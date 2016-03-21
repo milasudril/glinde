@@ -1,7 +1,7 @@
 #ifdef __WAND__
 target
 	[
-	name[windowsystem.o]
+	name[windowcontroller.o]
 	type[object]
 	dependency[GL;external]
 	dependency[GLEW;external]
@@ -9,7 +9,7 @@ target
 	]
 #endif
 
-#include "windowsystem.h"
+#include "windowcontroller.h"
 #include "errormessage.h"
 #include "debug.h"
 #include "logwriter.h"
@@ -29,7 +29,7 @@ using namespace Glinda;
 		"the window system:\n%s",message);
 	}
 
-WindowSystem::WindowSystem():r_window(nullptr)
+WindowController::WindowController():r_window(nullptr)
 	{
 	logWrite(LogMessageType::INFORMATION,"Initializing GLFW version %s"
 		,glfwGetVersionString());
@@ -45,12 +45,12 @@ WindowSystem::WindowSystem():r_window(nullptr)
 	glfwWindowHint(GLFW_DOUBLEBUFFER,GL_TRUE);
 	}
 
-WindowSystem::~WindowSystem()
+WindowController::~WindowController()
 	{
 	glfwTerminate();
 	}
 
-void WindowSystem::inputLoopRun() noexcept
+void WindowController::inputLoopRun() noexcept
 	{
 	glfwSwapInterval(1);
 	if(r_window!=nullptr)

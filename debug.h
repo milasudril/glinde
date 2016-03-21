@@ -5,13 +5,14 @@ target[name[debug.h] type[include]]
 #ifndef GLINDA_DEBUG_H
 #define GLINDA_DEBUG_H
 
+#include <cassert>
+
 #ifdef NDEBUG
-	#define GLINDA_DEBUG_PRINT(x)
+	#define GLINDA_DEBUG_PRINT(format,...)
 	#define GLINDA_ASSERT_CALL(function,relation,value) (function)
 #else
 
 #include "logwriter.h"
-#include <cassert>
 #include <cstdarg>
 	#define GLINDA_DEBUG_PRINT(format,...)\
 		Glinda::logWrite(Glinda::LogMessageType::DEBUG\

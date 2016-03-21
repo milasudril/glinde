@@ -3,7 +3,7 @@ target[name[glinda] type[application] ]
 #endif
 
 #include "errormessage.h"
-#include "windowsystem.h"
+#include "windowcontroller.h"
 #include "windowgame.h"
 #include "logwriter.h"
 #include "usereventhandler.h"
@@ -26,13 +26,13 @@ int main()
 		World world;
 		UserEventHandler event_handler(camera);
 
-		WindowSystem window_system;
+		WindowController window_controller;
 
 		WindowGame mainwin("Glinda",640,480,event_handler,world,camera);
 
-		window_system.eventWindowSet(&mainwin);
-		window_system.inputLoopRun();
-		window_system.eventWindowSet(nullptr);
+		window_controller.eventWindowSet(&mainwin);
+		window_controller.inputLoopRun();
+		window_controller.eventWindowSet(nullptr);
 		}
 	catch(const ErrorMessage& message)
 		{

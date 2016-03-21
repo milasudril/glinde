@@ -1,19 +1,19 @@
 #ifdef __WAND__
-target[name[windowsystem.h] type[include]]
-dependency[windowsystem.o]
+target[name[windowcontroller.h] type[include]]
+dependency[windowcontroller.o]
 #endif
 
-#ifndef GLINDA_WINDOWSYSTEM_H
-#define GLINDA_WINDOWSYSTEM_H
+#ifndef GLINDA_WINDOWCONTROLLER_H
+#define GLINDA_WINDOWCONTROLLER_H
 
 namespace Glinda
 	{
 	class Window;
-	class WindowSystem
+	class WindowController
 		{
 		public:
-			WindowSystem();
-			~WindowSystem();
+			WindowController();
+			~WindowController();
 
 			void eventWindowSet(Window* window) noexcept
 				{r_window=window;}
