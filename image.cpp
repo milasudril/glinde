@@ -1,0 +1,350 @@
+#ifdef __WAND__
+target
+	[
+	name[image.o] type[object] dependency[png;external]
+	dependency[Half;external]
+	]
+#endif
+
+#include "image.h"
+#include "datasource.h"
+#include "errormessage.h"
+#include "logwriter.h"
+#include "cpuinfo.h"
+#include "debug.h"
+#include <png.h>
+
+#include <memory>
+
+using namespace Glinda;
+
+namespace
+	{
+	class PNGReader
+		{
+		public:
+			inline PNGReader(DataSource& source);
+			inline ~PNGReader();
+
+			uint32_t widthGet() const noexcept
+				{return m_width;}
+
+			uint32_t heightGet() const noexcept
+				{return m_height;}
+
+			uint32_t nChannelsGet() const noexcept
+				{return m_n_channels;}
+
+			enum class ColorType:unsigned int
+				{
+				 UNKNOWN
+				,INFORMATION_MISSING
+				,SRGB
+				,GAMMACORRECTED
+				};
+
+			inline ColorType colorTypeGet() const noexcept
+				{return m_color_type;}
+
+			inline float gammaGet() const noexcept
+				{return m_gamma;}
+
+			inline void headerRead();
+
+			inline void pixelsRead(half* pixels_out);
+
+
+		private:
+			[[noreturn]] static void on_error(png_struct* pngptr,const char* message);
+
+			static void on_warning(png_struct* pngptr,const char* message);
+
+			static void on_read(png_struct* pngptr,uint8_t* data,png_size_t N);
+
+			void channelBitsConversionSetup();
+
+			png_struct* m_handle;
+			png_info* m_info;
+			png_info* m_info_end;
+
+			uint32_t m_width;
+			uint32_t m_height;
+			uint32_t m_n_channels;
+			uint32_t m_sample_size;
+			double m_gamma;
+
+			ColorType m_color_type;
+			};
+	};
+
+void PNGReader::on_warning(png_struct* pngptr,const char* message)
+	{
+	logWrite(LogMessageType::WARNING,"%s",message);
+	}
+
+void PNGReader::on_error(png_struct* pngptr,const char* message)
+	{
+	throw ErrorMessage("An error occured while decoding the image: %s"
+		,message);
+	}
+
+void PNGReader::on_read(png_struct* pngptr,uint8_t* data,png_size_t N)
+	{
+	auto source=reinterpret_cast<DataSource*>(png_get_io_ptr(pngptr));
+	if(source->read(data,N)!=N)
+		{
+		throw ErrorMessage("Possible end of file while decoding the image.");
+		}
+	}
+
+void PNGReader::channelBitsConversionSetup()
+	{
+	auto n_bits=png_get_bit_depth(m_handle,m_info);
+
+	if(n_bits < 8)
+		{
+		m_sample_size=1;
+		png_set_packing(m_handle);
+		}
+
+	if(n_bits > 8 && !CPUInfo::bigEndianIs())
+		{
+		png_set_swap(m_handle);
+		m_sample_size=n_bits/8;
+		}
+
+	switch(png_get_color_type(m_handle,m_info))
+		{
+		case PNG_COLOR_TYPE_GRAY:
+			m_n_channels=1;
+			if(n_bits<8)
+				{png_set_expand_gray_1_2_4_to_8(m_handle);}
+			break;
+
+		case PNG_COLOR_TYPE_GRAY_ALPHA:
+			m_n_channels=2;
+			break;
+
+		case PNG_COLOR_TYPE_RGB:
+			m_n_channels=3;
+			break;
+
+		case PNG_COLOR_TYPE_RGB_ALPHA:
+			m_n_channels=4;
+			break;
+
+		case PNG_COLOR_TYPE_PALETTE:
+			if(png_get_valid(m_handle,m_info,PNG_INFO_tRNS))
+				{
+				png_set_tRNS_to_alpha(m_handle);
+				m_n_channels=4;
+				}
+			else
+				{m_n_channels=3;}
+			png_set_palette_to_rgb(m_handle);
+			break;
+
+		default:
+			throw ErrorMessage("Unknown number of channels in image.");
+		}
+	}
+
+PNGReader::PNGReader(DataSource& source)
+	{
+	m_info=nullptr;
+	m_info_end=nullptr;
+	m_handle=png_create_read_struct(PNG_LIBPNG_VER_STRING,NULL,on_error,on_warning);
+	png_set_read_fn(m_handle,&source,on_read);
+	m_color_type=ColorType::INFORMATION_MISSING;
+	m_gamma=1.0;
+	}
+
+PNGReader::~PNGReader()
+	{
+	png_destroy_read_struct(&m_handle,&m_info,&m_info_end);
+	}
+
+void PNGReader::headerRead()
+	{
+	png_set_sig_bytes(m_handle,8);
+	png_read_info(m_handle,m_info);
+	m_width=png_get_image_width(m_handle,m_info);
+	m_height=png_get_image_width(m_handle,m_info);
+	channelBitsConversionSetup();
+
+	if(png_get_valid(m_handle,m_info,PNG_INFO_sRGB))
+		{m_color_type=ColorType::SRGB;}
+	else
+	if(png_get_valid(m_handle,m_info,PNG_INFO_gAMA))
+		{
+		png_get_gAMA(m_handle,m_info,&m_gamma);
+		m_color_type=ColorType::GAMMACORRECTED;
+		}
+	}
+
+static void bytesFree(uint8_t* bytes)
+	{
+	free(bytes);
+	}
+
+static uint8_t* bytesAlloc(size_t n)
+	{
+	auto ret=(uint8_t*)malloc(n*sizeof(uint8_t));
+	if(ret==nullptr)
+		{
+		throw ErrorMessage("A memory error occured while trying to load an image.");
+		}
+	return ret;
+	}
+
+template<class T>
+static void pixelsScale(const T* pixels_in,half* pixels_out,uint32_t N)
+	{
+	auto factor=( 1L<<(8L*sizeof(T)) ) - 1;
+	GLINDA_DEBUG_PRINT("Conversion factor: %d",factor);
+
+	while(N)
+		{
+		*pixels_out=*pixels_in/factor;
+		--N;
+		++pixels_in;
+		++pixels_out;
+		}
+	}
+
+void PNGReader::pixelsRead(half* pixels_out)
+	{
+	auto width=m_width;
+	auto height=m_height;
+	auto sample_size=m_sample_size;
+	std::unique_ptr<uint8_t,decltype(&bytesFree)> buffer_temp
+		{bytesAlloc(width*height*sample_size),bytesFree};
+
+		{
+		uint8_t** rows=(uint8_t**)malloc(height*sizeof(uint8_t*));
+		if(rows==nullptr)
+			{throw ErrorMessage("A memory error occured while trying to load an image.");}
+
+		auto ptr_row=buffer_temp.get();
+		for(uint32_t row=0;row<height;++row)
+			{
+			rows[row]=ptr_row;
+			ptr_row+=width*sample_size;
+			}
+		png_read_image(m_handle,rows);
+		free(rows);
+		}
+
+	switch(sample_size)
+		{
+		case 1:
+			pixelsScale(buffer_temp.get(),pixels_out,width*height);
+			break;
+
+		case 2:
+			pixelsScale(reinterpret_cast<const uint16_t*>(buffer_temp.get())
+				,pixels_out,width*height);
+			break;
+		case 4:
+			pixelsScale(reinterpret_cast<const uint32_t*>(buffer_temp.get())
+				,pixels_out,width*height);
+			break;
+		default:
+			throw ErrorMessage("Unsupported sample size.");
+		}
+
+	}
+
+
+
+namespace
+	{
+	typedef void (*ColorConverter)(Image& image);
+	}
+
+static void fromGamma(Image& image)
+	{}
+
+static void fromSRGB(Image& image)
+	{}
+
+static ColorConverter converterGet(PNGReader::ColorType color_type)
+	{
+	switch(color_type)
+		{
+		case PNGReader::ColorType::UNKNOWN:
+			logWrite(LogMessageType::WARNING
+				,"Color type for loaded image is unknown. Assuming LINEAR color values.");
+			return nullptr;
+
+		case PNGReader::ColorType::INFORMATION_MISSING:
+			logWrite(LogMessageType::WARNING
+				,"Color type information for loaded image is missing. Assuming sRGB.");
+			return fromSRGB;
+
+		case PNGReader::ColorType::GAMMACORRECTED:
+			return fromGamma;
+
+		case PNGReader::ColorType::SRGB:
+			return fromSRGB;
+
+		default:
+			logWrite(LogMessageType::WARNING
+				,"Color type for loaded image is unknown. Assuming LINEAR color values.");
+			return nullptr;
+		}
+	}
+
+
+
+Image::Image(DataSource&& source)
+	{
+		{
+		uint8_t magic[8];
+		if(source.read(magic,8)!=8)
+			{
+			throw ErrorMessage("An I/O error occured while reading the image "
+				"magic number.");
+			}
+
+		if(png_sig_cmp(magic,0,8))
+			{
+			throw ErrorMessage("The image file has an unknown encoding.");
+			}
+		}
+
+	PNGReader reader(source);
+	reader.headerRead();
+	pixelsAlloc(reader.widthGet(),reader.heightGet(),reader.nChannelsGet());
+	reader.pixelsRead(m_pixels);
+
+	auto converter=converterGet(reader.colorTypeGet());
+	if(converter!=nullptr)
+		{
+		converter(*this);
+		}
+	}
+
+Image::Image(uint32_t width,uint32_t height,uint32_t n_channels)
+	{
+	pixelsAlloc(width,height,n_channels);
+	}
+
+Image::~Image()
+	{
+	pixelsFree();
+	}
+
+void Image::pixelsAlloc(uint32_t width,uint32_t height,uint32_t n_channels)
+	{
+	m_pixels=(half*)malloc(width*height*n_channels*sizeof(half));
+	if(m_pixels==nullptr)
+		{
+		throw ErrorMessage("A memory error occured while trying to allocate storage for a new image.");
+		}
+	}
+
+void Image::pixelsFree()
+	{
+	free(m_pixels);
+	}

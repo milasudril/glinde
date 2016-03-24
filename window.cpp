@@ -76,7 +76,9 @@ Window::Window(const char* title,unsigned int width,unsigned int height
 	,EventHandler& handler)
 	{
 	logWrite(LogMessageType::INFORMATION,"Creating an OpenGL window");
-	auto window=glfwCreateWindow(width,height,title,NULL,NULL);
+//	HACK: Create a window that is one unit wider, so we are able to force a
+//	resize message to be sent (See (1) below).
+	auto window=glfwCreateWindow(width + 1,height,title,NULL,NULL);
 	assert(window!=NULL);
 	glfwMakeContextCurrent(window);
 	glewExperimental=1;
@@ -106,8 +108,7 @@ Window::Window(const char* title,unsigned int width,unsigned int height
 	glfwSetMouseButtonCallback(window,mouse_handler);
 	glfwSetCursorPosCallback(window,on_mouse_move);
 
-//	HACK: Trigg window size event so we can set our viewport
-	glfwSetWindowSize(window,width-1,height);
+//	HACK(1): Trigg window size event so we can set our viewport
 	glfwSetWindowSize(window,width,height);
 	}
 
