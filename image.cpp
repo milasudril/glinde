@@ -32,7 +32,7 @@ namespace
 			uint32_t heightGet() const noexcept
 				{return m_height;}
 
-			uint32_t nChannelsGet() const noexcept
+			uint32_t channelCountGet() const noexcept
 				{return m_n_channels;}
 
 			enum class ColorType:unsigned int
@@ -149,6 +149,7 @@ void PNGReader::channelBitsConversionSetup()
 		}
 	}
 
+
 PNGReader::PNGReader(DataSource& source)
 	{
 	m_info=nullptr;
@@ -182,23 +183,8 @@ void PNGReader::headerRead()
 		}
 	}
 
-static void bytesFree(uint8_t* bytes)
-	{
-	free(bytes);
-	}
-
-static uint8_t* bytesAlloc(size_t n)
-	{
-	auto ret=(uint8_t*)malloc(n*sizeof(uint8_t));
-	if(ret==nullptr)
-		{
-		throw ErrorMessage("A memory error occured while trying to load an image.");
-		}
-	return ret;
-	}
-
 template<class T>
-static void pixelsScale(const T* pixels_in,half* pixels_out,uint32_t N)
+static void pixelsScale(const T* pixels_in,Image::SampleType* pixels_out,uint32_t N)
 	{
 	auto factor=( 1L<<(8L*sizeof(T)) ) - 1;
 	GLINDA_DEBUG_PRINT("Conversion factor: %d",factor);
@@ -212,41 +198,36 @@ static void pixelsScale(const T* pixels_in,half* pixels_out,uint32_t N)
 		}
 	}
 
-void PNGReader::pixelsRead(half* pixels_out)
+void PNGReader::pixelsRead(Image::SampleType* pixels_out)
 	{
 	auto width=m_width;
 	auto height=m_height;
 	auto sample_size=m_sample_size;
-	std::unique_ptr<uint8_t,decltype(&bytesFree)> buffer_temp
-		{bytesAlloc(width*height*sample_size),bytesFree};
+	ArraySimple<uint8_t> buffer_temp(width*height*sample_size);
 
 		{
-		uint8_t** rows=(uint8_t**)malloc(height*sizeof(uint8_t*));
-		if(rows==nullptr)
-			{throw ErrorMessage("A memory error occured while trying to load an image.");}
-
-		auto ptr_row=buffer_temp.get();
-		for(uint32_t row=0;row<height;++row)
+		auto row=buffer_temp.begin();
+		ArraySimple<uint8_t*> rows
 			{
-			rows[row]=ptr_row;
-			ptr_row+=width*sample_size;
-			}
-		png_read_image(m_handle,rows);
-		free(rows);
+			height,[row,width,sample_size](size_t n)
+				{return row + n*width*sample_size;}
+			};
+
+		png_read_image(m_handle,rows.begin());
 		}
 
 	switch(sample_size)
 		{
 		case 1:
-			pixelsScale(buffer_temp.get(),pixels_out,width*height);
+			pixelsScale(buffer_temp.begin(),pixels_out,width*height);
 			break;
 
 		case 2:
-			pixelsScale(reinterpret_cast<const uint16_t*>(buffer_temp.get())
+			pixelsScale(reinterpret_cast<const uint16_t*>(buffer_temp.begin())
 				,pixels_out,width*height);
 			break;
 		case 4:
-			pixelsScale(reinterpret_cast<const uint32_t*>(buffer_temp.get())
+			pixelsScale(reinterpret_cast<const uint32_t*>(buffer_temp.begin())
 				,pixels_out,width*height);
 			break;
 		default:
@@ -315,8 +296,9 @@ Image::Image(DataSource&& source)
 
 	PNGReader reader(source);
 	reader.headerRead();
-	pixelsAlloc(reader.widthGet(),reader.heightGet(),reader.nChannelsGet());
-	reader.pixelsRead(m_pixels);
+	m_pixels=ArraySimple<SampleType>
+		(reader.widthGet()*reader.heightGet()*reader.channelCountGet());
+	reader.pixelsRead(m_pixels.begin());
 
 	auto converter=converterGet(reader.colorTypeGet());
 	if(converter!=nullptr)
@@ -325,26 +307,8 @@ Image::Image(DataSource&& source)
 		}
 	}
 
-Image::Image(uint32_t width,uint32_t height,uint32_t n_channels)
+Image::Image(uint32_t width,uint32_t height,uint32_t n_channels):
+	m_pixels(width*height*n_channels)
+	,m_properties{width,height,n_channels,0}
 	{
-	pixelsAlloc(width,height,n_channels);
-	}
-
-Image::~Image()
-	{
-	pixelsFree();
-	}
-
-void Image::pixelsAlloc(uint32_t width,uint32_t height,uint32_t n_channels)
-	{
-	m_pixels=(half*)malloc(width*height*n_channels*sizeof(half));
-	if(m_pixels==nullptr)
-		{
-		throw ErrorMessage("A memory error occured while trying to allocate storage for a new image.");
-		}
-	}
-
-void Image::pixelsFree()
-	{
-	free(m_pixels);
 	}

@@ -5,10 +5,22 @@ target[name[arrayinit.h] type[include]]
 #ifndef GLINDA_ARRAYINIT_H
 #define GLINDA_ARRAYINIT_H
 
+#include <new>
+
 namespace Glinda
 	{
 	namespace ArrayInit
 		{
+		template<class T>
+		void destroy(T* begin,T* end)
+			{
+			while(end!=begin)
+				{
+				--end;
+				end->~T();
+				}
+			}
+
 		template<class T,class Template>
 		void create(T* begin,T* end,const Template& x)
 			{
@@ -17,7 +29,26 @@ namespace Glinda
 				{
 				while(position!=end)
 					{
-					new(*position)T(x);
+					new(position)T(x);
+					++position;
+					}
+				}
+			catch(...)
+				{
+				destroy(position,begin);
+				throw;
+				}
+			}
+
+		template<class T>
+		void create(T* begin,T* end)
+			{
+			auto position=begin;
+			try
+				{
+				while(position!=end)
+					{
+					new(position)T();
 					++position;
 					}
 				}
@@ -36,7 +67,7 @@ namespace Glinda
 				{
 				while(position!=end)
 					{
-					new(*position)T(init(position-begin));
+					new(position)T(init(position-begin));
 					++position;
 					}
 				}
@@ -55,7 +86,7 @@ namespace Glinda
 				{
 				while(position!=end)
 					{
-					new(*position)T(*source);
+					new(position)T(*source);
 					++position;
 					}
 				}
@@ -63,16 +94,6 @@ namespace Glinda
 				{
 				destroy(position,end);
 				throw;
-				}
-			}
-
-		template<class T>
-		void destroy(T* begin,T* end)
-			{
-			while(end!=begin)
-				{
-				--end;
-				end->~T();
 				}
 			}
 		}

@@ -9,6 +9,9 @@ namespace Glinda
 	{
 	template<class T>
 	using vec4_t __attribute__ ((vector_size(4*sizeof(T))))=T;
+
+	template<class T>
+	using vec2_t __attribute__ ((vector_size(2*sizeof(T))))=T;
 	}
 
 #endif

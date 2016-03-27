@@ -24,18 +24,23 @@ static const GLfloat g_vertex_buffer_data[]=
 
 static const char* g_frag_shader="#version 330 core\n"
 	"out vec3 color;"
+	"in vec2 UV;"
+	"uniform sampler2D texture_diffuse;"
 	"void main()"
 	"	{"
-	"	color=vec3(1,0,0);"
+	"	color=texture(texture_diffuse, UV).rgb;"
 	"	}";
 
 static const char* g_vert_shader=
 	"#version 330 core\n"
 	"layout(location = 0) in vec3 pos_modelspace;"
+	"layout(location = 1) in vec2 uv;"
+	"out vec2 UV;"
 	"uniform mat4 MVP;"
 	"void main()"
 	"	{"
 	"	gl_Position=MVP*vec4(pos_modelspace,1);"
+	"	UV=uv;"
 	"	}";
 
 

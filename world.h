@@ -12,8 +12,10 @@ namespace Glinda
 	class World
 		{
 		public:
-		private:
 
+		private:
+			ArraySimple<float> vertices;
+			ArraySimple<uint32_t> faces;
 		};
 	}
 

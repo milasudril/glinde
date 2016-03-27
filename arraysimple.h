@@ -17,8 +17,14 @@ namespace Glinda
 	class ArraySimple
 		{
 		public:
-			ArraySimple(size_t n_elems);
+			ArraySimple():m_content{0,0,0,0}
+				{}
+				
+			explicit ArraySimple(size_t n_elems);
 			~ArraySimple();
+
+			template<class Initializer>
+			explicit ArraySimple(size_t n_elems,Initializer&& initializer);
 
 			ArraySimple(const ArraySimple& a);
 
@@ -33,6 +39,7 @@ namespace Glinda
 			ArraySimple& operator=(ArraySimple&& a) noexcept
 				{
 				std::swap(m_content.x,m_content.x);
+				return *this;
 				}
 
 			T* begin() noexcept
@@ -42,10 +49,10 @@ namespace Glinda
 				{return m_content.fields.data;}
 
 			T* end() noexcept
-				{return m_content.fields.data+m_content.fields.data.N;}
+				{return m_content.fields.data+m_content.fields.N;}
 
 			const T* end() const noexcept
-				{return m_content.fields.data+m_content.fields.data.N;}
+				{return m_content.fields.data+m_content.fields.N;}
 
 			size_t length() const noexcept
 				{return m_content.fields.N;}
@@ -57,9 +64,14 @@ namespace Glinda
 				{return m_content.fields.data[k];}
 
 		private:
-			union //Enable vectorized move assignment
+#if (__amd64 || __x86_64 || __x86_64__ || __amd64__)
+			typedef vec4_t<int> TwoPointers;
+#else
+			typedef vec2_t<int> TwoPointers;
+#endif
+			union
 				{
-				vec4_t<int> x;
+				TwoPointers x;
 				struct
 					{
 					T* data;
@@ -83,6 +95,23 @@ namespace Glinda
 		m_content.fields.N=n_elems;
 		m_content.fields.data=data;
 		}
+
+	template<class T>
+	template<class Initializer>
+	ArraySimple<T>::ArraySimple(size_t n_elems,Initializer&& init)
+		{
+		auto data=reinterpret_cast<T*>(memoryAllocate(n_elems*sizeof(T)));
+		try
+			{ArrayInit::create(data,data+n_elems,init);}
+		catch(...)
+			{
+			memoryFree(m_content.fields.data);
+			throw;
+			}
+		m_content.fields.N=n_elems;
+		m_content.fields.data=data;
+		}
+
 
 	template<class T>
 	ArraySimple<T>::~ArraySimple()

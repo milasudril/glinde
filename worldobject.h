@@ -11,12 +11,19 @@ target[name[worldobject.h] type[include]]
 
 namespace Glinda
 	{
+	class Mesh
+
 	class WorldObject
 		{
 		public:
 			WorldObject():
-				m_location(0,0,0),m_pitch(std::acos(0.0f)),m_roll(std::acos(-1.0f)),m_yaw(0.0f)
+				r_mesh(nullptr)
+				,m_location(0,0,0),m_pitch(std::acos(0.0f))
+				,m_roll(std::acos(-1.0f)),m_yaw(0.0f)
 				{}
+
+			void meshSet(Mesh* mesh)noexcept
+				{r_mesh=mesh;}
 
 			WorldObject& locationSet(const glm::vec3& location) noexcept
 				{
@@ -73,7 +80,12 @@ namespace Glinda
 				m_location+=0.1f*direction*glm::vec3(m_heading.y,-m_heading.x,0.0f);
 				}
 
+			const Mesh* meshGet() const noexcept
+				{return r_mesh;}
+
 		private:
+			Mesh* r_mesh;
+
 			glm::vec3 m_location;
 
 			glm::vec3 m_velocity;
