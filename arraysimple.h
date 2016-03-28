@@ -10,6 +10,7 @@ target[name[arraysimple.h] type[include]]
 #include "arrayinit.h"
 #include "memoryalloc.h"
 #include <utility>
+#include <cstdint>
 
 namespace Glinda
 	{
@@ -19,7 +20,7 @@ namespace Glinda
 		public:
 			ArraySimple():m_content{0,0,0,0}
 				{}
-				
+
 			explicit ArraySimple(size_t n_elems);
 			~ArraySimple();
 
@@ -33,12 +34,12 @@ namespace Glinda
 			ArraySimple(ArraySimple&& a) noexcept
 				{
 				m_content.x=a.m_content.x;
-				a.m_content.x={0,0,0,0};
+				a.m_content.x=vec4_t<int32_t>{0,0,0,0};
 				}
 
 			ArraySimple& operator=(ArraySimple&& a) noexcept
 				{
-				std::swap(m_content.x,m_content.x);
+				std::swap(m_content.x,a.m_content.x);
 				return *this;
 				}
 
@@ -65,9 +66,9 @@ namespace Glinda
 
 		private:
 #if (__amd64 || __x86_64 || __x86_64__ || __amd64__)
-			typedef vec4_t<int> TwoPointers;
+			typedef vec4_t<int32_t> TwoPointers;
 #else
-			typedef vec2_t<int> TwoPointers;
+			typedef vec2_t<int32_t> TwoPointers;
 #endif
 			union
 				{

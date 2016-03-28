@@ -10,6 +10,7 @@ target[name[glinda] type[application] ]
 #include "worldobject.h"
 #include "world.h"
 #include "renderer.h"
+#include "archive.h"
 
 using namespace Glinda;
 
@@ -23,16 +24,17 @@ int main()
 
 		camera.locationSet(glm::vec3(0.0f,-2.0f,0.0f));
 
-		World world;
+
+		World world{Archive("test.zip")};
 		UserEventHandler event_handler(camera);
 
-		WindowController window_controller;
+	/*	WindowController window_controller;
 
 		WindowGame mainwin("Glinda",640,480,event_handler,world,camera);
 
 		window_controller.eventWindowSet(&mainwin);
 		window_controller.inputLoopRun();
-		window_controller.eventWindowSet(nullptr);
+		window_controller.eventWindowSet(nullptr);*/
 		}
 	catch(const ErrorMessage& message)
 		{

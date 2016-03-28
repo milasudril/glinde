@@ -5,6 +5,7 @@ target[name[archive.o] type[object] dependency[zip;external]]
 #include "archive.h"
 #include "errormessage.h"
 #include <zip.h>
+#include <cstring>
 
 using namespace Glinda;
 
@@ -57,11 +58,15 @@ Archive::Archive(const char* filename)
 		archiveErrorRaise("It is not possible open the archive \"%s\". %s.",filename,result);
 		}
 	m_handle=handle;
+
+	m_filename=ArraySimple<char>(strlen(filename)+1);
+	memcpy(m_filename.begin(),filename,m_filename.length()*sizeof(char));
 	}
 
 Archive::~Archive()
 	{
-	zip_close(static_cast<zip*>(m_handle));
+	if(m_handle!=nullptr)
+		{zip_close(static_cast<zip*>(m_handle));}
 	}
 
 Archive::File::File(Archive& archive,const char* filename)
@@ -75,11 +80,14 @@ Archive::File::File(Archive& archive,const char* filename)
 		archiveErrorRaise("It is not possible open the file \"%s\". %s.",filename,status);
 		}
 	m_handle=handle;
+	m_filename=ArraySimple<char>(strlen(filename)+1);
+	memcpy(m_filename.begin(),filename,m_filename.length()*sizeof(char));
 	}
 
 Archive::File::~File()
 	{
-	zip_fclose(static_cast<zip_file*>(m_handle));
+	if(m_handle!=nullptr)
+		{zip_fclose(static_cast<zip_file*>(m_handle));}
 	}
 
 size_t Archive::File::read(void* buffer,size_t n_bytes)

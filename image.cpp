@@ -12,6 +12,7 @@ target
 #include "logwriter.h"
 #include "cpuinfo.h"
 #include "debug.h"
+#include "narrow_cast.h"
 #include <png.h>
 
 #include <memory>
@@ -47,7 +48,7 @@ namespace
 				{return m_color_type;}
 
 			inline float gammaGet() const noexcept
-				{return m_gamma;}
+				{return static_cast<float>( m_gamma );}
 
 			inline void headerRead();
 
@@ -84,7 +85,9 @@ void PNGReader::on_warning(png_struct* pngptr,const char* message)
 
 void PNGReader::on_error(png_struct* pngptr,const char* message)
 	{
-	throw ErrorMessage("An error occured while decoding the image: %s"
+	auto source=reinterpret_cast<DataSource*>(png_get_io_ptr(pngptr));
+	throw ErrorMessage("%s: An error occured while decoding the image. %s"
+		,source->nameGet()
 		,message);
 	}
 
@@ -93,7 +96,8 @@ void PNGReader::on_read(png_struct* pngptr,uint8_t* data,png_size_t N)
 	auto source=reinterpret_cast<DataSource*>(png_get_io_ptr(pngptr));
 	if(source->read(data,N)!=N)
 		{
-		throw ErrorMessage("Possible end of file while decoding the image.");
+		throw ErrorMessage("%s: Possible end of file while decoding the image."
+			,source->nameGet());
 		}
 	}
 
@@ -145,7 +149,10 @@ void PNGReader::channelBitsConversionSetup()
 			break;
 
 		default:
-			throw ErrorMessage("Unknown number of channels in image.");
+			{
+			auto source=reinterpret_cast<DataSource*>(png_get_io_ptr(m_handle));
+			throw ErrorMessage("%s: Unknown number of channels in image.",source->nameGet());
+			}
 		}
 	}
 
@@ -169,8 +176,8 @@ void PNGReader::headerRead()
 	{
 	png_set_sig_bytes(m_handle,8);
 	png_read_info(m_handle,m_info);
-	m_width=png_get_image_width(m_handle,m_info);
-	m_height=png_get_image_width(m_handle,m_info);
+	m_width=narrow_cast<uint32_t>( png_get_image_width(m_handle,m_info) );
+	m_height=narrow_cast<uint32_t>( png_get_image_width(m_handle,m_info) );
 	channelBitsConversionSetup();
 
 	if(png_get_valid(m_handle,m_info,PNG_INFO_sRGB))
@@ -186,12 +193,12 @@ void PNGReader::headerRead()
 template<class T>
 static void pixelsScale(const T* pixels_in,Image::SampleType* pixels_out,uint32_t N)
 	{
-	auto factor=( 1L<<(8L*sizeof(T)) ) - 1;
-	GLINDA_DEBUG_PRINT("Conversion factor: %d",factor);
+	auto factor=static_cast<float>( ( 1L<<(8L*sizeof(T)) ) - 1 );
+	GLINDA_DEBUG_PRINT("Conversion factor: %.7g",factor);
 
 	while(N)
 		{
-		*pixels_out=*pixels_in/factor;
+		*pixels_out=static_cast<float>(*pixels_in)/factor;
 		--N;
 		++pixels_in;
 		++pixels_out;
@@ -231,7 +238,10 @@ void PNGReader::pixelsRead(Image::SampleType* pixels_out)
 				,pixels_out,width*height);
 			break;
 		default:
-			throw ErrorMessage("Unsupported sample size.");
+			{
+			auto source=reinterpret_cast<DataSource*>(png_get_io_ptr(m_handle));
+			throw ErrorMessage("%s: Unsupported sample size.",source->nameGet());
+			}
 		}
 
 	}

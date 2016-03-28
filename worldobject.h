@@ -2,8 +2,8 @@
 target[name[worldobject.h] type[include]]
 #endif
 
-#ifndef WORLDOBJECT_H
-#define WORLDOBJECT_H
+#ifndef GLINDA_WORLDOBJECT_H
+#define GLINDA_WORLDOBJECT_H
 
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
@@ -11,7 +11,7 @@ target[name[worldobject.h] type[include]]
 
 namespace Glinda
 	{
-	class Mesh
+	class Mesh;
 
 	class WorldObject
 		{

@@ -7,6 +7,8 @@ dependency[archive.o]
 #define GLINDA_ARCHIVE_H
 
 #include "datasource.h"
+#include "arraysimple.h"
+#include <utility>
 
 namespace Glinda
 	{
@@ -16,23 +18,52 @@ namespace Glinda
 			class File:public DataSource
 				{
 				public:
+					File(const File&)=delete;
+					File& operator=(const File&)=delete;
+
+					File(File&& file):m_handle(file.m_handle)
+						,m_filename(std::move(file.m_filename))
+						{file.m_handle=nullptr;}
+
+					File& operator=(File&& file) noexcept
+						{
+						std::swap(file.m_handle,m_handle);
+						std::swap(file.m_filename,m_filename);
+						return *this;
+						}
+
+
 					File(Archive& archive,const char* filename);
 					~File();
 
 					size_t read(void* buffer, size_t n_bytes);
 
+					const char* nameGet() const noexcept
+						{return m_filename.begin();}
+
 				private:
 					void* m_handle;
+					ArraySimple<char> m_filename;
 				};
 
-			Archive(const char* filename);
+			explicit Archive(const char* filename);
 			~Archive();
 
 			Archive(const Archive&)=delete;
 			Archive& operator=(const Archive&)=delete;
 
+			File fileGet(const char* filename)
+				{
+				File ret(*this,filename);
+				return std::move(ret);
+				}
+
+			const char* nameGet() const noexcept
+				{return m_filename.begin();}
+
 		private:
 			void* m_handle;
+			ArraySimple<char> m_filename;
 		};
 	};
 

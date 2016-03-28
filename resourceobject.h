@@ -6,6 +6,8 @@ dependency[resourceobject.o]
 #ifndef GLINDA_RESOURCEOBJECT_H
 #define GLINDA_RESOURCEOBJECT_H
 
+#include "arraysimple.h"
+
 #include <utility>
 #include <cstddef>
 
@@ -16,6 +18,30 @@ namespace Glinda
 	class ResourceObject
 		{
 		public:
+			class Iterator
+				{
+				public:
+					Iterator(const Iterator&)=delete;
+					Iterator& operator=(const Iterator&)=delete;
+
+					Iterator(Iterator&& i) noexcept:
+						r_object(i.r_object),m_handle(i.m_handle)
+						{i.m_handle=nullptr;}
+					Iterator& operator=(Iterator&& i)=delete;
+
+
+
+					Iterator(ResourceObject& object);
+					void next() noexcept;
+					std::pair<const char*,ResourceObject> get() noexcept;
+					bool atEnd() noexcept;
+
+				private:
+					ResourceObject& r_object;
+					void* m_handle;
+
+				};
+
 			ResourceObject(const ResourceObject&)=delete;
 			ResourceObject& operator=(const ResourceObject&)=delete;
 
@@ -38,6 +64,12 @@ namespace Glinda
 			ResourceObject objectGet(const char* name);
 			size_t objectCountGet() const noexcept;
 			ResourceObject objectGet(size_t index);
+			Iterator objectIteratorGet() noexcept
+				{
+				Iterator i(*this);
+				return std::move(i);
+				}
+
 
 			const char* stringGet() const noexcept;
 			long long int integerGet() const noexcept;
@@ -48,8 +80,9 @@ namespace Glinda
 			explicit operator double() const;
 
 		private:
-			ResourceObject(void* handle);
+			ResourceObject(void* handle,const char* name);
 			void* m_handle;
+			ArraySimple<char> m_name;
 		};
 	};
 

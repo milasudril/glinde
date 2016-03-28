@@ -5,8 +5,10 @@ target[name[resourceobject.o] type[object] dependency[jansson;external]]
 #include "resourceobject.h"
 #include "errormessage.h"
 #include "datasource.h"
+#include "logwriter.h"
 
 #include <jansson.h>
+#include <cstring>
 
 using namespace Glinda;
 
@@ -15,6 +17,30 @@ static size_t loadCallback(void* buffer, size_t length, void* eventhandler)
 	return reinterpret_cast<DataSource*>(eventhandler)->read(buffer,length);
 	}
 
+ResourceObject::Iterator::Iterator(ResourceObject& object):r_object(object)
+	{
+	m_handle=json_object_iter(static_cast<json_t*>(object.m_handle));
+	}
+
+std::pair<const char*,ResourceObject> ResourceObject::Iterator::get() noexcept
+	{
+	auto key=json_object_iter_key(m_handle);
+	ResourceObject value{json_object_iter_value(m_handle),key};
+
+	return {key,std::move(value)};
+	}
+
+void ResourceObject::Iterator::next() noexcept
+	{
+	m_handle=json_object_iter_next(static_cast<json_t*>(r_object.m_handle),m_handle);
+	}
+
+bool ResourceObject::Iterator::atEnd() noexcept
+	{
+	return m_handle==nullptr;
+	}
+
+
 ResourceObject::ResourceObject(DataSource&& readhandler)
 	{
 	json_error_t status;
@@ -22,14 +48,19 @@ ResourceObject::ResourceObject(DataSource&& readhandler)
 	if(m_handle==nullptr)
 		{
 		throw ErrorMessage("Could not load JSON data. %s:%d: %s."
-			,status.source,status.line,status.text);
+			,readhandler.nameGet(),status.line,status.text);
 		}
+	m_name=ArraySimple<char>(strlen(readhandler.nameGet()) + 1 );
+	memcpy(m_name.begin(),readhandler.nameGet(),m_name.length()*sizeof(char));
 	}
 
-ResourceObject::ResourceObject(void* handle)
+ResourceObject::ResourceObject(void* handle,const char* name)
 	{
 	m_handle=handle;
 	json_incref(static_cast<json_t*>(m_handle));
+
+	m_name=ArraySimple<char>(strlen(name) + 1 );
+	memcpy(m_name.begin(),name,m_name.length()*sizeof(char));
 	}
 
 ResourceObject::~ResourceObject()
@@ -66,11 +97,12 @@ ResourceObject ResourceObject::objectGet(const char* name)
 	auto result=json_object_get(static_cast<const json_t*>(m_handle),name);
 	if(result==NULL)
 		{
-		throw ErrorMessage("Could not get object \"%s\" from the resource object"
+		throw ErrorMessage("%s: Could not get child object \"%s\"."
+			,m_name.begin()
 			,name);
 		}
 
-	return ResourceObject(result);
+	return ResourceObject(result,name);
 	}
 
 size_t ResourceObject::objectCountGet() const noexcept
@@ -81,10 +113,10 @@ ResourceObject ResourceObject::objectGet(size_t index)
 	auto result=json_array_get(static_cast<const json_t*>(m_handle),index);
 	if(result==NULL)
 		{
-		throw ErrorMessage("Could not get object number %zu from the resource object"
-			,index);
+		throw ErrorMessage("%s: Could not get child object number %zu."
+			,m_name.begin(),index + 1);
 		}
-	return ResourceObject(result);
+	return ResourceObject(result,m_name.begin());
 	}
 
 const char* ResourceObject::stringGet() const noexcept
@@ -101,7 +133,12 @@ long long int ResourceObject::integerGet() const noexcept
 double ResourceObject::floatGet() const noexcept
 	{
 	if(typeGet()==Type::INTEGER)
-		{return integerGet();}
+		{
+		logWrite(LogMessageType::WARNING
+			,"%s: Reading floating point value encoded as integer."
+			,m_name.begin());
+		return static_cast<double>(integerGet());
+		}
 	return json_real_value(static_cast<const json_t*>(m_handle));
 	}
 
@@ -110,7 +147,8 @@ ResourceObject::operator const char*() const
 	auto ret=stringGet();
 	if(ret==nullptr)
 		{
-		throw ErrorMessage("Current resource object is not a string.");
+		throw ErrorMessage("%s: Current resource object is not a string."
+			,m_name.begin());
 		}
 	return ret;
 	}
@@ -119,7 +157,8 @@ ResourceObject::operator long long int() const
 	{
 	if(typeGet()!=Type::INTEGER)
 		{
-		throw ErrorMessage("Current resource object is not an integer.");
+		throw ErrorMessage("%s: Current resource object is not an integer."
+			,m_name.begin());
 		}
 	return integerGet();
 	}
@@ -129,12 +168,11 @@ ResourceObject::operator double() const
 	switch(typeGet())
 		{
 		case Type::INTEGER:
-			return integerGet();
-
 		case Type::FLOAT:
 			return floatGet();
 
 		default:
-			throw ErrorMessage("Current resource object is not an integer.");
+			throw ErrorMessage("%s: Current resource object is not an integer."
+				,m_name.begin());
 		}
 	}

@@ -13,6 +13,7 @@ namespace Glinda
 		{
 		public:
 			virtual size_t read(void* buffer, size_t length)=0;
+			virtual const char* nameGet() const noexcept=0;
 		};
 	}
 
