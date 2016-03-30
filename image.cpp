@@ -317,6 +317,35 @@ Image::Image(DataSource&& source)
 		}
 	}
 
+Image::Image(DataSource& source)
+	{
+		{
+		uint8_t magic[8];
+		if(source.read(magic,8)!=8)
+			{
+			throw ErrorMessage("An I/O error occured while reading the image "
+				"magic number.");
+			}
+
+		if(png_sig_cmp(magic,0,8))
+			{
+			throw ErrorMessage("The image file has an unknown encoding.");
+			}
+		}
+
+	PNGReader reader(source);
+	reader.headerRead();
+	m_pixels=ArraySimple<SampleType>
+		(reader.widthGet()*reader.heightGet()*reader.channelCountGet());
+	reader.pixelsRead(m_pixels.begin());
+
+	auto converter=converterGet(reader.colorTypeGet());
+	if(converter!=nullptr)
+		{
+		converter(*this);
+		}
+	}
+
 Image::Image(uint32_t width,uint32_t height,uint32_t n_channels):
 	m_pixels(width*height*n_channels)
 	,m_properties{width,height,n_channels,0}

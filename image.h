@@ -20,6 +20,7 @@ namespace Glinda
 			typedef half SampleType;
 
 			Image(DataSource&& source);
+			Image(DataSource& source);
 			Image(uint32_t width,uint32_t height,uint32_t n_channels);
 
 			SampleType* pixelsGet() noexcept
