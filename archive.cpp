@@ -59,13 +59,12 @@ Archive::Archive(const char* filename)
 		}
 	m_handle=handle;
 
-	m_filename=ArraySimple<char>(strlen(filename)+1);
-	memcpy(m_filename.begin(),filename,m_filename.length()*sizeof(char));
+	m_filename=String(filename);
 	}
 
 Archive::~Archive()
 	{
-	if(m_handle!=nullptr)
+	if(m_handle!=NULL)
 		{zip_close(static_cast<zip*>(m_handle));}
 	}
 
@@ -79,14 +78,13 @@ Archive::File::File(Archive& archive,const char* filename)
 		zip_error_get(a,&status,NULL);
 		archiveErrorRaise("It is not possible open the file \"%s\". %s.",filename,status);
 		}
+	m_filename=String(archive.m_filename).append(':').append(filename);
 	m_handle=handle;
-	m_filename=ArraySimple<char>(strlen(filename)+1);
-	memcpy(m_filename.begin(),filename,m_filename.length()*sizeof(char));
 	}
 
 Archive::File::~File()
 	{
-	if(m_handle!=nullptr)
+	if(m_handle!=NULL)
 		{zip_fclose(static_cast<zip_file*>(m_handle));}
 	}
 

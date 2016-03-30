@@ -7,12 +7,13 @@ dependency[archive.o]
 #define GLINDA_ARCHIVE_H
 
 #include "datasource.h"
-#include "arraysimple.h"
+#include "string.h"
+#include "filesystem.h"
 #include <utility>
 
 namespace Glinda
 	{
-	class Archive
+	class Archive:public Filesystem
 		{
 		public:
 			class File:public DataSource
@@ -43,7 +44,7 @@ namespace Glinda
 
 				private:
 					void* m_handle;
-					ArraySimple<char> m_filename;
+					String m_filename;
 				};
 
 			explicit Archive(const char* filename);
@@ -58,12 +59,20 @@ namespace Glinda
 				return std::move(ret);
 				}
 
+			FileReference fileReferenceCreate(const char* filename)
+				{
+				return {new File(*this,filename),fileReferenceDestroy};
+				}
+
 			const char* nameGet() const noexcept
 				{return m_filename.begin();}
 
 		private:
 			void* m_handle;
-			ArraySimple<char> m_filename;
+			String m_filename;
+
+			static void fileReferenceDestroy(DataSource* source)
+				{delete source;}
 		};
 	};
 

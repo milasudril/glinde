@@ -18,7 +18,7 @@ namespace Glinda
 	class ArraySimple
 		{
 		public:
-			ArraySimple():m_content{0,0,0,0}
+			ArraySimple():m_content{0,0}
 				{}
 
 			explicit ArraySimple(size_t n_elems);
@@ -29,16 +29,24 @@ namespace Glinda
 
 			ArraySimple(const ArraySimple& a);
 
-			ArraySimple& operator=(const ArraySimple& a);
+			ArraySimple& operator=(const ArraySimple& a)
+				{
+				assert( &a != this);
+				ArraySimple<T> temp(a);
+				*this=std::move(temp);
+				return *this;
+				}
+
 
 			ArraySimple(ArraySimple&& a) noexcept
 				{
 				m_content.x=a.m_content.x;
-				a.m_content.x=vec4_t<int32_t>{0,0,0,0};
+				a.m_content.x=TwoPointers{0,0};
 				}
 
 			ArraySimple& operator=(ArraySimple&& a) noexcept
 				{
+ 				assert(&a != this);
 				std::swap(m_content.x,a.m_content.x);
 				return *this;
 				}
@@ -66,7 +74,7 @@ namespace Glinda
 
 		private:
 #if (__amd64 || __x86_64 || __x86_64__ || __amd64__)
-			typedef vec4_t<int32_t> TwoPointers;
+			typedef vec2_t<int64_t> TwoPointers;
 #else
 			typedef vec2_t<int32_t> TwoPointers;
 #endif
@@ -121,14 +129,6 @@ namespace Glinda
 		memoryFree(m_content.fields.data);
 		}
 
-	template<class T>
-	ArraySimple<T>& ArraySimple<T>::operator=(const ArraySimple<T>& a)
-		{
-		assert( &a != this);
-		ArraySimple<T> temp(a);
-		*this=std::move(temp);
-		return *this;
-		}
 
 	template<class T>
 	ArraySimple<T>::ArraySimple(const ArraySimple& a)
