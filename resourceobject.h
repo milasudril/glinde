@@ -43,8 +43,11 @@ namespace Glinda
 			ResourceObject(const ResourceObject&)=delete;
 			ResourceObject& operator=(const ResourceObject&)=delete;
 
-			explicit ResourceObject(DataSource&& reader);
+			explicit ResourceObject(DataSource&& reader):ResourceObject(reader)
+				{}
+
 			explicit ResourceObject(DataSource& reader);
+			
 			~ResourceObject();
 
 			ResourceObject(ResourceObject&& tree) noexcept:m_handle(tree.m_handle)

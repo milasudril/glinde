@@ -14,7 +14,7 @@ namespace Glinda
 
 	struct Mesh
 		{
-		Mesh(DataSource&& source);
+		Mesh(DataSource&& source):Mesh(source){}
 		Mesh(DataSource& source);
 
 		ArraySimple<unsigned int> m_faces;

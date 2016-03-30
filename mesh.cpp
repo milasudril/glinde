@@ -121,44 +121,6 @@ static Mesh::Frame frameGet(const char* source_name
 	}
 
 
-Mesh::Mesh(DataSource&& source)
-	{
-	ResourceObject data_raw(source);
-	unsigned int vi_max=0;
-		{
-		auto faces=data_raw.objectGet("faces");
-		auto N=narrow_cast<unsigned int>(faces.objectCountGet());
-		if(N%3!=0)
-			{
-			throw ErrorMessage("%s: A mesh must consist of triangles only."
-				,source.nameGet());
-			}
-
-		GLINDA_DEBUG_PRINT("%s: Got %u faces.",source.nameGet(),N);
-
-		m_faces=ArraySimple<unsigned int>
-			{
-			N,[&vi_max,&faces](size_t k)
-				{
-				auto vi=narrow_cast<unsigned int>
-					(static_cast<long long int>(faces.objectGet(k)) );
-				vi_max=std::max(vi,vi_max);
-				return vi;
-				}
-			};
-		}
-
-		{
-		auto frames=data_raw.objectGet("frames");
-		auto N=narrow_cast<unsigned int>(frames.objectCountGet());
-		GLINDA_DEBUG_PRINT("%s: Got %u frames.",source.nameGet(),N);
-		m_frames=ArraySimple<Frame>
-			{
-			N,[&source,&frames,vi_max](size_t k)
-				{return frameGet(source.nameGet(),frames.objectGet(k),vi_max);}
-			};
-		}
-	}
 
 Mesh::Mesh(DataSource& source)
 	{

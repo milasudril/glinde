@@ -40,16 +40,6 @@ bool ResourceObject::Iterator::atEnd() noexcept
 	}
 
 
-ResourceObject::ResourceObject(DataSource&& readhandler)
-	{
-	json_error_t status;
-	m_handle=json_load_callback(loadCallback,&readhandler,0,&status);
-	if(m_handle==nullptr)
-		{
-		throw ErrorMessage("Could not load JSON data. %s:%d: %s."
-			,readhandler.nameGet(),status.line,status.text);
-		}
-	}
 
 ResourceObject::ResourceObject(DataSource& readhandler)
 	{
