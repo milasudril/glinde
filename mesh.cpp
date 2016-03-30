@@ -123,7 +123,7 @@ static Mesh::Frame frameGet(const char* source_name
 
 Mesh::Mesh(DataSource&& source)
 	{
-	ResourceObject data_raw(std::move(source));
+	ResourceObject data_raw(source);
 	unsigned int vi_max=0;
 		{
 		auto faces=data_raw.objectGet("faces");

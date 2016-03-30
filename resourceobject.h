@@ -6,8 +6,6 @@ dependency[resourceobject.o]
 #ifndef GLINDA_RESOURCEOBJECT_H
 #define GLINDA_RESOURCEOBJECT_H
 
-#include "arraysimple.h"
-
 #include <utility>
 #include <cstddef>
 
@@ -46,6 +44,7 @@ namespace Glinda
 			ResourceObject& operator=(const ResourceObject&)=delete;
 
 			explicit ResourceObject(DataSource&& reader);
+			explicit ResourceObject(DataSource& reader);
 			~ResourceObject();
 
 			ResourceObject(ResourceObject&& tree) noexcept:m_handle(tree.m_handle)
@@ -82,7 +81,6 @@ namespace Glinda
 		private:
 			ResourceObject(void* handle,const char* name);
 			void* m_handle;
-			ArraySimple<char> m_name;
 		};
 	};
 

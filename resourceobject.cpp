@@ -8,7 +8,6 @@ target[name[resourceobject.o] type[object] dependency[jansson;external]]
 #include "logwriter.h"
 
 #include <jansson.h>
-#include <cstring>
 
 using namespace Glinda;
 
@@ -50,17 +49,23 @@ ResourceObject::ResourceObject(DataSource&& readhandler)
 		throw ErrorMessage("Could not load JSON data. %s:%d: %s."
 			,readhandler.nameGet(),status.line,status.text);
 		}
-	m_name=ArraySimple<char>(strlen(readhandler.nameGet()) + 1 );
-	memcpy(m_name.begin(),readhandler.nameGet(),m_name.length()*sizeof(char));
+	}
+
+ResourceObject::ResourceObject(DataSource& readhandler)
+	{
+	json_error_t status;
+	m_handle=json_load_callback(loadCallback,&readhandler,0,&status);
+	if(m_handle==nullptr)
+		{
+		throw ErrorMessage("Could not load JSON data. %s:%d: %s."
+			,readhandler.nameGet(),status.line,status.text);
+		}
 	}
 
 ResourceObject::ResourceObject(void* handle,const char* name)
 	{
 	m_handle=handle;
 	json_incref(static_cast<json_t*>(m_handle));
-
-	m_name=ArraySimple<char>(strlen(name) + 1 );
-	memcpy(m_name.begin(),name,m_name.length()*sizeof(char));
 	}
 
 ResourceObject::~ResourceObject()
@@ -97,9 +102,7 @@ ResourceObject ResourceObject::objectGet(const char* name)
 	auto result=json_object_get(static_cast<const json_t*>(m_handle),name);
 	if(result==NULL)
 		{
-		throw ErrorMessage("%s: Could not get child object \"%s\"."
-			,m_name.begin()
-			,name);
+		throw ErrorMessage("Could not get child object \"%s\".",name);
 		}
 
 	return ResourceObject(result,name);
@@ -113,10 +116,9 @@ ResourceObject ResourceObject::objectGet(size_t index)
 	auto result=json_array_get(static_cast<const json_t*>(m_handle),index);
 	if(result==NULL)
 		{
-		throw ErrorMessage("%s: Could not get child object number %zu."
-			,m_name.begin(),index + 1);
+		throw ErrorMessage("Could not get child object number %zu.",index + 1);
 		}
-	return ResourceObject(result,m_name.begin());
+	return ResourceObject(result,nullptr);
 	}
 
 const char* ResourceObject::stringGet() const noexcept
@@ -135,8 +137,7 @@ double ResourceObject::floatGet() const noexcept
 	if(typeGet()==Type::INTEGER)
 		{
 		logWrite(LogMessageType::WARNING
-			,"%s: Reading floating point value encoded as integer."
-			,m_name.begin());
+			,"Reading floating point value encoded as integer.");
 		return static_cast<double>(integerGet());
 		}
 	return json_real_value(static_cast<const json_t*>(m_handle));
@@ -147,8 +148,7 @@ ResourceObject::operator const char*() const
 	auto ret=stringGet();
 	if(ret==nullptr)
 		{
-		throw ErrorMessage("%s: Current resource object is not a string."
-			,m_name.begin());
+		throw ErrorMessage("Current resource object is not a string.");
 		}
 	return ret;
 	}
@@ -157,8 +157,7 @@ ResourceObject::operator long long int() const
 	{
 	if(typeGet()!=Type::INTEGER)
 		{
-		throw ErrorMessage("%s: Current resource object is not an integer."
-			,m_name.begin());
+		throw ErrorMessage("Current resource object is not an integer.");
 		}
 	return integerGet();
 	}
@@ -172,7 +171,6 @@ ResourceObject::operator double() const
 			return floatGet();
 
 		default:
-			throw ErrorMessage("%s: Current resource object is not an integer."
-				,m_name.begin());
+			throw ErrorMessage("Current resource object is not an integer.");
 		}
 	}
