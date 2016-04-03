@@ -35,7 +35,7 @@
 </xsl:template>
 
 <xsl:template match="div[@class='title']">
-<h1><xsl:apply-templates select="./node()" /></h1>
+<h1 id="details"><xsl:apply-templates select="./node()" /></h1>
 </xsl:template>
 
 <xsl:template match="div[@class='header']">

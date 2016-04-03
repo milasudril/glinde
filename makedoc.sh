@@ -4,7 +4,8 @@ rm -rf __doc
 doxygen >/dev/null
 
 cp -n dynsections.js __doc/html
-cp __doc/html/class_glinda_1_1_array_simple.html test.html
+cp starspink.png __doc/html
+
 if kiss doxstyle.txt < doxstyle.css > __doc/html/doxstyle.css; then
 	for i in __doc/html/*.html; do
 		temp=`mktemp`

@@ -120,6 +120,8 @@ table.memberdecls,table.directory
 	background: $memberdecls_ background ;
 	border-color: $memberdecls_ border ;
 	}
+
+body{background:$page_ background ;}
 nav {background:$menu_ background ;}
 nav > ul.tablist {background:$tablist_ background ;}
 nav > ul.tablist > li {background:$menubutton_ background ;}

@@ -7,7 +7,8 @@ tablist background: #ffbdde
 menubutton text: #000000
 navtext color: #ff57ab
 menu background: #ffbdde
-navpath background: #ffffff
+menu background: initial
+navpath background: initial
 link color: #8000ff
 header color: #8000ff
 memheader color: #ff57ab
@@ -25,3 +26,4 @@ article background: initial
 title text: initial
 header background: initial
 see border: #8000ff
+page background: #ffffff url("starspink.png") repeat fixed
