@@ -36,7 +36,7 @@ h1,h2,h3,h4,h5,h6,dt,th
 code,pre,kbd,div.line{font-family:$font_ monospace ;white-space:pre}
 pre > code,kbd{font-size:10px}
 
-pre.fragment,div.fragment,.note,.warning
+table,pre.fragment,div.fragment,.note,.warning,.see
 	{
 	width:calc(100% - 128px);
 	position:relative;
@@ -48,10 +48,8 @@ pre.fragment,div.fragment,.note,.warning
 	padding:4px;
 	}
 
-table,.note,.warning
+table,.note,.warning,.see
 	{
-	width:calc(100% - 128px);
-	position:relative;
 	border:2px solid;
 	margin:auto;
 	border-radius:4px;
@@ -117,7 +115,7 @@ a{text-decoration:none}
 a {color: $link_ color ;}
 h1,h2,h3,h4{color: $header_ color ;}
 .memproto{color: $memheader_ color ;}
-table.memberdecls
+table.memberdecls,table.directory
 	{
 	background: $memberdecls_ background ;
 	border-color: $memberdecls_ border ;
@@ -132,6 +130,7 @@ nav > ul.navpath{background: $navpath_ background ;}
 dl.section,div.fragment,pre.fragment{background: $infobox_ background ;}
 dl.section.warning{border-color: $warning_ border ;}
 dl.section.note,pre.fragment,div.fragment{border-color: $note_ border ;}
+dl.section.see{border-color: $see_ border ;}
 table.params,table.fieldtable{border-color: $parameters_ border ; background: $parameters_ background ;}
 
 .keywordtype{color: $keywordtype_ text ;}

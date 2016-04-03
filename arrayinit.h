@@ -5,7 +5,7 @@ target[name[arrayinit.h] type[include]]
 #ifndef GLINDA_ARRAYINIT_H
 #define GLINDA_ARRAYINIT_H
 
-/**\file arrayinit.h Array initialization routines
+/**\file arrayinit.h \brief Array initialization routines
  */
 
 #include <new>

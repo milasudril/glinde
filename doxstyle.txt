@@ -24,3 +24,4 @@ comment text: #408000
 article background: initial
 title text: initial
 header background: initial
+see border: #8000ff

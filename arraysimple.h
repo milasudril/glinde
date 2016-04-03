@@ -17,7 +17,7 @@ target[name[arraysimple.h] type[include]]
 
 namespace Glinda
 	{
-	/**\brief A class for non-growing dynamically allocated arrays.
+	/**\brief Class representing non-growing dynamically allocated arrays.
 	 *
 	 * This class describes non-growing dynamically allocated arrays. The memory
 	 * is managed through the functions declared in memoryalloc.h, which makes
