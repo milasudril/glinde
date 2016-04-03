@@ -1,10 +1,19 @@
 #!/bin/bash
 
 rm -rf __doc
-doxygen
+doxygen >/dev/null
 
-for i in __doc/html/*.html; do
-	echo "Processing $i"
-	xsltproc --novalid tagfilter.xsl "$i" 2>/dev/null > "temp.html"
-	mv temp.html "$i"
-done
+cp -n dynsections.js __doc/html
+if kiss doxstyle.txt < doxstyle.css > __doc/html/doxstyle.css; then
+	for i in __doc/html/*.html; do
+		temp=`mktemp`
+		{
+		echo "<!DOCTYPE html>" ;
+		sed 's/\&\&/\&amp;\&amp;/g' "$i" | xsltproc --novalid tagfilter.xsl - \
+			| xsltproc --html members-merge.xsl - 2>/dev/null;
+		}  > temp
+		mv temp "$i"
+	done
+else
+	echo "Kiss failed"
+fi
