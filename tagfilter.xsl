@@ -16,6 +16,10 @@
 <xsl:apply-templates select="*[not(@class='textblock' or text()='Detailed Description')]"/>
 </xsl:template>
 
+<xsl:template match="div[@class='textblock']">
+<xsl:apply-templates />
+</xsl:template>
+
 <xsl:template match="body">
 <xsl:apply-templates select="div[@id='top']" />
 <article>

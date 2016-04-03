@@ -136,6 +136,8 @@ table.params,table.fieldtable{border-color: $parameters_ border ; background: $p
 
 .keywordtype{color: $keywordtype_ text ;}
 .keyword,.keywordflow{color: $keyword_ text ;font-weight: bold ;}
+.comment{color: $comment_ text ;}
+
 article{background: $article_ background ;}
 header{background: $header_ background ;}
 header>h1{color: $title_ text ;}

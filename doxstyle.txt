@@ -20,6 +20,7 @@ parameters background: #ffe0f0
 parameters border: #ffbdde
 keywordtype text: #ff0080
 keyword text: #8000ff
+comment text: #408000
 article background: initial
 title text: initial
 header background: initial

@@ -2,6 +2,9 @@
 target[name[arraysimple.h] type[include]]
 #endif
 
+/** \file arraysimple.h \brief Definition of a simple array storage class
+*/
+
 #ifndef ARRAYSIMPLE_H
 #define ARRAYSIMPLE_H
 
@@ -14,21 +17,86 @@ target[name[arraysimple.h] type[include]]
 
 namespace Glinda
 	{
+	/**\brief A class for non-growing dynamically allocated arrays.
+	 *
+	 * This class describes non-growing dynamically allocated arrays. The memory
+	 * is managed through the functions declared in memoryalloc.h, which makes
+	 * the array suitable for vectorized code.
+	 *
+	 */
 	template<class T>
 	class ArraySimple
 		{
 		public:
+			~ArraySimple();
+
+			/**\brief Default constructor.
+			 *
+			 * This is the default constructor. An ArraySimple, that has been
+			 * initialized by this constructor, is empty.
+			*/
 			ArraySimple():m_content{0,0}
 				{}
 
+			/**\brief Size initialize constructor.
+			 *
+			 * This constructor initializes the array with a capacity of
+			 * `n_elems` elements. The elements allocated will be default
+			 * initialized.
+			*/
 			explicit ArraySimple(size_t n_elems);
-			~ArraySimple();
 
+			/**\brief Element initialize constructor.
+			 *
+			 * This constructor initializes the array with a capacity of
+			 * `n_elems` elements. The elements allocated will be initialized
+			 * using the function object given by `initializer`. This function
+			 * object must behave as a ArrayInit::ElementInitializer.
+			 *
+			 * The main usecase for this function is to create an array of
+			 * objects that cannot be default initialized. This is the case when
+			 * dealing with system resources, that must have a valid handle,
+			 * like files. To create an array of files, the following piece of
+			 * code can be used:
+			 *
+			 * \code{.cpp}
+			 * // Assume there is a class called File, and another array object
+			 * // containing all filenames
+			 *
+			 * Glinda::ArraySimple<File> files(filenames.length(),[&filenames](size_t k)
+			 *     {
+			 * //  Assume Files are move constructible
+			 *     return File(filenames[k]);
+			 *     });
+			 * \endcode
+			 *
+			 * \note While default constructible is not a requirement for this
+			 * constructor, it requires that the objects created in the array
+			 * are move constructible, which is equivalent to say that there
+			 * must exist a "dead" state for the objects.
+			 *
+			*/
 			template<class Initializer>
 			explicit ArraySimple(size_t n_elems,Initializer&& initializer);
 
+			/**\brief Copy constructor.
+			 *
+			 * This is the copy constructor.
+			 *
+			 * \note This function only works if the individual objects are copy
+			 * constructible
+			 *
+			*/
 			ArraySimple(const ArraySimple& a);
 
+			/**\brief Copy copy assignment operator.
+			 *
+			 * This is the copy assigment operator.
+			 *
+			 * \note This function only works if the individual objects are copy
+			 * constructible
+			 *
+			*/
 			ArraySimple& operator=(const ArraySimple& a)
 				{
 				assert( &a != this);
@@ -37,13 +105,16 @@ namespace Glinda
 				return *this;
 				}
 
-
+			/**\brief Move constructor
+			*/
 			ArraySimple(ArraySimple&& a) noexcept
 				{
 				m_content.x=a.m_content.x;
 				a.m_content.x=TwoPointers{0,0};
 				}
 
+			/**\brief Move assigment operator
+			*/
 			ArraySimple& operator=(ArraySimple&& a) noexcept
 				{
  				assert(&a != this);
@@ -51,26 +122,54 @@ namespace Glinda
 				return *this;
 				}
 
+			/**\brief Returns a pointer to the beginning of the array
+			*/
 			T* begin() noexcept
 				{return m_content.fields.data;}
 
+			/**\brief Returns a pointer to const to the beginning of the array
+			*/
 			const T* begin() const noexcept
 				{return m_content.fields.data;}
 
+			/**\brief Returns a pointer to the element past the last element
+			*/
 			T* end() noexcept
 				{return m_content.fields.data+m_content.fields.N;}
 
+			/**\brief Returns a pointer to the element past the last element
+			*/
 			const T* end() const noexcept
 				{return m_content.fields.data+m_content.fields.N;}
 
+			/**\brief Returns the length of the array
+			*/
 			size_t length() const noexcept
 				{return m_content.fields.N;}
 
+			/**\brief Array element access.
+			 *
+			 * \warning The parameter `k` has to be less than the value returned
+			 * by length()
+			 *
+			*/
 			const T& operator[](size_t k) const noexcept
-				{return m_content.fields.data[k];}
+				{
+				assert(k<m_content.fields.N);
+				return m_content.fields.data[k];
+				}
 
+			/**\brief Array element access.
+			 *
+			 * \warning The parameter `k` has to be less than the value returned
+			 * by length()
+			 *
+			*/
 			T& operator[](size_t k) noexcept
-				{return m_content.fields.data[k];}
+				{
+				assert(k<m_content.fields.N);
+				return m_content.fields.data[k];
+				}
 
 		private:
 #if (__amd64 || __x86_64 || __x86_64__ || __amd64__)
