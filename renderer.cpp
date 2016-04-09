@@ -8,6 +8,8 @@ target
 	]
 #endif
 
+#define NDEBUG
+
 #include "renderer.h"
 #include "glshader.h"
 #include "worldobject.h"
@@ -29,8 +31,8 @@ static const char* g_frag_shader="#version 330 core\n"
 	"uniform sampler2D texture_diffuse;"
 	"void main()"
 	"	{"
-//	"	color=texture(texture_diffuse, UV).rgb;"
-	"	color.rgb=vec3(1.0,0.0,0.0);"
+	"	color=texture(texture_diffuse, UV).rgb;"
+//	"	color.rgb=vec3(UV.x,UV.y,0.0);"
 	"	}";
 
 static const char* g_vert_shader=
@@ -61,8 +63,12 @@ Renderer::Renderer()
 	array.bind();
 	program.use();
 	MVP_id=program.uniformGet("MVP");
-	glEnable(GL_DEPTH_TEST);
+	diffuse_id=program.uniformGet("texture_diffuse");
+	GLINDA_DEBUG_PRINT("diffuse uniform is %u",diffuse_id);
+	glEnable(GL_DEPTH_TEST|GL_CULL_FACE);
+	glCullFace(GL_BACK);
 	glDepthFunc(GL_LESS);
+	glFrontFace(GL_CCW);
 	}
 
 Renderer::~Renderer()
@@ -73,11 +79,13 @@ void Renderer::sceneRender(World& world,WorldObject& camera) noexcept
 	glClearColor(0,0,0,1);
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
 	auto V=glm::lookAt(glm::vec3(0,0,2),glm::vec3(0,0,0),glm::vec3(0,1,0));
 	auto V1=camera.viewMatrixGet();
 	auto VP=P*V1;
 	auto MVP=VP;
 	glUniformMatrix4fv(MVP_id,1,GL_FALSE,&MVP[0][0]);
+	glUniform1i(diffuse_id,0);
 
 		{
 		auto ptr=world.objectsBegin();
@@ -89,15 +97,25 @@ void Renderer::sceneRender(World& world,WorldObject& camera) noexcept
 			vertices.dataSet(frame.m_vertices.begin()
 				,static_cast<unsigned int>(frame.m_vertices.length())
 				,GL_STATIC_DRAW);
+
+			GLINDA_DEBUG_PRINT("vertex: %u   UV: %u"
+				,frame.m_vertices.length(),frame.m_uv.length());
+
+			uvs.dataSet(frame.m_uv.begin()
+				,static_cast<unsigned int>(frame.m_uv.length())
+				,GL_STATIC_DRAW);
+
 			vertex_indices.dataSet(mesh->m_faces.begin()
 				,static_cast<unsigned int>(mesh->m_faces.length())
 				,GL_STATIC_DRAW);
-			vertices.attributesBind(0);
+			vertices.attributesBind(0,3);
+			uvs.attributesBind(1,2);
+			texture.dataSet(*frame.r_tex_diffuse);
 			vertex_indices.draw(0);
 			++ptr;
 			}
 		}
-
+	glEnableVertexAttribArray(1);
 	glDisableVertexAttribArray(0);
 	}
 
@@ -105,5 +123,5 @@ void Renderer::viewportSizeSet(int width,int height) noexcept
 	{
 	GLINDA_DEBUG_PRINT("Viewport size changed to %d x %d",width,height);
 	glViewport(0,0,width,height);
-	P=glm::perspective(std::acos(0.0f),float(width)/height,0.1f,1000.0f);
+	P=glm::perspective(std::acos(0.0f),float(width)/float(height),0.1f,1000.0f);
 	}

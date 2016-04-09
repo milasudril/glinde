@@ -7,7 +7,9 @@ dependency[GL;external]
 #ifndef GLINDA_GLVERTEXBUFFER_H
 #define GLINDA_GLVERTEXBUFFER_H
 
+#include "debug.h"
 #include <GL/glew.h>
+#include <cassert>
 
 namespace Glinda
 	{
@@ -24,16 +26,18 @@ namespace Glinda
 				glBufferData(GL_ARRAY_BUFFER,size*sizeof(float),data,usage);
 				}
 
-			void draw(GLuint index) noexcept
+			void draw(GLuint index,unsigned int elem_size) noexcept
 				{
-				attributesBind(index);
+				assert(elem_size==3);
+				attributesBind(index,elem_size);
 				glDrawArrays(GL_TRIANGLES, 0, m_size);
 				}
 
-			void attributesBind(GLuint index)
+			void attributesBind(GLuint index,unsigned int elem_size) noexcept
 				{
+				assert(m_size%elem_size==0);
 				glBindBuffer(GL_ARRAY_BUFFER,id);
-				glVertexAttribPointer(index,3,
+				glVertexAttribPointer(index,elem_size,
 					GL_FLOAT,// type
 					GL_FALSE,// normalized?
 					0,// stride

@@ -13,6 +13,6 @@ void UserEventHandler::onMouseMove(Window& source,double x,double y)
 	int h;
 	source.sizeGet(w,h);
 	r_camera->pitchSet(std::acos(-1)*y/h)
-		.yawSet(2.0f*std::acos(0)*(x-w/2)/w)
+		.yawSet(4.0f*std::acos(0)*(x-w/2)/w)
 		.headingUpdate();
 	}

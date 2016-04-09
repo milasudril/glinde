@@ -2,6 +2,8 @@
 target[name[memoryalloc.o] type[object] dependency[jemalloc;external]]
 #endif
 
+#define NDEBUG
+
 #include "memoryalloc.h"
 #include "errormessage.h"
 #include "debug.h"

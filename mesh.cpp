@@ -129,8 +129,8 @@ static Mesh::Frame frameGet(TextureManager& textures,const char* source_name
 	return std::move(Mesh::Frame
 		{
 		 std::move(v)
-		,uvGet(source_name,frame_current_in.objectGet("uv"),vertex_count)
 		,normalsGet(source_name,frame_current_in.objectGet("normals"),vertex_count)
+		,uvGet(source_name,frame_current_in.objectGet("uv"),vertex_count)
 		,imageFind(textures,source_name,frame_current_in,"texture_diffuse")
 		});
 	}

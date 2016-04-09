@@ -22,9 +22,10 @@ int main()
 		{
 		WorldObject camera;
 
-		camera.locationSet(glm::vec3(0.0f,-2.0f,0.0f));
+		camera.locationSet(glm::vec3(0.0f,0.0f,0.0f));
 
-		Archive src{"test.zip"};
+	//	Archive src{"test.zip"};
+		Archive src{"test (kopiera 1).zip"};
 		World world{src};
 		UserEventHandler event_handler(camera);
 

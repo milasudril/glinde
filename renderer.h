@@ -10,6 +10,7 @@ dependency[renderer.o]
 #include "glvertexarray.h"
 #include "glvertexbuffer.h"
 #include "glelementarraybuffer.h"
+#include "gltexture.h"
 
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
@@ -34,9 +35,13 @@ namespace Glinda
 
 			GlVertexArray array;
 			GlVertexBuffer vertices;
+			GlVertexBuffer uvs;
 			GlElementArrayBuffer vertex_indices;
+			GlTexture texture;
+
 			glm::mat4 P;
 			GLuint MVP_id;
+			GLuint diffuse_id;
 		};
 	}
 

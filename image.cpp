@@ -201,7 +201,7 @@ template<class T>
 static void pixelsScale(const T* pixels_in,Image::SampleType* pixels_out,uint32_t N)
 	{
 	auto factor=static_cast<float>( ( 1L<<(8L*sizeof(T)) ) - 1 );
-	GLINDA_DEBUG_PRINT("Conversion factor: %.7g",factor);
+	GLINDA_DEBUG_PRINT("Conversion factor: %.7g N=%u",factor,N);
 
 	while(N)
 		{
@@ -217,14 +217,15 @@ void PNGReader::pixelsRead(Image::SampleType* pixels_out)
 	auto width=m_width;
 	auto height=m_height;
 	auto sample_size=m_sample_size;
-	ArraySimple<uint8_t> buffer_temp(width*height*sample_size);
+	auto n_channels=m_n_channels;
+	ArraySimple<uint8_t> buffer_temp(width*height*sample_size*n_channels);
 
 		{
 		auto row=buffer_temp.begin();
 		ArraySimple<uint8_t*> rows
 			{
-			height,[row,width,sample_size](size_t n)
-				{return row + n*width*sample_size;}
+			height,[row,width,sample_size,n_channels](size_t n)
+				{return row + n*width*sample_size*n_channels;}
 			};
 
 		png_read_image(m_handle,rows.begin());
@@ -233,16 +234,16 @@ void PNGReader::pixelsRead(Image::SampleType* pixels_out)
 	switch(sample_size)
 		{
 		case 1:
-			pixelsScale(buffer_temp.begin(),pixels_out,width*height);
+			pixelsScale(buffer_temp.begin(),pixels_out,width*height*n_channels);
 			break;
 
 		case 2:
 			pixelsScale(reinterpret_cast<const uint16_t*>(buffer_temp.begin())
-				,pixels_out,width*height);
+				,pixels_out,width*height*n_channels);
 			break;
 		case 4:
 			pixelsScale(reinterpret_cast<const uint32_t*>(buffer_temp.begin())
-				,pixels_out,width*height);
+				,pixels_out,width*height*n_channels);
 			break;
 		default:
 			{
@@ -264,7 +265,26 @@ static void fromGamma(Image& image)
 	{}
 
 static void fromSRGB(Image& image)
-	{}
+	{
+	auto ptr=image.pixelsGet();
+	auto n_ch=image.channelCountGet();
+	auto N=image.widthGet() * image.heightGet();
+	GLINDA_DEBUG_PRINT("Converting image from sRGB %u %u",n_ch,N);
+
+/*	auto k=0;
+	float color=0.0f;
+	while(N!=0)
+		{
+		color=(k%32==0)?(1.0f - color):color;
+		ptr[0]=color;
+		ptr[1]=color;
+		ptr[2]=color;
+		ptr[3]=1.0;
+		ptr+=n_ch;
+		++k;
+		N-=n_ch;
+		}*/
+	}
 
 static ColorConverter converterGet(PNGReader::ColorType color_type)
 	{
@@ -313,10 +333,16 @@ Image::Image(DataSource& source)
 
 	PNGReader reader(source);
 	reader.headerRead();
+
+	m_properties.x=vec4_t<uint32_t>
+		{reader.widthGet(),reader.heightGet(),reader.channelCountGet(),0};
+
 	m_pixels=ArraySimple<SampleType>(reader.widthGet()*reader.heightGet()
 		*reader.channelCountGet());
 
 	reader.pixelsRead(m_pixels.begin());
+
+
 
 	auto converter=converterGet(reader.colorTypeGet());
 	if(converter!=nullptr)

@@ -19,6 +19,7 @@ target
 #include <GL/gl.h>
 #include <GLFW/glfw3.h>
 
+#include <ctime>
 
 
 using namespace Glinda;
@@ -38,8 +39,8 @@ WindowController::WindowController():r_window(nullptr)
 	GLINDA_ASSERT_CALL(glfwInit(),==,GL_TRUE);
 
 	glfwWindowHint(GLFW_SAMPLES,4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,5);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_DOUBLEBUFFER,GL_TRUE);
@@ -52,10 +53,12 @@ WindowController::~WindowController()
 
 void WindowController::inputLoopRun() noexcept
 	{
-	glfwSwapInterval(1);
+//	glfwSwapInterval(1);
 	if(r_window!=nullptr)
 		{r_window->stickyKeysSet();}
 
+	clock_t now=clock();
+	uint64_t frame_count=0;
 	while(r_window!=nullptr)
 		{
 		if(r_window->shouldClose())
@@ -64,6 +67,8 @@ void WindowController::inputLoopRun() noexcept
 		glfwPollEvents();
 		r_window->redraw();
 		r_window->buffersSwap();
+		++frame_count;
 		}
+	GLINDA_DEBUG_PRINT("Frame rate: %.8g",CLOCKS_PER_SEC*double(frame_count)/(double(clock() - now)));
 	}
 
