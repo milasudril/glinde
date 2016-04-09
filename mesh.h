@@ -6,16 +6,18 @@ dependency[mesh.o]
 #ifndef GLINDA_MESH_H
 #define GLINDA_MESH_H
 
-#include "image.h"
+#include "arraysimple.h"
 
 namespace Glinda
 	{
 	class DataSource;
+	class Image;
+	class TextureManager;
 
 	struct Mesh
 		{
-		Mesh(DataSource&& source):Mesh(source){}
-		Mesh(DataSource& source);
+		Mesh(TextureManager& textures,DataSource&& source):Mesh(textures,source){}
+		Mesh(TextureManager& textures,DataSource& source);
 
 		ArraySimple<unsigned int> m_faces;
 
@@ -24,6 +26,7 @@ namespace Glinda
 			ArraySimple<float> m_vertices;
 			ArraySimple<float> m_normals;
 			ArraySimple<float> m_uv;
+			const Image* r_tex_diffuse;
 			};
 
 		ArraySimple<Frame> m_frames;

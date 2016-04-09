@@ -109,7 +109,7 @@ namespace Glinda
 			*/
 			FileReference fileReferenceCreate(const char* filename)
 				{
-				return {new File(*this,filename),fileReferenceDestroy};
+				return FileReference{new File(*this,filename),fileReferenceDestroy};
 				}
 
 			/**\brief Archive filename
@@ -119,9 +119,16 @@ namespace Glinda
 			const char* nameGet() const noexcept
 				{return m_filename.begin();}
 
+			String filepathCreate(const char* wd,const char* path_relative);
+
+			void cd(const char* dir_new);
+
+			String filenameFromSibling(const char* sibling,const char* filename);
+
 		private:
 			void* m_handle;
 			String m_filename;
+			String m_dir_current;
 
 			static void fileReferenceDestroy(DataSource* source)
 				{delete source;}

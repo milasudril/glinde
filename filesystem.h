@@ -9,6 +9,7 @@ target[name[filesystem.h] type[include]]
 #define GLINDA_FILESYSTEM_H
 
 #include "datasource.h"
+#include "string.h"
 #include <memory>
 
 namespace Glinda
@@ -29,8 +30,17 @@ namespace Glinda
 			 * retrieved by the method fileReferenceCreate(const char*).
 			 *
 			*/
-			typedef std::unique_ptr<DataSource,DataSource::Deleter>
-			FileReference;
+			class FileReference:private std::unique_ptr<DataSource,DataSource::Deleter>
+				{
+				public:
+					explicit FileReference(DataSource* ds,DataSource::Deleter d):
+						std::unique_ptr<DataSource,DataSource::Deleter>(ds,d)
+						{}
+
+					operator DataSource& () noexcept
+						{return *get();}
+				};
+
 
 			/**\brief File access.
 			 *
@@ -39,6 +49,17 @@ namespace Glinda
 			 * an exception.
 			*/
 			virtual FileReference fileReferenceCreate(const char* filename)=0;
+
+			/**\brief Change working directory.
+			 *
+			 * This method shall change the current working directory.
+			 *
+			 */
+			virtual void cd(const char* dir_new)=0;
+
+			/**\brief Construct a path for a sibling file.
+			 */
+			virtual String filenameFromSibling(const char* sibling,const char* filename)=0;
 		};
 	}
 

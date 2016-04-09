@@ -197,7 +197,7 @@ namespace Glinda
 			{ArrayInit::create(data,data+n_elems);}
 		catch(...)
 			{
-			memoryFree(m_content.fields.data);
+			memoryFree(data);
 			throw;
 			}
 		m_content.fields.N=n_elems;
@@ -213,7 +213,7 @@ namespace Glinda
 			{ArrayInit::create(data,data+n_elems,init);}
 		catch(...)
 			{
-			memoryFree(m_content.fields.data);
+			memoryFree(data);
 			throw;
 			}
 		m_content.fields.N=n_elems;
@@ -232,7 +232,7 @@ namespace Glinda
 	template<class T>
 	ArraySimple<T>::ArraySimple(const ArraySimple& a)
 		{
-		auto data=reinterpret_cast<T>( memoryAllocate(a.length()*sizeof(T)) );
+		auto data=reinterpret_cast<T*>( memoryAllocate(a.length()*sizeof(T)) );
 		try
 			{ArrayInit::copy(data,data+a.length(),a.begin());}
 		catch(...)

@@ -6,11 +6,11 @@ dependency[world.o]
 #ifndef GLINDA_WORLD_H
 #define GLINDA_WORLD_H
 
-#include "arraysimple.h"
-#include "stringkey.h"
+#include "arraydynamic.h"
 #include "mesh.h"
 #include "worldobject.h"
-#include <map>
+#include "texturemanager.h"
+#include "stringkey.h"
 
 namespace Glinda
 	{
@@ -19,13 +19,19 @@ namespace Glinda
 	class World
 		{
 		public:
-			World();
 			~World();
-			World(Archive&& source);
+			World(Archive& source);
+
+			WorldObject* objectsBegin() noexcept
+				{return m_objects.begin();}
+
+			WorldObject* objectsEnd() noexcept
+				{return m_objects.end();}
 
 		private:
 			std::map<Stringkey, Mesh> m_meshes;
-			ArraySimple<WorldObject> m_objects;
+			ArrayDynamic<WorldObject> m_objects;
+			TextureManager m_textures;
 		};
 	}
 

@@ -17,13 +17,20 @@ namespace Glinda
 			GlVertexBuffer()
 				{glGenBuffers(1,&id);}
 
-			void dataSet(size_t n_verts,const float* data,GLenum usage) noexcept
+			void dataSet(const float* data,unsigned int size,GLenum usage) noexcept
 				{
+				m_size=size;
 				glBindBuffer(GL_ARRAY_BUFFER,id);
-				glBufferData(GL_ARRAY_BUFFER,3*n_verts*sizeof(float),data,usage);
+				glBufferData(GL_ARRAY_BUFFER,size*sizeof(float),data,usage);
 				}
 
 			void draw(GLuint index) noexcept
+				{
+				attributesBind(index);
+				glDrawArrays(GL_TRIANGLES, 0, m_size);
+				}
+
+			void attributesBind(GLuint index)
 				{
 				glBindBuffer(GL_ARRAY_BUFFER,id);
 				glVertexAttribPointer(index,3,
@@ -32,7 +39,6 @@ namespace Glinda
 					0,// stride
 					(void*)0// array buffer offset
 					);
-				glDrawArrays(GL_TRIANGLES, 0, 3);
 				}
 
 			~GlVertexBuffer()
@@ -43,7 +49,7 @@ namespace Glinda
 
 		private:
 			GLuint id;
-			unsigned int size;
+			unsigned int m_size;
 		};
 	}
 

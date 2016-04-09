@@ -10,6 +10,8 @@ target[name[arrayinit.h] type[include]]
 
 #include <new>
 #include <cstddef>
+#include <type_traits>
+#include <cstring>
 
 namespace Glinda
 	{
@@ -38,10 +40,13 @@ namespace Glinda
 		template<class T>
 		void destroy(T* begin,T* end)
 			{
-			while(end!=begin)
+			if(!std::is_trivially_destructible<T>::value)
 				{
-				--end;
-				end->~T();
+				while(end!=begin)
+					{
+					--end;
+					end->~T();
+					}
 				}
 			}
 
@@ -91,19 +96,22 @@ namespace Glinda
 		template<class T>
 		void create(T* begin,T* end)
 			{
-			auto position=begin;
-			try
+			if(!std::is_trivially_default_constructible<T>::value)
 				{
-				while(position!=end)
+				auto position=begin;
+				try
 					{
-					new(position)T();
-					++position;
+					while(position!=end)
+						{
+						new(position)T();
+						++position;
+						}
 					}
-				}
-			catch(...)
-				{
-				destroy(position,begin);
-				throw;
+				catch(...)
+					{
+					destroy(begin,position);
+					throw;
+					}
 				}
 			}
 
@@ -160,7 +168,7 @@ namespace Glinda
 				}
 			catch(...)
 				{
-				destroy(position,begin);
+				destroy(begin,position);
 				throw;
 				}
 			}
@@ -194,9 +202,18 @@ namespace Glinda
 				}
 			catch(...)
 				{
-				destroy(position,end);
+				destroy(begin,position);
 				throw;
 				}
+			}
+
+		template<class T>
+		void copy(T* begin,T* end,const T* source)
+			{
+			if(std::is_trivially_copy_constructible<T>::value)
+				{memcpy(begin,source,sizeof(T)*(end-begin));}
+			else
+				{copy<T,T>(begin,end,source);}
 			}
 		}
 	}

@@ -9,11 +9,14 @@ target[name[mesh.o] type[object]]
 #include "errormessage.h"
 #include "logwriter.h"
 #include "narrow_cast.h"
+#include "texturemanager.h"
+#include "string.h"
+#include <algorithm>
 
 using namespace Glinda;
 
 static ArraySimple<float> verticesGet(const char* source_name
-	,ResourceObject&& vertices
+	,const ResourceObject& vertices
 	,unsigned int vi_max)
 	{
 	auto n=narrow_cast<unsigned int>( vertices.objectCountGet() );
@@ -48,7 +51,7 @@ static ArraySimple<float> verticesGet(const char* source_name
 	}
 
 static ArraySimple<float> uvGet(const char* source_name
-	,ResourceObject&& uv
+	,const ResourceObject& uv
 	,size_t vertex_count)
 	{
 	auto n=narrow_cast<unsigned int>( uv.objectCountGet() );
@@ -77,7 +80,7 @@ static ArraySimple<float> uvGet(const char* source_name
 	}
 
 static ArraySimple<float> normalsGet(const char* source_name
-	,ResourceObject&& normals
+	,const ResourceObject& normals
 	,size_t vertex_count)
 	{
 	auto n=narrow_cast<unsigned int>( normals.objectCountGet() );
@@ -105,25 +108,37 @@ static ArraySimple<float> normalsGet(const char* source_name
 		});
 	}
 
+static Image* imageFind(TextureManager& textures,const char* source_name
+	,const ResourceObject& frame_current_in,const char* type)
+	{
+ 	auto filename=frame_current_in.stringGet(type);
+	if(filename!=nullptr)
+		{
+		return &textures.textureGet(source_name,filename);
+		}
+	return nullptr;
+	}
 
-static Mesh::Frame frameGet(const char* source_name
-	,ResourceObject&& frame_current_in
+static Mesh::Frame frameGet(TextureManager& textures,const char* source_name
+	,const ResourceObject& frame_current_in
 	,unsigned int vi_max)
 	{
 	auto v=verticesGet(source_name,frame_current_in.objectGet("vertices"),vi_max);
 	auto vertex_count=v.length();
+
 	return std::move(Mesh::Frame
 		{
 		 std::move(v)
 		,uvGet(source_name,frame_current_in.objectGet("uv"),vertex_count)
 		,normalsGet(source_name,frame_current_in.objectGet("normals"),vertex_count)
+		,imageFind(textures,source_name,frame_current_in,"texture_diffuse")
 		});
 	}
 
 
 
-Mesh::Mesh(DataSource& source)
-	{
+Mesh::Mesh(TextureManager& textures,DataSource& source)
+ 	{
 	ResourceObject data_raw(source);
 	unsigned int vi_max=0;
 		{
@@ -155,8 +170,8 @@ Mesh::Mesh(DataSource& source)
 		GLINDA_DEBUG_PRINT("%s: Got %u frames.",source.nameGet(),N);
 		m_frames=ArraySimple<Frame>
 			{
-			N,[&source,&frames,vi_max](size_t k)
-				{return frameGet(source.nameGet(),frames.objectGet(k),vi_max);}
+			N,[&textures,&source,&frames,vi_max](size_t k)
+				{return frameGet(textures,source.nameGet(),frames.objectGet(k),vi_max);}
 			};
 		}
 	}

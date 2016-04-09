@@ -50,6 +50,9 @@ namespace
 			inline float gammaGet() const noexcept
 				{return static_cast<float>( m_gamma );}
 
+			uint32_t sampleSizeGet() const noexcept
+				{return m_sample_size;}
+
 			inline void headerRead();
 
 			inline void pixelsRead(half* pixels_out);
@@ -111,10 +114,13 @@ void PNGReader::channelBitsConversionSetup()
 		png_set_packing(m_handle);
 		}
 
-	if(n_bits > 8 && !CPUInfo::bigEndianIs())
+	if(n_bits>=8)
+		{m_sample_size=n_bits/8;}
+
+	if(n_bits > 8)
 		{
-		png_set_swap(m_handle);
-		m_sample_size=n_bits/8;
+		if(!CPUInfo::bigEndianIs())
+			{png_set_swap(m_handle);}
 		}
 
 	switch(png_get_color_type(m_handle,m_info))
@@ -163,6 +169,7 @@ PNGReader::PNGReader(DataSource& source)
 	m_info_end=nullptr;
 	m_handle=png_create_read_struct(PNG_LIBPNG_VER_STRING,NULL,on_error,on_warning);
 	png_set_read_fn(m_handle,&source,on_read);
+	m_info=png_create_info_struct(m_handle);
 	m_color_type=ColorType::INFORMATION_MISSING;
 	m_gamma=1.0;
 	}
@@ -306,8 +313,9 @@ Image::Image(DataSource& source)
 
 	PNGReader reader(source);
 	reader.headerRead();
-	m_pixels=ArraySimple<SampleType>
-		(reader.widthGet()*reader.heightGet()*reader.channelCountGet());
+	m_pixels=ArraySimple<SampleType>(reader.widthGet()*reader.heightGet()
+		*reader.channelCountGet());
+
 	reader.pixelsRead(m_pixels.begin());
 
 	auto converter=converterGet(reader.colorTypeGet());

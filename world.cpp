@@ -9,11 +9,7 @@ target[name[world.o] type[object]]
 
 using namespace Glinda;
 
-World::World()
-	{
-	}
-
-World::World(Archive&& source)
+World::World(Archive& source):m_textures(source)
 	{
 	ResourceObject models{source.fileGet("models.json")};
 
@@ -27,7 +23,13 @@ World::World(Archive&& source)
 		const char* mesh_path=static_cast<const char*>(subobject);
 		GLINDA_DEBUG_PRINT("Got a mesh object \"%s\"",mesh_path);
 
-		Mesh mesh(source.fileGet(mesh_path));
+		auto ip=m_meshes.emplace(Stringkey(pair.first),Mesh(m_textures,source.fileGet(mesh_path)));
+
+
+		WorldObject obj;
+		obj.meshSet(&ip.first->second);
+		m_objects.append(std::move(obj));
+
 		i.next();
 		}
 	}

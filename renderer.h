@@ -9,6 +9,7 @@ dependency[renderer.o]
 #include "glprogram.h"
 #include "glvertexarray.h"
 #include "glvertexbuffer.h"
+#include "glelementarraybuffer.h"
 
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
@@ -32,7 +33,8 @@ namespace Glinda
 			GlProgram program;
 
 			GlVertexArray array;
-			GlVertexBuffer vbo;
+			GlVertexBuffer vertices;
+			GlElementArrayBuffer vertex_indices;
 			glm::mat4 P;
 			GLuint MVP_id;
 		};

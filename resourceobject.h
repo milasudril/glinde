@@ -47,7 +47,7 @@ namespace Glinda
 				{}
 
 			explicit ResourceObject(DataSource& reader);
-			
+
 			~ResourceObject();
 
 			ResourceObject(ResourceObject&& tree) noexcept:m_handle(tree.m_handle)
@@ -63,16 +63,16 @@ namespace Glinda
 
 			Type typeGet() const noexcept;
 
-			ResourceObject objectGet(const char* name);
+			ResourceObject objectGet(const char* name) const;
 			size_t objectCountGet() const noexcept;
-			ResourceObject objectGet(size_t index);
+			ResourceObject objectGet(size_t index) const;
 			Iterator objectIteratorGet() noexcept
 				{
 				Iterator i(*this);
 				return std::move(i);
 				}
 
-
+			const char* stringGet(const char* name) const noexcept;
 			const char* stringGet() const noexcept;
 			long long int integerGet() const noexcept;
 			double floatGet() const noexcept;

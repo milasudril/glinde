@@ -6,6 +6,7 @@ target[name[resourceobject.o] type[object] dependency[jansson;external]]
 #include "errormessage.h"
 #include "datasource.h"
 #include "logwriter.h"
+#include "debug.h"
 
 #include <jansson.h>
 
@@ -87,7 +88,7 @@ ResourceObject::Type ResourceObject::typeGet() const noexcept
 		}
 	}
 
-ResourceObject ResourceObject::objectGet(const char* name)
+ResourceObject ResourceObject::objectGet(const char* name) const
 	{
 	auto result=json_object_get(static_cast<const json_t*>(m_handle),name);
 	if(result==NULL)
@@ -101,7 +102,7 @@ ResourceObject ResourceObject::objectGet(const char* name)
 size_t ResourceObject::objectCountGet() const noexcept
 	{return json_array_size(static_cast<const json_t*>(m_handle));}
 
-ResourceObject ResourceObject::objectGet(size_t index)
+ResourceObject ResourceObject::objectGet(size_t index) const
 	{
 	auto result=json_array_get(static_cast<const json_t*>(m_handle),index);
 	if(result==NULL)
@@ -109,6 +110,18 @@ ResourceObject ResourceObject::objectGet(size_t index)
 		throw ErrorMessage("Could not get child object number %zu.",index + 1);
 		}
 	return ResourceObject(result,nullptr);
+	}
+
+const char* ResourceObject::stringGet(const char* name) const noexcept
+	{
+	auto string_obj=json_object_get(static_cast<const json_t*>(m_handle),name);
+	if(string_obj!=NULL)
+		{
+		auto string=json_string_value(static_cast<const json_t*>(string_obj));
+		if(string!=NULL)
+			{return string;}
+		}
+	return nullptr;
 	}
 
 const char* ResourceObject::stringGet() const noexcept

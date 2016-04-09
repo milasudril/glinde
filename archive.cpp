@@ -49,6 +49,35 @@ using namespace Glinda;
 		}
 	}
 
+static String directoryNormalize(const char* str)
+	{
+	String ret;
+	String elem_current;
+	while(*str!='\0')
+		{
+		switch(*str)
+			{
+			case '/':
+				if(elem_current=="..")
+					{
+					ret.truncate('/');
+					}
+				else
+				if(elem_current!=".")
+					{ret.append(elem_current).append('/');}
+
+				elem_current.clear();
+				break;
+
+			default:
+				elem_current.append(*str);
+			}
+		++str;
+		}
+	ret.append(elem_current);
+	return std::move(  ret );
+	}
+
 Archive::Archive(const char* filename)
 	{
 	int result;
@@ -60,6 +89,7 @@ Archive::Archive(const char* filename)
 	m_handle=handle;
 
 	m_filename=String(filename);
+	m_dir_current.append('/');
 	}
 
 Archive::~Archive()
@@ -71,6 +101,10 @@ Archive::~Archive()
 Archive::File::File(Archive& archive,const char* filename)
 	{
 	auto a=static_cast<zip*>(archive.m_handle);
+	auto filename_temp=archive.m_dir_current;
+	filename_temp=directoryNormalize(filename_temp.append(filename).begin());
+
+	filename=filename_temp.beginAfter(':') + 1;
 	auto handle=zip_fopen(a,filename,0);
 	if(handle==NULL)
 		{
@@ -78,7 +112,7 @@ Archive::File::File(Archive& archive,const char* filename)
 		zip_error_get(a,&status,NULL);
 		archiveErrorRaise("It is not possible open the file \"%s\". %s.",filename,status);
 		}
-	m_filename=String(archive.m_filename).append(':').append(filename);
+	m_filename=String(archive.m_filename).append(':').append(filename_temp);
 	m_handle=handle;
 	}
 
@@ -100,3 +134,14 @@ size_t Archive::File::read(void* buffer,size_t n_bytes)
 	return ret;
 	}
 
+void Archive::cd(const char* dir_new)
+	{
+	m_dir_current.append('/').append(dir_new);
+	m_dir_current=directoryNormalize(m_dir_current.begin());
+	}
+
+String Archive::filenameFromSibling(const char* sibling,const char* filename)
+	{
+	String ret(sibling);
+	return std::move(ret.truncate('/').append('/').append(filename));
+	}

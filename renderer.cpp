@@ -11,6 +11,7 @@ target
 #include "renderer.h"
 #include "glshader.h"
 #include "worldobject.h"
+#include "world.h"
 #include "debug.h"
 
 using namespace Glinda;
@@ -28,7 +29,8 @@ static const char* g_frag_shader="#version 330 core\n"
 	"uniform sampler2D texture_diffuse;"
 	"void main()"
 	"	{"
-	"	color=texture(texture_diffuse, UV).rgb;"
+//	"	color=texture(texture_diffuse, UV).rgb;"
+	"	color.rgb=vec3(1.0,0.0,0.0);"
 	"	}";
 
 static const char* g_vert_shader=
@@ -57,9 +59,10 @@ Renderer::Renderer()
 	program.shaderDetatch(fragment_shader).shaderDetatch(vertex_shader);
 
 	array.bind();
-	vbo.dataSet(sizeof(g_vertex_buffer_data),g_vertex_buffer_data,GL_STATIC_DRAW);
 	program.use();
 	MVP_id=program.uniformGet("MVP");
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 	}
 
 Renderer::~Renderer()
@@ -75,7 +78,26 @@ void Renderer::sceneRender(World& world,WorldObject& camera) noexcept
 	auto VP=P*V1;
 	auto MVP=VP;
 	glUniformMatrix4fv(MVP_id,1,GL_FALSE,&MVP[0][0]);
-	vbo.draw(0);
+
+		{
+		auto ptr=world.objectsBegin();
+		auto ptr_end=world.objectsEnd();
+		while(ptr!=ptr_end)
+			{
+			auto mesh=ptr->meshGet();
+			auto& frame=mesh->m_frames[0];
+			vertices.dataSet(frame.m_vertices.begin()
+				,static_cast<unsigned int>(frame.m_vertices.length())
+				,GL_STATIC_DRAW);
+			vertex_indices.dataSet(mesh->m_faces.begin()
+				,static_cast<unsigned int>(mesh->m_faces.length())
+				,GL_STATIC_DRAW);
+			vertices.attributesBind(0);
+			vertex_indices.draw(0);
+			++ptr;
+			}
+		}
+
 	glDisableVertexAttribArray(0);
 	}
 

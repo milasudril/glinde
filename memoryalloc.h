@@ -34,6 +34,16 @@ namespace Glinda
 	 *
 	 */
 	void memoryFree(void* buffer);
+
+
+	/**\brief Reallocates memory allocated by memoryAllocate(size_t).
+	 *
+	 * This function reallocates memory allocated by memoryAllocate(size_t).
+	 *
+	 * \warning Do not pass a pointer allocated by `malloc` to this function.
+	 *
+	 */
+	void* memoryRealloc(void* buffer,size_t N);
 	}
 
 #endif
