@@ -57,7 +57,7 @@ void WindowController::inputLoopRun() noexcept
 	if(r_window!=nullptr)
 		{r_window->stickyKeysSet();}
 
-	clock_t now=clock();
+//	clock_t now=clock();
 	uint64_t frame_count=0;
 	while(r_window!=nullptr)
 		{
@@ -69,6 +69,6 @@ void WindowController::inputLoopRun() noexcept
 		r_window->buffersSwap();
 		++frame_count;
 		}
-	GLINDA_DEBUG_PRINT("Frame rate: %.8g",CLOCKS_PER_SEC*double(frame_count)/(double(clock() - now)));
+//	GLINDA_DEBUG_PRINT("Frame rate: %.8g",CLOCKS_PER_SEC*double(frame_count)/(double(clock() - now)));
 	}
 

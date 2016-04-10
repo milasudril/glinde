@@ -6,6 +6,9 @@ target[name[worldobject.h] type[include]]
 #define GLINDA_WORLDOBJECT_H
 
 #define GLM_FORCE_RADIANS
+
+#include "debug.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -19,7 +22,7 @@ namespace Glinda
 			WorldObject():
 				r_mesh(nullptr)
 				,m_location(0,0,0),m_pitch(std::acos(0.0f))
-				,m_roll(std::acos(-1.0f)),m_yaw(0.0f)
+				,m_roll(std::acos(1.0f)),m_yaw(0.0f)
 				{}
 
 			void meshSet(Mesh* mesh)noexcept
@@ -53,17 +56,21 @@ namespace Glinda
 				{
 				m_heading=glm::vec3(std::sin(m_pitch)*std::sin(m_yaw)
 					,std::sin(m_pitch)*std::cos(m_yaw)
-					,std::cos(m_pitch));
+					,-std::cos(m_pitch));
+
+				GLINDA_DEBUG_PRINT("Heading direction is %.8g,%.8g,%.8g"
+					,m_heading.x,m_heading.y,m_heading.z);
 				}
 
 			glm::mat4 viewMatrixGet() const noexcept
 				{
 				glm::mat4 ret;
 
-				ret=glm::rotate(ret,m_pitch,glm::vec3(1.0f,0.0f,0.0f));
+				ret=glm::rotate(ret,m_pitch,glm::vec3(-1.0f,0.0f,0.0f));
 				ret=glm::rotate(ret,m_roll,glm::vec3(0.0f,1.0f,0.0f));
 				ret=glm::rotate(ret,m_yaw,glm::vec3(0.0f,0.0f,1.0f));
 				ret=glm::translate(ret,m_location);
+
 
 				return ret;
 				}

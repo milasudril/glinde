@@ -36,11 +36,15 @@ namespace Glinda
 			GlVertexArray array;
 			GlVertexBuffer vertices;
 			GlVertexBuffer uvs;
+			GlVertexBuffer normals;
 			GlElementArrayBuffer vertex_indices;
 			GlTexture texture;
 
 			glm::mat4 P;
 			GLuint MVP_id;
+			GLuint V_id;
+			GLuint M_id;
+			GLuint lightpos_id;
 			GLuint diffuse_id;
 		};
 	}
