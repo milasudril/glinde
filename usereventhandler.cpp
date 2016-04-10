@@ -2,6 +2,8 @@
 target[name[usereventhandler.o] type[object]]
 #endif
 
+#define NDEBUG
+
 #include "usereventhandler.h"
 #include "worldobject.h"
 #include "debug.h"

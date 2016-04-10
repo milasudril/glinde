@@ -73,8 +73,8 @@ static ArraySimple<float> uvGet(const char* source_name
 		{
 		n,[&uv](size_t k)
 			{
-			return static_cast<float>
-				(static_cast<double>(uv.objectGet(k)));
+			auto ret=static_cast<float>(static_cast<double>(uv.objectGet(k)));
+			return k%2? 1.0f - ret:ret;
 			}
 		});
 	}

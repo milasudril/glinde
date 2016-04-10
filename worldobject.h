@@ -57,9 +57,6 @@ namespace Glinda
 				m_heading=glm::vec3(std::sin(m_pitch)*std::sin(m_yaw)
 					,std::sin(m_pitch)*std::cos(m_yaw)
 					,-std::cos(m_pitch));
-
-				GLINDA_DEBUG_PRINT("Heading direction is %.8g,%.8g,%.8g"
-					,m_heading.x,m_heading.y,m_heading.z);
 				}
 
 			glm::mat4 viewMatrixGet() const noexcept
