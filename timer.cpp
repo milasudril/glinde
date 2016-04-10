@@ -16,6 +16,7 @@ struct Timer::Impl
 	{
 	Impl(double frequency)
 		{
+		GLINDA_DEBUG_PRINT("Creating a timer %p",this);
 		sigevent ev;
 
 		ev.sigev_notify=SIGEV_SIGNAL;
@@ -40,7 +41,7 @@ struct Timer::Impl
 			 delay_sec
 			,static_cast<long>(1e9*(T-static_cast<double>(delay_sec)))
 			};
-		t.it_value={0,0};
+		t.it_value={0,1};
 		if(timer_settime(m_id,0,&t,NULL)!=0)
 			{
 			throw ErrorMessage("It was not possible to set the timer interval.");
@@ -49,13 +50,17 @@ struct Timer::Impl
 		}
 
 	~Impl()
-		{timer_delete(m_id);}
+		{
+		itimerspec t={{0,0},{0,0}};
+		timer_settime(m_id,0,&t,NULL);
+		timer_delete(m_id);
+		}
 
 	timer_t m_id;
 
 	static void sig_handler(int signal,siginfo_t* si,void* uc)
 		{
-		GLINDA_DEBUG_PRINT("Hello");
+		GLINDA_DEBUG_PRINT("Hello %p",si->si_ptr);
 		}
 	};
 

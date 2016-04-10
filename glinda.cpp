@@ -22,7 +22,7 @@ int main()
 	try
 		{
 		WorldObject camera;
-	//	Timer world_clock(1.0);
+		Timer world_clock(1.0);
 
 		camera.locationSet(glm::vec3(0.0f,0.0f,0.0f));
 
