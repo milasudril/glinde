@@ -52,6 +52,7 @@ using namespace Glinda;
 static String directoryNormalize(const char* str)
 	{
 	String ret;
+	ret.append('/');
 	String elem_current;
 	while(*str!='\0')
 		{
@@ -63,7 +64,7 @@ static String directoryNormalize(const char* str)
 					ret.truncate('/');
 					}
 				else
-				if(elem_current!=".")
+				if(elem_current!="." && elem_current.length()!=0)
 					{ret.append(elem_current).append('/');}
 
 				elem_current.clear();
@@ -98,19 +99,31 @@ Archive::~Archive()
 		{zip_close(static_cast<zip*>(m_handle));}
 	}
 
+static const char* prefixStrip(const char* filename)
+	{
+	auto ptr=filename;
+	while(*ptr!='\0')
+		{
+		if(*ptr==':')
+			{return ptr + 1;}
+		++ptr;
+		}
+	return filename;
+	}
+
 Archive::File::File(Archive& archive,const char* filename)
 	{
 	auto a=static_cast<zip*>(archive.m_handle);
 	auto filename_temp=archive.m_dir_current;
-	filename_temp=directoryNormalize(filename_temp.append(filename).begin());
+	filename_temp=directoryNormalize(filename_temp.append(prefixStrip(filename)).begin());
 
-	filename=filename_temp.beginAfter(':') + 1;
-	auto handle=zip_fopen(a,filename,0);
+	auto handle=zip_fopen(a,filename_temp.begin() + 1,0);
 	if(handle==NULL)
 		{
 		int status;
 		zip_error_get(a,&status,NULL);
-		archiveErrorRaise("It is not possible open the file \"%s\". %s.",filename,status);
+		archiveErrorRaise("It is not possible open the file \"%s\". %s."
+			,filename_temp.begin(),status);
 		}
 	m_filename=String(archive.m_filename).append(':').append(filename_temp);
 	m_handle=handle;

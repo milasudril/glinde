@@ -23,7 +23,8 @@ namespace Glinda
 	 *  * Storing array elements in a location not returned by `new`
 	 *  * Creating an array containing objects that cannot be default constructed
 	 *
-	 * \note If you want automatic managment of arrays, see ArraySimple.
+	 * \note If you want automatic managment of arrays, see ArraySimple, or
+	 * ArrayDynamic.
 	 *
 	*/
 	namespace ArrayInit

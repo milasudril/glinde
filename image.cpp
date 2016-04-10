@@ -318,9 +318,10 @@ static ColorConverter converterGet(PNGReader::ColorType color_type)
 Image::Image(DataSource& source)
 	{
 		{
-		uint8_t magic[8];
+		uint8_t magic[8]="xxxxxxx";
 		if(source.read(magic,8)!=8)
 			{
+			GLINDA_DEBUG_PRINT("magic: %s",magic);
 			throw ErrorMessage("An I/O error occured while reading the image "
 				"magic number.");
 			}

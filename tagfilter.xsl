@@ -17,7 +17,16 @@
 </xsl:template>
 
 <xsl:template match="div[@class='textblock']">
-<xsl:apply-templates />
+<xsl:for-each select="./node()">
+<xsl:choose>
+<xsl:when test="self::text()">
+	<p><xsl:value-of select="." /></p>
+</xsl:when>
+<xsl:otherwise>
+<xsl:copy><xsl:apply-templates /></xsl:copy>
+</xsl:otherwise>
+</xsl:choose>
+</xsl:for-each>
 </xsl:template>
 
 <xsl:template match="body">
@@ -139,14 +148,16 @@
 
 <!--Member items-->
 <xsl:template match="div[@class='memitem']">
+<section>
 <h3 class="memproto">
 <xsl:attribute name="id">
 <xsl:value-of select="preceding-sibling::a[1]/@id "/>
 </xsl:attribute>
 <xsl:apply-templates select="div[@class='memproto']"/>
 </h3>
-<xsl:apply-templates select="div[@class='memproto']/table[@class='mlabels']/tr/td[@class='mlabels-right']/*" />
 <xsl:apply-templates select="div[@class='memdoc']" />
+<xsl:apply-templates select="div[@class='memproto']/table[@class='mlabels']/tr/td[@class='mlabels-right']/*" />
+</section>
 </xsl:template>
 
 <!--Member title-->
@@ -186,9 +197,15 @@
 <!--xsl:apply-templates select="tr/td[@class='mlabels-right']/*" /-->
 </xsl:template>
 
-<!--Render labels as a paragraph-->
+<!--Render labels aside as a bullet list-->
+<xsl:template match="span[@class='mlabel']">
+<li><xsl:apply-templates /></li>
+</xsl:template>
+
 <xsl:template match="span[@class='mlabels']">
-<p>This entity is <xsl:apply-templates /></p>
+<aside>
+<h4>Quick info</h4>
+<ul><xsl:apply-templates select="span[@class='mlabel']"/></ul></aside>
 </xsl:template>
 
 <!--Member documentation-->

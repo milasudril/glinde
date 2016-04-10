@@ -63,8 +63,13 @@ th.membername{padding-left:32px; text-indent:-32px;}
 tr{border-bottom:1px solid rgba(0,0,0,0.5);}
 
 .memproto,article>h1{padding-top:2.25ex;padding-bottom:1.0ex}
-article{padding-left:8px;}
-
+article{padding-left:8px;padding-right:8px}
+h3.memproto{display:table-caption;}
+section{display:table; width:100%}
+section > aside{display:table-cell;width:192px; border:2px solid;border-radius:4px}
+section > aside >ul{margin-left:8px;margin-top:0px;}
+section > aside >h4{margin-left:4px;padding-top:8px;padding-bottom:0px;}
+section > aside >ul>li{margin-top:0px;margin-bottom:0px;padding-top:0px;padding-bottom:0px}
 
 nav{width:100%;display:block;}
 nav{border-collapse:separate;border-spacing:4px 0px;}
@@ -142,6 +147,11 @@ table.params,table.fieldtable{border-color: $parameters_ border ; background: $p
 article{background: $article_ background ;}
 header{background: $header_ background ;}
 header>h1{color: $title_ text ;}
+section>aside
+	{
+	background: $memberdecls_ background ;
+	border-color: $memberdecls_ border ;
+	}
 /*
 
 @media screen and (min-width: 700px)

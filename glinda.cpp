@@ -11,6 +11,7 @@ target[name[glinda] type[application] ]
 #include "world.h"
 #include "renderer.h"
 #include "archive.h"
+#include "timer.h"
 
 using namespace Glinda;
 
@@ -21,6 +22,7 @@ int main()
 	try
 		{
 		WorldObject camera;
+	//	Timer world_clock(1.0);
 
 		camera.locationSet(glm::vec3(0.0f,0.0f,0.0f));
 

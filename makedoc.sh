@@ -5,6 +5,7 @@ doxygen >/dev/null
 
 cp -n dynsections.js __doc/html
 cp starspink.png __doc/html
+cp __doc/html/files.html .
 
 if kiss doxstyle.txt < doxstyle.css > __doc/html/doxstyle.css; then
 	for i in __doc/html/*.html; do

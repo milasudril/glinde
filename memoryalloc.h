@@ -4,6 +4,12 @@ dependency[memoryalloc.o]
 #endif
 
 /**\file memoryalloc.h \brief Memory allocation routines.
+ *
+ * The memory allocation routines declared in this file are SSE safe.
+ *
+ * \note These functions are implement through the `jemalloc` library by
+ * Jason Evans. It has been released under the two-clause BSD license.
+ *
  */
 
 #ifndef GLINDA_ALLOC_H

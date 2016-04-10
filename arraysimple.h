@@ -19,9 +19,10 @@ namespace Glinda
 	{
 	/**\brief Class representing non-growing dynamically allocated arrays.
 	 *
-	 * This class describes non-growing dynamically allocated arrays. The memory
-	 * is managed through the functions declared in memoryalloc.h, which makes
-	 * the array suitable for vectorized code.
+	 * This class describes non-growing dynamically allocated arrays.
+	 * Like ArrayDynamic, the memory allocation is done through the functions
+	 * declared in memoryalloc.h , which makes it possible to use SSE
+	 * instructions on its elements.
 	 *
 	 */
 	template<class T>
