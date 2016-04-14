@@ -12,7 +12,12 @@ void GlTexture::dataSet(const Image& source) noexcept
 	{
 /*	GLINDA_DEBUG_PRINT("Upload texture data %u x %u"
 		,source.widthGet(),source.heightGet());*/
+
 	glBindTexture(GL_TEXTURE_2D,id);
+
+	if(&source==r_source)
+		{return;}
+
 	switch(source.channelCountGet())
 		{
 		case 1:
@@ -40,7 +45,6 @@ void GlTexture::dataSet(const Image& source) noexcept
 				,GL_HALF_FLOAT
 				,source.pixelsGet());
 		}
+	r_source=&source;
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	}

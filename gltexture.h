@@ -19,12 +19,16 @@ namespace Glinda
 		public:
 			GlTexture()
 				{
+				r_source=nullptr;
 				glGenTextures(1,&id);
+				bind();
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 				}
 
 			void dataSet(const Image& source) noexcept;
 
-			void bind(GLuint index)
+			void bind()
 				{
 				glBindTexture(GL_TEXTURE_2D,id);
 				}
@@ -36,6 +40,7 @@ namespace Glinda
 				}
 
 		private:
+			const Image* r_source;
 			GLuint id;
 		};
 	}
