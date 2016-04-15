@@ -1,0 +1,11 @@
+.highlight__comment
+	{
+	color: $color_-complement_-5;
+	font-weight:bold;
+	}
+
+.highlight__keywordflow,.highlight__keywordtype
+	{
+	font-weight :bold;
+	color:$color_-secondary_-1_-3
+	}

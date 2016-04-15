@@ -1,0 +1,29 @@
+font monospace: Inconsolata, Consolas, Monospace
+font normal: Andika, Verdana, Sans-serif
+menubutton background: #ff80c0
+menubutton active shadow: #ffffc0
+menubutton active background: linear-gradient(#ff80c0,#ffffff)
+tablist background: #ffbdde
+menubutton text: #000000
+navtext color: #ff57ab
+menu background: #ffbdde
+menu background: initial
+navpath background: initial
+link color: #8000ff
+header color: #8000ff
+memheader color: #ff57ab
+memberdecls background: #ffe0f0
+memberdecls border: #ffbdde
+infobox background: #fff8e0
+note border: #60c000
+warning border: #ffc300
+parameters background: #ffe0f0
+parameters border: #ffbdde
+keywordtype text: #ff0080
+keyword text: #8000ff
+comment text: #408000
+article background: initial
+title text: initial
+header background: initial
+see border: #8000ff
+page background: #ffffff url("starspink.png") repeat fixed

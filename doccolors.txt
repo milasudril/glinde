@@ -1,0 +1,24 @@
+color-primary-0: #FF53AA
+color-primary-1: #FFB6DB
+color-primary-2: #FF83C2
+color-primary-3: #F7007E
+color-primary-4: #C60065
+
+color-secondary-1-0: #CD5AFF
+color-secondary-1-1: #EAB9FF
+color-secondary-1-2: #DB88FF
+color-secondary-1-3: #A800F0
+color-secondary-1-4: #7000A0
+
+color-secondary-2-0: #FF5F53
+color-secondary-2-1: #FFBBB6
+color-secondary-2-2: #FF8C83
+color-secondary-2-3: #FF1300
+color-secondary-2-4: #F11200
+
+color-complement-0: #BFFF53
+color-complement-1: #E4FFB6
+color-complement-2: #D1FF83
+color-complement-3: #9FFC00
+color-complement-4: #8DDF00
+color-complement-5: #619900
