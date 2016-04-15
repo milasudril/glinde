@@ -7,7 +7,7 @@ target[name[worldobject.h] type[include]]
 
 #define GLM_FORCE_RADIANS
 
-#include "debug.h"
+#include "camera.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -19,10 +19,7 @@ namespace Glinda
 	class WorldObject
 		{
 		public:
-			WorldObject():
-				r_mesh(nullptr)
-				,m_location(0,0,0),m_pitch(std::acos(0.0f))
-				,m_roll(std::acos(1.0f)),m_yaw(0.0f)
+			WorldObject():r_mesh(nullptr),m_location(0,0,0)
 				{}
 
 			void meshSet(Mesh* mesh)noexcept
@@ -34,54 +31,14 @@ namespace Glinda
 				return *this;
 				}
 
-			WorldObject& pitchSet(float pitch) noexcept
+			Camera& eyesGet() noexcept
 				{
-				m_pitch=pitch;
-				return *this;
+				return m_eyes;
 				}
 
-			WorldObject& rollSet(float roll) noexcept
+			const Camera& eyesGet() const noexcept
 				{
-				m_roll=roll;
-				return *this;
-				}
-
-			WorldObject& yawSet(float yaw) noexcept
-				{
-				m_yaw=yaw;
-				return *this;
-				}
-
-			void headingUpdate() noexcept
-				{
-				m_heading=glm::vec3(std::sin(m_pitch)*std::sin(m_yaw)
-					,std::sin(m_pitch)*std::cos(m_yaw)
-					,-std::cos(m_pitch));
-				}
-
-			glm::mat4 viewMatrixGet() const noexcept
-				{
-				glm::mat4 ret;
-
-				ret=glm::rotate(ret,m_pitch,glm::vec3(-1.0f,0.0f,0.0f));
-				ret=glm::rotate(ret,m_roll,glm::vec3(0.0f,1.0f,0.0f));
-				ret=glm::rotate(ret,m_yaw,glm::vec3(0.0f,0.0f,1.0f));
-				ret=glm::translate(ret,m_location);
-
-
-				return ret;
-				}
-
-			void walk(float direction)
-				{
-			//TODO: Get z from ground
-				m_location+=0.1f*direction*glm::vec3(m_heading.x,m_heading.y,0.0f);
-				}
-
-			void strafe(float direction)
-				{
-			//TODO: Get z from ground
-				m_location+=0.1f*direction*glm::vec3(m_heading.y,-m_heading.x,0.0f);
+				return m_eyes;
 				}
 
 			const Mesh* meshGet() const noexcept
@@ -95,10 +52,7 @@ namespace Glinda
 			glm::vec3 m_velocity;
 			glm::vec3 m_acceleration;
 
-			glm::vec3 m_heading;
-			float m_pitch;
-			float m_roll;
-			float m_yaw;
+			Camera m_eyes;
 
 			float m_mass;
 			float m_charge;

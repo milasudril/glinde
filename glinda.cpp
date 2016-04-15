@@ -21,19 +21,19 @@ int main()
 	logWrite(LogMessageType::INFORMATION,"Glinda is starting up");
 	try
 		{
-		WorldObject camera;
+		WorldObject player;
 		Timer world_clock(1.0);
 
-		camera.locationSet(glm::vec3(0.0f,0.0f,0.0f));
+		player.locationSet(glm::vec3(0.0f,0.0f,0.0f));
 
 	//	Archive src{"test.zip"};
 		Archive src{"test (kopiera 1).zip"};
 		World world{src};
-		UserEventHandler event_handler(camera);
+		UserEventHandler event_handler(player);
 
 		WindowController window_controller;
 
-		WindowGame mainwin("Glinda",640,480,event_handler,world,camera);
+		WindowGame mainwin("Glinda",640,480,event_handler,world,player.eyesGet());
 
 		window_controller.eventWindowSet(&mainwin);
 		window_controller.inputLoopRun();

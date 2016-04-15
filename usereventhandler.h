@@ -15,7 +15,7 @@ namespace Glinda
 	class UserEventHandler:public Window::EventHandler
 		{
 		public:
-			explicit UserEventHandler(WorldObject& camera):r_camera(&camera){}
+			explicit UserEventHandler(WorldObject& player):r_player(&player){}
 
 			void onKeyDown(Window& source,uint8_t scancode){}
 			void onKeyUp(Window& source,uint8_t scancode){}
@@ -28,7 +28,7 @@ namespace Glinda
 			void onResize(Window& source,int width,int height){}
 
 		private:
-			WorldObject* r_camera;
+			WorldObject* r_player;
 		};
 	}
 
