@@ -35,7 +35,7 @@ static void key_handler(GLFWwindow* window,int key,int scancode,int action
 	switch(action)
 		{
 		case GLFW_REPEAT:
-		case GLFW_PRESS:
+		case GLFW_PRESS:;
 			self->eventHandlerGet().onKeyDown(*self,scancode);
 			break;
 

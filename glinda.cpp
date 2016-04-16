@@ -3,7 +3,7 @@ target[name[glinda] type[application] ]
 #endif
 
 #include "errormessage.h"
-#include "windowcontroller.h"
+#include "uimanager.h"
 #include "windowgame.h"
 #include "logwriter.h"
 #include "usereventhandler.h"
@@ -22,21 +22,21 @@ int main()
 	try
 		{
 		WorldObject player;
-		Timer world_clock(1.0);
-
-		player.locationSet(glm::vec3(0.0f,0.0f,0.0f));
+		Timer world_clock(60.0);
+		logWrite(LogMessageType::INFORMATION
+			,"World clock ticks every %.15g second",world_clock.delayGet());
 
 	//	Archive src{"test.zip"};
 		Archive src{"test (kopiera 1).zip"};
 		World world{src};
-		UserEventHandler event_handler(player);
+		UserEventHandler event_handler(player,world_clock.delayGet());
 
-		WindowController window_controller;
+		UIManager window_controller;
 
-		WindowGame mainwin("Glinda",640,480,event_handler,world,player.eyesGet());
+		WindowGame mainwin("Glinda",640,480,event_handler,world,player);
 
 		window_controller.eventWindowSet(&mainwin);
-		window_controller.inputLoopRun();
+		window_controller.inputLoopRun(world_clock);
 		window_controller.eventWindowSet(nullptr);
 		}
 	catch(const ErrorMessage& message)

@@ -19,16 +19,21 @@ namespace Glinda
 	class WorldObject
 		{
 		public:
-			WorldObject():r_mesh(nullptr),m_location(0,0,0)
+			WorldObject():r_mesh(nullptr),m_position(0,0,0)
 				{}
 
 			void meshSet(Mesh* mesh)noexcept
 				{r_mesh=mesh;}
 
-			WorldObject& locationSet(const glm::vec3& location) noexcept
+			WorldObject& positionSet(const glm::vec3& position) noexcept
 				{
-				m_location=location;
+				m_position=position;
 				return *this;
+				}
+
+			const glm::vec3& positionGet() const noexcept
+				{
+				return m_position;
 				}
 
 			Camera& eyesGet() noexcept
@@ -44,15 +49,24 @@ namespace Glinda
 			const Mesh* meshGet() const noexcept
 				{return r_mesh;}
 
+			glm::mat4 viewMatrixGet() const noexcept
+				{
+				return glm::translate(m_eyes.viewMatrixGet(),-m_position);
+				};
+
+			const glm::vec3& headingGet() const noexcept
+				{
+				return m_eyes.headingGet();
+				}
+
 		private:
 			Mesh* r_mesh;
 
-			glm::vec3 m_location;
-
+			Camera m_eyes;
+			glm::vec3 m_position;
 			glm::vec3 m_velocity;
 			glm::vec3 m_acceleration;
 
-			Camera m_eyes;
 
 			float m_mass;
 			float m_charge;

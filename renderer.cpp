@@ -105,7 +105,7 @@ Renderer::Renderer()
 Renderer::~Renderer()
 	{}
 
-void Renderer::sceneRender(World& world,const Camera& eyes) noexcept
+void Renderer::sceneRender(World& world,const WorldObject& viewer) noexcept
 	{
 	glClearColor(0,0,0,1);
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
@@ -114,7 +114,7 @@ void Renderer::sceneRender(World& world,const Camera& eyes) noexcept
 	glEnableVertexAttribArray(2);
 	auto V=glm::lookAt(glm::vec3(0,0,2),glm::vec3(0,0,0),glm::vec3(0,1,0));
 	glUniformMatrix4fv(V_id,1,GL_FALSE,&V[0][0]);
-	auto V1=eyes.viewMatrixGet();
+	auto V1=viewer.viewMatrixGet();
 	auto VP=P*V1;
 	auto MVP=VP;
 	glm::mat4 M;

@@ -16,13 +16,13 @@ namespace Glinda
 			WindowGame(const char* title,int width,int height
 				,EventHandler& handler
 				,World& world
-				,const Camera& eyes):Window(title,width,height,handler)
-				,r_world(&world),r_eyes(&eyes)
+				,const WorldObject& viewer):Window(title,width,height,handler)
+				,r_world(&world),r_viewer(&viewer)
 				{}
 
 			void redraw() noexcept
 				{
-				renderer.sceneRender(*r_world,*r_eyes);
+				renderer.sceneRender(*r_world,*r_viewer);
 				}
 
 			void resized(int width,int height)  noexcept
@@ -33,7 +33,7 @@ namespace Glinda
 		private:
 			Renderer renderer;
 			World* r_world;
-			const Camera* r_eyes;
+			const WorldObject* r_viewer;
 		};
 	}
 

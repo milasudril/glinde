@@ -18,8 +18,8 @@ dependency[renderer.o]
 
 namespace Glinda
 	{
+	class WorldObject;
 	class World;
-	class Camera;
 
 	class Renderer
 		{
@@ -27,7 +27,7 @@ namespace Glinda
 			Renderer();
 			~Renderer();
 
-			void sceneRender(World& world,const Camera& eyes) noexcept;
+			void sceneRender(World& world,const WorldObject& viewer) noexcept;
 			void viewportSizeSet(int width,int height) noexcept;
 
 		private:

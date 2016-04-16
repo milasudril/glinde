@@ -22,7 +22,7 @@ namespace Glinda
 		public:
 			Camera():m_pitch(std::acos(0.0f))
 				,m_roll(std::acos(1.0f)),m_yaw(0.0f)
-				{}
+				{headingUpdate();}
 
 			Camera& pitchSet(float pitch) noexcept
 				{
@@ -73,11 +73,14 @@ namespace Glinda
 				{return m_heading;}
 
 		private:
-			glm::vec3 m_heading;
 			float m_pitch;
 			float m_roll;
 			float m_yaw;
 			float m_fov_y;
+
+			glm::vec3 m_heading;
+			glm::vec3 m_pivot;
+			glm::vec3 m_rot_offset;
 		};
 	};
 

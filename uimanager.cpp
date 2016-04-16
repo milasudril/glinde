@@ -1,7 +1,7 @@
 #ifdef __WAND__
 target
 	[
-	name[windowcontroller.o]
+	name[uimanager.o]
 	type[object]
 	dependency[GL;external]
 	dependency[GLEW;external]
@@ -9,11 +9,12 @@ target
 	]
 #endif
 
-#include "windowcontroller.h"
+#include "uimanager.h"
 #include "errormessage.h"
 #include "debug.h"
 #include "logwriter.h"
 #include "window.h"
+#include "timer.h"
 
 #include <GL/glew.h>
 #include <GL/gl.h>
@@ -30,7 +31,7 @@ using namespace Glinda;
 		"the window system:\n%s",message);
 	}
 
-WindowController::WindowController():r_window(nullptr)
+UIManager::UIManager():r_window(nullptr)
 	{
 	logWrite(LogMessageType::INFORMATION,"Initializing GLFW version %s"
 		,glfwGetVersionString());
@@ -46,14 +47,13 @@ WindowController::WindowController():r_window(nullptr)
 	glfwWindowHint(GLFW_DOUBLEBUFFER,GL_TRUE);
 	}
 
-WindowController::~WindowController()
+UIManager::~UIManager()
 	{
 	glfwTerminate();
 	}
 
-void WindowController::inputLoopRun() noexcept
+void UIManager::inputLoopRun(const Timer& world_clock) noexcept
 	{
-//	glfwSwapInterval(1);
 	if(r_window!=nullptr)
 		{r_window->stickyKeysSet();}
 
@@ -67,6 +67,7 @@ void WindowController::inputLoopRun() noexcept
 		glfwPollEvents();
 		r_window->redraw();
 		r_window->buffersSwap();
+		world_clock.wait();
 		++frame_count;
 		}
 //	GLINDA_DEBUG_PRINT("Frame rate: %.8g",CLOCKS_PER_SEC*double(frame_count)/(double(clock() - now)));
