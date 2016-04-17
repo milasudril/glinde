@@ -36,6 +36,17 @@ static const char* g_frag_shader="#version 450 core\n"
 	"in vec3 light_dir_cameraspace;"
 	"uniform sampler2D texture_diffuse;"
 	"uniform vec3 lightpos_worldspace;"
+	""
+	"float tosRGB(float x)"
+	"	{"
+	"	return x<=0.0031308f? 12.92f*x : (1 + 0.055f)*pow(x,1/2.4f) - 0.055f;"
+	"	}"
+	""
+	"vec3 tosRGB(vec3 x)"
+	"	{"
+	"	return vec3(tosRGB(x.r),tosRGB(x.g),tosRGB(x.b));"
+	"	}"
+	""
 	"void main()"
 	"	{"
 	"	vec3 light_color=vec3(1,1,1);"
@@ -46,7 +57,7 @@ static const char* g_frag_shader="#version 450 core\n"
 	"	float dotprod=clamp(dot(n,l),0,1);"
 /*	"	vec3 e=normalize(eye_dir_cameraspace);"
 	"	vec3 r=reflect(-l,n);"*/
-	"	color=texture(texture_diffuse, UV).rgb*light_color*dotprod/(d*d);"
+	"	color=tosRGB(texture(texture_diffuse, UV).rgb*light_color*dotprod/(d*d));"
 	"	}";
 
 static const char* g_vert_shader=
@@ -89,7 +100,7 @@ Renderer::Renderer()
 	program.shaderDetatch(fragment_shader).shaderDetatch(vertex_shader);
 
 	array.bind();
-		program.use();
+	program.use();
 	MVP_id=program.uniformGet("MVP");
 	V_id=program.uniformGet("V");
 	M_id=program.uniformGet("M");
@@ -169,5 +180,5 @@ void Renderer::viewportSizeSet(int width,int height) noexcept
 	{
 	GLINDA_DEBUG_PRINT("Viewport size changed to %d x %d",width,height);
 	glViewport(0,0,width,height);
-	P=glm::perspective(2.0f*std::acos(0.0f)/3.0f,float(width)/float(height),0.1f,1000.0f);
+	P=glm::perspective(2.5f*std::acos(0.0f)/3.0f,float(width)/float(height),0.1f,1000.0f);
 	}

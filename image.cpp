@@ -14,7 +14,7 @@ target
 #include "debug.h"
 #include "narrow_cast.h"
 #include <png.h>
-
+#include <cmath>
 #include <memory>
 
 using namespace Glinda;
@@ -264,26 +264,28 @@ namespace
 static void fromGamma(Image& image)
 	{}
 
+static float fromSRGB(float x)
+	{
+	return x<=0.04045f? x/12.92f : std::pow( (x+0.055f)/(1.0f + 0.055f),2.4f);
+	}
+
 static void fromSRGB(Image& image)
 	{
 	auto ptr=image.pixelsGet();
 	auto n_ch=image.channelCountGet();
-	auto N=image.widthGet() * image.heightGet();
+	auto N=image.widthGet() * image.heightGet() * n_ch;
 	GLINDA_DEBUG_PRINT("Converting image from sRGB %u %u",n_ch,N);
 
-/*	auto k=0;
-	float color=0.0f;
+	auto k=0;
 	while(N!=0)
 		{
-		color=(k%32==0)?(1.0f - color):color;
-		ptr[0]=color;
-		ptr[1]=color;
-		ptr[2]=color;
-		ptr[3]=1.0;
+		ptr[0]=fromSRGB(ptr[0]);
+		ptr[1]=fromSRGB(ptr[1]);
+		ptr[2]=fromSRGB(ptr[2]);
 		ptr+=n_ch;
 		++k;
 		N-=n_ch;
-		}*/
+		}
 	}
 
 static ColorConverter converterGet(PNGReader::ColorType color_type)
