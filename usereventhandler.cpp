@@ -89,7 +89,7 @@ void UserEventHandler::onKeyDown(Window& source,uint8_t key)
 	auto flag=keyToFlag(key);
 	if(flag==MENU_MODE || (m_move_flags&MENU_MODE))
 		{
-		if(m_move_flags&MENU_MODE && flag==MENU_MODE )
+		if((m_move_flags&MENU_MODE) && flag==MENU_MODE )
 			{
 			source.cursorHideAndGrab();
 			m_move_flags=0;
