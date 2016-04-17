@@ -34,10 +34,10 @@ void UserEventHandler::velocityUpdate()
 	{
 	auto& player=r_world->playerGet();
 
-
 	glm::vec3 v={0,0,0};
-	if(m_move_flags==0) //If the player is not holding down any button, stop
+	if(m_move_flags==0)
 		{
+	//	Stop player
 	//	TODO: add momentum
 		player.velocitySet(v);
 		return;
@@ -87,17 +87,44 @@ unsigned int UserEventHandler::keyToFlag(uint8_t key)
 void UserEventHandler::onKeyDown(Window& source,uint8_t key)
 	{
 	auto flag=keyToFlag(key);
-	if(flag==MENU_MODE)
+	if(flag==MENU_MODE || (m_move_flags&MENU_MODE))
 		{
-		if(m_move_flags&MENU_MODE)
-			{source.cursorHideAndGrab();}
+		if(m_move_flags&MENU_MODE && flag==MENU_MODE )
+			{
+			source.cursorHideAndGrab();
+			m_move_flags=0;
+			}
 		else
-			{source.cursorShow();}
-		m_move_flags^=flag;
+			{
+			source.cursorShow();
+			m_move_flags=MENU_MODE;
+			}
 		}
 	else
 		{
-		m_move_flags|=keyToFlag(key);
+		switch(flag) //	Disable inconsistent flags
+			{
+			case STRAFE_LEFT:
+				m_move_flags&=~STRAFE_RIGHT;
+				break;
+
+			case STRAFE_RIGHT:
+				m_move_flags&=~STRAFE_LEFT;
+				break;
+
+			case MOVE_FORWARD:
+				m_move_flags&=~MOVE_BACKWARD;
+				break;
+
+			case MOVE_BACKWARD:
+				m_move_flags&=~MOVE_FORWARD;
+				break;
+
+			default:
+				break;
+			}
+
+		m_move_flags|=flag;
 		velocityUpdate();
 		}
 	}
@@ -105,7 +132,7 @@ void UserEventHandler::onKeyDown(Window& source,uint8_t key)
 void UserEventHandler::onKeyUp(Window& source,uint8_t key)
 	{
 	auto flag=keyToFlag(key);
-	if(flag!=MENU_MODE)
+	if(flag!=MENU_MODE && !(m_move_flags&MENU_MODE))
 		{
 		m_move_flags&=~flag;
 		velocityUpdate();
