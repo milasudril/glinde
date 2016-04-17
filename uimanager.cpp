@@ -20,9 +20,6 @@ target
 #include <GL/gl.h>
 #include <GLFW/glfw3.h>
 
-#include <ctime>
-
-
 using namespace Glinda;
 
 [[noreturn]] static void glfwErrorRaise(int code,const char* message)
@@ -31,7 +28,7 @@ using namespace Glinda;
 		"the window system:\n%s",message);
 	}
 
-UIManager::UIManager():r_window(nullptr)
+UIManager::UIManager()
 	{
 	logWrite(LogMessageType::INFORMATION,"Initializing GLFW version %s"
 		,glfwGetVersionString());
@@ -52,24 +49,7 @@ UIManager::~UIManager()
 	glfwTerminate();
 	}
 
-void UIManager::inputLoopRun(const Timer& world_clock) noexcept
+void UIManager::eventsPoll()
 	{
-	if(r_window!=nullptr)
-		{r_window->stickyKeysSet();}
-
-//	clock_t now=clock();
-	uint64_t frame_count=0;
-	while(r_window!=nullptr)
-		{
-		if(r_window->shouldClose())
-			{break;}
-
-		glfwPollEvents();
-		r_window->redraw();
-		r_window->buffersSwap();
-		world_clock.wait();
-		++frame_count;
-		}
-//	GLINDA_DEBUG_PRINT("Frame rate: %.8g",CLOCKS_PER_SEC*double(frame_count)/(double(clock() - now)));
+	glfwPollEvents();
 	}
-

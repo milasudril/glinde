@@ -26,13 +26,7 @@ namespace Glinda
 			UIManager();
 			~UIManager();
 
-			void eventWindowSet(Window* window) noexcept
-				{r_window=window;}
-
-			void inputLoopRun(const Timer& world_clock) noexcept;
-
-		private:
-			Window* r_window;
+			void eventsPoll();
 		};
 	}
 

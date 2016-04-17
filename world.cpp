@@ -11,6 +11,10 @@ using namespace Glinda;
 
 World::World(Archive& source):m_textures(source)
 	{
+//	Spawn player
+	m_objects.append(WorldObject{});
+
+
 	ResourceObject models{source.fileGet("models.json")};
 
 	auto i=models.objectIteratorGet();
@@ -36,3 +40,25 @@ World::World(Archive& source):m_textures(source)
 
 World::~World()
 	{}
+
+void World::update(uint64_t frame,double delta_t,int64_t wallclock_utc)
+	{
+	auto ptr=m_objects.begin();
+	auto ptr_end=m_objects.end();
+	auto dt=static_cast<float>(delta_t);
+	while(ptr!=ptr_end)
+		{
+	//	Integrate position
+		auto x=ptr->positionGet();
+		auto v=ptr->velocityGet();
+
+		x+=dt * v;
+
+	//	TODO: Interaction with other objects?
+	//	v+=dt * ptr->accelerationGet();
+
+		ptr->positionSet(x);
+
+		++ptr;
+		}
+	}

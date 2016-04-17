@@ -7,6 +7,7 @@ target[name[windowgame.h] type[include]]
 
 #include "window.h"
 #include "renderer.h"
+#include "world.h"
 
 namespace Glinda
 	{
@@ -15,14 +16,16 @@ namespace Glinda
 		public:
 			WindowGame(const char* title,int width,int height
 				,EventHandler& handler
-				,World& world
-				,const WorldObject& viewer):Window(title,width,height,handler)
-				,r_world(&world),r_viewer(&viewer)
-				{}
+				,World& world):Window(title,width,height,handler)
+				,r_world(&world)
+				{
+			//	cursorHide();
+				cursorHideAndGrab();
+				}
 
 			void redraw() noexcept
 				{
-				renderer.sceneRender(*r_world,*r_viewer);
+				renderer.sceneRender(*r_world,r_world->playerGet());
 				}
 
 			void resized(int width,int height)  noexcept

@@ -89,7 +89,7 @@ Renderer::Renderer()
 	program.shaderDetatch(fragment_shader).shaderDetatch(vertex_shader);
 
 	array.bind();
-	program.use();
+		program.use();
 	MVP_id=program.uniformGet("MVP");
 	V_id=program.uniformGet("V");
 	M_id=program.uniformGet("M");
@@ -128,30 +128,35 @@ void Renderer::sceneRender(World& world,const WorldObject& viewer) noexcept
 		while(ptr!=ptr_end)
 			{
 			auto mesh=ptr->meshGet();
-			auto& frame=mesh->m_frames[0];
-			vertices.dataSet(frame.m_vertices.begin()
-				,static_cast<unsigned int>(frame.m_vertices.length())
-				,GL_STATIC_DRAW);
 
-			normals.dataSet(frame.m_normals.begin()
-				,static_cast<unsigned int>(frame.m_normals.length())
-				,GL_STATIC_DRAW);
+			if(mesh!=nullptr)	//Do not render empty objects
+				{
+				auto& frame=mesh->m_frames[0];
+				vertices.dataSet(frame.m_vertices.begin()
+					,static_cast<unsigned int>(frame.m_vertices.length())
+					,GL_STATIC_DRAW);
 
-			GLINDA_DEBUG_PRINT("vertex: %u   UV: %u"
-				,frame.m_vertices.length(),frame.m_uv.length());
+				normals.dataSet(frame.m_normals.begin()
+					,static_cast<unsigned int>(frame.m_normals.length())
+					,GL_STATIC_DRAW);
 
-			uvs.dataSet(frame.m_uv.begin()
-				,static_cast<unsigned int>(frame.m_uv.length())
-				,GL_STATIC_DRAW);
+				GLINDA_DEBUG_PRINT("vertex: %u   UV: %u"
+					,frame.m_vertices.length(),frame.m_uv.length());
 
-			vertex_indices.dataSet(mesh->m_faces.begin()
-				,static_cast<unsigned int>(mesh->m_faces.length())
-				,GL_STATIC_DRAW);
-			vertices.attributesBind(0,3);
-			normals.attributesBind(1,3);
-			uvs.attributesBind(2,2);
-			texture.dataSet(*frame.r_tex_diffuse);
-			vertex_indices.draw(0);
+				uvs.dataSet(frame.m_uv.begin()
+					,static_cast<unsigned int>(frame.m_uv.length())
+					,GL_STATIC_DRAW);
+
+				vertex_indices.dataSet(mesh->m_faces.begin()
+					,static_cast<unsigned int>(mesh->m_faces.length())
+					,GL_STATIC_DRAW);
+				vertices.attributesBind(0,3);
+				normals.attributesBind(1,3);
+				uvs.attributesBind(2,2);
+				texture.dataSet(*frame.r_tex_diffuse);
+				vertex_indices.draw(0);
+				}
+
 			++ptr;
 			}
 		}

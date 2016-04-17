@@ -12,6 +12,7 @@ target[name[glinda] type[application] ]
 #include "renderer.h"
 #include "archive.h"
 #include "timer.h"
+#include "gameloop.h"
 
 using namespace Glinda;
 
@@ -21,23 +22,20 @@ int main()
 	logWrite(LogMessageType::INFORMATION,"Glinda is starting up");
 	try
 		{
-		WorldObject player;
-		Timer world_clock(60.0);
+		Timer world_clock(30.0);
 		logWrite(LogMessageType::INFORMATION
 			,"World clock ticks every %.15g second",world_clock.delayGet());
 
 	//	Archive src{"test.zip"};
 		Archive src{"test (kopiera 1).zip"};
 		World world{src};
-		UserEventHandler event_handler(player,world_clock.delayGet());
+		UserEventHandler event_handler(world);
 
-		UIManager window_controller;
+		UIManager ui;
 
-		WindowGame mainwin("Glinda",640,480,event_handler,world,player);
+		WindowGame mainwin("Glinda",640,480,event_handler,world);
 
-		window_controller.eventWindowSet(&mainwin);
-		window_controller.inputLoopRun(world_clock);
-		window_controller.eventWindowSet(nullptr);
+		gameLoopRun(ui,mainwin,world_clock,world);
 		}
 	catch(const ErrorMessage& message)
 		{

@@ -5,6 +5,7 @@ target[name[usereventhandler.o] type[object]]
 
 #include "usereventhandler.h"
 #include "worldobject.h"
+#include "world.h"
 #include "debug.h"
 
 using namespace Glinda;
@@ -14,10 +15,51 @@ void UserEventHandler::onMouseMove(Window& source,double x,double y)
 	int w;
 	int h;
 	source.sizeGet(w,h);
+	if(m_move_flags&MENU_MODE)
+		{
+	//	TODO: Do menu stuff
+		}
+	else
+		{
+		auto& player=r_world->playerGet();
+		player.eyesGet().pitchSet(std::acos(-1.0f)*(1.0f - float(y/h) ))
+			.yawSet(4.0f*std::acos(0.0f)*(float(x/w) - 1.0f/2.0f) )
+			.headingUpdate();
 
-	r_player->eyesGet().pitchSet(std::acos(-1.0f)*(1.0f - float(y/h) ))
-		.yawSet(4.0f*std::acos(0.0f)*(float(x/w) - 1.0f/2.0f) )
-		.headingUpdate();
+		velocityUpdate();
+		}
+	}
+
+void UserEventHandler::velocityUpdate()
+	{
+	auto& player=r_world->playerGet();
+
+
+	glm::vec3 v={0,0,0};
+	if(m_move_flags==0) //If the player is not holding down any button, stop
+		{
+	//	TODO: add momentum
+		player.velocitySet(v);
+		return;
+		}
+
+	auto& heading=player.headingGet();
+	float speed=1.0f;
+
+	if(m_move_flags&MOVE_FORWARD)
+		{v+=heading;}
+
+	if(m_move_flags&MOVE_BACKWARD)
+		{v-=heading;}
+
+	if(m_move_flags&STRAFE_LEFT)
+		{v+=glm::vec3{-heading.y,heading.x,0.0f};}
+
+	if(m_move_flags&STRAFE_RIGHT)
+		{v-=glm::vec3{-heading.y,heading.x,0.0f};}
+
+	v=speed*normalize(v);
+	player.velocitySet(v);
 	}
 
 unsigned int UserEventHandler::keyToFlag(uint8_t key)
@@ -35,41 +77,37 @@ unsigned int UserEventHandler::keyToFlag(uint8_t key)
 
 		case 114:
 			return STRAFE_RIGHT;
+
+		case 9:
+			return MENU_MODE;
 		}
 	return 0;
 	}
 
 void UserEventHandler::onKeyDown(Window& source,uint8_t key)
 	{
-//	GLINDA_DEBUG_PRINT("Got key event %u",key);
-	auto& heading=r_player->headingGet();
-	auto position=r_player->positionGet();
-	float speed=1.0f;
-
-	m_move_flags|=keyToFlag(key);
-
-	if(m_move_flags&MOVE_FORWARD)
-		{position+=static_cast<float>(m_dt)*speed*heading;}
-
-	if(m_move_flags&MOVE_BACKWARD)
-		{position-=static_cast<float>(m_dt)*speed*heading;}
-
-	if(m_move_flags&STRAFE_LEFT)
+	auto flag=keyToFlag(key);
+	if(flag==MENU_MODE)
 		{
-		position+=static_cast<float>(m_dt)*speed
-				*glm::vec3{-heading.y,heading.x,heading.z};
+		if(m_move_flags&MENU_MODE)
+			{source.cursorHideAndGrab();}
+		else
+			{source.cursorShow();}
+		m_move_flags^=flag;
 		}
-
-	if(m_move_flags&STRAFE_RIGHT)
+	else
 		{
-		position+=static_cast<float>(m_dt)*speed
-				*glm::vec3{heading.y,-heading.x,heading.z};
+		m_move_flags|=keyToFlag(key);
+		velocityUpdate();
 		}
-
-	r_player->positionSet(position);
 	}
 
 void UserEventHandler::onKeyUp(Window& source,uint8_t key)
 	{
-	m_move_flags&=~keyToFlag(key);
+	auto flag=keyToFlag(key);
+	if(flag!=MENU_MODE)
+		{
+		m_move_flags&=~flag;
+		velocityUpdate();
+		}
 	}

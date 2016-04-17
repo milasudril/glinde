@@ -22,11 +22,16 @@ namespace Glinda
 			~World();
 			World(Archive& source);
 
-			WorldObject* objectsBegin() noexcept
+			const WorldObject* objectsBegin() noexcept
 				{return m_objects.begin();}
 
-			WorldObject* objectsEnd() noexcept
+			const WorldObject* objectsEnd() noexcept
 				{return m_objects.end();}
+
+			void update(uint64_t frame,double delta_t,int64_t wallclock_utc);
+
+			WorldObject& playerGet() noexcept
+				{return *( m_objects.begin() );}
 
 		private:
 			std::map<Stringkey, Mesh> m_meshes;

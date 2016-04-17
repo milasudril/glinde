@@ -10,13 +10,13 @@ dependency[usereventhandler.o]
 
 namespace Glinda
 	{
-	class WorldObject;
+	class World;
 
 	class UserEventHandler:public Window::EventHandler
 		{
 		public:
-			explicit UserEventHandler(WorldObject& player,double dt):
-				r_player(&player),m_dt(dt),m_move_flags(0)
+			explicit UserEventHandler(World& world):
+				r_world(&world),m_move_flags(0)
 				{}
 
 			void onKeyDown(Window& source,uint8_t scancode);
@@ -30,16 +30,16 @@ namespace Glinda
 			void onResize(Window& source,int width,int height){}
 
 		private:
-			WorldObject* r_player;
-			double m_dt;
-
+			World* r_world;
 
 			unsigned int keyToFlag(uint8_t key);
+			void velocityUpdate();
 			unsigned int m_move_flags;
 			static constexpr unsigned int MOVE_FORWARD=1;
 			static constexpr unsigned int MOVE_BACKWARD=2;
 			static constexpr unsigned int STRAFE_LEFT=4;
 			static constexpr unsigned int STRAFE_RIGHT=8;
+			static constexpr unsigned int MENU_MODE=16;
 		};
 	}
 

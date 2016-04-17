@@ -49,6 +49,11 @@ namespace Glinda
 
 			void sizeGet(int& width,int& height) noexcept;
 
+			void cursorPositionSet(double x,double y) noexcept;
+			void cursorHide() noexcept;
+			void cursorShow() noexcept;
+			void cursorHideAndGrab() noexcept;
+
 		private:
 			EventHandler* r_handler;
 			void* m_handle;

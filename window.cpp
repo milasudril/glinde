@@ -138,3 +138,22 @@ void Window::sizeGet(int& width,int& height) noexcept
 	glfwGetWindowSize(static_cast<GLFWwindow*>(m_handle),&width,&height);
 	}
 
+void Window::cursorPositionSet(double x, double y) noexcept
+	{
+	glfwSetCursorPos(static_cast<GLFWwindow*>(m_handle),x,y);
+	}
+
+void Window::cursorHide() noexcept
+	{
+	glfwSetInputMode(static_cast<GLFWwindow*>(m_handle), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	}
+
+void Window::cursorShow() noexcept
+	{
+	glfwSetInputMode(static_cast<GLFWwindow*>(m_handle), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
+
+void Window::cursorHideAndGrab() noexcept
+	{
+	glfwSetInputMode(static_cast<GLFWwindow*>(m_handle), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	}
