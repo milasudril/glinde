@@ -12,6 +12,7 @@ target[name[mesh.o] type[object]]
 #include "texturemanager.h"
 #include "string.h"
 #include <algorithm>
+#include <glm/glm.hpp>
 
 using namespace Glinda;
 
@@ -174,4 +175,32 @@ Mesh::Mesh(TextureManager& textures,DataSource& source)
 				{return frameGet(textures,source.nameGet(),frames.objectGet(k),vi_max);}
 			};
 		}
+	}
+
+BoundingBox Mesh::boundingBoxGetInternal(unsigned int frame) const noexcept
+	{
+	auto faces_begin=m_faces.begin();
+	auto faces_end=m_faces.end();
+
+	auto& verts=m_frames[frame].m_vertices;
+
+	auto v_current=&verts[*faces_begin];
+	BoundingBox ret
+		{
+		 {v_current[0],v_current[1],v_current[2],1.0f}
+		,{v_current[0],v_current[1],v_current[2],1.0f}
+		};
+
+	while(faces_begin!=faces_end)
+		{
+		v_current=&verts[*faces_begin];
+
+		glm::vec4 value={v_current[0],v_current[1],v_current[2],1.0f};
+		ret.min=glm::min(value,ret.min);
+		ret.max=glm::max(value,ret.max);
+
+		++faces_begin;
+		}
+
+	return ret;
 	}

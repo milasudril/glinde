@@ -109,7 +109,8 @@ Renderer::Renderer()
 
 	glUniform3f(lightpos_id,0.0f,1.0f,0.75f);
 
-	glEnable(GL_DEPTH_TEST|GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
 	glDepthFunc(GL_LESS);
 	}
 

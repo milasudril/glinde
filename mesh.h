@@ -7,6 +7,8 @@ dependency[mesh.o]
 #define GLINDA_MESH_H
 
 #include "arraysimple.h"
+#include "debug.h"
+#include "boundingbox.h"
 
 namespace Glinda
 	{
@@ -30,6 +32,14 @@ namespace Glinda
 			};
 
 		ArraySimple<Frame> m_frames;
+		BoundingBox boundingBoxGet(unsigned int frame) const noexcept
+			{
+			assert(m_faces.length()!=0 && frame<m_frames.length());
+			return boundingBoxGetInternal(frame);
+			}
+
+		private:
+			BoundingBox boundingBoxGetInternal(unsigned int frame) const noexcept;
 		};
 	}
 

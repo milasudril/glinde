@@ -16,7 +16,9 @@ void GlTexture::dataSet(const Image& source) noexcept
 	glBindTexture(GL_TEXTURE_2D,id);
 
 	if(&source==r_source)
-		{return;}
+		{
+		return;
+		}
 
 	switch(source.channelCountGet())
 		{
