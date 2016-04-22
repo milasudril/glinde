@@ -18,6 +18,7 @@ dependency[world.o]
 namespace Glinda
 	{
 	class Archive;
+	class FaceRejectionTree;
 
 	/**\brief Class representing the current game.
 	*/
@@ -49,12 +50,17 @@ namespace Glinda
 			void update(uint64_t frame,double delta_t,int64_t wallclock_utc);
 
 			WorldObject& playerGet() noexcept
-				{return *( m_objects.begin() );}
+				{return m_objects[0];}
+
+			const WorldObject& mapGet() const noexcept
+				{return m_objects[1];}
 
 		private:
 			std::map<Stringkey, Mesh> m_meshes;
 			ArrayDynamic<WorldObject> m_objects;
 			TextureManager m_textures;
+
+			FaceRejectionTree* m_tree;
 		};
 	}
 

@@ -6,6 +6,7 @@ target[name[world.o] type[object]]
 #include "archive.h"
 #include "resourceobject.h"
 #include "debug.h"
+#include "facerejectiontree.h"
 
 using namespace Glinda;
 
@@ -36,6 +37,8 @@ World::World(Archive& source):m_textures(source)
 
 		i.next();
 		}
+
+	m_tree=new FaceRejectionTree(*mapGet().meshGet());
 	}
 
 World::~World()

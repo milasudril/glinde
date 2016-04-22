@@ -29,6 +29,9 @@ namespace Glinda
 		glm::vec3 size() const noexcept
 			{return glm::vec3( max - min );}
 
+		glm::vec4 mid() const noexcept
+			{return 0.5f*(max + min);}
+
 		/**\brief Tests whether or not `point` is inside the bounding box
 		*/
 		bool inside(const glm::vec4& point) const noexcept

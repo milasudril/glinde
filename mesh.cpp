@@ -179,27 +179,27 @@ Mesh::Mesh(TextureManager& textures,DataSource& source)
 
 BoundingBox Mesh::boundingBoxGetInternal(unsigned int frame) const noexcept
 	{
-	auto faces_begin=m_faces.begin();
-	auto faces_end=m_faces.end();
-
 	auto& verts=m_frames[frame].m_vertices;
+	auto v=verts.begin();
+	auto N=verts.length();
 
-	auto v_current=&verts[*faces_begin];
 	BoundingBox ret
 		{
-		 {v_current[0],v_current[1],v_current[2],1.0f}
-		,{v_current[0],v_current[1],v_current[2],1.0f}
+		 {v[0],v[1],v[2],1.0f}
+		,{v[0],v[1],v[2],1.0f}
 		};
 
-	while(faces_begin!=faces_end)
-		{
-		v_current=&verts[*faces_begin];
+	v+=3;
+	N-=3;
 
-		glm::vec4 value={v_current[0],v_current[1],v_current[2],1.0f};
+	while(N!=0)
+		{
+		glm::vec4 value={v[0],v[1],v[2],1.0f};
 		ret.min=glm::min(value,ret.min);
 		ret.max=glm::max(value,ret.max);
 
-		++faces_begin;
+		v+=3;
+		N-=3;
 		}
 
 	return ret;
