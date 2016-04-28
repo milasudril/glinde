@@ -18,17 +18,17 @@ World::World(Archive& source):m_textures(source)
 	m_objects.append(WorldObject{});
 
 
-	ResourceObject models{source.fileGet("models.json")};
+	ResourceObject classes{source.fileGet("classes.json")};
 
-	auto i=models.objectIteratorGet();
+	auto i=classes.objectIteratorGet();
 	while(!i.endAt())
 		{
 		auto pair=i.get();
 		GLINDA_DEBUG_PRINT("Got key \"%s\"",pair.first);
-		auto subobject=pair.second.objectGet("mesh");
+		auto subobject=pair.second.objectGet("model");
 
 		const char* mesh_path=static_cast<const char*>(subobject);
-		GLINDA_DEBUG_PRINT("Got a mesh object \"%s\"",mesh_path);
+		GLINDA_DEBUG_PRINT("Got a model object \"%s\"",mesh_path);
 
 		auto ip=m_models.emplace(
 			Stringkey(pair.first),Model(m_textures,source.fileGet(mesh_path))

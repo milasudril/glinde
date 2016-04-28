@@ -22,7 +22,7 @@ int main()
 	logWrite(LogMessageType::INFORMATION,"Glinda is starting up");
 	try
 		{
-		Archive src{"test (kopiera 1).zip"};
+		Archive src{"test.zip"};
 		World world{src};
 
 		UserEventHandler event_handler(world);

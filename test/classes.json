@@ -1,0 +1,10 @@
+{
+"world":
+	{
+	 "model":"world/model.json"
+	}
+,"player":
+	{
+	 "model":"player/model.json"
+	}
+}
