@@ -8,7 +8,10 @@ dependency[GL;external]
 #define GLINDA_GLVERTEXBUFFER_H
 
 #include "debug.h"
+#include "range.h"
 #include <GL/glew.h>
+#include <glm/vec3.hpp>
+#include <glm/vec2.hpp>
 #include <cassert>
 
 namespace Glinda
@@ -24,6 +27,18 @@ namespace Glinda
 				m_size=size;
 				glBindBuffer(GL_ARRAY_BUFFER,id);
 				glBufferData(GL_ARRAY_BUFFER,size*sizeof(float),data,usage);
+				}
+
+			void dataSet(const Range<const glm::vec3*>& data,GLenum usage) noexcept
+				{
+				dataSet(reinterpret_cast<const float*>(data.begin())
+					,3*static_cast<unsigned int>(data.length()),usage);
+				}
+
+			void dataSet(const Range<const glm::vec2*>& data,GLenum usage) noexcept
+				{
+				dataSet(reinterpret_cast<const float*>(data.begin())
+					,2*static_cast<unsigned int>( data.length() ),usage);
 				}
 
 			void draw(GLuint index,unsigned int elem_size) noexcept

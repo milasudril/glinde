@@ -12,6 +12,7 @@ target[name[arrayinit.h] type[include]]
 #include <cstddef>
 #include <type_traits>
 #include <cstring>
+#include <utility>
 
 namespace Glinda
 	{
@@ -23,7 +24,7 @@ namespace Glinda
 	 *  * Storing array elements in a location not returned by `new`
 	 *  * Creating an array containing objects that cannot be default constructed
 	 *
-	 * \note If you want automatic managment of arrays, see ArraySimple, or
+	 * \note If you want automatic management of arrays, see ArraySimple, or
 	 * ArrayDynamic.
 	 *
 	*/
@@ -149,7 +150,7 @@ namespace Glinda
 		 * \note When the array is no longer needed, its elements should be
 		 * destroyed by destroy(T*,T*).
 		 *
-		 * \note This function requires that T is move constructable.
+		 * \note This function requires that T is move constructible.
 		 *
 		 * \warning Calling this function on a range that is already initialized
 		 * may cause memory leaks.
@@ -163,7 +164,7 @@ namespace Glinda
 				{
 				while(position!=end)
 					{
-					new(position)T(init(position-begin));
+					new(position)T(std::move(init(position-begin)));
 					++position;
 					}
 				}
@@ -198,6 +199,7 @@ namespace Glinda
 				while(position!=end)
 					{
 					new(position)T(*source);
+					++source;
 					++position;
 					}
 				}

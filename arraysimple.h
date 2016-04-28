@@ -12,8 +12,10 @@ target[name[arraysimple.h] type[include]]
 #include "debug.h"
 #include "arrayinit.h"
 #include "memoryalloc.h"
+#include "range.h"
 #include <utility>
 #include <cstdint>
+#include <cstdio>
 
 namespace Glinda
 	{
@@ -42,7 +44,7 @@ namespace Glinda
 			/**\brief Size initialize constructor.
 			 *
 			 * This constructor initializes the array with a capacity of
-			 * `n_elems` elements. The elements allocated will be default
+			 * <var>n_elems</var> elements. The elements allocated will be default
 			 * initialized.
 			*/
 			explicit ArraySimple(size_t n_elems);
@@ -50,8 +52,8 @@ namespace Glinda
 			/**\brief Element initialize constructor.
 			 *
 			 * This constructor initializes the array with a capacity of
-			 * `n_elems` elements. The elements allocated will be initialized
-			 * using the function object given by `initializer`. This function
+			 * <var>n_elems</var> elements. The elements allocated will be initialized
+			 * using the function object given by <var>initializer</var>. This function
 			 * object must behave as a ArrayInit::ElementInitializer.
 			 *
 			 * The main usecase for this function is to create an array of
@@ -92,7 +94,7 @@ namespace Glinda
 
 			/**\brief Copy copy assignment operator.
 			 *
-			 * This is the copy assigment operator.
+			 * This is the copy assignment operator.
 			 *
 			 * \note This function only works if the individual objects are copy
 			 * constructible
@@ -107,6 +109,9 @@ namespace Glinda
 				}
 
 			/**\brief Move constructor
+			 *
+			 * This is the move constructor.
+			 *
 			*/
 			ArraySimple(ArraySimple&& a) noexcept
 				{
@@ -115,6 +120,8 @@ namespace Glinda
 				}
 
 			/**\brief Move assigment operator
+			 *
+			 * This is the move assignment operator.
 			*/
 			ArraySimple& operator=(ArraySimple&& a) noexcept
 				{
@@ -124,6 +131,9 @@ namespace Glinda
 				}
 
 			/**\brief Returns a pointer to the beginning of the array
+			 *
+			 * This function returns a pointer to the beginning of the array.
+			 *
 			*/
 			T* begin() noexcept
 				{return m_content.fields.data;}
@@ -134,23 +144,33 @@ namespace Glinda
 				{return m_content.fields.data;}
 
 			/**\brief Returns a pointer to the element past the last element
+			 *
+			 * This function returns a pointer to the element past the last
+			 * element.
 			*/
 			T* end() noexcept
 				{return m_content.fields.data+m_content.fields.N;}
 
 			/**\brief Returns a pointer to the element past the last element
+			 *
+			 * This function returns a pointer to the element past the last
+			 * element.
+			 *
 			*/
 			const T* end() const noexcept
 				{return m_content.fields.data+m_content.fields.N;}
 
 			/**\brief Returns the length of the array
+			 *
+			 * This function returns the length of the array.
+			 *
 			*/
 			size_t length() const noexcept
 				{return m_content.fields.N;}
 
 			/**\brief Array element access.
 			 *
-			 * \warning The parameter `k` has to be less than the value returned
+			 * \warning The parameter <var>k</var> has to be less than the value returned
 			 * by length()
 			 *
 			*/
@@ -162,7 +182,9 @@ namespace Glinda
 
 			/**\brief Array element access.
 			 *
-			 * \warning The parameter `k` has to be less than the value returned
+			 * This function returns the element at position <var>k</var>.
+			 *
+			 * \warning The parameter <var>k</var> has to be less than the value returned
 			 * by length()
 			 *
 			*/
@@ -170,6 +192,26 @@ namespace Glinda
 				{
 				assert(k<m_content.fields.N);
 				return m_content.fields.data[k];
+				}
+
+			/**\brief Array range.
+			 *
+			 * This function returns a Range representing the content of the
+			 * array.
+			 */
+			operator Range<const T*>() const noexcept
+				{
+				return Range<const T*>(begin(),length());
+				}
+
+			/**\brief Array range.
+			 *
+			 * This function returns a Range representing the content of the
+			 * array.
+			 */
+			operator Range<T*>() noexcept
+				{
+				return Range<T*>(begin(),length());
 				}
 
 		private:
@@ -193,6 +235,7 @@ namespace Glinda
 	template<class T>
 	ArraySimple<T>::ArraySimple(size_t n_elems)
 		{
+		assert(n_elems!=0);
 		auto data=reinterpret_cast<T*>(memoryAllocate(n_elems*sizeof(T)));
 		try
 			{ArrayInit::create(data,data+n_elems);}
@@ -209,6 +252,7 @@ namespace Glinda
 	template<class Initializer>
 	ArraySimple<T>::ArraySimple(size_t n_elems,Initializer&& init)
 		{
+		assert(n_elems!=0);
 		auto data=reinterpret_cast<T*>(memoryAllocate(n_elems*sizeof(T)));
 		try
 			{ArrayInit::create(data,data+n_elems,init);}
@@ -233,6 +277,7 @@ namespace Glinda
 	template<class T>
 	ArraySimple<T>::ArraySimple(const ArraySimple& a)
 		{
+		assert(a.begin()!=0);
 		auto data=reinterpret_cast<T*>( memoryAllocate(a.length()*sizeof(T)) );
 		try
 			{ArrayInit::copy(data,data+a.length(),a.begin());}

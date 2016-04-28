@@ -22,19 +22,15 @@ int main()
 	logWrite(LogMessageType::INFORMATION,"Glinda is starting up");
 	try
 		{
+		Archive src{"test (kopiera 1).zip"};
+		World world{src};
+
+		UserEventHandler event_handler(world);
+		UIManager ui;
+		WindowGame mainwin("Glinda",640,480,event_handler,world);
 		Timer world_clock(30.0);
 		logWrite(LogMessageType::INFORMATION
 			,"World clock ticks every %.15g second",world_clock.delayGet());
-
-	//	Archive src{"test.zip"};
-		Archive src{"test (kopiera 1).zip"};
-		World world{src};
-		UserEventHandler event_handler(world);
-
-		UIManager ui;
-
-		WindowGame mainwin("Glinda",640,480,event_handler,world);
-
 		gameLoopRun(ui,mainwin,world_clock,world);
 		}
 	catch(const ErrorMessage& message)

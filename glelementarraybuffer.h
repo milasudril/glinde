@@ -7,6 +7,8 @@ dependency[GL;external]
 #ifndef GLINDA_GLELEMENTARRAYBUFFER_H
 #define GLINDA_GLELEMENTARRAYBUFFER_H
 
+#include "range.h"
+#include "mesh.h"
 #include <GL/glew.h>
 
 namespace Glinda
@@ -22,6 +24,12 @@ namespace Glinda
 				m_size=N;
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,id);
 				glBufferData(GL_ELEMENT_ARRAY_BUFFER,N*sizeof(uint32_t),data,usage);
+				}
+
+			void dataSet(const Range<const Mesh::Face*> data,GLenum usage) noexcept
+				{
+				dataSet(reinterpret_cast<const uint32_t*>( data.begin() )
+					,3*static_cast<unsigned int>(data.length()),usage);
 				}
 
 			void draw(GLuint index) noexcept

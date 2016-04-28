@@ -20,6 +20,9 @@ namespace Glinda
 	{
 	class WorldObject;
 	class World;
+	class Mesh;
+
+	template<class T> class Range;
 
 	class Renderer
 		{
@@ -46,6 +49,8 @@ namespace Glinda
 			GLuint M_id;
 			GLuint lightpos_id;
 			GLuint diffuse_id;
+
+			void render(const Range< const Mesh* >& meshes) noexcept;
 		};
 	}
 

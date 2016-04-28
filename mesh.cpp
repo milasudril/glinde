@@ -3,204 +3,183 @@ target[name[mesh.o] type[object]]
 #endif
 
 #include "mesh.h"
-#include "datasource.h"
 #include "resourceobject.h"
 #include "debug.h"
-#include "errormessage.h"
-#include "logwriter.h"
 #include "narrow_cast.h"
 #include "texturemanager.h"
-#include "string.h"
-#include <algorithm>
 #include <glm/glm.hpp>
 
 using namespace Glinda;
 
-static ArraySimple<float> verticesGet(const char* source_name
-	,const ResourceObject& vertices
-	,unsigned int vi_max)
+static ArraySimple<glm::vec3> verticesLoad(const ResourceObject& source
+	,const char* source_name)
 	{
-	auto n=narrow_cast<unsigned int>( vertices.objectCountGet() );
-	if(n%3!=0)
+	auto verts=source.objectGet("vertices");
+	auto n_verts=verts.objectCountGet();
+	if(n_verts%3!=0)
+		{throw ErrorMessage("%s: Each vertex needs three components",source_name);}
+	n_verts/=3;
+	GLINDA_DEBUG_PRINT("Got %zu vertices",n_verts);
+	return std::move(ArraySimple<glm::vec3>(n_verts,[&verts](size_t k)
 		{
-		throw ErrorMessage("%s: The number of elements in the vertex "
-			"array must be divisible by 3.",source_name);
-		}
-
-	if(n/3 > vi_max + 1)
-		{
-		throw ErrorMessage("%s: Mesh contains unconnected vertices. %u > %u"
-			,source_name,n/3,vi_max);
-		}
-
-	if(n/3 < vi_max + 1)
-		{
-		throw ErrorMessage("%s: Mesh non-existent vertices. %u > %u"
-			,source_name,n/3,vi_max);
-		}
-
-	GLINDA_DEBUG_PRINT("%s: Got %u vertices.",source_name,n/3);
-
-	return std::move(ArraySimple<float>
-		{
-		n,[&vertices](size_t k)
+		glm::vec3 ret;
+		for(int l=0;l<3;++l)
 			{
-			return static_cast<float>
-				(static_cast<double>(vertices.objectGet(k)));
+			auto vertex_obj=verts.objectGet(3*k + l);
+			ret[l]=static_cast<float>( static_cast<double>(vertex_obj) );
 			}
-		});
+		return ret;
+		}));
 	}
 
-static ArraySimple<float> uvGet(const char* source_name
-	,const ResourceObject& uv
+static ArraySimple<glm::vec3> normalsLoad(const ResourceObject& source
+	,const char* source_name
 	,size_t vertex_count)
 	{
-	auto n=narrow_cast<unsigned int>( uv.objectCountGet() );
-	if(n%2!=0)
+	auto normals=source.objectGet("normals");
+	auto n_normals=normals.objectCountGet();
+	if(n_normals%3!=0)
+		{throw ErrorMessage("%s: Each normal needs three components",source_name);}
+	n_normals/=3;
+	if(n_normals!=vertex_count)
 		{
-		throw ErrorMessage("%s: The number of elements in the UV "
-			"array must be divisible by 2.",source_name);
+		throw ErrorMessage("%s: There has to be exactly one normal vector per vertex. "
+			"The number of normal vectors are %zu, and the number of vertices are %zu"
+			,source_name,n_normals,vertex_count);
 		}
 
-	if(n/2 != vertex_count/3 )
-		{
-		throw ErrorMessage("%s: The number of UV coordinates has to "
-			"be equal to the number of vertices."
-			,source_name);
-		}
+	GLINDA_DEBUG_PRINT("Got %zu normals",n_normals);
 
-	GLINDA_DEBUG_PRINT("%s: Got %u UV coordinates.",source_name,n/2);
-	return std::move(ArraySimple<float>
+	return std::move(ArraySimple<glm::vec3>(n_normals,[&normals](size_t k)
 		{
-		n,[&uv](size_t k)
+		glm::vec3 ret;
+		for(int l=0;l<3;++l)
 			{
-			auto ret=static_cast<float>(static_cast<double>(uv.objectGet(k)));
-			return k%2? 1.0f - ret:ret;
+			auto normal_obj=normals.objectGet(3*k + l);
+			ret[l]=static_cast<float>( static_cast<double>(normal_obj) );
 			}
-		});
+		return ret;
+		}));
 	}
 
-static ArraySimple<float> normalsGet(const char* source_name
-	,const ResourceObject& normals
+static ArraySimple<glm::vec2> uvsLoad(const ResourceObject& source
+	,const char* source_name
 	,size_t vertex_count)
 	{
-	auto n=narrow_cast<unsigned int>( normals.objectCountGet() );
-	if(n%3!=0)
+	auto uvs=source.objectGet("uvs");
+	auto n_uvs=uvs.objectCountGet();
+	if(n_uvs%2!=0)
+		{throw ErrorMessage("%s: Each UV coordinate needs two components",source_name);}
+	n_uvs/=2;
+	if(n_uvs!=vertex_count)
 		{
-		throw ErrorMessage("%s: The number of elements in the "
-			"normal array must be divisible by 3.",source_name);
+		throw ErrorMessage("%s: There has to be exactly one UV coordinate per vertex. "
+			"The number of UV coordinats are %zu, and the number of vertices are %zu"
+			,source_name
+			,n_uvs,vertex_count);
 		}
 
-	if(n != vertex_count )
-		{
-		throw ErrorMessage("%s: The number of normal vectors has to "
-			"be equal to the number of vertices."
-			,source_name);
-		}
+	GLINDA_DEBUG_PRINT("Got %zu uv coordinates",n_uvs);
 
-	GLINDA_DEBUG_PRINT("%s: Got %u vertex normal vectors.",source_name,n/3);
-	return std::move(ArraySimple<float>
+	return std::move(ArraySimple<glm::vec2>(n_uvs,[&uvs](size_t k)
 		{
-		n,[&normals](size_t k)
+		glm::vec2 ret;
+		for(int l=0;l<2;++l)
 			{
-			return static_cast<float>
-				(static_cast<double>(normals.objectGet(k)));
+			auto uv_obj=uvs.objectGet(2*k + l);
+			ret[l]=static_cast<float>( static_cast<double>(uv_obj) );
 			}
-		});
+	//	Invert y coordinate
+		ret[1]=1.0f - ret[1];
+		return ret;
+		}));
 	}
 
-static Image* imageFind(TextureManager& textures,const char* source_name
-	,const ResourceObject& frame_current_in,const char* type)
+static ArraySimple<Mesh::Face> facesLoad(const ResourceObject& source
+	,const char* source_name
+	,size_t vertex_count)
 	{
- 	auto filename=frame_current_in.stringGet(type);
-	if(filename!=nullptr)
+	auto faces=source.objectGet("faces");
+	auto n_faces=faces.objectCountGet();
+	if(n_faces%Mesh::Face::length()!=0)
+		{throw ErrorMessage("%s: Each face needs three vertices",source_name);}
+	n_faces/=Mesh::Face::length();
+
+	GLINDA_DEBUG_PRINT("Got %zu faces",n_faces);
+
+	return std::move(ArraySimple<Mesh::Face>(n_faces,[&faces,source_name,vertex_count](size_t k)
 		{
-		return &textures.textureGet(source_name,filename);
-		}
-	return nullptr;
-	}
-
-static Mesh::Frame frameGet(TextureManager& textures,const char* source_name
-	,const ResourceObject& frame_current_in
-	,unsigned int vi_max)
-	{
-	auto v=verticesGet(source_name,frame_current_in.objectGet("vertices"),vi_max);
-	auto vertex_count=v.length();
-
-	return std::move(Mesh::Frame
-		{
-		 std::move(v)
-		,normalsGet(source_name,frame_current_in.objectGet("normals"),vertex_count)
-		,uvGet(source_name,frame_current_in.objectGet("uv"),vertex_count)
-		,imageFind(textures,source_name,frame_current_in,"texture_diffuse")
-		});
-	}
-
-
-
-Mesh::Mesh(TextureManager& textures,DataSource& source)
- 	{
-	ResourceObject data_raw(source);
-	unsigned int vi_max=0;
-		{
-		auto faces=data_raw.objectGet("faces");
-		auto N=narrow_cast<unsigned int>(faces.objectCountGet());
-		if(N%3!=0)
+		Mesh::Face ret;
+		for(size_t l=0;l<ret.length();++l)
 			{
-			throw ErrorMessage("%s: A mesh must consist of triangles only."
-				,source.nameGet());
+			auto face_obj=faces.objectGet(ret.length()*k + l);
+			auto x=static_cast<long long int>(face_obj);
+			if(x<0 || static_cast<size_t>(x)>=vertex_count)
+				{throw ErrorMessage("%s: Invalid vertex index",source_name);}
+			ret[l]=narrow_cast<unsigned int>(x);
 			}
-
-		GLINDA_DEBUG_PRINT("%s: Got %u faces.",source.nameGet(),N);
-
-		m_faces=ArraySimple<unsigned int>
-			{
-			N,[&vi_max,&faces](size_t k)
-				{
-				auto vi=narrow_cast<unsigned int>
-					(static_cast<long long int>(faces.objectGet(k)) );
-				vi_max=std::max(vi,vi_max);
-				return vi;
-				}
-			};
-		}
-
-		{
-		auto frames=data_raw.objectGet("frames");
-		auto N=narrow_cast<unsigned int>(frames.objectCountGet());
-		GLINDA_DEBUG_PRINT("%s: Got %u frames.",source.nameGet(),N);
-		m_frames=ArraySimple<Frame>
-			{
-			N,[&textures,&source,&frames,vi_max](size_t k)
-				{return frameGet(textures,source.nameGet(),frames.objectGet(k),vi_max);}
-			};
-		}
+		return ret;
+		}));
 	}
 
-BoundingBox Mesh::boundingBoxGetInternal(unsigned int frame) const noexcept
+static ArrayFixed<const Image*,Mesh::textureCountGet()>
+texturesLoad(TextureManager& textures,const ResourceObject& source
+	,const char* source_name)
 	{
-	auto& verts=m_frames[frame].m_vertices;
-	auto v=verts.begin();
-	auto N=verts.length();
+	GLINDA_DEBUG_PRINT("Loading textures for %s",source_name);
+	auto textures_lump=source.objectGet("textures");
+	auto n_textures=textures_lump.objectCountGet();
+	if(n_textures>=Mesh::textureCountGet())
+		{
+		throw ErrorMessage("%s: A mesh can only have %zu different textures"
+			,source_name,Mesh::textureCountGet());
+		}
+
+	ArrayFixed<const Image*,Mesh::textureCountGet()> ret;
+	memset(ret.begin(),0,ret.length()*sizeof(const Image*));
+	for(size_t k=0;k<n_textures;++k)
+		{
+		ret[k]=&textures.textureGet(source_name
+			,static_cast<const char*>(textures_lump.objectGet(k)));
+		}
+	return std::move(ret);
+	}
+
+
+
+Mesh::Mesh(TextureManager& textures,const ResourceObject& source
+	,const char* source_name):
+	 m_vertices(verticesLoad(source,source_name))
+	,m_normals(normalsLoad(source,source_name,m_vertices.length()))
+	,m_uvs(uvsLoad(source,source_name,m_vertices.length()))
+	,m_faces(facesLoad(source,source_name,m_vertices.length()))
+	,r_textures(texturesLoad(textures,source,source_name))
+	{
+	boundingBoxUpdate();
+	}
+
+Mesh::~Mesh()
+	{}
+
+void Mesh::boundingBoxUpdate() noexcept
+	{
+	auto v=m_vertices.begin();
+	auto v_end=m_vertices.end();
 
 	BoundingBox ret
 		{
-		 {v[0],v[1],v[2],1.0f}
-		,{v[0],v[1],v[2],1.0f}
+		 glm::vec4(v[0],1.0f)
+		,glm::vec4(v[0],1.0f)
 		};
 
-	v+=3;
-	N-=3;
-
-	while(N!=0)
+	while(v!=v_end)
 		{
-		glm::vec4 value={v[0],v[1],v[2],1.0f};
+		glm::vec4 value=glm::vec4(*v,1.0f);
 		ret.min=glm::min(value,ret.min);
 		ret.max=glm::max(value,ret.max);
 
-		v+=3;
-		N-=3;
+		++v;
 		}
 
-	return ret;
+	m_box=ret;
 	}

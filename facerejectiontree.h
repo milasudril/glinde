@@ -9,40 +9,52 @@ dependency[facerejectiontree.o]
 #ifndef GLINDA_FACEREJECTIONTREE_H
 #define GLINDA_FACEREJECTIONTREE_H
 
+#include "arraydynamic.h"
+#include "vectortype.h"
+#include <glm/glm.hpp>
+
 namespace Glinda
 	{
+	class Model;
 	class Mesh;
-	class WorldObject;
 	class BoundingBox;
-
 	class FaceRejectionTree
 		{
 		public:
 			FaceRejectionTree& operator=(const FaceRejectionTree&)=delete;
 			FaceRejectionTree(const FaceRejectionTree&)=delete;
 
-			FaceRejectionTree(Mesh&& mesh)
-				{treeBuild(mesh);}
+			FaceRejectionTree(Model&& model,size_t frame)=delete;
 
-			FaceRejectionTree(const Mesh& mesh)
-				{treeBuild(mesh);}
+			FaceRejectionTree(const Model& model,size_t frame);
 
 			~FaceRejectionTree();
 
-
-			const unsigned int* facesGet(const WorldObject* object) const noexcept;
-
+		/*	const ArrayDynamic<unsigned int>& facesGet(const glm::vec4& position
+				,const glm::vec3& size_min) const noexcept;*/
 
 		private:
 			class Node;
-			Node* root;
+			Node* m_root;
 
-			void treeBuild(const Mesh& mesh);
-			Node* nodeCreate(const unsigned int* face_indices
-				,unsigned int N_faces_indices
-				,const unsigned int* faces
-				,const float* vertices
-				,const BoundingBox& box);
+			class ConstructionParams;
+
+			void treeBuild();
+
+
+			static Node* nodeCreate(const Range<const unsigned int*>& face_indices
+				,const BoundingBox& box,const ConstructionParams& params);
+
+			static ArrayDynamic<unsigned int>
+			facesFind(const Range<const unsigned int*>& face_indices
+				,const ConstructionParams& params,const BoundingBox& box);
+
+			Range<const Mesh*> r_meshes;
+			ArrayDynamic< vec4_t<unsigned int> > m_face_list;
+
+
+		/*	static const Node& nodeFind(const Node& root,const glm::vec4& position
+				,const glm::vec3& size_min) noexcept;*/
 		};
 	}
 

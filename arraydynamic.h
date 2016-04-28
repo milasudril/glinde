@@ -13,6 +13,7 @@ target[name[arraydynamic.h] type[include]]
 #include "arrayinit.h"
 #include "debug.h"
 #include "errormessage.h"
+#include "range.h"
 
 #include <limits>
 #include <cstdint>
@@ -97,12 +98,12 @@ namespace Glinda
 			uint32_t length() const noexcept
 				{return m_content.data.length;}
 
-			/**\brief Returns a pointer to the first elmenet in the array.
+			/**\brief Returns a pointer to the first elemenet in the array.
 			*/
 			T* begin() noexcept
 				{return m_content.data.pointer;}
 
-			/**\brief Returns a pointer to the first elmenet in the array.
+			/**\brief Returns a pointer to the first elemenet in the array.
 			*/
 			const T* begin() const noexcept
 				{return m_content.data.pointer;}
@@ -131,6 +132,26 @@ namespace Glinda
 				{
 				assert(position<length());
 				return m_content.data.pointer[position];
+				}
+
+			/**\brief Array range.
+			 *
+			 * This function returns a Range representing the content of the
+			 * array.
+			 */
+			operator Range<const T*>() const noexcept
+				{
+				return Range<const T*>(begin(),length());
+				}
+
+			/**\brief Array range.
+			 *
+			 * This function returns a Range representing the content of the
+			 * array.
+			 */
+			operator Range<T*>() noexcept
+				{
+				return Range<T*>(begin(),length());
 				}
 
 			/**\brief Appends another array object to the array.
@@ -222,7 +243,7 @@ namespace Glinda
 				--m_content.data.length;
 				}
 
-			/**\brief  Removes the <var>N</var>last element from the array.
+			/**\brief  Removes the <var>N</var> last element from the array.
 			 */
 			void truncate(uint32_t N)
 				{
@@ -284,7 +305,7 @@ namespace Glinda
 	//	GLINDA_DEBUG_PRINT("Resizing block of size %u to %zu",m_content.data.capacity,N_2);
 
 		T* block_new=reinterpret_cast<T*>(memoryRealloc(begin(),N_2*sizeof(T)));
-		memset(block_new+length(),0,N_2*sizeof(T));
+		memset(block_new+length(),0,(N_2-length())*sizeof(T));
 		m_content.data.pointer=block_new;
 		m_content.data.capacity=static_cast<uint32_t>(N_2);
 		}

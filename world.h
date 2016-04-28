@@ -10,7 +10,6 @@ dependency[world.o]
 #define GLINDA_WORLD_H
 
 #include "arraydynamic.h"
-#include "mesh.h"
 #include "worldobject.h"
 #include "texturemanager.h"
 #include "stringkey.h"
@@ -19,6 +18,7 @@ namespace Glinda
 	{
 	class Archive;
 	class FaceRejectionTree;
+	class Model;
 
 	/**\brief Class representing the current game.
 	*/
@@ -56,11 +56,13 @@ namespace Glinda
 				{return m_objects[1];}
 
 		private:
-			std::map<Stringkey, Mesh> m_meshes;
+			std::map<Stringkey, Model> m_models;
 			ArrayDynamic<WorldObject> m_objects;
 			TextureManager m_textures;
 
 			FaceRejectionTree* m_tree;
+
+			unsigned int n_faces;
 		};
 	}
 

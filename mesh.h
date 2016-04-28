@@ -7,39 +7,73 @@ dependency[mesh.o]
 #define GLINDA_MESH_H
 
 #include "arraysimple.h"
-#include "debug.h"
+#include "arrayfixed.h"
 #include "boundingbox.h"
+#include "stringkey.h"
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
+#include <map>
 
 namespace Glinda
 	{
-	class DataSource;
 	class Image;
 	class TextureManager;
+	class ResourceObject;
 
-	struct Mesh
+	class Mesh
 		{
-		Mesh(TextureManager& textures,DataSource&& source):Mesh(textures,source){}
-		Mesh(TextureManager& textures,DataSource& source);
+		public:
+			struct Face:public ArrayFixed<unsigned int,3>
+				{
+				using ArrayFixed<unsigned int,3>::ArrayFixed;
+				};
 
-		ArraySimple<unsigned int> m_faces;
+			Mesh(TextureManager& textures,const ResourceObject& source
+				,const char* source_name);
 
-		struct Frame
-			{
-			ArraySimple<float> m_vertices;
-			ArraySimple<float> m_normals;
-			ArraySimple<float> m_uv;
-			const Image* r_tex_diffuse;
-			};
+			~Mesh();
 
-		ArraySimple<Frame> m_frames;
-		BoundingBox boundingBoxGet(unsigned int frame) const noexcept
-			{
-			assert(m_faces.length()!=0 && frame<m_frames.length());
-			return boundingBoxGetInternal(frame);
-			}
+			Range<const glm::vec3*> verticesGet() const noexcept
+				{return m_vertices;}
+
+			ArrayFixed<glm::vec3,3> verticesFromFaceGet(const Face& face) const noexcept
+				{
+				assert(face[0]<m_vertices.length()
+					&& face[1]<m_vertices.length()
+					&& face[2]<m_vertices.length());
+				auto verts=m_vertices.begin();
+				return {verts[face[0]],verts[face[1]],verts[face[2]]};
+				}
+
+			Range<const glm::vec3*> normalsGet() const noexcept
+				{return m_normals;}
+
+			Range<const glm::vec2*> uvsGet() const noexcept
+				{return m_uvs;}
+
+			Range<const Face*> facesGet() const noexcept
+				{return m_faces;}
+
+			static constexpr unsigned int textureCountGet() noexcept
+				{return decltype(r_textures)::length();}
+
+			Range<const Image* const*> texturesGet() const noexcept
+				{return r_textures;}
+
+			const BoundingBox& boundingBoxGet() const noexcept
+				{return m_box;}
+
+
 
 		private:
-			BoundingBox boundingBoxGetInternal(unsigned int frame) const noexcept;
+			BoundingBox m_box;
+			ArraySimple<glm::vec3> m_vertices;
+			ArraySimple<glm::vec3> m_normals;
+			ArraySimple<glm::vec2> m_uvs;
+			ArraySimple<Face> m_faces;
+			ArrayFixed<const Image*,4> r_textures;
+
+			void boundingBoxUpdate() noexcept;
 		};
 	}
 

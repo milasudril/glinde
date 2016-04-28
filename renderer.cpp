@@ -17,15 +17,10 @@ target
 #include "worldobject.h"
 #include "world.h"
 #include "debug.h"
+#include "range.h"
+#include "model.h"
 
 using namespace Glinda;
-
-static const GLfloat g_vertex_buffer_data[]=
-	{
-	-1.0f, 0.0f,0.0f,
-	1.0f, 0.0f,0.0f,
-	0.0f, 0.0f, 1.0f
-	};
 
 static const char* g_frag_shader="#version 450 core\n"
 	"out vec3 color;"
@@ -112,15 +107,38 @@ Renderer::Renderer()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glDepthFunc(GL_LESS);
+	glClearColor(0.5,0.5,0.5,1);
 	}
 
 Renderer::~Renderer()
 	{}
 
+void Renderer::render(const Range< const Mesh* >& meshes) noexcept
+	{
+	auto mesh=meshes.begin();
+	auto mesh_end=meshes.end();
+
+	while(mesh!=mesh_end)
+		{
+		vertices.dataSet(mesh->verticesGet(),GL_STATIC_DRAW);
+		normals.dataSet(mesh->normalsGet(),GL_STATIC_DRAW);
+		uvs.dataSet(mesh->uvsGet(),GL_STATIC_DRAW);
+
+
+		vertex_indices.dataSet(mesh->facesGet(),GL_STATIC_DRAW);
+		vertices.attributesBind(0,3);
+		normals.attributesBind(1,3);
+		uvs.attributesBind(2,2);
+		texture.dataSet(**(mesh->texturesGet().begin()));
+		vertex_indices.draw(0);
+
+		++mesh;
+		}
+	}
+
 void Renderer::sceneRender(World& world,const WorldObject& viewer) noexcept
 	{
-	glClearColor(0,0,0,1);
-	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
@@ -139,36 +157,11 @@ void Renderer::sceneRender(World& world,const WorldObject& viewer) noexcept
 		auto ptr_end=world.objectsEnd();
 		while(ptr!=ptr_end)
 			{
-			auto mesh=ptr->meshGet();
-
-			if(mesh!=nullptr)	//Do not render empty objects
+			auto model=ptr->modelGet();
+			if(model!=nullptr)
 				{
-				auto& frame=mesh->m_frames[0];
-				vertices.dataSet(frame.m_vertices.begin()
-					,static_cast<unsigned int>(frame.m_vertices.length())
-					,GL_STATIC_DRAW);
-
-				normals.dataSet(frame.m_normals.begin()
-					,static_cast<unsigned int>(frame.m_normals.length())
-					,GL_STATIC_DRAW);
-
-				GLINDA_DEBUG_PRINT("vertex: %u   UV: %u"
-					,frame.m_vertices.length(),frame.m_uv.length());
-
-				uvs.dataSet(frame.m_uv.begin()
-					,static_cast<unsigned int>(frame.m_uv.length())
-					,GL_STATIC_DRAW);
-
-				vertex_indices.dataSet(mesh->m_faces.begin()
-					,static_cast<unsigned int>(mesh->m_faces.length())
-					,GL_STATIC_DRAW);
-				vertices.attributesBind(0,3);
-				normals.attributesBind(1,3);
-				uvs.attributesBind(2,2);
-				texture.dataSet(*frame.r_tex_diffuse);
-				vertex_indices.draw(0);
+				render(model->frameGet(0));
 				}
-
 			++ptr;
 			}
 		}

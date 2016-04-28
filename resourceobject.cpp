@@ -35,7 +35,7 @@ void ResourceObject::Iterator::next() noexcept
 	m_handle=json_object_iter_next(static_cast<json_t*>(r_object.m_handle),m_handle);
 	}
 
-bool ResourceObject::Iterator::atEnd() noexcept
+bool ResourceObject::Iterator::endAt() noexcept
 	{
 	return m_handle==nullptr;
 	}

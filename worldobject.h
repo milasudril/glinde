@@ -14,16 +14,16 @@ target[name[worldobject.h] type[include]]
 
 namespace Glinda
 	{
-	class Mesh;
+	class Model;
 
 	class WorldObject
 		{
 		public:
-			WorldObject():r_mesh(nullptr),m_position(0,0,0),m_velocity(0,0,0)
+			WorldObject():r_model(nullptr),m_position(0,0,0),m_velocity(0,0,0)
 				{}
 
-			void meshSet(Mesh* mesh)noexcept
-				{r_mesh=mesh;}
+			void modelSet(Model* model)noexcept
+				{r_model=model;}
 
 			WorldObject& positionSet(const glm::vec3& position) noexcept
 				{
@@ -53,8 +53,8 @@ namespace Glinda
 			const Camera& eyesGet() const noexcept
 				{return m_eyes;}
 
-			const Mesh* meshGet() const noexcept
-				{return r_mesh;}
+			const Model* modelGet() const noexcept
+				{return r_model;}
 
 			glm::mat4 viewMatrixGet() const noexcept
 				{return glm::translate(m_eyes.viewMatrixGet(),-m_position);};
@@ -63,7 +63,7 @@ namespace Glinda
 				{return m_eyes.headingGet();}
 
 		private:
-			Mesh* r_mesh;
+			Model* r_model;
 
 			Camera m_eyes;
 			glm::vec3 m_position;

@@ -32,7 +32,7 @@ namespace Glinda
 					Iterator(ResourceObject& object);
 					void next() noexcept;
 					std::pair<const char*,ResourceObject> get() noexcept;
-					bool atEnd() noexcept;
+					bool endAt() noexcept;
 
 				private:
 					ResourceObject& r_object;
