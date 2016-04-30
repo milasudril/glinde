@@ -102,7 +102,7 @@ Renderer::Renderer()
 	lightpos_id=program.uniformGet("lightpos_worldspace");
 	diffuse_id=program.uniformGet("texture_diffuse");
 
-	glUniform3f(lightpos_id,0.0f,1.0f,0.75f);
+	glUniform3f(lightpos_id,0.0f,1.0f,2.4f);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
@@ -125,7 +125,7 @@ void Renderer::render(const Range< const Mesh* >& meshes) noexcept
 		uvs.dataSet(mesh->uvsGet(),GL_STATIC_DRAW);
 
 
-		vertex_indices.dataSet(mesh->facesGet(),GL_STATIC_DRAW);
+		vertex_indices.dataSet(mesh->facesIndirectGet(),GL_STATIC_DRAW);
 		vertices.attributesBind(0,3);
 		normals.attributesBind(1,3);
 		uvs.attributesBind(2,2);
@@ -142,14 +142,10 @@ void Renderer::sceneRender(World& world,const WorldObject& viewer) noexcept
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
-	auto V=glm::lookAt(glm::vec3(0,0,2),glm::vec3(0,0,0),glm::vec3(0,1,0));
+//	auto V=glm::lookAt(glm::vec3(0,-2,1.7f),glm::vec3(0,0,1.55),glm::vec3(0,0,1));
+	auto V=viewer.viewMatrixGet();
 	glUniformMatrix4fv(V_id,1,GL_FALSE,&V[0][0]);
-	auto V1=viewer.viewMatrixGet();
-	auto VP=P*V1;
-	auto MVP=VP;
-	glm::mat4 M;
-	glUniformMatrix4fv(M_id,1,GL_FALSE,&M[0][0]);
-	glUniformMatrix4fv(MVP_id,1,GL_FALSE,&MVP[0][0]);
+	auto VP=P*V;
 	glUniform1i(diffuse_id,0);
 
 		{
@@ -157,10 +153,13 @@ void Renderer::sceneRender(World& world,const WorldObject& viewer) noexcept
 		auto ptr_end=world.objectsEnd();
 		while(ptr!=ptr_end)
 			{
-			auto model=ptr->modelGet();
-			if(model!=nullptr)
+			if(ptr->modelGet()!=nullptr)
 				{
-				render(model->frameGet(0));
+				glm::mat4 M=ptr->modelMatrixGet();
+				auto MVP=VP*M;
+				glUniformMatrix4fv(M_id,1,GL_FALSE,&M[0][0]);
+				glUniformMatrix4fv(MVP_id,1,GL_FALSE,&MVP[0][0]);
+				render(ptr->frameCurrentGet().meshes);
 				}
 			++ptr;
 			}

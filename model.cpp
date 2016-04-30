@@ -11,7 +11,21 @@ target[name[model.o] type[object]]
 
 using namespace Glinda;
 
-static ArraySimple< ArraySimple<Mesh> >
+static ArraySimple<Mesh>
+meshesLoad(TextureManager& textures,const ResourceObject& meshes
+	,const char* source_name)
+	{
+	auto n_meshes=meshes.objectCountGet();
+	GLINDA_DEBUG_PRINT("Got %zu individual meshes",n_meshes);
+
+	return std::move(ArraySimple<Mesh>(n_meshes,[&meshes,&textures,source_name](size_t l)
+		{
+		auto mesh=meshes.objectGet(l);
+		return Mesh(textures,mesh,source_name);
+		}));
+	}
+
+static ArraySimple< Model::Frame >
 framesLoad(TextureManager& textures,const ResourceObject& obj
 	,const char* source_name)
 	{
@@ -19,17 +33,13 @@ framesLoad(TextureManager& textures,const ResourceObject& obj
 	auto n_frames=frames.objectCountGet();
 	GLINDA_DEBUG_PRINT("Got %zu frames",n_frames);
 
-	return std::move(ArraySimple<ArraySimple<Mesh>>(n_frames,[&frames,&textures,source_name](size_t k)
+	return std::move(ArraySimple<Model::Frame>(n_frames,[&frames,&textures,source_name](size_t k)
 		{
 		auto meshes=frames.objectGet(k);
-		auto n_meshes=meshes.objectCountGet();
-		GLINDA_DEBUG_PRINT("Got %zu individual meshes",n_meshes);
-		return std::move(ArraySimple<Mesh>(n_meshes,[&meshes,&textures,source_name](size_t l)
-			{
-			auto mesh=meshes.objectGet(l);
-			return Mesh(textures,mesh,source_name);
-			}));
 
+		auto ret=meshesLoad(textures,meshes,source_name);
+		auto bb=boundingBoxGet(ret);
+		return Model::Frame{std::move(ret),bb};
 		}));
 	}
 
@@ -78,7 +88,7 @@ Model::~Model()
 	{
 	}
 
-size_t Model::frameIndexGet(const char* key) const
+size_t Model::frameIndexGet(const Stringkey& key) const
 	{
 	auto i=m_frame_tags.find(Stringkey(key));
 	if(i==m_frame_tags.end())

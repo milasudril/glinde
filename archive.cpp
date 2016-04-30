@@ -61,7 +61,7 @@ static String directoryNormalize(const char* str)
 			case '/':
 				if(elem_current=="..")
 					{
-					ret.truncate('/');
+					ret.truncate().truncate('/');
 					}
 				else
 				if(elem_current!="." && elem_current.length()!=0)
@@ -156,5 +156,7 @@ void Archive::cd(const char* dir_new)
 String Archive::filenameFromSibling(const char* sibling,const char* filename)
 	{
 	String ret(sibling);
-	return std::move(ret.truncate('/').append('/').append(filename));
+	return std::move(
+		directoryNormalize( ret.truncate('/').append('/').append(filename).begin())
+	);
 	}

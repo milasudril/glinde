@@ -22,6 +22,7 @@ namespace Glinda
 		public:
 			Camera():m_pitch(std::acos(0.0f))
 				,m_roll(std::acos(1.0f)),m_yaw(0.0f)
+				,m_pivot(0.0f,0.07f,1.4)
 				{headingUpdate();}
 
 			Camera& pitchSet(float pitch) noexcept
@@ -66,6 +67,7 @@ namespace Glinda
 				ret=glm::rotate(ret,m_pitch,glm::vec3(-1.0f,0.0f,0.0f));
 				ret=glm::rotate(ret,m_roll,glm::vec3(0.0f,1.0f,0.0f));
 				ret=glm::rotate(ret,m_yaw,glm::vec3(0.0f,0.0f,1.0f));
+				ret=glm::translate(ret,-m_pivot);
 				return ret;
 				}
 

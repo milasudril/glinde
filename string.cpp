@@ -11,6 +11,11 @@ target[name[string.o] type[object]]
 
 using namespace Glinda;
 
+void String::memClear()
+	{
+	memset(begin(),0,length()*sizeof(char));
+	}
+
 String& String::appendImpl(const char* c_str)
 	{
 	while(*c_str != '\0')

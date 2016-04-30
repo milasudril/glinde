@@ -26,7 +26,7 @@ namespace Glinda
 		{
 		public:
 			~World();
-			World(Archive& source);
+			explicit World(Archive& source);
 
 			const WorldObject* objectsBegin() noexcept
 				{return m_objects.begin();}
@@ -50,19 +50,21 @@ namespace Glinda
 			void update(uint64_t frame,double delta_t,int64_t wallclock_utc);
 
 			WorldObject& playerGet() noexcept
-				{return m_objects[0];}
+				{return *r_player;}
 
 			const WorldObject& mapGet() const noexcept
-				{return m_objects[1];}
+				{return *r_map;}
 
 		private:
 			std::map<Stringkey, Model> m_models;
 			ArrayDynamic<WorldObject> m_objects;
+			WorldObject* r_player;
+			WorldObject* r_map;
 			TextureManager m_textures;
 
 			FaceRejectionTree* m_tree;
 
-			unsigned int n_faces;
+			uintptr_t nodeid;
 		};
 	}
 

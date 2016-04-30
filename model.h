@@ -14,12 +14,17 @@ namespace Glinda
 	{
 	class DataSource;
 	class TextureManager;
-	class Mesh;
 	class Stringkey;
 
 	class Model
 		{
 		public:
+			struct Frame
+				{
+				ArraySimple<Mesh> meshes;
+				BoundingBox bounding_box;
+				};
+
 			Model(TextureManager& textures,DataSource&& source):
 				Model(textures,source)
 				{}
@@ -27,19 +32,16 @@ namespace Glinda
 			Model(TextureManager& textures,DataSource& source);
 			~Model();
 
-			size_t frameIndexGet(const char* key) const;
+			size_t frameIndexGet(const Stringkey& key) const;
 
-			Range< const Mesh* > frameGet(size_t index) const noexcept
+			const Frame& frameGet(size_t index) const noexcept
 				{
 				assert(index < m_frames.length());
 				return m_frames[index];
 				}
 
 		private:
-
-		//	FIXME: If this is a bottleneck (double derererence)
-			ArraySimple< ArraySimple<Mesh> > m_frames;
-
+			ArraySimple< Frame > m_frames;
 			std::map<Stringkey,size_t> m_frame_tags;
 		};
 	}

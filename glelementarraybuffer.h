@@ -26,7 +26,7 @@ namespace Glinda
 				glBufferData(GL_ELEMENT_ARRAY_BUFFER,N*sizeof(uint32_t),data,usage);
 				}
 
-			void dataSet(const Range<const Mesh::Face*> data,GLenum usage) noexcept
+			void dataSet(const Range<const Mesh::FaceIndirect*> data,GLenum usage) noexcept
 				{
 				dataSet(reinterpret_cast<const uint32_t*>( data.begin() )
 					,3*static_cast<unsigned int>(data.length()),usage);

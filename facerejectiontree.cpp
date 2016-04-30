@@ -13,6 +13,9 @@ static constexpr unsigned int CHILD_COUNT=8;
 
 struct FaceRejectionTree::Node
 	{
+	Node()=default;
+	Node(const Node&)=delete;
+	Node& operator=(const Node&)=delete;
 	Node* children[CHILD_COUNT];
 	ArrayDynamic<unsigned int> faces;
 	BoundingBox box;
@@ -32,83 +35,45 @@ struct FaceRejectionTree::Node
 		}
 	};
 
-BoundingBox boundingBoxGet(const Range<const Mesh*> meshes)
-	{
-	auto mesh_current=meshes.begin();
-	auto end=meshes.end();
-	auto ret=mesh_current->boundingBoxGet();
-	++mesh_current;
-	while(mesh_current!=end)
-		{
-		auto& bb_current=mesh_current->boundingBoxGet();
-		ret=
-			{
-			 glm::min(ret.min,bb_current.min)
-			,glm::max(ret.max,bb_current.max)
-			};
-		++mesh_current;
-		}
-
-	return ret;
-	}
-
-static ArrayDynamic< vec4_t<unsigned int> >
+static ArrayDynamic< Mesh::Face >
 facesCollect(const Range<const Mesh*>& meshes)
 	{
-	ArrayDynamic< vec4_t<unsigned int> > ret;
+	ArrayDynamic<Mesh::Face> ret;
 	auto mesh_current=meshes.begin();
 	auto end=meshes.end();
-	unsigned int k=0;
 	while(mesh_current!=end)
 		{
-		auto faces=mesh_current->facesGet();
-		auto face_current=faces.begin();
-		auto face_end=faces.end();
+		auto face_current=mesh_current->facesBegin();
+		auto face_end=mesh_current->facesEnd();
 		while(face_current!=face_end)
 			{
-			ret.append(vec4_t<unsigned int>
-				{
-				 (*face_current)[0],(*face_current)[1],(*face_current)[2]
-				,k
-				});
+			ret.append(*face_current);
 			++face_current;
 			}
-		++k;
 		++mesh_current;
 		}
 
 	return ret;
 	}
 
-
-struct FaceRejectionTree::ConstructionParams
-	{
-	Range< const vec4_t<unsigned int>* > faces;
-	Range<const Mesh*> meshes;
-	};
-
-ArrayDynamic<unsigned int>
-FaceRejectionTree::facesFind(const Range<const unsigned int*>& face_indices
-	,const ConstructionParams& params
-	,const BoundingBox& box)
+ArrayDynamic<unsigned int> facesFind(const Range<const unsigned int*>& face_indices
+	,const BoundingBox& box
+	,const Range< const Mesh::Face* >& faces)
 	{
 	ArrayDynamic<unsigned int> ret;
 //	GLINDA_DEBUG_PRINT("Number of faces: %u",face_indices.length());
 
 	auto face_index=face_indices.begin();
 	auto face_index_end=face_indices.end();
-	auto faces=params.faces.begin();
-	auto meshes=params.meshes.begin();
+	auto f=faces.begin();
 	while(face_index!=face_index_end)
 		{
 		auto index=*face_index;
-		assert(index < params.faces.length());
-		auto v=faces[index];
-		auto vertices=meshes[ v[3] ]
-			.verticesFromFaceGet(Mesh::Face{v[0],v[1],v[2]});
+		assert(index < faces.length());
 
 	//	GLINDA_DEBUG_PRINT("  Hit test face %u@%u",face,3*face);
-		if(insideAny(vertices,box))
+	//	TODO add line cross check
+		if(insideAny(f[index],box))
 			{ret.append(index);}
 		++face_index;
 		}
@@ -119,7 +84,7 @@ FaceRejectionTree::facesFind(const Range<const unsigned int*>& face_indices
 FaceRejectionTree::Node* FaceRejectionTree::nodeCreate(
 	 const Range<const unsigned int*>& face_indices
 	,const BoundingBox& box
-	,const ConstructionParams& params)
+	,const Range<const Mesh::Face*>& faces)
 	{
 /*	GLINDA_DEBUG_PRINT("Building FaceRejectionTree for box "
 		"(%.8g,%.8g,%.8g) - (%.8g,%.8g,%.8g)"
@@ -131,7 +96,7 @@ FaceRejectionTree::Node* FaceRejectionTree::nodeCreate(
 	if(std::max(size.x,std::max(size.y,size.z)) < 4.8828125e-04f)
 		{return nullptr;}
 
-	auto faces_in_box=facesFind(face_indices,params,box);
+	auto faces_in_box=::facesFind(face_indices,box,faces);
 //	Terminate recursion if there are no faces left
 	if(faces_in_box.length()==0)
 		{return nullptr;}
@@ -172,36 +137,36 @@ FaceRejectionTree::Node* FaceRejectionTree::nodeCreate(
 
 	for(unsigned int k=0;k<CHILD_COUNT;++k)
 		{
-		ret->children[k]=nodeCreate(faces_in_box,boxes[k],params);
+		ret->children[k]=nodeCreate(faces_in_box,boxes[k],faces);
 		}
 
 	ret->faces=std::move(faces_in_box);
 	return ret;
 	}
 
-void FaceRejectionTree::treeBuild()
+void FaceRejectionTree::treeBuild(const Model::Frame& frame)
 	{
-	auto bb=boundingBoxGet(r_meshes);
-	m_face_list=facesCollect(r_meshes);
+	m_faces=facesCollect(frame.meshes);
 
-	auto mid=bb.mid();
+	auto bb=frame.bounding_box;
+	auto mid=frame.bounding_box.mid();
 
 	auto bb_min=2.0f*(bb.min - mid) + mid;
 	auto bb_max=2.0f*(bb.max - mid) + mid;
+
 	bb={bb_min,bb_max};
 
-	ArraySimple<unsigned int> face_indices_init(m_face_list.length()
+	ArraySimple<unsigned int> face_indices_init(m_faces.length()
 		,[](size_t k)
 			{return narrow_cast<unsigned int>(k);}
 		);
 
-	m_root=nodeCreate(face_indices_init,bb,{m_face_list,r_meshes});
+	m_root=nodeCreate(face_indices_init,bb,m_faces);
 	}
 
-FaceRejectionTree::FaceRejectionTree(const Model& model,size_t frame):
-	r_meshes(model.frameGet(frame))
+FaceRejectionTree::FaceRejectionTree(const Model& model,size_t frame)
 	{
-	treeBuild();
+	treeBuild(model.frameGet(frame));
 	}
 
 FaceRejectionTree::~FaceRejectionTree()
@@ -209,11 +174,22 @@ FaceRejectionTree::~FaceRejectionTree()
 	delete m_root;
 	}
 
-/*const FaceRejectionTree::Node& FaceRejectionTree::nodeFind(const Node& root
+Twins<FaceRejectionTree::FaceIterator> FaceRejectionTree::facesFind(const glm::vec4& position
+	,const glm::vec3& size_min) const noexcept
+	{
+	auto& node=nodeFind(*m_root,position,size_min);
+	return Twins<FaceIterator>
+		{
+		 FaceIterator(node.faces.begin(),m_faces.begin())
+		,FaceIterator(node.faces.end(),m_faces.begin())
+		};
+	}
+
+const FaceRejectionTree::Node& FaceRejectionTree::nodeFind(const Node& root
 	,const glm::vec4& position,const glm::vec3& size_min) noexcept
 	{
 	auto size_root=root.box.size();
-//	Return when we reach maximum size. This is because we want to avoid objects
+//	Return when we reach minimum size. This is because we want to avoid objects
 //	that span multiple sectors
 	if(std::min(std::min(size_root.x,size_root.y),size_root.z)
 		<= std::max(std::max(size_min.x,size_min.y),size_min.z))
@@ -226,7 +202,7 @@ FaceRejectionTree::~FaceRejectionTree()
 		auto child_current=root.children[k];
 		if(child_current!=nullptr)
 			{
-			if(child_current->box.inside(position))
+			if(inside(position,child_current->box))
 				{
 				return nodeFind(*child_current,position,size_min);
 				}
@@ -234,11 +210,4 @@ FaceRejectionTree::~FaceRejectionTree()
 		}
 
 	return root;
-	}*/
-
-
-/*const ArrayDynamic<unsigned int>& FaceRejectionTree::facesGet(const glm::vec4& position
-	,const glm::vec3& size_min) const noexcept
-	{
-	return nodeFind(*m_root,position,size_min).faces;
-	}*/
+	}

@@ -14,10 +14,6 @@ using namespace Glinda;
 
 World::World(Archive& source):m_textures(source)
 	{
-//	Spawn player
-	m_objects.append(WorldObject{});
-
-
 	ResourceObject classes{source.fileGet("classes.json")};
 
 	auto i=classes.objectIteratorGet();
@@ -30,23 +26,54 @@ World::World(Archive& source):m_textures(source)
 		const char* mesh_path=static_cast<const char*>(subobject);
 		GLINDA_DEBUG_PRINT("Got a model object \"%s\"",mesh_path);
 
-		auto ip=m_models.emplace(
-			Stringkey(pair.first),Model(m_textures,source.fileGet(mesh_path))
-		);
+		auto key=Stringkey(pair.first);
+
+		auto ip=m_models.emplace(key,Model(m_textures,source.fileGet(mesh_path)));
 
 		WorldObject obj;
 
 		obj.modelSet(&ip.first->second);
 		m_objects.append(std::move(obj));
 
+		if(key==Stringkey("player"))
+			{
+			r_player=m_objects.end() - 1;
+			}
+
+		if(key==Stringkey("world"))
+			{
+			r_map=m_objects.end() - 1;
+			}
+
 		i.next();
 		}
 	m_tree=new FaceRejectionTree(*mapGet().modelGet(),0);
-	n_faces=0;
+	nodeid=0;
 	}
 
 World::~World()
 	{delete m_tree;}
+
+static Twins<FaceRejectionTree::FaceIterator>
+collisionCheck(const FaceRejectionTree& tree,const WorldObject& object
+	,const glm::vec3& offset)
+	{
+	auto& frame_current=object.frameCurrentGet();
+	auto faces=tree.facesFind(glm::vec4(offset,1.0f)
+		,4.0f*frame_current.bounding_box.size());
+	auto k=0;
+	while(faces.first!=faces.second)
+		{
+		if(intersect(*faces.first - offset
+			,static_cast< Range<const Mesh*> >(frame_current.meshes)))
+			{
+			return faces;
+			}
+		++k;
+		++faces.first;
+		}
+	return faces;
+	}
 
 void World::update(uint64_t frame,double delta_t,int64_t wallclock_utc)
 	{
@@ -62,20 +89,33 @@ void World::update(uint64_t frame,double delta_t,int64_t wallclock_utc)
 			auto x=ptr->positionGet();
 			auto v=ptr->velocityGet();
 
-			x+=dt * v;
-
-
-		/*	auto faces=m_tree->facesGet(glm::vec4(x,1.0f),glm::vec3(0.125f,0.125f,0.125f));
-			if(faces.length()!=n_faces)
-				{
-				n_faces=faces.length();
-				GLINDA_DEBUG_PRINT("%zu Number of faces: %u",frame,n_faces);
-				}*/
-
 
 		//	TODO: Interaction with other objects?
 		//	v+=dt * ptr->accelerationGet();
 
+			if(ptr->modelGet()!=nullptr && length(v)>0.0f)
+				{
+				auto x_temp=x + dt*v;
+				auto check=collisionCheck(*m_tree,*ptr,x_temp);
+				if(check.first==check.second)
+					{x=x_temp;}
+				else
+					{
+					auto& face=*check.first;
+					auto n=glm::normalize(glm::cross(face[1] - face[0],face[2]-face[0]));
+					GLINDA_DEBUG_PRINT("%zu %.8g %.8g %.8g",n[0],n[1],n[2],frame);
+					v=0.125f*(v - 2.0f*(glm::dot(v,n)*n));
+					x_temp=x + dt*v;
+					auto check=collisionCheck(*m_tree,*ptr,x_temp);
+					if(check.first==check.second)
+						{
+						x=x_temp;
+						}
+					}
+
+				}
+			v+=dt*glm::vec3(0.0f,0.0f,-9.81f);
+			ptr->velocitySet(v);
 			ptr->positionSet(x);
 			}
 		++ptr;

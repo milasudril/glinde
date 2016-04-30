@@ -30,7 +30,7 @@ namespace Glinda
 			 * \param frequency The event frequency given in Hz.
 			 *
 			*/
-			Timer(double frequency);
+			explicit Timer(double frequency);
 			~Timer();
 
 			/**\brief Blocks the calling thread until the timer has made a tick.
@@ -49,6 +49,9 @@ namespace Glinda
 
 
 		private:
+			Timer(const Timer&)=delete;
+			Timer& operator=(const Timer&)=delete;
+
 			struct Impl;
 			Impl* m_impl;
 		};

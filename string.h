@@ -20,7 +20,7 @@ namespace Glinda
 			String()
 				{}
 
-			String(const char* c_str)
+			explicit String(const char* c_str)
 				{append(c_str);}
 
 			const char* beginAfter(char ch) const noexcept;
@@ -59,14 +59,15 @@ namespace Glinda
 				{
 				if(begin()!=nullptr)
 					{
+					memClear();
 					ArrayDynamic<char>::clear();
-					(*begin()) = '\0';
 					}
 				return *this;
 				}
 
 		private:
 			String& appendImpl(const char* c_str);
+			void memClear();
 		};
 
 		bool operator==(const String& a,const char* b) noexcept;

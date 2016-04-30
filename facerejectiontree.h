@@ -11,16 +11,59 @@ dependency[facerejectiontree.o]
 
 #include "arraydynamic.h"
 #include "vectortype.h"
+#include "model.h"
+#include "twins.h"
 #include <glm/glm.hpp>
 
 namespace Glinda
 	{
-	class Model;
-	class Mesh;
-	class BoundingBox;
 	class FaceRejectionTree
 		{
 		public:
+			class FaceIterator
+				{
+				public:
+					FaceIterator& operator++() noexcept
+						{
+						++r_position;
+						return *this;
+						}
+
+					FaceIterator operator++(int) noexcept
+						{
+						FaceIterator temp(*this);
+						++r_position;
+						return temp;
+						}
+
+					const Mesh::Face& operator*() const noexcept
+						{
+						return r_faces[ *r_position ];
+						}
+
+					bool operator==(const FaceIterator& i) const noexcept
+						{
+						return r_position==i.r_position && r_faces==i.r_faces;
+						}
+
+					bool operator!=(const FaceIterator& i) const noexcept
+						{
+						return !(*this==i);
+						}
+
+				private:
+					FaceIterator(const unsigned int* face_indices
+						,const Mesh::Face* faces) noexcept
+						:r_position(face_indices),r_faces(faces)
+						{}
+
+
+					friend class FaceRejectionTree;
+					const unsigned int* r_position;
+					const Mesh::Face* r_faces;
+				};
+
+
 			FaceRejectionTree& operator=(const FaceRejectionTree&)=delete;
 			FaceRejectionTree(const FaceRejectionTree&)=delete;
 
@@ -30,31 +73,24 @@ namespace Glinda
 
 			~FaceRejectionTree();
 
-		/*	const ArrayDynamic<unsigned int>& facesGet(const glm::vec4& position
-				,const glm::vec3& size_min) const noexcept;*/
+			Twins<FaceIterator> facesFind(const glm::vec4& position
+				,const glm::vec3& size_min) const noexcept;
 
 		private:
 			class Node;
 			Node* m_root;
 
-			class ConstructionParams;
+			void treeBuild(const Model::Frame& frame);
 
-			void treeBuild();
+			static Node* nodeCreate(
+				 const Range<const unsigned int*>& face_indices
+				,const BoundingBox& box
+				,const Range<const Mesh::Face*>& faces);
 
+			ArrayDynamic< Mesh::Face > m_faces;
 
-			static Node* nodeCreate(const Range<const unsigned int*>& face_indices
-				,const BoundingBox& box,const ConstructionParams& params);
-
-			static ArrayDynamic<unsigned int>
-			facesFind(const Range<const unsigned int*>& face_indices
-				,const ConstructionParams& params,const BoundingBox& box);
-
-			Range<const Mesh*> r_meshes;
-			ArrayDynamic< vec4_t<unsigned int> > m_face_list;
-
-
-		/*	static const Node& nodeFind(const Node& root,const glm::vec4& position
-				,const glm::vec3& size_min) noexcept;*/
+			static const Node& nodeFind(const Node& root,const glm::vec4& position
+				,const glm::vec3& size_min) noexcept;
 		};
 	}
 

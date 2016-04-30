@@ -43,7 +43,7 @@ namespace Glinda
 				{return N;}
 
 			constexpr operator Range<const T*>() const noexcept
-				{return {data,N};}
+				{return Range<const T*>{data,N};}
 
 		private:
 			T data[N];

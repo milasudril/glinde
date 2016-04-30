@@ -11,7 +11,8 @@ namespace Glinda
 	class Range
 		{
 		public:
-			constexpr Range(T begin,size_t l):r_begin(begin),m_length(l)
+			explicit constexpr Range(T begin,size_t l):
+				r_begin(begin),m_length(l)
 				{}
 
 			constexpr T begin() noexcept
