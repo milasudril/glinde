@@ -6,6 +6,7 @@ target[name[facerejectiontree.o] type[object]]
 #include "arraydynamic.h"
 #include "model.h"
 #include "narrow_cast.h"
+#include "face.h"
 #include <algorithm>
 
 using namespace Glinda;
@@ -35,10 +36,10 @@ struct FaceRejectionTree::Node
 		}
 	};
 
-static ArrayDynamic< Mesh::Face >
+static ArrayDynamic< Face >
 facesCollect(const Range<const Mesh*>& meshes)
 	{
-	ArrayDynamic<Mesh::Face> ret;
+	ArrayDynamic<Face> ret;
 	auto mesh_current=meshes.begin();
 	auto end=meshes.end();
 	while(mesh_current!=end)
@@ -58,7 +59,7 @@ facesCollect(const Range<const Mesh*>& meshes)
 
 ArrayDynamic<unsigned int> facesFind(const Range<const unsigned int*>& face_indices
 	,const BoundingBox& box
-	,const Range< const Mesh::Face* >& faces)
+	,const Range< const Face* >& faces)
 	{
 	ArrayDynamic<unsigned int> ret;
 //	GLINDA_DEBUG_PRINT("Number of faces: %u",face_indices.length());
@@ -89,7 +90,7 @@ FaceRejectionTree::Node* FaceRejectionTree::nodeCreate(
 	 const Range<const unsigned int*>& face_indices
 	,const BoundingBox& box
 	,unsigned int depth
-	,const Range<const Mesh::Face*>& faces)
+	,const Range<const Face*>& faces)
 	{
 	GLINDA_DEBUG_PRINT("Building FaceRejectionTree level %u for box "
 		"(%.8g,%.8g,%.8g) - (%.8g,%.8g,%.8g)"

@@ -10,6 +10,7 @@ dependency[mesh.o]
 #include "arrayfixed.h"
 #include "boundingbox.h"
 #include "stringkey.h"
+#include "face.h"
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <map>
@@ -26,11 +27,6 @@ namespace Glinda
 			struct FaceIndirect:public ArrayFixed<unsigned int,3>
 				{
 				using ArrayFixed<unsigned int,3>::ArrayFixed;
-				};
-
-			struct Face:public ArrayFixed<glm::vec3,3>
-				{
-				using ArrayFixed<glm::vec3,3>::ArrayFixed;
 				};
 
 			class FaceIterator
@@ -59,7 +55,7 @@ namespace Glinda
 						{
 						auto face=*r_position;
 						auto verts=r_vertices;
-						return {verts[face[0]],verts[face[1]],verts[face[2]]};
+						return Face{verts[face[0]],verts[face[1]],verts[face[2]]};
 						}
 
 				private:
@@ -108,9 +104,6 @@ namespace Glinda
 			glm::vec3 vertexGet(size_t k) const noexcept
 				{return m_vertices[k];}
 
-
-
-
 		private:
 			BoundingBox m_box;
 			ArraySimple<glm::vec3> m_vertices;
@@ -124,25 +117,6 @@ namespace Glinda
 		};
 
 	BoundingBox boundingBoxGet(const Range<const Mesh*>& meshes);
-	bool intersect(const Mesh::Face& a,const Mesh::Face& b);
-	bool intersect(const Mesh::Face& a,const Mesh& mesh);
-	bool intersect(const Mesh::Face& a,const Range<const Mesh*>& meshes);
-
-	inline Mesh::Face operator+(const Mesh::Face& face,const glm::vec3& x)
-		{
-		auto ret=face;
-		for(size_t k=0;k<face.length();++k)
-			{ret[k]+=x;}
-		return ret;
-		}
-
-	inline Mesh::Face operator-(const Mesh::Face& face,const glm::vec3& x)
-		{
-		auto ret=face;
-		for(size_t k=0;k<face.length();++k)
-			{ret[k]-=x;}
-		return ret;
-		}
 	}
 
 #endif

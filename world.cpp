@@ -8,8 +8,8 @@ target[name[world.o] type[object]]
 #include "model.h"
 #include "debug.h"
 #include "logwriter.h"
-
 #include "facerejectiontree.h"
+#include "intersections.h"
 
 using namespace Glinda;
 
@@ -69,8 +69,7 @@ collisionCheck(const FaceRejectionTree& tree,const WorldObject& object
 	auto k=0;
 	while(faces.first!=faces.second)
 		{
-		if(intersect(*faces.first - offset
-			,static_cast< Range<const Mesh*> >(frame_current.meshes)))
+		if(intersect(*faces.first - offset,frame_current.meshes))
 			{
 			return faces;
 			}

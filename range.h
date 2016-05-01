@@ -5,6 +5,8 @@ target[name[range.h] type[include]]
 #ifndef GLINDA_RANGE_H
 #define GLINDA_RANGE_H
 
+#include <cstddef>
+
 namespace Glinda
 	{
 	template<class T>

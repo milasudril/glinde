@@ -18,7 +18,7 @@ namespace Glinda
 			constexpr ArrayFixed(){}
 
 			template<typename... U>
-			constexpr ArrayFixed(U... values):data{values...}
+			constexpr explicit ArrayFixed(U... values):data{values...}
 				{}
 
 			constexpr const T& operator[](size_t i) const

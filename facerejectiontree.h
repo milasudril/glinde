@@ -17,6 +17,8 @@ dependency[facerejectiontree.o]
 
 namespace Glinda
 	{
+	class Face;
+
 	class FaceRejectionTree
 		{
 		public:
@@ -36,7 +38,7 @@ namespace Glinda
 						return temp;
 						}
 
-					const Mesh::Face& operator*() const noexcept
+					const Face& operator*() const noexcept
 						{
 						return r_faces[ *r_position ];
 						}
@@ -53,14 +55,14 @@ namespace Glinda
 
 				private:
 					FaceIterator(const unsigned int* face_indices
-						,const Mesh::Face* faces) noexcept
+						,const Face* faces) noexcept
 						:r_position(face_indices),r_faces(faces)
 						{}
 
 
 					friend class FaceRejectionTree;
 					const unsigned int* r_position;
-					const Mesh::Face* r_faces;
+					const Face* r_faces;
 				};
 
 
@@ -86,9 +88,9 @@ namespace Glinda
 				 const Range<const unsigned int*>& face_indices
 				,const BoundingBox& box
 				,unsigned int depth
-				,const Range<const Mesh::Face*>& faces);
+				,const Range<const Face*>& faces);
 
-			ArrayDynamic< Mesh::Face > m_faces;
+			ArrayDynamic< Face > m_faces;
 
 			static const Node& nodeFind(const Node& root,const glm::vec4& position
 				,const glm::vec3& size_min) noexcept;
