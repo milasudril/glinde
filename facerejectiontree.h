@@ -85,6 +85,7 @@ namespace Glinda
 			static Node* nodeCreate(
 				 const Range<const unsigned int*>& face_indices
 				,const BoundingBox& box
+				,unsigned int depth
 				,const Range<const Mesh::Face*>& faces);
 
 			ArrayDynamic< Mesh::Face > m_faces;

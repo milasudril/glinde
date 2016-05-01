@@ -50,6 +50,8 @@ namespace Glinda
 	bool insideAny(const Range<const glm::vec3*>& vertices,const BoundingBox& box);
 	bool insideAll(const Range<const glm::vec3*>& vertices,const BoundingBox& box);
 
+//	bool lineCrosses(const BoundingBox& box,const glim::vec4& a, const glm::vec4& b);
+
 	}
 
 #endif

@@ -74,7 +74,11 @@ ArrayDynamic<unsigned int> facesFind(const Range<const unsigned int*>& face_indi
 	//	GLINDA_DEBUG_PRINT("  Hit test face %u@%u",face,3*face);
 	//	TODO add line cross check
 		if(insideAny(f[index],box))
-			{ret.append(index);}
+			{
+		//	if(box.max.z>=2 && f[index][0].z>0)
+			//	{GLINDA_DEBUG_PRINT("%u is inside box",index);}
+			ret.append(index);
+			}
 		++face_index;
 		}
 
@@ -84,16 +88,20 @@ ArrayDynamic<unsigned int> facesFind(const Range<const unsigned int*>& face_indi
 FaceRejectionTree::Node* FaceRejectionTree::nodeCreate(
 	 const Range<const unsigned int*>& face_indices
 	,const BoundingBox& box
+	,unsigned int depth
 	,const Range<const Mesh::Face*>& faces)
 	{
-/*	GLINDA_DEBUG_PRINT("Building FaceRejectionTree for box "
+	GLINDA_DEBUG_PRINT("Building FaceRejectionTree level %u for box "
 		"(%.8g,%.8g,%.8g) - (%.8g,%.8g,%.8g)"
+		,depth
 		,box.min.x,box.min.y,box.min.z
-		,box.max.x,box.max.y,box.max.z);*/
+		,box.max.x,box.max.y,box.max.z);
 	auto size=0.5f*glm::vec4(box.size(),0.0f);
 
 //	Terminate if the box becomes too small
 	if(std::max(size.x,std::max(size.y,size.z)) < 4.8828125e-04f)
+//	if(std::max(size.x,std::max(size.y,size.z)) < 2.0f)
+//	if(depth>1)
 		{return nullptr;}
 
 	auto faces_in_box=::facesFind(face_indices,box,faces);
@@ -137,7 +145,7 @@ FaceRejectionTree::Node* FaceRejectionTree::nodeCreate(
 
 	for(unsigned int k=0;k<CHILD_COUNT;++k)
 		{
-		ret->children[k]=nodeCreate(faces_in_box,boxes[k],faces);
+		ret->children[k]=nodeCreate(faces_in_box,boxes[k],depth+1,faces);
 		}
 
 	ret->faces=std::move(faces_in_box);
@@ -161,7 +169,7 @@ void FaceRejectionTree::treeBuild(const Model::Frame& frame)
 			{return narrow_cast<unsigned int>(k);}
 		);
 
-	m_root=nodeCreate(face_indices_init,bb,m_faces);
+	m_root=nodeCreate(face_indices_init,bb,0,m_faces);
 	}
 
 FaceRejectionTree::FaceRejectionTree(const Model& model,size_t frame)

@@ -7,6 +7,7 @@ target[name[world.o] type[object]]
 #include "resourceobject.h"
 #include "model.h"
 #include "debug.h"
+#include "logwriter.h"
 
 #include "facerejectiontree.h"
 
@@ -47,6 +48,7 @@ World::World(Archive& source):m_textures(source)
 
 		i.next();
 		}
+	logWrite(LogMessageType::INFORMATION,"Building face rejection tree");
 	m_tree=new FaceRejectionTree(*mapGet().modelGet(),0);
 	nodeid=0;
 	}
@@ -59,8 +61,11 @@ collisionCheck(const FaceRejectionTree& tree,const WorldObject& object
 	,const glm::vec3& offset)
 	{
 	auto& frame_current=object.frameCurrentGet();
-	auto faces=tree.facesFind(glm::vec4(offset,1.0f)
-		,4.0f*frame_current.bounding_box.size());
+	auto& bb=frame_current.bounding_box;
+
+
+	auto faces=tree.facesFind(glm::vec4(offset,1.0f) + bb.mid()
+		,2.0f*bb.size());
 	auto k=0;
 	while(faces.first!=faces.second)
 		{
@@ -114,7 +119,7 @@ void World::update(uint64_t frame,double delta_t,int64_t wallclock_utc)
 					}
 
 				}
-			v+=dt*glm::vec3(0.0f,0.0f,-9.81f);
+		//	v+=dt*glm::vec3(0.0f,0.0f,-9.81f);
 			ptr->velocitySet(v);
 			ptr->positionSet(x);
 			}
