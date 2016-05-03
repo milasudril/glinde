@@ -99,6 +99,17 @@ namespace Glinda
 
 
 
+			WorldObject& normalImpulseSet(const glm::vec3& impulse) noexcept
+				{
+				m_normal_impulse=impulse;
+				return *this;
+				}
+
+			const glm::vec3& normalImpulseGet() const noexcept
+				{return m_normal_impulse;}
+
+
+
 			WorldObject& dampingSet(float damping) noexcept
 				{
 				m_damping=damping;
@@ -166,6 +177,7 @@ namespace Glinda
 			glm::vec3 m_velocity;
 
 			glm::vec3 m_force;
+			glm::vec3 m_normal_impulse;
 			float m_mass;
 			float m_damping;
 			float m_charge;

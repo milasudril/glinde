@@ -41,7 +41,6 @@ void UserEventHandler::objectUpdate()
 	auto& player=r_world->playerGet();
 
 	auto F_0=player.dampingGet();
-	auto m=player.massGet();
 
 	glm::vec3 F={0,0,0};
 	if(m_move_flags==0)
@@ -63,9 +62,6 @@ void UserEventHandler::objectUpdate()
 
 	if(m_move_flags&STRAFE_RIGHT)
 		{F-=glm::vec3(-heading.y,heading.x,0.0f);}
-
-	if(m_move_flags&JUMP)
-		{F+=glm::vec3(0.0f,0.0f,3.0f * 9.81f*m);}
 
 	F=F_0*normalize(F);
 
@@ -151,11 +147,16 @@ void UserEventHandler::onKeyUp(Window& source,uint8_t key)
 
 void UserEventHandler::onMouseDown(Window& source,int button)
 	{
+	auto& player=r_world->playerGet();
+	auto m=player.massGet();
+	auto g=9.81f;
+	auto t=0.25f;
+
 	GLINDA_DEBUG_PRINT("Player clicked %d",button);
 	switch(button)
 		{
 		case 1:
-
+			player.normalImpulseSet(glm::vec3(0.0f,0.0f,1.0f*m*g*t));
 			break;
 		}
 	}

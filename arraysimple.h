@@ -2,7 +2,7 @@
 target[name[arraysimple.h] type[include]]
 #endif
 
-/** \file arraysimple.h \brief Definition of a simple array storage class
+/** \file arraysimple.h \brief Definition of ArraySimple
 */
 
 #ifndef ARRAYSIMPLE_H
@@ -169,6 +169,8 @@ namespace Glinda
 				{return m_content.fields.N;}
 
 			/**\brief Array element access.
+			 *
+			 * This function returns the element at position <var>k</var>
 			 *
 			 * \warning The parameter <var>k</var> has to be less than the value returned
 			 * by length()

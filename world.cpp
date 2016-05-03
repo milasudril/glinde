@@ -76,7 +76,10 @@ glm::vec3 collisionCheck(const FaceRejectionTree& tree,const WorldObject& object
 			auto n=glm::normalize(glm::cross(face[1] - face[0],face[2]-face[0]));
 			auto R=basisFromVector(n);
 			auto v_normal=glm::transpose(R)*v;
-			v_normal[0]=0.0f;
+			auto J=object.normalImpulseGet();
+			auto m=object.massGet();
+
+			v_normal[0]=std::max(0.0f,glm::dot(J,n)/m);
 			v=R*v_normal;
 			}
 		++faces.first;
@@ -111,6 +114,7 @@ void World::update(uint64_t frame,double delta_t,int64_t wallclock_utc)
 				}
 
 			x+=dt*v;
+			ptr->normalImpulseSet(glm::vec3(0.0f,0.0f,0.0f));
 			ptr->velocitySet(v);
 			ptr->positionSet(x);
 			}
