@@ -7,7 +7,7 @@ target[name[boundingbox.o] type[object]]
 
 using namespace Glinda;
 
-bool Glinda::insideAny(const Range<const glm::vec3*>& vertices,const BoundingBox& box)
+bool Glinda::insideAny(const Range<const glm::vec3*>& vertices,const BoundingBox& box) noexcept
 	{
 	auto v=vertices.begin();
 	auto end=vertices.end();
@@ -20,7 +20,7 @@ bool Glinda::insideAny(const Range<const glm::vec3*>& vertices,const BoundingBox
 	return 0;
 	}
 
-bool Glinda::insideAll(const Range<const glm::vec3*>& vertices,const BoundingBox& box)
+bool Glinda::insideAll(const Range<const glm::vec3*>& vertices,const BoundingBox& box) noexcept
 	{
 	auto v=vertices.begin();
 	auto end=vertices.end();
@@ -31,4 +31,94 @@ bool Glinda::insideAll(const Range<const glm::vec3*>& vertices,const BoundingBox
 		++v;
 		}
 	return 1;
+	}
+
+ArrayFixed<Face,12> Glinda::facesGet(const BoundingBox& bb) noexcept
+	{
+	return ArrayFixed<Face,12>
+		{
+	//	Side (0)
+		 Face
+			{
+			 glm::vec3(bb.min.x,bb.min.y,bb.min.z)
+			,glm::vec3(bb.max.x,bb.min.y,bb.min.z)
+			,glm::vec3(bb.max.x,bb.min.y,bb.max.z)
+			}
+		,Face
+			{
+			 glm::vec3(bb.max.x,bb.min.y,bb.max.z)
+			,glm::vec3(bb.min.x,bb.min.y,bb.max.z)
+			,glm::vec3(bb.min.x,bb.min.y,bb.min.z)
+			}
+
+	//	Side (1)
+		,Face
+			{
+			 glm::vec3(bb.max.x,bb.min.y,bb.min.z)
+			,glm::vec3(bb.max.x,bb.max.y,bb.min.z)
+			,glm::vec3(bb.max.x,bb.max.y,bb.max.z)
+			}
+		,Face
+			{
+			 glm::vec3(bb.max.x,bb.max.y,bb.max.z)
+			,glm::vec3(bb.max.x,bb.min.y,bb.max.z)
+			,glm::vec3(bb.max.x,bb.min.y,bb.min.z)
+			}
+
+	//	Side (2)
+		,Face
+			{
+			 glm::vec3(bb.max.x,bb.max.y,bb.min.z)
+			,glm::vec3(bb.min.x,bb.max.y,bb.min.z)
+			,glm::vec3(bb.min.x,bb.max.y,bb.max.z)
+			}
+		,Face
+			{
+			 glm::vec3(bb.min.x,bb.max.y,bb.max.z)
+			,glm::vec3(bb.max.x,bb.max.y,bb.max.z)
+			,glm::vec3(bb.max.x,bb.max.y,bb.min.z)
+			}
+
+	//	Side (3)
+		,Face
+			{
+			 glm::vec3(bb.max.x,bb.max.y,bb.min.z)
+			,glm::vec3(bb.max.x,bb.min.y,bb.min.z)
+			,glm::vec3(bb.max.x,bb.min.y,bb.max.z)
+			}
+		,Face
+			{
+			 glm::vec3(bb.max.x,bb.min.y,bb.max.z)
+			,glm::vec3(bb.max.x,bb.max.y,bb.max.z)
+			,glm::vec3(bb.max.x,bb.max.y,bb.min.z)
+			}
+
+	//	Side (4)
+		,Face
+			{
+			 glm::vec3(bb.min.x,bb.min.y,bb.max.z)
+			,glm::vec3(bb.max.x,bb.min.y,bb.max.z)
+			,glm::vec3(bb.max.x,bb.max.y,bb.max.z)
+			}
+		,Face
+			{
+			 glm::vec3(bb.max.x,bb.max.y,bb.max.z)
+			,glm::vec3(bb.min.x,bb.max.y,bb.max.z)
+			,glm::vec3(bb.min.x,bb.min.y,bb.max.z)
+			}
+
+	//	Side (5)
+		,Face
+			{
+			 glm::vec3(bb.max.x,bb.min.y,bb.min.z)
+			,glm::vec3(bb.min.x,bb.min.y,bb.min.z)
+			,glm::vec3(bb.min.x,bb.max.y,bb.min.z)
+			}
+		,Face
+			{
+			 glm::vec3(bb.min.x,bb.max.y,bb.min.z)
+			,glm::vec3(bb.max.x,bb.max.y,bb.min.z)
+			,glm::vec3(bb.max.x,bb.min.y,bb.min.z)
+			}
+		};
 	}

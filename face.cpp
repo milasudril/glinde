@@ -10,7 +10,7 @@ using namespace Glinda;
 
 inline static ArrayFixed<float,3> distancesGet(const glm::vec3& normal
 	,const glm::vec3& v_0
-	,const Face& face)
+	,const Face& face) noexcept
 	{
 	ArrayFixed<float,face.length()> ret;
 	for(size_t k=0;k<ret.length();++k)
@@ -23,7 +23,7 @@ inline static ArrayFixed<float,3> distancesGet(const glm::vec3& normal
 
 inline static ArrayFixed<float,3>
 projectOnLine(const glm::vec3& direction,const Face& face
-	,const ArrayFixed<int,3>& order)
+	,const ArrayFixed<int,3>& order) noexcept
 	{
 	ArrayFixed<float,face.length()> ret;
 	for(size_t k=0;k<ret.length();++k)
@@ -34,7 +34,7 @@ projectOnLine(const glm::vec3& direction,const Face& face
 	}
 
 
-inline static ArrayFixed<int,3> vertexPermutationsGet(const ArrayFixed<float,3>& projections)
+inline static ArrayFixed<int,3> vertexPermutationsGet(const ArrayFixed<float,3>& projections) noexcept
 	{
 //	v[0] and v[1] are on the same side. Use v[2] as the opposite vertex
 	if(projections[0]*projections[1] > 0)
@@ -50,7 +50,7 @@ inline static ArrayFixed<int,3> vertexPermutationsGet(const ArrayFixed<float,3>&
 
 inline static Twins<float> lineSegment(const ArrayFixed<float,3>& t
 	,const ArrayFixed<float,3>& pi
-	,const ArrayFixed<int,3>& order)
+	,const ArrayFixed<int,3>& order) noexcept
 	{
 	Twins<float> ret
 		{
@@ -63,7 +63,7 @@ inline static Twins<float> lineSegment(const ArrayFixed<float,3>& t
 	}
 
 inline static Twins<float> linesegmentIntersection(const glm::vec3& direction
-	,const Face& a,const Face& b,const glm::vec3& n_b)
+	,const Face& a,const Face& b,const glm::vec3& n_b) noexcept
 	{
 //	Get distances from the vertices to the plane of the other triangle
 	auto distances=distancesGet(n_b,b[0],a);
@@ -84,14 +84,14 @@ inline static Twins<float> linesegmentIntersection(const glm::vec3& direction
 	return lineSegment(t,distances,permuts);
 	}
 
-inline static bool intersect(const Twins<float>& a,const Twins<float>& b)
+inline static bool intersect(const Twins<float>& a,const Twins<float>& b) noexcept
 	{
 	if(a.second<=b.first + 2.4414062e-04f || b.second<=a.first + 2.4414062e-04f)
 		{return 0;}
 	return 1;
 	}
 
-bool Glinda::intersect(const Face& a,const Face& b)
+bool Glinda::intersect(const Face& a,const Face& b) noexcept
 	{
 	auto n_a=glm::normalize(glm::cross(a[1]-a[0],a[2]-a[0]));
 	auto n_b=glm::normalize(glm::cross(b[1]-b[0],b[2]-b[0]));
@@ -111,5 +111,19 @@ bool Glinda::intersect(const Face& a,const Face& b)
 
 	if(::intersect(L_1,L_2))
 		{return 1;}
+	return 0;
+	}
+
+bool Glinda::intersect(const Face& face,const Range<const Face*>& faces) noexcept
+	{
+	auto begin=faces.begin();
+	auto end=faces.end();
+
+	while(begin!=end)
+		{
+		if(intersect(face,*begin))
+			{return 1;}
+		++begin;
+		}
 	return 0;
 	}

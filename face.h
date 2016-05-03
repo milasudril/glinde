@@ -16,9 +16,10 @@ namespace Glinda
 		using ArrayFixed<glm::vec3,3>::ArrayFixed;
 		};
 
-	bool intersect(const Face& a,const Face& b);
+	bool intersect(const Face& a,const Face& b) noexcept;
+	bool intersect(const Face& a,const Range<const Face*>& faces) noexcept;
 
-	inline Face operator+(const Face& face,const glm::vec3& x)
+	inline Face operator+(const Face& face,const glm::vec3& x) noexcept
 		{
 		auto ret=face;
 		for(size_t k=0;k<face.length();++k)
@@ -26,7 +27,7 @@ namespace Glinda
 		return ret;
 		}
 
-	inline Face operator-(const Face& face,const glm::vec3& x)
+	inline Face operator-(const Face& face,const glm::vec3& x) noexcept
 		{
 		auto ret=face;
 		for(size_t k=0;k<face.length();++k)

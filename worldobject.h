@@ -10,8 +10,8 @@ target[name[worldobject.h] type[include]]
 #include "camera.h"
 #include "model.h"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/glm.hpp>
+//#include <glm/gtc/matrix_transform.hpp>
 
 namespace Glinda
 	{
@@ -19,14 +19,25 @@ namespace Glinda
 	class WorldObject
 		{
 		public:
-			WorldObject():r_model(nullptr)
+			WorldObject() noexcept:r_model(nullptr)
 				,m_frame_start(0),m_frame_current(0),m_frame_end(0)
-				,m_position(0,0,0)
-				,m_velocity(0,0,0),m_mass(0),m_charge(0)
+				,m_position(0,0,0),m_rot_z(0)
+				,m_velocity(0,0,0)
+				,m_force(0,0,0)
+				,m_mass(0),m_damping(0),m_charge(0)
 				{}
 
-			void modelSet(Model* model) noexcept
-				{r_model=model;}
+			void modelSet(const Model* model) noexcept
+				{
+				r_model=model;
+				if(model!=nullptr)
+					{
+					auto height=frameCurrentGet().bounding_box.size().z;
+					m_mass=23*height*height;
+				//	TODO: Is damping really connected to the mass
+					m_damping=m_mass/0.0625f;
+					}
+				}
 
 			void frameStartSet(const Stringkey& key)
 				{
@@ -77,6 +88,42 @@ namespace Glinda
 
 
 
+			WorldObject& forceSet(const glm::vec3& force) noexcept
+				{
+				m_force=force;
+				return *this;
+				}
+
+			const glm::vec3& forceGet() const noexcept
+				{return m_force;}
+
+
+
+			WorldObject& dampingSet(float damping) noexcept
+				{
+				m_damping=damping;
+				return *this;
+				}
+
+			float dampingGet() const noexcept
+				{
+				return m_damping;
+				}
+
+
+
+			WorldObject& massSet(float mass) noexcept
+				{
+				m_mass=mass;
+				return *this;
+				}
+
+			float massGet() const
+				{return m_mass;}
+
+
+
+
 			Camera& eyesGet() noexcept
 				{return m_eyes;	}
 
@@ -96,11 +143,18 @@ namespace Glinda
 			glm::mat4 modelMatrixGet() const noexcept
 				{
 				glm::mat4 M;
-				return glm::translate(M,m_position);
+				M=glm::translate(M,m_position);
+				return glm::rotate(M,m_rot_z,glm::vec3(0.0f,0.0f,1.0f));
+				}
+
+			WorldObject& rotZSet(float angle) noexcept
+				{
+				m_rot_z=angle;
+				return *this;
 				}
 
 		private:
-			Model* r_model;
+			const Model* r_model;
 			size_t m_frame_start;
 			size_t m_frame_current;
 			size_t m_frame_end;
@@ -108,11 +162,12 @@ namespace Glinda
 
 			Camera m_eyes;
 			glm::vec3 m_position;
+			float m_rot_z;
 			glm::vec3 m_velocity;
-			glm::vec3 m_acceleration;
 
-
+			glm::vec3 m_force;
 			float m_mass;
+			float m_damping;
 			float m_charge;
 		};
 	}

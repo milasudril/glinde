@@ -9,6 +9,8 @@ dependency[boundingbox.o]
 #ifndef GLINDA_BOUNDINGBOX_H
 #define GLINDA_BOUNDINGBOX_H
 
+#include "face.h"
+
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 
@@ -47,11 +49,10 @@ namespace Glinda
 			&& point.x<max.x && point.y<max.y && point.z<max.z;
 		}
 
-	bool insideAny(const Range<const glm::vec3*>& vertices,const BoundingBox& box);
-	bool insideAll(const Range<const glm::vec3*>& vertices,const BoundingBox& box);
+	bool insideAny(const Range<const glm::vec3*>& vertices,const BoundingBox& box) noexcept;
+	bool insideAll(const Range<const glm::vec3*>& vertices,const BoundingBox& box) noexcept;
 
-//	bool lineCrosses(const BoundingBox& box,const glim::vec4& a, const glm::vec4& b);
-
+	ArrayFixed<Face,12> facesGet(const BoundingBox&) noexcept;
 	}
 
 #endif

@@ -116,7 +116,7 @@ namespace Glinda
 			friend class FaceIterator;
 		};
 
-	BoundingBox boundingBoxGet(const Range<const Mesh*>& meshes);
+	BoundingBox boundingBoxGet(const Range<const Mesh*>& meshes) noexcept;
 	}
 
 #endif

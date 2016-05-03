@@ -102,7 +102,7 @@ Renderer::Renderer()
 	lightpos_id=program.uniformGet("lightpos_worldspace");
 	diffuse_id=program.uniformGet("texture_diffuse");
 
-	glUniform3f(lightpos_id,0.0f,1.0f,2.4f);
+	glUniform3f(lightpos_id,0.0f,0.0f,2.4f);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
@@ -143,6 +143,7 @@ void Renderer::sceneRender(World& world,const WorldObject& viewer) noexcept
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
 //	auto V=glm::lookAt(glm::vec3(0,-2,1.7f),glm::vec3(0,0,1.55),glm::vec3(0,0,1));
+//	auto V=glm::lookAt(glm::vec3(0,0,2.5f),glm::vec3(0,0,0),glm::vec3(0,1,0));
 	auto V=viewer.viewMatrixGet();
 	glUniformMatrix4fv(V_id,1,GL_FALSE,&V[0][0]);
 	auto VP=P*V;

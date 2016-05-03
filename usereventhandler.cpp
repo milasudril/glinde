@@ -21,45 +21,55 @@ void UserEventHandler::onMouseMove(Window& source,double x,double y)
 		}
 	else
 		{
+		auto yaw=4.0f*std::acos(0.0f)*(float(x/w) - 1.0f/2.0f);
+		auto pitch=std::acos(-1.0f)*(1.0f - float(y/h) );
+
 		auto& player=r_world->playerGet();
-		player.eyesGet().pitchSet(std::acos(-1.0f)*(1.0f - float(y/h) ))
-			.yawSet(4.0f*std::acos(0.0f)*(float(x/w) - 1.0f/2.0f) )
+		player.eyesGet()
+			.pitchSet(pitch)
+			.yawSet(yaw )
 			.headingUpdate();
 
-		velocityUpdate();
+		player.rotZSet(std::acos(-1.0f)-yaw);
+
+		objectUpdate();
 		}
 	}
 
-void UserEventHandler::velocityUpdate()
+void UserEventHandler::objectUpdate()
 	{
 	auto& player=r_world->playerGet();
 
-	glm::vec3 v={0,0,0};
+	auto F_0=player.dampingGet();
+	auto m=player.massGet();
+
+	glm::vec3 F={0,0,0};
 	if(m_move_flags==0)
 		{
-	//	Stop player
-	//	TODO: add momentum
-		player.velocitySet(v);
+		player.forceSet(F);
 		return;
 		}
 
 	auto& heading=player.headingGet();
-	float speed=1.0f;
 
 	if(m_move_flags&MOVE_FORWARD)
-		{v+=heading;}
+		{F+=glm::vec3(heading.x,heading.y,0.0f);}
 
 	if(m_move_flags&MOVE_BACKWARD)
-		{v-=heading;}
+		{F-=glm::vec3(heading.x,heading.y,0.0f);}
 
 	if(m_move_flags&STRAFE_LEFT)
-		{v+=glm::vec3{-heading.y,heading.x,0.0f};}
+		{F+=glm::vec3(-heading.y,heading.x,0.0f);}
 
 	if(m_move_flags&STRAFE_RIGHT)
-		{v-=glm::vec3{-heading.y,heading.x,0.0f};}
+		{F-=glm::vec3(-heading.y,heading.x,0.0f);}
 
-	v=speed*normalize(v);
-	player.velocitySet(v);
+	if(m_move_flags&JUMP)
+		{F+=glm::vec3(0.0f,0.0f,3.0f * 9.81f*m);}
+
+	F=F_0*normalize(F);
+
+	player.forceSet(F);
 	}
 
 unsigned int UserEventHandler::keyToFlag(uint8_t key)
@@ -125,7 +135,7 @@ void UserEventHandler::onKeyDown(Window& source,uint8_t key)
 			}
 
 		m_move_flags|=flag;
-		velocityUpdate();
+		objectUpdate();
 		}
 	}
 
@@ -135,6 +145,17 @@ void UserEventHandler::onKeyUp(Window& source,uint8_t key)
 	if(flag!=MENU_MODE && !(m_move_flags&MENU_MODE))
 		{
 		m_move_flags&=~flag;
-		velocityUpdate();
+		objectUpdate();
+		}
+	}
+
+void UserEventHandler::onMouseDown(Window& source,int button)
+	{
+	GLINDA_DEBUG_PRINT("Player clicked %d",button);
+	switch(button)
+		{
+		case 1:
+
+			break;
 		}
 	}

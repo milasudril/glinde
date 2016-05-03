@@ -67,6 +67,9 @@ ArrayDynamic<unsigned int> facesFind(const Range<const unsigned int*>& face_indi
 	auto face_index=face_indices.begin();
 	auto face_index_end=face_indices.end();
 	auto f=faces.begin();
+
+	auto boxFaces=facesGet(box);
+
 	while(face_index!=face_index_end)
 		{
 		auto index=*face_index;
@@ -74,7 +77,7 @@ ArrayDynamic<unsigned int> facesFind(const Range<const unsigned int*>& face_indi
 
 	//	GLINDA_DEBUG_PRINT("  Hit test face %u@%u",face,3*face);
 	//	TODO add line cross check
-		if(insideAny(f[index],box))
+		if(insideAny(f[index],box) || intersect(f[index],boxFaces))
 			{
 		//	if(box.max.z>=2 && f[index][0].z>0)
 			//	{GLINDA_DEBUG_PRINT("%u is inside box",index);}
@@ -122,7 +125,7 @@ FaceRejectionTree::Node* FaceRejectionTree::nodeCreate(
 			 ,box.min + size + glm::vec4(size.x,0.0f,0.0f,0.0f)
 			 }
 			,{
-			  box.min + glm::vec4(0,size.y,0.0f,0.f)
+			  box.min + glm::vec4(0,size.y,0.0f,0.0f)
 			 ,box.min + size + glm::vec4(0,size.y,0.0f,0.0f)
 			 }
 			,{

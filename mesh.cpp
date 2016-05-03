@@ -185,7 +185,7 @@ void Mesh::boundingBoxUpdate() noexcept
 	m_box=ret;
 	}
 
-BoundingBox Glinda::boundingBoxGet(const Range<const Mesh*>& meshes)
+BoundingBox Glinda::boundingBoxGet(const Range<const Mesh*>& meshes) noexcept
 	{
 	auto mesh_current=meshes.begin();
 	auto end=meshes.end();

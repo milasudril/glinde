@@ -14,8 +14,8 @@ namespace Glinda
 	class Line;
 	template<class T> class Range;
 
-	bool intersect(const Face& a,const Mesh& mesh);
-	bool intersect(const Face& a,const Range<const Mesh*>& meshes);
+	bool intersect(const Face& a,const Mesh& mesh) noexcept;
+	bool intersect(const Face& a,const Range<const Mesh*>& meshes) noexcept;
 	}
 
 #endif
