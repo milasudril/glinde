@@ -6,9 +6,9 @@ target[name[intersections.o] type[object]]
 #include "mesh.h"
 #include "face.h"
 
-using namespace Glinda;
+using namespace Glinie;
 
-bool Glinda::intersect(const Face& a,const Mesh& mesh) noexcept
+bool Glinie::intersect(const Face& a,const Mesh& mesh) noexcept
 	{
 	auto i=mesh.facesBegin();
 	auto i_end=mesh.facesEnd();
@@ -21,7 +21,7 @@ bool Glinda::intersect(const Face& a,const Mesh& mesh) noexcept
 	return 0;
 	}
 
-bool Glinda::intersect(const Face& a,const Range<const Mesh*>& meshes) noexcept
+bool Glinie::intersect(const Face& a,const Range<const Mesh*>& meshes) noexcept
 	{
 	auto i=meshes.begin();
 	auto i_end=meshes.end();

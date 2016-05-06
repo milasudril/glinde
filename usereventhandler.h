@@ -3,12 +3,12 @@ target[name[usereventhandler.h] type[include]]
 dependency[usereventhandler.o]
 #endif
 
-#ifndef GLINDA_USEREVENTHANDLER_H
-#define GLINDA_USEREVENTHANDLER_H
+#ifndef GLINIE_USEREVENTHANDLER_H
+#define GLINIE_USEREVENTHANDLER_H
 
 #include "window.h"
 
-namespace Glinda
+namespace Glinie
 	{
 	class World;
 

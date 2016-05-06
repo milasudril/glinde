@@ -5,8 +5,8 @@ target[name[arraydynamic.h] type[include]]
 /**\file arraydynamic.h \brief Definition of an array that can grow
  */
 
-#ifndef GLINDA_ARRAYDYNAMIC_H
-#define GLINDA_ARRAYDYNAMIC_H
+#ifndef GLINIE_ARRAYDYNAMIC_H
+#define GLINIE_ARRAYDYNAMIC_H
 
 #include "memoryalloc.h"
 #include "vectortype.h"
@@ -21,7 +21,7 @@ target[name[arraydynamic.h] type[include]]
 #include <utility>
 #include <cassert>
 
-namespace Glinda
+namespace Glinie
 	{
 	/**\brief Class representing arrays that can grow.
 	 *
@@ -304,7 +304,7 @@ namespace Glinda
 		auto N_2=nextpow2(N);
 		if(N_2 > std::numeric_limits<uint32_t>::max())
 			{throw ErrorMessage("Block resize to %zu would result in a too large array.",N_2);}
-	//	GLINDA_DEBUG_PRINT("Resizing block of size %u to %zu",m_content.data.capacity,N_2);
+	//	GLINIE_DEBUG_PRINT("Resizing block of size %u to %zu",m_content.data.capacity,N_2);
 
 		T* block_new=reinterpret_cast<T*>(memoryRealloc(begin(),N_2*sizeof(T)));
 		m_content.data.pointer=block_new;

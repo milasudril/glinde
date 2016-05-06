@@ -3,13 +3,13 @@ target[name[resourceobject.h] type[include] ]
 dependency[resourceobject.o]
 #endif
 
-#ifndef GLINDA_RESOURCEOBJECT_H
-#define GLINDA_RESOURCEOBJECT_H
+#ifndef GLINIE_RESOURCEOBJECT_H
+#define GLINIE_RESOURCEOBJECT_H
 
 #include <utility>
 #include <cstddef>
 
-namespace Glinda
+namespace Glinie
 	{
 	class DataSource;
 

@@ -1,46 +1,46 @@
-a{color:$color_-primary_-4;}
-a:hover{text-shadow:0 0 2px $color_-secondary_-2_-2;}
+a{color: #C60065;}
+a:hover{text-shadow:0 0 2px  #FF8C83;}
 div.logo
 	{
-	background-color:$color_-primary_-0;
-	color:$color_-primary_-1;
+	background-color: #FF53AA;
+	color: #FFB6DB;
 	text-shadow:0 0 1px #ffffff
 	}
 
-header>nav,footer{background-color: $color_-secondary_-1_-1;}
+header>nav,footer{background-color:  #EAB9FF;}
 header>nav>ul>li>a{color:#7000A0}
-header>nav>ul>li>a:hover{text-shadow: 0 0 2px $color_-primary_-0;}
+header>nav>ul>li>a:hover{text-shadow: 0 0 2px  #FF53AA;}
 table
 	{
-	background-color: $color_-primary_-1;
+	background-color:  #FFB6DB;
 	border:2px solid;
 	border-radius:4px;
-	border-color:$color_-primary_-3
+	border-color: #F7007E
 	}
 
 aside,.infobox_note
 	{
-	background-color:$color_-complement_-1;
+	background-color: #E4FFB6;
 	border:2px solid;
 	border-radius:8px;
-	border-color:$color_-complement_-3
+	border-color: #9FFC00
 	}
 
 .infobox_warning
 	{
-	background-color:$color_-secondary_-2_-1;
+	background-color: #FFBBB6;
 	border:2px solid;
 	border-radius:8px;
-	border-color:$color_-secondary_-2_-3;
+	border-color: #FF1300;
 	}
 pre.code
 	{
 	background-color:#ffffff;
 	border:2px solid;
 	border-radius:8px;
-	border-color: $color_-primary_-3;
+	border-color:  #F7007E;
 	}
 
 body{background-image:url('starspink.png');}
-h1,h2,h3{color:$color_-secondary_-1_-3;}
-h2 a,h1 a {color:$color_-secondary_-2_-3;}
+h1,h2,h3{color: #A800F0;}
+h2 a,h1 a {color: #FF1300;}

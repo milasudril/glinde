@@ -6,19 +6,19 @@ dependency[archive.o]
 /**\file archive.h \brief Definition of a ZIP archive reader class
  */
 
-#ifndef GLINDA_ARCHIVE_H
-#define GLINDA_ARCHIVE_H
+#ifndef GLINIE_ARCHIVE_H
+#define GLINIE_ARCHIVE_H
 
 #include "datasource.h"
 #include "string.h"
 #include "filesystem.h"
 #include <utility>
 
-namespace Glinda
+namespace Glinie
 	{
 	/**\brief A class describing a ZIP archive reader
 	 *
-	 * Glinda uses ZIP archives as data storage. To access such files, this
+	 * Glinie uses ZIP archives as data storage. To access such files, this
 	 * class is used.
 	 *
 	 * \note This class is implemented using the `libzip` library by Dieter

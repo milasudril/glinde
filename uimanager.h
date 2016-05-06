@@ -6,10 +6,10 @@ dependency[uimanager.o]
 /** \file uimanager.h \brief Defintion of the UIManager class
  */
 
-#ifndef GLINDA_UIMANAGER_H
-#define GLINDA_UIMANAGER_H
+#ifndef GLINIE_UIMANAGER_H
+#define GLINIE_UIMANAGER_H
 
-namespace Glinda
+namespace Glinie
 	{
 	class Window;
 	class Timer;

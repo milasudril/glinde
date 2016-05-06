@@ -7,7 +7,7 @@ target[name[archive.o] type[object] dependency[zip;external]]
 #include <zip.h>
 #include <cstring>
 
-using namespace Glinda;
+using namespace Glinie;
 
 [[noreturn]] static void archiveErrorRaise(const char* message_str
 	,const char* filename,int result)

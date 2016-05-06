@@ -5,7 +5,7 @@ target[name[glprogram.o] type[object]]
 #include "glprogram.h"
 #include "errormessage.h"
 
-using namespace Glinda;
+using namespace Glinie;
 
 void GlProgram::link()
 	{

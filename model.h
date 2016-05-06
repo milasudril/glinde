@@ -3,14 +3,14 @@ target[name[model.h] type[include]]
 dependency[model.o]
 #endif
 
-#ifndef GLINDA_MODEL_H
-#define GLINDA_MODEL_H
+#ifndef GLINIE_MODEL_H
+#define GLINIE_MODEL_H
 
 #include "arraysimple.h"
 #include "mesh.h"
 #include <map>
 
-namespace Glinda
+namespace Glinie
 	{
 	class DataSource;
 	class TextureManager;

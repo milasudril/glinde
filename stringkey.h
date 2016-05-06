@@ -2,12 +2,12 @@
 target[name[stringkey.h] type[include]]
 #endif
 
-#ifndef GLINDA_STRINGKEY_H
-#define GLINDA_STRINGKEY_H
+#ifndef GLINIE_STRINGKEY_H
+#define GLINIE_STRINGKEY_H
 
 #include <cstdint>
 
-namespace Glinda
+namespace Glinie
 	{
 	class Stringkey
 		{

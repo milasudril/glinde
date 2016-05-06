@@ -2,14 +2,14 @@
 target[name[resourcecache.h] type[include]]
 #endif
 
-#ifndef GLINDA_RESOURCECACHE_H
-#define GLINDA_RESOURCECACHE_H
+#ifndef GLINIE_RESOURCECACHE_H
+#define GLINIE_RESOURCECACHE_H
 
 #include "arrayfixed.h"
 #include "arrayinit.h"
 #include <cstdint>
 
-namespace Glinda
+namespace Glinie
 	{
 	template<class T>
 	class ResourceCache

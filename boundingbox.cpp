@@ -5,9 +5,9 @@ target[name[boundingbox.o] type[object]]
 #include "boundingbox.h"
 #include "range.h"
 
-using namespace Glinda;
+using namespace Glinie;
 
-bool Glinda::insideAny(const Range<const glm::vec3*>& vertices,const BoundingBox& box) noexcept
+bool Glinie::insideAny(const Range<const glm::vec3*>& vertices,const BoundingBox& box) noexcept
 	{
 	auto v=vertices.begin();
 	auto end=vertices.end();
@@ -20,7 +20,7 @@ bool Glinda::insideAny(const Range<const glm::vec3*>& vertices,const BoundingBox
 	return 0;
 	}
 
-bool Glinda::insideAll(const Range<const glm::vec3*>& vertices,const BoundingBox& box) noexcept
+bool Glinie::insideAll(const Range<const glm::vec3*>& vertices,const BoundingBox& box) noexcept
 	{
 	auto v=vertices.begin();
 	auto end=vertices.end();
@@ -33,7 +33,7 @@ bool Glinda::insideAll(const Range<const glm::vec3*>& vertices,const BoundingBox
 	return 1;
 	}
 
-ArrayFixed<Face,12> Glinda::facesGet(const BoundingBox& bb) noexcept
+ArrayFixed<Face,12> Glinie::facesGet(const BoundingBox& bb) noexcept
 	{
 	return ArrayFixed<Face,12>
 		{

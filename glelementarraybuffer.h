@@ -4,14 +4,14 @@ dependency[GLEW;external]
 dependency[GL;external]
 #endif
 
-#ifndef GLINDA_GLELEMENTARRAYBUFFER_H
-#define GLINDA_GLELEMENTARRAYBUFFER_H
+#ifndef GLINIE_GLELEMENTARRAYBUFFER_H
+#define GLINIE_GLELEMENTARRAYBUFFER_H
 
 #include "range.h"
 #include "mesh.h"
 #include <GL/glew.h>
 
-namespace Glinda
+namespace Glinie
 	{
 	class GlElementArrayBuffer
 		{

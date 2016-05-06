@@ -19,7 +19,7 @@ target
 #include <GLFW/glfw3.h>
 
 
-using namespace Glinda;
+using namespace Glinie;
 
 static void on_resize(GLFWwindow* window,int width,int height)
 	{
@@ -44,7 +44,7 @@ static void key_handler(GLFWwindow* window,int key,int scancode,int action
 			break;
 
 		default:
-			GLINDA_DEBUG_PRINT("Unknown keyboard action %d",action);
+			GLINIE_DEBUG_PRINT("Unknown keyboard action %d",action);
 		}
 	}
 
@@ -62,7 +62,7 @@ static void mouse_handler(GLFWwindow* window,int button,int action,int mods)
 			break;
 
 		default:
-			GLINDA_DEBUG_PRINT("Unknown mouse action %d",action);
+			GLINIE_DEBUG_PRINT("Unknown mouse action %d",action);
 		}
 	}
 
@@ -114,7 +114,7 @@ Window::Window(const char* title,unsigned int width,unsigned int height
 
 Window::~Window()
 	{
-	GLINDA_DEBUG_PRINT("Someone is trying to destroy me");
+	GLINIE_DEBUG_PRINT("Someone is trying to destroy me");
 	glfwDestroyWindow(static_cast<GLFWwindow*>(m_handle));
 	}
 

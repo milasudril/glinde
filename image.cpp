@@ -17,7 +17,7 @@ target
 #include <cmath>
 #include <memory>
 
-using namespace Glinda;
+using namespace Glinie;
 
 namespace
 	{
@@ -201,7 +201,7 @@ template<class T>
 static void pixelsScale(const T* pixels_in,Image::SampleType* pixels_out,uint32_t N)
 	{
 	auto factor=static_cast<float>( ( 1L<<(8L*sizeof(T)) ) - 1 );
-	GLINDA_DEBUG_PRINT("Conversion factor: %.7g N=%u",factor,N);
+	GLINIE_DEBUG_PRINT("Conversion factor: %.7g N=%u",factor,N);
 
 	while(N)
 		{
@@ -274,7 +274,7 @@ static void fromSRGB(Image& image)
 	auto ptr=image.pixelsGet();
 	auto n_ch=image.channelCountGet();
 	auto N=image.widthGet() * image.heightGet() * n_ch;
-	GLINDA_DEBUG_PRINT("Converting image from sRGB %u %u",n_ch,N);
+	GLINIE_DEBUG_PRINT("Converting image from sRGB %u %u",n_ch,N);
 
 	auto k=0;
 	while(N!=0)
@@ -319,12 +319,12 @@ static ColorConverter converterGet(PNGReader::ColorType color_type)
 
 Image::Image(DataSource& source,uint32_t id)
 	{
-	GLINDA_DEBUG_PRINT("Reading image %s",source.nameGet());
+	GLINIE_DEBUG_PRINT("Reading image %s",source.nameGet());
 		{
 		uint8_t magic[8]="xxxxxxx";
 		if(source.read(magic,8)!=8)
 			{
-			GLINDA_DEBUG_PRINT("magic: %s",magic);
+			GLINIE_DEBUG_PRINT("magic: %s",magic);
 			throw ErrorMessage("An I/O error occured while reading the image "
 				"magic number.");
 			}
@@ -354,7 +354,7 @@ Image::Image(DataSource& source,uint32_t id)
 		converter(*this);
 		}
 
-	GLINDA_DEBUG_PRINT("Loaded an image of size %u x %u",widthGet(),heightGet());
+	GLINIE_DEBUG_PRINT("Loaded an image of size %u x %u",widthGet(),heightGet());
 	}
 
 Image::Image(uint32_t width,uint32_t height,uint32_t n_channels,uint32_t id):

@@ -3,14 +3,14 @@ target[name[image.h] type[include]]
 dependency[image.o]
 #endif
 
-#ifndef GLINDA_IMAGE_H
-#define GLINDA_IMAGE_H
+#ifndef GLINIE_IMAGE_H
+#define GLINIE_IMAGE_H
 
 #include "arraysimple.h"
 #include <cstdint>
 #include <OpenEXR/half.h>
 
-namespace Glinda
+namespace Glinie
 	{
 	class DataSource;
 

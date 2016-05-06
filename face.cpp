@@ -6,7 +6,7 @@ target[name[face.o] type[object]]
 #include "twins.h"
 #include <glm/glm.hpp>
 
-using namespace Glinda;
+using namespace Glinie;
 
 inline static ArrayFixed<float,3> distancesGet(const glm::vec3& normal
 	,const glm::vec3& v_0
@@ -91,7 +91,7 @@ inline static bool intersect(const Twins<float>& a,const Twins<float>& b) noexce
 	return 1;
 	}
 
-bool Glinda::intersect(const Face& a,const Face& b) noexcept
+bool Glinie::intersect(const Face& a,const Face& b) noexcept
 	{
 	auto n_a=glm::normalize(glm::cross(a[1]-a[0],a[2]-a[0]));
 	auto n_b=glm::normalize(glm::cross(b[1]-b[0],b[2]-b[0]));
@@ -114,7 +114,7 @@ bool Glinda::intersect(const Face& a,const Face& b) noexcept
 	return 0;
 	}
 
-bool Glinda::intersect(const Face& face,const Range<const Face*>& faces) noexcept
+bool Glinie::intersect(const Face& face,const Range<const Face*>& faces) noexcept
 	{
 	auto begin=faces.begin();
 	auto end=faces.end();

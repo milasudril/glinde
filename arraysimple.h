@@ -17,7 +17,7 @@ target[name[arraysimple.h] type[include]]
 #include <cstdint>
 #include <cstdio>
 
-namespace Glinda
+namespace Glinie
 	{
 	/**\brief Class representing non-growing dynamically allocated arrays.
 	 *
@@ -66,7 +66,7 @@ namespace Glinda
 			 * // Assume there is a class called File, and another array object
 			 * // containing all filenames
 			 *
-			 * Glinda::ArraySimple<File> files(filenames.length(),[&filenames](size_t k)
+			 * Glinie::ArraySimple<File> files(filenames.length(),[&filenames](size_t k)
 			 *     {
 			 * //  Assume Files are move constructible
 			 *     return File(filenames[k]);

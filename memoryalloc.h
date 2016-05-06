@@ -12,12 +12,12 @@ dependency[memoryalloc.o]
  *
  */
 
-#ifndef GLINDA_ALLOC_H
-#define GLINDA_ALLOC_H
+#ifndef GLINIE_ALLOC_H
+#define GLINIE_ALLOC_H
 
 #include <cstddef>
 
-namespace Glinda
+namespace Glinie
 	{
 	/**\brief Allocates N bytes from the heap.
 	 *

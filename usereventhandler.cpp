@@ -8,7 +8,7 @@ target[name[usereventhandler.o] type[object]]
 #include "world.h"
 #include "debug.h"
 
-using namespace Glinda;
+using namespace Glinie;
 
 void UserEventHandler::onMouseMove(Window& source,double x,double y)
 	{
@@ -152,7 +152,7 @@ void UserEventHandler::onMouseDown(Window& source,int button)
 	auto g=9.81f;
 	auto t=0.25f;
 
-	GLINDA_DEBUG_PRINT("Player clicked %d",button);
+	GLINIE_DEBUG_PRINT("Player clicked %d",button);
 	switch(button)
 		{
 		case 1:

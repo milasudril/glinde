@@ -7,9 +7,9 @@ target[name[logwriter.o] type [object]]
 #include <cstdio>
 #include <cstdarg>
 
-using namespace Glinda;
+using namespace Glinie;
 
-void Glinda::logWrite(LogMessageType type,const char* format,...)
+void Glinie::logWrite(LogMessageType type,const char* format,...)
 	{
 	const char* infostring;
 	switch(type)
@@ -42,7 +42,7 @@ void Glinda::logWrite(LogMessageType type,const char* format,...)
 
 
 #if (_WIN32 || _WIN64)
-void Glinda::deathtrapHandlerActivate()
+void Glinie::deathtrapHandlerActivate()
 	{}
 #else
 
@@ -95,7 +95,7 @@ inline static const void* faultAddressGet(ucontext_t* context)
 	_exit(signal);
 	}
 
-void Glinda::deathtrapHandlerActivate()
+void Glinie::deathtrapHandlerActivate()
 	{
 	struct sigaction sa;
 	sa.sa_sigaction=deathMessagePrint;

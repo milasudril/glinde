@@ -10,7 +10,7 @@ target[name[resourceobject.o] type[object] dependency[jansson;external]]
 
 #include <jansson.h>
 
-using namespace Glinda;
+using namespace Glinie;
 
 static size_t loadCallback(void* buffer, size_t length, void* eventhandler)
 	{

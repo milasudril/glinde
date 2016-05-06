@@ -8,13 +8,13 @@ target[name[debug.h] type[include]]
  *
  */
 
-#ifndef GLINDA_DEBUG_H
-#define GLINDA_DEBUG_H
+#ifndef GLINIE_DEBUG_H
+#define GLINIE_DEBUG_H
 
 #ifdef NDEBUG
 #include <cassert>
-	#define GLINDA_DEBUG_PRINT(format,...)
-	#define GLINDA_ASSERT_CALL(function,relation,value) (function)
+	#define GLINIE_DEBUG_PRINT(format,...)
+	#define GLINIE_ASSERT_CALL(function,relation,value) (function)
 #else
 
 #include "logwriter.h"
@@ -26,8 +26,8 @@ target[name[debug.h] type[include]]
 	 * This macro prints a debug message to the console. The macro follows
 	 * the `printf` convention.
 	*/
-	#define GLINDA_DEBUG_PRINT(format,...)\
-		Glinda::logWrite(Glinda::LogMessageType::DEBUG\
+	#define GLINIE_DEBUG_PRINT(format,...)\
+		Glinie::logWrite(Glinie::LogMessageType::DEBUG\
 			,"%s:%u: " format,__FILE__,__LINE__,##__VA_ARGS__)
 
 	/**\brief Function call with assertion on return value
@@ -40,7 +40,7 @@ target[name[debug.h] type[include]]
 	 * \warning Exiting through an assertion failure may leak system resources.
 	 *
 	*/
-	#define GLINDA_ASSERT_CALL(function,relation,value) assert((function) relation (value))
+	#define GLINIE_ASSERT_CALL(function,relation,value) assert((function) relation (value))
 #endif
 
 #endif

@@ -16,13 +16,13 @@ target
 #include <time.h>
 #include <semaphore.h>
 
-using namespace Glinda;
+using namespace Glinie;
 
 struct Timer::Impl
 	{
 	Impl(double frequency)
 		{
-		GLINDA_DEBUG_PRINT("Creating a timer %p",this);
+		GLINIE_DEBUG_PRINT("Creating a timer %p",this);
 		if(sem_init(&m_trig,0,1)!=0)
 			{throw ErrorMessage("It was not possible to initialize a semaphore for the timer");}
 
@@ -82,7 +82,7 @@ struct Timer::Impl
 
 	static void sig_handler(int signal,siginfo_t* si,void* uc)
 		{
-		GLINDA_DEBUG_PRINT("Hello %p",si->si_ptr);
+		GLINIE_DEBUG_PRINT("Hello %p",si->si_ptr);
 		sem_post( reinterpret_cast<sem_t*>(uc) );
 		}
 

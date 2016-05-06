@@ -6,8 +6,8 @@ dependency[facerejectiontree.o]
 /**\file facerejectiontree.h \brief Defines the FaceRejectionTree class
 */
 
-#ifndef GLINDA_FACEREJECTIONTREE_H
-#define GLINDA_FACEREJECTIONTREE_H
+#ifndef GLINIE_FACEREJECTIONTREE_H
+#define GLINIE_FACEREJECTIONTREE_H
 
 #include "arraydynamic.h"
 #include "vectortype.h"
@@ -15,7 +15,7 @@ dependency[facerejectiontree.o]
 #include "twins.h"
 #include <glm/glm.hpp>
 
-namespace Glinda
+namespace Glinie
 	{
 	class Face;
 

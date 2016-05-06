@@ -10,7 +10,7 @@ target[name[mesh.o] type[object]]
 #include "debug.h"
 #include <glm/glm.hpp>
 
-using namespace Glinda;
+using namespace Glinie;
 
 static ArraySimple<glm::vec3> verticesLoad(const ResourceObject& source
 	,const char* source_name)
@@ -20,7 +20,7 @@ static ArraySimple<glm::vec3> verticesLoad(const ResourceObject& source
 	if(n_verts%3!=0)
 		{throw ErrorMessage("%s: Each vertex needs three components",source_name);}
 	n_verts/=3;
-	GLINDA_DEBUG_PRINT("Got %zu vertices",n_verts);
+	GLINIE_DEBUG_PRINT("Got %zu vertices",n_verts);
 	return std::move(ArraySimple<glm::vec3>(n_verts,[&verts](size_t k)
 		{
 		glm::vec3 ret;
@@ -49,7 +49,7 @@ static ArraySimple<glm::vec3> normalsLoad(const ResourceObject& source
 			,source_name,n_normals,vertex_count);
 		}
 
-	GLINDA_DEBUG_PRINT("Got %zu normals",n_normals);
+	GLINIE_DEBUG_PRINT("Got %zu normals",n_normals);
 
 	return std::move(ArraySimple<glm::vec3>(n_normals,[&normals](size_t k)
 		{
@@ -80,7 +80,7 @@ static ArraySimple<glm::vec2> uvsLoad(const ResourceObject& source
 			,n_uvs,vertex_count);
 		}
 
-	GLINDA_DEBUG_PRINT("Got %zu uv coordinates",n_uvs);
+	GLINIE_DEBUG_PRINT("Got %zu uv coordinates",n_uvs);
 
 	return std::move(ArraySimple<glm::vec2>(n_uvs,[&uvs](size_t k)
 		{
@@ -106,7 +106,7 @@ static ArraySimple<Mesh::FaceIndirect> facesLoad(const ResourceObject& source
 		{throw ErrorMessage("%s: Each face needs three vertices",source_name);}
 	n_faces/=Mesh::FaceIndirect::length();
 
-	GLINDA_DEBUG_PRINT("Got %zu faces",n_faces);
+	GLINIE_DEBUG_PRINT("Got %zu faces",n_faces);
 
 	return std::move(ArraySimple<Mesh::FaceIndirect>(n_faces,[&faces,source_name,vertex_count](size_t k)
 		{
@@ -127,7 +127,7 @@ static ArrayFixed<const Image*,Mesh::textureCountGet()>
 texturesLoad(TextureManager& textures,const ResourceObject& source
 	,const char* source_name)
 	{
-	GLINDA_DEBUG_PRINT("Loading textures for %s",source_name);
+	GLINIE_DEBUG_PRINT("Loading textures for %s",source_name);
 	auto textures_lump=source.objectGet("textures");
 	auto n_textures=textures_lump.objectCountGet();
 	if(n_textures>=Mesh::textureCountGet())
@@ -185,7 +185,7 @@ void Mesh::boundingBoxUpdate() noexcept
 	m_box=ret;
 	}
 
-BoundingBox Glinda::boundingBoxGet(const Range<const Mesh*>& meshes) noexcept
+BoundingBox Glinie::boundingBoxGet(const Range<const Mesh*>& meshes) noexcept
 	{
 	auto mesh_current=meshes.begin();
 	auto end=meshes.end();

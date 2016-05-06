@@ -5,13 +5,13 @@ dependency[GL;external]
 dependency[gltexture.o]
 #endif
 
-#ifndef GLINDA_GLTEXTURE_H
-#define GLINDA_GLTEXTURE_H
+#ifndef GLINIE_GLTEXTURE_H
+#define GLINIE_GLTEXTURE_H
 
 #include <GL/glew.h>
 #include <utility>
 
-namespace Glinda
+namespace Glinie
 	{
 	class Image;
 

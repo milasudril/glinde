@@ -2,14 +2,14 @@
 target[name[windowgame.h] type[include]]
 #endif
 
-#ifndef GLINDA_WINDOWGAME_H
-#define GLINDA_WINDOWGAME_H
+#ifndef GLINIE_WINDOWGAME_H
+#define GLINIE_WINDOWGAME_H
 
 #include "window.h"
 #include "renderer.h"
 #include "world.h"
 
-namespace Glinda
+namespace Glinie
 	{
 	class WindowGame:public Window
 		{

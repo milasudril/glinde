@@ -1,5 +1,5 @@
 #ifdef __WAND__
-target[name[glinda] type[application] ]
+target[name[glinie] type[application] ]
 #endif
 
 #include "errormessage.h"
@@ -14,12 +14,12 @@ target[name[glinda] type[application] ]
 #include "timer.h"
 #include "gameloop.h"
 
-using namespace Glinda;
+using namespace Glinie;
 
 int main()
 	{
 	deathtrapHandlerActivate();
-	logWrite(LogMessageType::INFORMATION,"Glinda is starting up");
+	logWrite(LogMessageType::INFORMATION,"Glinie is starting up");
 	try
 		{
 		Archive src{"test.zip"};
@@ -27,7 +27,7 @@ int main()
 
 		UserEventHandler event_handler(world);
 		UIManager ui;
-		WindowGame mainwin("Glinda",640,480,event_handler,world);
+		WindowGame mainwin("Glinie",640,480,event_handler,world);
 		Timer world_clock(30.0);
 		logWrite(LogMessageType::INFORMATION
 			,"World clock ticks every %.15g second",world_clock.delayGet());

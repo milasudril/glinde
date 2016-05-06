@@ -5,7 +5,7 @@ target[name[glshader.o] type[object]]
 #include "glshader.h"
 #include "errormessage.h"
 
-using namespace Glinda;
+using namespace Glinie;
 
 void GlShader::compile()
 	{

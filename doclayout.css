@@ -74,3 +74,8 @@ section{padding-bottom:1ex;}
 header > nav > ul > li{display: inline;}
 header > nav > ul > li:after{content: "»";}
 header > nav > ul {margin:0px;padding:1ex;border-bottom:1px solid rgba(0,0,0,0.25);border-top:1px solid rgba(0,0,0,0.25)}
+
+body{display:flex;flex-direction:column}
+header{flex:0 1 auto;}
+main{flex:1 1 auto;overflow-y:scroll;}
+footer{flex:0 1 auto;}

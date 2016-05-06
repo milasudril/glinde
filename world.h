@@ -6,15 +6,15 @@ dependency[world.o]
 /**\file world.h \brief Defines the World class
  */
 
-#ifndef GLINDA_WORLD_H
-#define GLINDA_WORLD_H
+#ifndef GLINIE_WORLD_H
+#define GLINIE_WORLD_H
 
 #include "arraydynamic.h"
 #include "worldobject.h"
 #include "texturemanager.h"
 #include "stringkey.h"
 
-namespace Glinda
+namespace Glinie
 	{
 	class Archive;
 	class FaceRejectionTree;

@@ -5,14 +5,14 @@ target[name[filesystem.h] type[include]]
 /**\file filesystem.h \brief Definition of an abstract fil system
  */
 
-#ifndef GLINDA_FILESYSTEM_H
-#define GLINDA_FILESYSTEM_H
+#ifndef GLINIE_FILESYSTEM_H
+#define GLINIE_FILESYSTEM_H
 
 #include "datasource.h"
 #include "string.h"
 #include <memory>
 
-namespace Glinda
+namespace Glinie
 	{
 	/**\brief An abstract filesystem
 	 *

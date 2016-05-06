@@ -5,12 +5,12 @@ target[name[datasource.h] type[include]]
 /**\file datasource.h \brief Definition of an abstract data source
  */
 
-#ifndef GLINDA_DATASOURCE_H
-#define GLINDA_DATASOURCE_H
+#ifndef GLINIE_DATASOURCE_H
+#define GLINIE_DATASOURCE_H
 
 #include <cstddef>
 
-namespace Glinda
+namespace Glinie
 	{
 	/**\brief An abstract data source.
 	 *

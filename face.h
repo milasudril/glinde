@@ -3,13 +3,13 @@ target[name[face.h] type[include]]
 dependency[face.o]
 #endif
 
-#ifndef GLINDA_FACE_H
-#define GLINDA_FACE_H
+#ifndef GLINIE_FACE_H
+#define GLINIE_FACE_H
 
 #include "arrayfixed.h"
 #include <glm/vec3.hpp>
 
-namespace Glinda
+namespace Glinie
 	{
 	struct Face:public ArrayFixed<glm::vec3,3>
 		{

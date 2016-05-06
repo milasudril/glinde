@@ -2,12 +2,12 @@
 target[name[range.h] type[include]]
 #endif
 
-#ifndef GLINDA_RANGE_H
-#define GLINDA_RANGE_H
+#ifndef GLINIE_RANGE_H
+#define GLINIE_RANGE_H
 
 #include <cstddef>
 
-namespace Glinda
+namespace Glinie
 	{
 	template<class T>
 	class Range

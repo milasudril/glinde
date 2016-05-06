@@ -2,8 +2,8 @@
 target[name[arrayinit.h] type[include]]
 #endif
 
-#ifndef GLINDA_ARRAYINIT_H
-#define GLINDA_ARRAYINIT_H
+#ifndef GLINIE_ARRAYINIT_H
+#define GLINIE_ARRAYINIT_H
 
 /**\file arrayinit.h \brief Array initialization routines
  */
@@ -14,7 +14,7 @@ target[name[arrayinit.h] type[include]]
 #include <cstring>
 #include <utility>
 
-namespace Glinda
+namespace Glinie
 	{
 	/** \brief Array initialization routines.
 	 *

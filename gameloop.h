@@ -7,10 +7,10 @@ dependency[gameloop.o]
  *
  */
 
-#ifndef GLINDA_GAMELOOP_H
-#define GLINDA_GAMELOOP_H
+#ifndef GLINIE_GAMELOOP_H
+#define GLINIE_GAMELOOP_H
 
-namespace Glinda
+namespace Glinie
 	{
 	class Window;
 	class Timer;
