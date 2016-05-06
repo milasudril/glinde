@@ -15,7 +15,7 @@ int main()
 	try
 		{
 		Archive test("test.zip");
-		Image testimg{Archive::File(test,"diffuse.png")};
+		Image testimg{Archive::File(test,"diffuse.png"),0};
 		}
 	catch(const ErrorMessage& message)
 		{

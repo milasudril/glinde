@@ -8,8 +8,6 @@ target
 	]
 #endif
 
-#define NDEBUG
-
 #define GLM_FORCE_RADIANS
 
 #include "renderer.h"
@@ -19,6 +17,7 @@ target
 #include "debug.h"
 #include "range.h"
 #include "model.h"
+#include "image.h"
 
 using namespace Glinda;
 
@@ -129,7 +128,17 @@ void Renderer::render(const Range< const Mesh* >& meshes) noexcept
 		vertices.attributesBind(0,3);
 		normals.attributesBind(1,3);
 		uvs.attributesBind(2,2);
-		texture.dataSet(**(mesh->texturesGet().begin()));
+			{
+			auto& texture=**(mesh->texturesGet().begin());
+			auto id=texture.idGet();
+			auto tex=textures.resourceGet(id);
+			if(!tex.second)
+				{
+				GLINDA_DEBUG_PRINT("Cache miss for texture %u",id);
+				tex.first.tagSet(id).objectGet().dataSet(texture);
+				}
+			tex.first.objectGet().bind();
+			}
 		vertex_indices.draw(0);
 
 		++mesh;

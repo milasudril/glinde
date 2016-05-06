@@ -9,6 +9,7 @@ dependency[gltexture.o]
 #define GLINDA_GLTEXTURE_H
 
 #include <GL/glew.h>
+#include <utility>
 
 namespace Glinda
 	{
@@ -17,31 +18,44 @@ namespace Glinda
 	class GlTexture
 		{
 		public:
+			GlTexture(const GlTexture&)=delete;
+			GlTexture& operator=(const GlTexture&)=delete;
+
+			GlTexture(GlTexture&& obj) noexcept:m_id(obj.m_id)
+				{obj.m_id=0;}
+
+			GlTexture& operator=(GlTexture&& obj) noexcept
+				{
+				std::swap(m_id,obj.m_id);
+				return *this;
+				}
+
 			GlTexture()
 				{
-				r_source=nullptr;
-				glGenTextures(1,&id);
+				glGenTextures(1,&m_id);
 				bind();
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
 				}
 
 			void dataSet(const Image& source) noexcept;
 
 			void bind()
 				{
-				glBindTexture(GL_TEXTURE_2D,id);
+				glBindTexture(GL_TEXTURE_2D,m_id);
 				}
 
 			~GlTexture()
 				{
-				glBindTexture(GL_TEXTURE_2D,0);
-				glDeleteTextures(1,&id);
+				if(m_id!=0)
+					{
+					glBindTexture(GL_TEXTURE_2D,0);
+					glDeleteTextures(1,&m_id);
+					}
 				}
 
 		private:
-			const Image* r_source;
-			GLuint id;
+			GLuint m_id;
 		};
 	}
 

@@ -7,6 +7,7 @@ target[name[texturemanager.o] type[object]]
 #include "stringkey.h"
 #include "image.h"
 #include "errormessage.h"
+#include "narrow_cast.h"
 
 using namespace Glinda;
 
@@ -23,9 +24,11 @@ Image& TextureManager::textureGet(const char* sibling,const char* filename)
 	if(ip!=m_images.end())
 		{return ip->second;}
 
+	auto id=narrow_cast<uint32_t>( m_images.size() );
+
 	return m_images.emplace(std::pair<Stringkey,Image>
 		{
 		 Stringkey(filename_full.begin())
-		,Image( r_fs.fileReferenceCreate(filename_full.begin()) )
+		,Image( r_fs.fileReferenceCreate(filename_full.begin()) , id)
 		}).first->second;
 	}

@@ -15,13 +15,25 @@ namespace Glinda
 		public:
 			using ArrayDynamic<char>::begin;
 			using ArrayDynamic<char>::end;
-			using ArrayDynamic<char>::length;
+
+			const char* end() const noexcept
+				{return ArrayDynamic<char>::end()-1;}
+
+			char* end() noexcept
+				{return ArrayDynamic<char>::end()-1;}
+
+			unsigned int length() const noexcept
+				{return ArrayDynamic<char>::length()-1;}
+
 
 			String()
-				{}
+				{ArrayDynamic<char>::append('\0');}
 
 			explicit String(const char* c_str)
-				{append(c_str);}
+				{
+				ArrayDynamic<char>::append('\0');
+				append(c_str);
+				}
 
 			const char* beginAfter(char ch) const noexcept;
 
@@ -36,13 +48,13 @@ namespace Glinda
 
 			String& append(const String& str)
 				{
-				ArrayDynamic<char>::append(str);
+				ArrayDynamic<char>::truncate().append(str);
 				return *this;
 				}
 
 			String& append(char ch)
 				{
-				ArrayDynamic<char>::append(ch);
+				ArrayDynamic<char>::truncate().append(ch).append('\0');
 				return *this;
 				}
 
@@ -57,17 +69,13 @@ namespace Glinda
 
 			String& clear() noexcept
 				{
-				if(begin()!=nullptr)
-					{
-					memClear();
-					ArrayDynamic<char>::clear();
-					}
+				ArrayDynamic<char>::clear();
+				ArrayDynamic<char>::append('\0');
 				return *this;
 				}
 
 		private:
 			String& appendImpl(const char* c_str);
-			void memClear();
 		};
 
 		bool operator==(const String& a,const char* b) noexcept;

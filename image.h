@@ -19,9 +19,10 @@ namespace Glinda
 		public:
 			typedef half SampleType;
 
-			explicit Image(DataSource&& source):Image(source){}
-			explicit Image(DataSource& source);
-			explicit Image(uint32_t width,uint32_t height,uint32_t n_channels);
+			explicit Image(DataSource&& source,uint32_t id):Image(source,id){}
+			explicit Image(DataSource& source,uint32_t id);
+			explicit Image(uint32_t width,uint32_t height,uint32_t n_channels
+				,uint32_t id);
 
 			SampleType* pixelsGet() noexcept
 				{return m_pixels.begin();}
@@ -38,6 +39,9 @@ namespace Glinda
 			uint32_t channelCountGet() const noexcept
 				{return m_properties.data.n_channels;}
 
+			uint32_t idGet() const noexcept
+				{return m_properties.data.id;}
+
 		private:
 			ArraySimple<SampleType> m_pixels;
 			union //Force vectorization when possible
@@ -48,7 +52,7 @@ namespace Glinda
 					uint32_t width;
 					uint32_t height;
 					uint32_t n_channels;
-					uint32_t reserved;
+					uint32_t id;
 					} data;
 				} m_properties;
 		};

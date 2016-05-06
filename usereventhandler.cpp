@@ -156,7 +156,7 @@ void UserEventHandler::onMouseDown(Window& source,int button)
 	switch(button)
 		{
 		case 1:
-			player.normalImpulseSet(glm::vec3(0.0f,0.0f,1.0f*m*g*t));
+			player.normalImpulseSet(glm::vec3(0.0f,0.0f,1.5f*m*g*t));
 			break;
 		}
 	}

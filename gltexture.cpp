@@ -13,12 +13,7 @@ void GlTexture::dataSet(const Image& source) noexcept
 /*	GLINDA_DEBUG_PRINT("Upload texture data %u x %u"
 		,source.widthGet(),source.heightGet());*/
 
-	glBindTexture(GL_TEXTURE_2D,id);
-
-	if(&source==r_source)
-		{
-		return;
-		}
+	glBindTexture(GL_TEXTURE_2D,m_id);
 
 	switch(source.channelCountGet())
 		{
@@ -47,6 +42,5 @@ void GlTexture::dataSet(const Image& source) noexcept
 				,GL_HALF_FLOAT
 				,source.pixelsGet());
 		}
-	r_source=&source;
-
+	glGenerateMipmap(GL_TEXTURE_2D);
 	}

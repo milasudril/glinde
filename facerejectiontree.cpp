@@ -95,11 +95,11 @@ FaceRejectionTree::Node* FaceRejectionTree::nodeCreate(
 	,unsigned int depth
 	,const Range<const Face*>& faces)
 	{
-	GLINDA_DEBUG_PRINT("Building FaceRejectionTree level %u for box "
+/*	GLINDA_DEBUG_PRINT("Building FaceRejectionTree level %u for box "
 		"(%.8g,%.8g,%.8g) - (%.8g,%.8g,%.8g)"
 		,depth
 		,box.min.x,box.min.y,box.min.z
-		,box.max.x,box.max.y,box.max.z);
+		,box.max.x,box.max.y,box.max.z);*/
 	auto size=0.5f*glm::vec4(box.size(),0.0f);
 
 //	Terminate if the box becomes too small

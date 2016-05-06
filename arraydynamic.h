@@ -202,8 +202,8 @@ namespace Glinda
 			ArrayDynamic& append(const T& obj)
 				{
 				auto length_new=static_cast<size_t>( length() ) + 1;
-				if(capacity() < length_new + 1)
-					{resize(length_new + 1);}
+				if(capacity() < length_new)
+					{resize(length_new);}
 				*end() = obj;
 				m_content.data.length=static_cast<uint32_t>(length_new);
 				return *this;
@@ -219,8 +219,8 @@ namespace Glinda
 			ArrayDynamic& append(T&& obj)
 				{
 				auto length_new=length() + 1;
-				if(capacity() < length_new + 1)
-					{resize(length_new + 1);}
+				if(capacity() < length_new)
+					{resize(length_new);}
 				*end() = std::move(obj);
 				m_content.data.length=length_new;
 				return *this;
@@ -236,20 +236,22 @@ namespace Glinda
 			 * \endcode
 			 *
 			 */
-			void truncate()
+			ArrayDynamic& truncate()
 				{
 				assert(length()!=0);
 				ArrayInit::destroy(end()-1,end());
 				--m_content.data.length;
+				return *this;
 				}
 
 			/**\brief  Removes the <var>N</var> last element from the array.
 			 */
-			void truncate(uint32_t N)
+			ArrayDynamic& truncate(uint32_t N)
 				{
 				assert(length() >= N);
 				ArrayInit::destroy(end()-N,end());
 				m_content.data.length-=N;
+				return *this;
 				}
 
 			/**\brief Removes all elements from the array.
@@ -262,8 +264,8 @@ namespace Glinda
 			 * \endcode
 			 *
 			 */
-			void clear()
-				{truncate(length());}
+			ArrayDynamic& clear()
+				{return truncate(length());}
 
 		private:
 			union
@@ -305,7 +307,6 @@ namespace Glinda
 	//	GLINDA_DEBUG_PRINT("Resizing block of size %u to %zu",m_content.data.capacity,N_2);
 
 		T* block_new=reinterpret_cast<T*>(memoryRealloc(begin(),N_2*sizeof(T)));
-		memset(block_new+length(),0,(N_2-length())*sizeof(T));
 		m_content.data.pointer=block_new;
 		m_content.data.capacity=static_cast<uint32_t>(N_2);
 		}

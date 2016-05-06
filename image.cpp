@@ -184,7 +184,7 @@ void PNGReader::headerRead()
 	png_set_sig_bytes(m_handle,8);
 	png_read_info(m_handle,m_info);
 	m_width=narrow_cast<uint32_t>( png_get_image_width(m_handle,m_info) );
-	m_height=narrow_cast<uint32_t>( png_get_image_width(m_handle,m_info) );
+	m_height=narrow_cast<uint32_t>( png_get_image_height(m_handle,m_info) );
 	channelBitsConversionSetup();
 
 	if(png_get_valid(m_handle,m_info,PNG_INFO_sRGB))
@@ -317,8 +317,9 @@ static ColorConverter converterGet(PNGReader::ColorType color_type)
 
 
 
-Image::Image(DataSource& source)
+Image::Image(DataSource& source,uint32_t id)
 	{
+	GLINDA_DEBUG_PRINT("Reading image %s",source.nameGet());
 		{
 		uint8_t magic[8]="xxxxxxx";
 		if(source.read(magic,8)!=8)
@@ -338,7 +339,7 @@ Image::Image(DataSource& source)
 	reader.headerRead();
 
 	m_properties.x=vec4_t<uint32_t>
-		{reader.widthGet(),reader.heightGet(),reader.channelCountGet(),0};
+		{reader.widthGet(),reader.heightGet(),reader.channelCountGet(),id};
 
 	m_pixels=ArraySimple<SampleType>(reader.widthGet()*reader.heightGet()
 		*reader.channelCountGet());
@@ -352,10 +353,12 @@ Image::Image(DataSource& source)
 		{
 		converter(*this);
 		}
+
+	GLINDA_DEBUG_PRINT("Loaded an image of size %u x %u",widthGet(),heightGet());
 	}
 
-Image::Image(uint32_t width,uint32_t height,uint32_t n_channels):
+Image::Image(uint32_t width,uint32_t height,uint32_t n_channels,uint32_t id):
 	m_pixels(width*height*n_channels)
-	,m_properties{width,height,n_channels,0}
+	,m_properties{width,height,n_channels,id}
 	{
 	}

@@ -6,6 +6,7 @@ dependency[renderer.o]
 #ifndef GLINDA_RENDERER_H
 #define GLINDA_RENDERER_H
 
+#include "resourcecache.h"
 #include "glprogram.h"
 #include "glvertexarray.h"
 #include "glvertexbuffer.h"
@@ -41,13 +42,15 @@ namespace Glinda
 			GlVertexBuffer uvs;
 			GlVertexBuffer normals;
 			GlElementArrayBuffer vertex_indices;
-			GlTexture texture;
+			ResourceCache<GlTexture> textures;
 
 			glm::mat4 P;
 			GLuint MVP_id;
 			GLuint V_id;
 			GLuint M_id;
 			GLuint lightpos_id;
+
+
 			GLuint diffuse_id;
 
 			void render(const Range< const Mesh* >& meshes) noexcept;
