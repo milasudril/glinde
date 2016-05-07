@@ -3,7 +3,7 @@ target[name[boundingbox.h] type[include]]
 dependency[boundingbox.o]
 #endif
 
-/**\file boundingbox.h \file Defines the BoundingBox class
+/**\file boundingbox.h \brief Defines the BoundingBox class
  */
 
 #ifndef GLINIE_BOUNDINGBOX_H
@@ -31,15 +31,28 @@ namespace Glinie
 
 		/**\brief Computes the extents of the bounding box and returns the result
 		 * as a vector.
+		 *
+		 * This function computes the extents of the bounding box.
+		 *
 		*/
 		glm::vec3 size() const noexcept
 			{return glm::vec3( max - min );}
 
+		/**\brief Computes the midpoint of the bounding box.
+		 *
+		 * This function computes the midpoint of the bounding box.
+		*/
 		glm::vec4 mid() const noexcept
 			{return 0.5f*(max + min);}
 		};
 
-	/**\brief Tests whether or not `point` is inside the bounding box
+	/**\brief Tests whether or not <var>point</var> is inside the bounding box
+	 *
+	 * This function tests whether or not <var>point</var> is inside <var>bb</var>.
+	 * box.
+	 *
+	 * \return A non-zero value if and only <var>point</var> is inside <var>bb</var>.
+	 *
 	*/
 	inline bool inside(const glm::vec4& point,const BoundingBox& bb) noexcept
 		{
@@ -49,10 +62,33 @@ namespace Glinie
 			&& point.x<max.x && point.y<max.y && point.z<max.z;
 		}
 
+	/**\brief Tests whether or not <em>any</em> of the given vertices lay inside
+	 * the bounding box <var>box</var>.
+	 *
+	 * This function tests whether or not <em>any</em> of the given vertices lay inside
+	 * the bounding box <var>box</var>.
+	 *
+	 * \return A non-zero value non-zero if and only if any of the vertices is
+	 * inside <var>box</var>.
+	 *
+	*/
 	bool insideAny(const Range<const glm::vec3*>& vertices,const BoundingBox& box) noexcept;
+
+	/**\brief Tests whether or not <em>all</em> of the given vertices lay inside
+	 * the bounding box <var>box</var>.
+	 *
+	 * This function tests whether or not <em>all</em> of the given vertices lay inside
+	 * the bounding box <var>box</var>.
+	 *
+	 * \return A non-zero value if and only if all vertices is inside <var>box</var>.
+	*/
 	bool insideAll(const Range<const glm::vec3*>& vertices,const BoundingBox& box) noexcept;
 
-	ArrayFixed<Face,12> facesGet(const BoundingBox&) noexcept;
+	/**\brief Generates a fixed array containing all 12 faces enclosing <var>box</var>.
+	 *
+	 * This function generates a fixed array containing all 12 faces enclosing <var>box</var>.
+	*/
+	ArrayFixed<Face,12> facesGet(const BoundingBox& box) noexcept;
 	}
 
 #endif

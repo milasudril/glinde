@@ -7,4 +7,4 @@ glinie-json-exporter.zip: glinie-json-exporter/__init__.py
 	zip glinie-json-exporter.zip glinie-json-exporter/__init__.py
 
 test.zip: test
-	./makegame.sh
+	./makegame.sh test
