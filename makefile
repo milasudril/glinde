@@ -1,10 +1,10 @@
-all: glinie-json-exporter.zip glinie test.zip
+all: glinde-json-exporter.zip glinde test.zip
 
-glinie:
+glinde:
 	wand profile[release]
 
-glinie-json-exporter.zip: glinie-json-exporter/__init__.py
-	zip glinie-json-exporter.zip glinie-json-exporter/__init__.py
+glinde-json-exporter.zip: glinde-json-exporter/__init__.py
+	zip glinde-json-exporter.zip glinde-json-exporter/__init__.py
 
 test.zip: test
 	./makegame.sh test

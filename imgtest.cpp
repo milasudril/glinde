@@ -7,7 +7,7 @@ target[name[imgtest] type[application]]
 #include "logwriter.h"
 #include "errormessage.h"
 
-using namespace Glinie;
+using namespace Glinde;
 
 int main()
 	{

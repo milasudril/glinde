@@ -5,14 +5,14 @@ target[name[arrayfixed.h] type[include]]
 /** \file arrayfixed.h \brief Definition of ArrayFixed
 */
 
-#ifndef GLINIE_ARRAYFIXED_H
-#define GLINIE_ARRAYFIXED_H
+#ifndef GLINDE_ARRAYFIXED_H
+#define GLINDE_ARRAYFIXED_H
 
 #include "range.h"
 #include <cstddef>
 #include <initializer_list>
 
-namespace Glinie
+namespace Glinde
 	{
 	/**\brief Class representing an array allocated at compile-time
 	 *

@@ -6,15 +6,15 @@ dependency[boundingbox.o]
 /**\file boundingbox.h \brief Defines the BoundingBox class
  */
 
-#ifndef GLINIE_BOUNDINGBOX_H
-#define GLINIE_BOUNDINGBOX_H
+#ifndef GLINDE_BOUNDINGBOX_H
+#define GLINDE_BOUNDINGBOX_H
 
 #include "face.h"
 
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 
-namespace Glinie
+namespace Glinde
 	{
 	template<class T>
 	class Range;

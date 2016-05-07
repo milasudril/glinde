@@ -3,12 +3,12 @@ target[name[window.h] type[include]]
 dependency[window.o]
 #endif
 
-#ifndef GLINIE_WINDOW_H
-#define GLINIE_WINDOW_H
+#ifndef GLINDE_WINDOW_H
+#define GLINDE_WINDOW_H
 
 #include <cstdint>
 
-namespace Glinie
+namespace Glinde
 	{
 	class Window
 		{

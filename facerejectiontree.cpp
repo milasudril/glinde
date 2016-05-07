@@ -9,7 +9,7 @@ target[name[facerejectiontree.o] type[object]]
 #include "face.h"
 #include <algorithm>
 
-using namespace Glinie;
+using namespace Glinde;
 static constexpr unsigned int CHILD_COUNT=8;
 
 struct FaceRejectionTree::Node
@@ -62,7 +62,7 @@ ArrayDynamic<unsigned int> facesFind(const Range<const unsigned int*>& face_indi
 	,const Range< const Face* >& faces)
 	{
 	ArrayDynamic<unsigned int> ret;
-//	GLINIE_DEBUG_PRINT("Number of faces: %u",face_indices.length());
+//	GLINDE_DEBUG_PRINT("Number of faces: %u",face_indices.length());
 
 	auto face_index=face_indices.begin();
 	auto face_index_end=face_indices.end();
@@ -75,12 +75,12 @@ ArrayDynamic<unsigned int> facesFind(const Range<const unsigned int*>& face_indi
 		auto index=*face_index;
 		assert(index < faces.length());
 
-	//	GLINIE_DEBUG_PRINT("  Hit test face %u@%u",face,3*face);
+	//	GLINDE_DEBUG_PRINT("  Hit test face %u@%u",face,3*face);
 	//	TODO add line cross check
 		if(insideAny(f[index],box) || intersect(f[index],boxFaces))
 			{
 		//	if(box.max.z>=2 && f[index][0].z>0)
-			//	{GLINIE_DEBUG_PRINT("%u is inside box",index);}
+			//	{GLINDE_DEBUG_PRINT("%u is inside box",index);}
 			ret.append(index);
 			}
 		++face_index;
@@ -95,7 +95,7 @@ FaceRejectionTree::Node* FaceRejectionTree::nodeCreate(
 	,unsigned int depth
 	,const Range<const Face*>& faces)
 	{
-/*	GLINIE_DEBUG_PRINT("Building FaceRejectionTree level %u for box "
+/*	GLINDE_DEBUG_PRINT("Building FaceRejectionTree level %u for box "
 		"(%.8g,%.8g,%.8g) - (%.8g,%.8g,%.8g)"
 		,depth
 		,box.min.x,box.min.y,box.min.z

@@ -8,7 +8,7 @@ dependency[texturemanager.o]
 
 #include <map>
 
-namespace Glinie
+namespace Glinde
 	{
 	class Image;
 	class Filesystem;

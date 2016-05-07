@@ -10,9 +10,9 @@ target[name[gameloop.o] type[object]]
 
 #include <ctime>
 
-using namespace Glinie;
+using namespace Glinde;
 
-void Glinie::gameLoopRun(UIManager& ui,Window& window,const Timer& world_clock
+void Glinde::gameLoopRun(UIManager& ui,Window& window,const Timer& world_clock
 	,World& world)
 	{
 	uint64_t frame_count=0;

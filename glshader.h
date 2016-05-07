@@ -4,12 +4,12 @@ dependency[GLEW;external]
 dependency[glshader.o]
 #endif
 
-#ifndef GLINIE_GLSHADER_H
-#define GLINIE_GLSHADER_H
+#ifndef GLINDE_GLSHADER_H
+#define GLINDE_GLSHADER_H
 
 #include <GL/glew.h>
 
-namespace Glinie
+namespace Glinde
 	{
 	class GlShader
 		{

@@ -5,15 +5,15 @@ target[name[camera.h] type[include]]
 /**\file camera.h \brief Defines the Camera class.
  */
 
-#ifndef GLINIE_CAMERA_H
-#define GLINIE_CAMERA_H
+#ifndef GLINDE_CAMERA_H
+#define GLINDE_CAMERA_H
 
 #define GLM_FORCE_RADIANS
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-namespace Glinie
+namespace Glinde
 	{
 	/**\brief This class describes a camera
 	*/

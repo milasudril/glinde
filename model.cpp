@@ -9,14 +9,14 @@ target[name[model.o] type[object]]
 #include "narrow_cast.h"
 #include "logwriter.h"
 
-using namespace Glinie;
+using namespace Glinde;
 
 static ArraySimple<Mesh>
 meshesLoad(TextureManager& textures,const ResourceObject& meshes
 	,const char* source_name)
 	{
 	auto n_meshes=meshes.objectCountGet();
-	GLINIE_DEBUG_PRINT("Got %zu individual meshes",n_meshes);
+	GLINDE_DEBUG_PRINT("Got %zu individual meshes",n_meshes);
 
 	return std::move(ArraySimple<Mesh>(n_meshes,[&meshes,&textures,source_name](size_t l)
 		{
@@ -31,7 +31,7 @@ framesLoad(TextureManager& textures,const ResourceObject& obj
 	{
 	auto frames=obj.objectGet("frames");
 	auto n_frames=frames.objectCountGet();
-	GLINIE_DEBUG_PRINT("Got %zu frames",n_frames);
+	GLINDE_DEBUG_PRINT("Got %zu frames",n_frames);
 
 	return std::move(ArraySimple<Model::Frame>(n_frames,[&frames,&textures,source_name](size_t k)
 		{

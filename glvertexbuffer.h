@@ -4,8 +4,8 @@ dependency[GLEW;external]
 dependency[GL;external]
 #endif
 
-#ifndef GLINIE_GLVERTEXBUFFER_H
-#define GLINIE_GLVERTEXBUFFER_H
+#ifndef GLINDE_GLVERTEXBUFFER_H
+#define GLINDE_GLVERTEXBUFFER_H
 
 #include "debug.h"
 #include "range.h"
@@ -14,7 +14,7 @@ dependency[GL;external]
 #include <glm/vec2.hpp>
 #include <cassert>
 
-namespace Glinie
+namespace Glinde
 	{
 	class GlVertexBuffer
 		{

@@ -6,11 +6,11 @@ target[name[gltexture.o] type[object]]
 #include "image.h"
 #include "debug.h"
 
-using namespace Glinie;
+using namespace Glinde;
 
 void GlTexture::dataSet(const Image& source) noexcept
 	{
-/*	GLINIE_DEBUG_PRINT("Upload texture data %u x %u"
+/*	GLINDE_DEBUG_PRINT("Upload texture data %u x %u"
 		,source.widthGet(),source.heightGet());*/
 
 	glBindTexture(GL_TEXTURE_2D,m_id);

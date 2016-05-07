@@ -6,7 +6,7 @@ target[name[errormessage.o] type[object]]
 #include <cstdio>
 #include <cstdarg>
 
-using namespace Glinie;
+using namespace Glinde;
 
 ErrorMessage::ErrorMessage(const char* format,...) noexcept
 	{

@@ -9,7 +9,7 @@ target[name[texturemanager.o] type[object]]
 #include "errormessage.h"
 #include "narrow_cast.h"
 
-using namespace Glinie;
+using namespace Glinde;
 
 TextureManager::TextureManager(Filesystem& fs):r_fs(fs)
 	{}

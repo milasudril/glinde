@@ -3,8 +3,8 @@ target[name[mesh.h] type[include]]
 dependency[mesh.o]
 #endif
 
-#ifndef GLINIE_MESH_H
-#define GLINIE_MESH_H
+#ifndef GLINDE_MESH_H
+#define GLINDE_MESH_H
 
 #include "arraysimple.h"
 #include "arrayfixed.h"
@@ -15,7 +15,7 @@ dependency[mesh.o]
 #include <glm/vec3.hpp>
 #include <map>
 
-namespace Glinie
+namespace Glinde
 	{
 	class Image;
 	class TextureManager;

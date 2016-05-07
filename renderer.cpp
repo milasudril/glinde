@@ -19,7 +19,7 @@ target
 #include "model.h"
 #include "image.h"
 
-using namespace Glinie;
+using namespace Glinde;
 
 static const char* g_frag_shader="#version 450 core\n"
 	"out vec3 color;"
@@ -134,7 +134,7 @@ void Renderer::render(const Range< const Mesh* >& meshes) noexcept
 			auto tex=textures.resourceGet(id);
 			if(!tex.second)
 				{
-				GLINIE_DEBUG_PRINT("Cache miss for texture %u",id);
+				GLINDE_DEBUG_PRINT("Cache miss for texture %u",id);
 				tex.first.tagSet(id).objectGet().dataSet(texture);
 				}
 			tex.first.objectGet().bind();
@@ -181,7 +181,7 @@ void Renderer::sceneRender(World& world,const WorldObject& viewer) noexcept
 
 void Renderer::viewportSizeSet(int width,int height) noexcept
 	{
-	GLINIE_DEBUG_PRINT("Viewport size changed to %d x %d",width,height);
+	GLINDE_DEBUG_PRINT("Viewport size changed to %d x %d",width,height);
 	glViewport(0,0,width,height);
 	P=glm::perspective(2.5f*std::acos(0.0f)/3.0f,float(width)/float(height),0.1f,1000.0f);
 	}

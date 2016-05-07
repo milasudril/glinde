@@ -9,7 +9,7 @@ target[name[string.o] type[object]]
 #include <cstdlib>
 #include <limits>
 
-using namespace Glinie;
+using namespace Glinde;
 
 String& String::appendImpl(const char* c_str)
 	{
@@ -23,14 +23,14 @@ String& String::appendImpl(const char* c_str)
 	return *this;
 	}
 
-bool Glinie::operator==(const String& a,const char* b) noexcept
+bool Glinde::operator==(const String& a,const char* b) noexcept
 	{
 	if(a.length()==0 && *b!='\0')
 		{return 0;}
 	return strcmp(a.begin(),b)==0;
 	}
 
-bool Glinie::operator==(const String& a,const String& b) noexcept
+bool Glinde::operator==(const String& a,const String& b) noexcept
 	{
 	if(a.length()!=b.length())
 		{return 0;}

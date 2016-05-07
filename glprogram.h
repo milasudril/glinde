@@ -4,14 +4,14 @@ dependency[GLEW;external]
 dependency[glprogram.o]
 #endif
 
-#ifndef GLINIE_GLPROGRAM_H
-#define GLINIE_GLPROGRAM_H
+#ifndef GLINDE_GLPROGRAM_H
+#define GLINDE_GLPROGRAM_H
 
 #include "glshader.h"
 
 #include <GL/glew.h>
 
-namespace Glinie
+namespace Glinde
 	{
 	class GlProgram
 		{

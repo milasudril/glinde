@@ -2,15 +2,15 @@
 target[name[cpuinfo.h] type[include]]
 #endif
 
-#ifndef GLINIE_CPUINFO_H
-#define GLINIE_CPUINFO_H
+#ifndef GLINDE_CPUINFO_H
+#define GLINDE_CPUINFO_H
 
 /** \file cpuinfo.h \brief Routines for getting properties of the CPU
  */
 
 #include <cstdint>
 
-namespace Glinie
+namespace Glinde
 	{
 	/**\brief Routines for getting properties of the CPU
 	*/

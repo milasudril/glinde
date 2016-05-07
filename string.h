@@ -3,12 +3,12 @@ target[name[string.h] type[include]]
 dependency[string.o]
 #endif
 
-#ifndef GLINIE_STRING_H
-#define GLINIE_STRING_H
+#ifndef GLINDE_STRING_H
+#define GLINDE_STRING_H
 
 #include "arraydynamic.h"
 
-namespace Glinie
+namespace Glinde
 	{
 	class String:private ArrayDynamic<char>
 		{

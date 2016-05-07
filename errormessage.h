@@ -11,11 +11,11 @@ dependency[errormessage.o]
 
 #include <cstddef>
 
-namespace Glinie
+namespace Glinde
 	{
 	/**\brief Class representing a formated error message.
 	 *
-	 * The exception handling within Glinie is based on throwing ErrorMessage
+	 * The exception handling within Glinde is based on throwing ErrorMessage
 	 * objects. An ErrorMessage contains a formated string describing the
 	 * exception in a user-friendly way. Typically, the message is formated at
 	 * the point where the exception is thrown. The message can then be catched

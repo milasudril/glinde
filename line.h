@@ -2,12 +2,12 @@
 target[name[line.h] type[include]]
 #endif
 
-#ifndef GLINIE_LINE_H
-#define GLINIE_LINE_H
+#ifndef GLINDE_LINE_H
+#define GLINDE_LINE_H
 
 #include <glm/vec4.hpp>
 
-namespace Glinie
+namespace Glinde
 	{
 	struct Line
 		{

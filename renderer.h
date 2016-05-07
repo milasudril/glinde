@@ -3,8 +3,8 @@ target[name[renderer.h] type[include]]
 dependency[renderer.o]
 #endif
 
-#ifndef GLINIE_RENDERER_H
-#define GLINIE_RENDERER_H
+#ifndef GLINDE_RENDERER_H
+#define GLINDE_RENDERER_H
 
 #include "resourcecache.h"
 #include "glprogram.h"
@@ -17,7 +17,7 @@ dependency[renderer.o]
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-namespace Glinie
+namespace Glinde
 	{
 	class WorldObject;
 	class World;

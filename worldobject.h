@@ -2,8 +2,8 @@
 target[name[worldobject.h] type[include]]
 #endif
 
-#ifndef GLINIE_WORLDOBJECT_H
-#define GLINIE_WORLDOBJECT_H
+#ifndef GLINDE_WORLDOBJECT_H
+#define GLINDE_WORLDOBJECT_H
 
 #define GLM_FORCE_RADIANS
 
@@ -13,7 +13,7 @@ target[name[worldobject.h] type[include]]
 //#include <glm/glm.hpp>
 //#include <glm/gtc/matrix_transform.hpp>
 
-namespace Glinie
+namespace Glinde
 	{
 
 	class WorldObject

@@ -7,13 +7,13 @@ dependency[face.o]
 /**\file face.h \brief Defines a Face
  */
 
-#ifndef GLINIE_FACE_H
-#define GLINIE_FACE_H
+#ifndef GLINDE_FACE_H
+#define GLINDE_FACE_H
 
 #include "arrayfixed.h"
 #include <glm/vec3.hpp>
 
-namespace Glinie
+namespace Glinde
 	{
 	/**\brief A lose triangle that is part of a Mesh.
 	 *

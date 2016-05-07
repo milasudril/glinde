@@ -6,10 +6,10 @@ dependency[logwriter.o]
 /**\file logwriter.h \brief Functions for writing log messages.
  */
 
-#ifndef GLINIE_LOGWRITER_H
-#define GLINIE_LOGWRITER_H
+#ifndef GLINDE_LOGWRITER_H
+#define GLINDE_LOGWRITER_H
 
-namespace Glinie
+namespace Glinde
 	{
 #ifdef NDEBUG
 	enum class LogMessageType:unsigned int{INFORMATION,WARNING,ERROR};

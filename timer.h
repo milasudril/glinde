@@ -6,12 +6,12 @@ dependency[timer.o]
 /**\file timer.h \brief Defines a periodic timer.
  */
 
-#ifndef GLINIE_TIMER_H
-#define GLINIE_TIMER_H
+#ifndef GLINDE_TIMER_H
+#define GLINDE_TIMER_H
 
 #include <cstdint>
 
-namespace Glinie
+namespace Glinde
 	{
 	/**\brief A periodic timer that ticks at predefined frequency.
 	 *

@@ -5,8 +5,8 @@ target[name[vectortype.h] type[include]]
 /**\file vectortype.h \brief Defines data types for enabling vectorized code.
  */
 
-#ifndef GLINIE_VECTORTYPE_H
-#define GLINIE_VECTORTYPE_H
+#ifndef GLINDE_VECTORTYPE_H
+#define GLINDE_VECTORTYPE_H
 
 #ifdef DOXYGEN
 #define __attribute__(x)
@@ -15,7 +15,7 @@ target[name[vectortype.h] type[include]]
 #define vector_type(Type) Type
 #endif
 
-namespace Glinie
+namespace Glinde
 	{
 #ifdef DOXYGEN
 	/**\brief class used to define types that uses vectorized instruction sets
@@ -39,10 +39,10 @@ namespace Glinie
 	 *
 	 * This type represents a vector with four components. For example,
 	 * \code
-	 * Glinie::vec4_t<int> a{1,2,3,4};
-	 * Glinie::vec4_t<int> b{4,3,2,1};
+	 * Glinde::vec4_t<int> a{1,2,3,4};
+	 * Glinde::vec4_t<int> b{4,3,2,1};
 	 * auto c=a+b;
-	 * Glinie::logWrite(LogMessageType::INFORMATION,"c=[%d,%d,%d,%d]"
+	 * Glinde::logWrite(LogMessageType::INFORMATION,"c=[%d,%d,%d,%d]"
 	 *     ,c[0],c[1],c[2],c[3]);
 	 * \endcode
 	 * will print
@@ -58,10 +58,10 @@ namespace Glinie
 	 *
 	 * This type represents a vector with four components. For example,
 	 * \code
-	 * Glinie::vec2_t<int> a{1,2};
-	 * Glinie::vec2_t<int> b{4,3};
+	 * Glinde::vec2_t<int> a{1,2};
+	 * Glinde::vec2_t<int> b{4,3};
 	 * auto c=a+b;
-	 * Glinie::logWrite(LogMessageType::INFORMATION,"c=[%d,%d]",c[0],c[1]);
+	 * Glinde::logWrite(LogMessageType::INFORMATION,"c=[%d,%d]",c[0],c[1]);
 	 * \endcode
 	 * will print
 	 *

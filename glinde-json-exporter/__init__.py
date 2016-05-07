@@ -17,12 +17,12 @@
 # ##### END GPL LICENSE BLOCK #####
 
 bl_info={
-	'name': 'Glinie JSON mesh exporter',
+	'name': 'Glinde JSON mesh exporter',
 	'author': 'Torbjörn Rathsman',
 	'version': (1, 0, 0),
 	'blender': (2, 77, 0),
 	'location': 'File > Import-Export',
-	'description': 'Exports mesh objects as a Glinie JSON mesh',
+	'description': 'Exports mesh objects as a Glinde JSON mesh',
 	'category': 'Import-Export'
     }
 
@@ -217,7 +217,7 @@ def frameTagsWrite(file_out):
 		data_has=1
 		file_out.write('"%s": %d' %(v.name,v.frame))
 
-class GlinieMeshExporter(bpy.types.Operator,ExportHelper):
+class GlindeMeshExporter(bpy.types.Operator,ExportHelper):
 	bl_idname='export_glindamesh.fmt'
 	bl_label='Export'
 	bl_options={'PRESET'}
@@ -236,7 +236,7 @@ class GlinieMeshExporter(bpy.types.Operator,ExportHelper):
 		return {'FINISHED'}
 
 def menu_func(self,context):
-	self.layout.operator(GlinieMeshExporter.bl_idname, text='Glinie JSON mesh exporter');
+	self.layout.operator(GlindeMeshExporter.bl_idname, text='Glinde JSON mesh exporter');
 
 def register():
 	bpy.utils.register_module(__name__);

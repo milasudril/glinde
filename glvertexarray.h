@@ -3,12 +3,12 @@ target[name[glvertexarray.h] type[include]]
 dependency[GLEW;external]
 #endif
 
-#ifndef GLINIE_GLVERTEXARRAY_H
-#define GLINIE_GLVERTEXARRAY_H
+#ifndef GLINDE_GLVERTEXARRAY_H
+#define GLINDE_GLVERTEXARRAY_H
 
 #include <GL/glew.h>
 
-namespace Glinie
+namespace Glinde
 	{
 	class GlVertexArray
 		{

@@ -3,10 +3,10 @@ target[name[intersections.h] type[include]]
 dependency[intersections.o]
 #endif
 
-#ifndef GLINIE_INTERSECTIONS_H
-#define GLINIE_INTERSECTIONS_H
+#ifndef GLINDE_INTERSECTIONS_H
+#define GLINDE_INTERSECTIONS_H
 
-namespace Glinie
+namespace Glinde
 	{
 	class Mesh;
 	class Face;

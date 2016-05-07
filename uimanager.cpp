@@ -20,7 +20,7 @@ target
 #include <GL/gl.h>
 #include <GLFW/glfw3.h>
 
-using namespace Glinie;
+using namespace Glinde;
 
 [[noreturn]] static void glfwErrorRaise(int code,const char* message)
 	{
@@ -34,7 +34,7 @@ UIManager::UIManager()
 		,glfwGetVersionString());
 
 	glfwSetErrorCallback(glfwErrorRaise);
-	GLINIE_ASSERT_CALL(glfwInit(),==,GL_TRUE);
+	GLINDE_ASSERT_CALL(glfwInit(),==,GL_TRUE);
 
 	glfwWindowHint(GLFW_SAMPLES,4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);

@@ -2,12 +2,12 @@
 target[name[twins.h] type[include]]
 #endif
 
-#ifndef GLINIE_TWINS_H
-#define GLINIE_TWINS_H
+#ifndef GLINDE_TWINS_H
+#define GLINDE_TWINS_H
 
 #include <utility>
 
-namespace Glinie
+namespace Glinde
 	{
 	template<class T>
 	struct Twins:public std::pair<T,T>

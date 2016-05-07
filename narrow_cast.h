@@ -2,14 +2,14 @@
 target[name[narrow_cast.h] type[include]]
 #endif
 
-#ifndef GLINIE_NARROWCAST_H
-#define GLINIE_NARROWCAST_H
+#ifndef GLINDE_NARROWCAST_H
+#define GLINDE_NARROWCAST_H
 
 #include "errormessage.h"
 #include <limits>
 #include <type_traits>
 
-namespace Glinie
+namespace Glinde
 	{
 	template<class T,class U>
 	typename std::enable_if<std::is_unsigned<T>::value,T>::type

@@ -12,7 +12,7 @@ target[name[world.o] type[object]]
 #include "intersections.h"
 #include "transformations.h"
 
-using namespace Glinie;
+using namespace Glinde;
 
 World::World(Archive& source):m_textures(source)
 	{
@@ -22,11 +22,11 @@ World::World(Archive& source):m_textures(source)
 	while(!i.endAt())
 		{
 		auto pair=i.get();
-		GLINIE_DEBUG_PRINT("Got key \"%s\"",pair.first);
+		GLINDE_DEBUG_PRINT("Got key \"%s\"",pair.first);
 		auto subobject=pair.second.objectGet("model");
 
 		const char* mesh_path=static_cast<const char*>(subobject);
-		GLINIE_DEBUG_PRINT("Got a model object \"%s\"",mesh_path);
+		GLINDE_DEBUG_PRINT("Got a model object \"%s\"",mesh_path);
 
 		auto key=Stringkey(pair.first);
 

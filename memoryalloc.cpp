@@ -9,9 +9,9 @@ target[name[memoryalloc.o] type[object] dependency[jemalloc;external]]
 #include "debug.h"
 #include <jemalloc/jemalloc.h>
 
-using namespace Glinie;
+using namespace Glinde;
 
-void* Glinie::memoryAllocate(size_t N)
+void* Glinde::memoryAllocate(size_t N)
 	{
 	void* ret=mallocx(N,MALLOCX_ALIGN(64));
 	if(ret==nullptr)
@@ -19,20 +19,20 @@ void* Glinie::memoryAllocate(size_t N)
 		throw ErrorMessage("It was not possible to allocate %zu bytes of memory"
 			,N);
 		}
-	GLINIE_DEBUG_PRINT("Allocated %zu bytes at %p",N,ret);
+	GLINDE_DEBUG_PRINT("Allocated %zu bytes at %p",N,ret);
 	return ret;
 	}
 
-void Glinie::memoryFree(void* buffer)
+void Glinde::memoryFree(void* buffer)
 	{
 	if(buffer!=nullptr)
 		{
-		GLINIE_DEBUG_PRINT("DeAllocating %p",buffer);
+		GLINDE_DEBUG_PRINT("DeAllocating %p",buffer);
 		dallocx(buffer,MALLOCX_ALIGN(64));
 		}
 	}
 
-void* Glinie::memoryRealloc(void* buffer,size_t N)
+void* Glinde::memoryRealloc(void* buffer,size_t N)
 	{
 	if(buffer==nullptr)
 		{return memoryAllocate(N);}
