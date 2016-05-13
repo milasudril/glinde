@@ -13,7 +13,7 @@ dependency[model.o]
 namespace Glinde
 	{
 	class DataSource;
-	class TextureManager;
+	class ResourceManager;
 	class Stringkey;
 
 	class Model
@@ -25,11 +25,11 @@ namespace Glinde
 				BoundingBox bounding_box;
 				};
 
-			Model(TextureManager& textures,DataSource&& source):
-				Model(textures,source)
+			Model(ResourceManager& rc,DataSource&& source):
+				Model(rc,source)
 				{}
 
-			Model(TextureManager& textures,DataSource& source);
+			Model(ResourceManager& rc,DataSource& source);
 			~Model();
 
 			size_t frameIndexGet(const Stringkey& key) const;

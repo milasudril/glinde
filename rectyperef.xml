@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<docset root="true">
+  <navpath>
+    <navitem href="index.html">Glinde</navitem>
+  </navpath>
+  <h1>Record type reference</h1>
+  <p>This is a list of all record types used within the project.</p>
+  <table>
+    <tr>
+      <th class="membername">
+        <a href="recordtype-itemclass.html">ItemClass</a>
+      </th>
+      <td>Properties shared by all <a href="recordtype-item.html">Item</a>s that belongs to the same class</td>
+    </tr>
+    <tr>
+      <th class="membername">
+        <a href="recordtype-item.html">Item</a>
+      </th>
+      <td>Describes an object in a <a href="recordtype-map.html">Map</a></td>
+    </tr>
+    <tr>
+      <th class="membername">
+        <a href="recordtype-map.html">Map</a>
+      </th>
+      <td>An isolated part of a <a href="recordtype-world.html">World</a></td>
+    </tr>
+    <tr>
+      <th class="membername">
+        <a href="recordtype-meshcollection.html">MeshCollection</a>
+      </th>
+      <td>An array of <a href="recordtype-mesh.html">Mesh</a>es</td>
+    </tr>
+    <tr>
+      <th class="membername">
+        <a href="recordtype-mesh.html">Mesh</a>
+      </th>
+      <td>A representation of the data sent to the renderer</td>
+    </tr>
+    <tr>
+      <th class="membername">
+        <a href="recordtype-model.html">Model</a>
+      </th>
+      <td>A graphical representation of an <a href="recordtype-item.html">Item</a></td>
+    </tr>
+    <tr>
+      <th class="membername">
+        <a href="recordtype-world.html">World</a>
+      </th>
+      <td>Definition of a game</td>
+    </tr>
+  </table>
+</docset>

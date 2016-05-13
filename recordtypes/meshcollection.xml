@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+
+<record-type name="MeshCollection">
+	<description_brief>An array of <ref kind="type" name="Mesh"/>es</description_brief>
+	<description_detailed><p>A MeshCollection is an array of <ref kind="type" name="Mesh"/>es. </p></description_detailed>
+</record-type>

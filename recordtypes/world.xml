@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<record-type name="World">
+	<description_brief>Definition of a game</description_brief>
+	<fields as-array="true">
+		<item name="item_classes" type="array" subtype="string">
+			<description_brief>Contains relative paths to the definitions of all <ref kind="type" name="ItemClass"/>es.</description_brief>
+		</item>
+		<item name="player_class_default" type="string">
+			<description_brief>Defines the <ref kind="type" name="ItemClass" /> used as default player class.</description_brief>
+		</item>
+		<item name="maps" type="array" subtype="string">
+			<description_brief>Contains relative paths to the definitions of all <ref kind="type" name="Map"/>s within the game.</description_brief>
+		</item>
+	</fields>
+</record-type>

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<record-type name="Item">
+	<description_brief>Describes an object in a <ref kind="type" name="Map"/></description_brief>
+	<fields as-array="true">
+		<item name="class" type="string">
+			<description_brief>The name of the <ref kind="type" name="ItemClass"/> the item belongs to</description_brief>
+			<description_detailed><p>This is the name of the <ref kind="type" name="ItemClass"/> the item belongs to. The special value <code>$PLAYER_CLASS</code> is used to refer to the class of the current player.</p></description_detailed>
+		</item>
+		<item name="position_init" type="array" subtype="float">
+			<description_brief>The initial position of the item given as an (<var>x</var>, <var>y</var>, <var>z</var>) tripple</description_brief>
+		</item>
+		<item name="rot_z" type="float">
+			<description_brief>The initial rotation in radians, around the <var>z</var> axis</description_brief>
+		</item>
+		<item name="tag" type="string">
+			<description_brief>An arbitrary, but unique tag that can be used to identify the object</description_brief>
+		</item>
+	</fields>
+</record-type>

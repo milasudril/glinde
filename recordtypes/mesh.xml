@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<record-type name="Mesh">
+	<description_brief>A representation of the data sent to the renderer</description_brief>
+	<fields as-array="true">
+		<item name="vertices" type="array" subtype="float">
+			<description_brief>Contains the coordinates for all vertices in the mesh</description_brief>
+			<description_detailed><p>This array contains all vertices in the mesh. Each triple represents a (<var>x</var>, <var>y</var>, <var>z</var>) triple. Therefore, the number of elements in this array needs to be divisible by three.</p></description_detailed>
+		</item>
+		<item name="normals" type="array" subtype="float">
+			<description_brief>Contains the components of all vertex normals in the mesh</description_brief>
+			<description_detailed><p>This array contains all vertex normals in the mesh. Each triple represents a (<var>x</var>, <var>y</var>, <var>z</var>) triple. Therefore, the number of elements in this array needs to be divisible by three.</p></description_detailed>
+		</item>
+		<item name="uvs" type="array" subtype="float">
+			<description_brief>Contains the components of all UV coordinates in the mesh</description_brief>
+			<description_detailed><p>This array contains all vertex normals in the mesh. Each triple represents a (<var>x</var>, <var>y</var>) pair. Therefore, the number of elements in this array needs to be divisible by two.</p></description_detailed>
+		</item>
+		<item name="faces" type="array" subtype="integer">
+			<description_brief>Contains the faces in the mesh</description_brief>
+			<description_detailed><p>This array contains all vertex indices (as indices into the array <ref type="item" name="vertices"/>). A face must be a triangle. Therefore, the number of elements in this array needs to be divisible by three.</p></description_detailed>
+		</item>
+		<item name="textures" type="array" subtype="string">
+			<description_brief>Contains relative paths to all textures used by this mesh</description_brief>
+			<description_detailed><p>This array contains relative paths to all textures used by this mesh. What the renderer does with the texture, depends on its location in the array.</p></description_detailed>
+		</item>
+	</fields>
+</record-type>

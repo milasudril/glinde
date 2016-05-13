@@ -189,7 +189,7 @@ def meshesWrite(file_out):
 	objects=bpy.context.scene.objects
 	data_has=0
 	for item in objects:
-		if item.type=='MESH' and 'textures' in item:
+		if item.type=='MESH':
 			if data_has:
 				file_out.write(',')
 			data_has=1

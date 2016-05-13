@@ -12,46 +12,13 @@ target[name[world.o] type[object]]
 #include "intersections.h"
 #include "transformations.h"
 
+#include "errormessage.h"
+
 using namespace Glinde;
 
-World::World(Archive& source):m_textures(source)
+World::World(Archive& source):m_resources(source),r_player(nullptr),r_map(nullptr),m_tree(nullptr)
 	{
-	ResourceObject classes{source.fileGet("classes.json")};
-
-	auto i=classes.objectIteratorGet();
-	while(!i.endAt())
-		{
-		auto pair=i.get();
-		GLINDE_DEBUG_PRINT("Got key \"%s\"",pair.first);
-		auto subobject=pair.second.objectGet("model");
-
-		const char* mesh_path=static_cast<const char*>(subobject);
-		GLINDE_DEBUG_PRINT("Got a model object \"%s\"",mesh_path);
-
-		auto key=Stringkey(pair.first);
-
-		auto ip=m_models.emplace(key,Model(m_textures,source.fileGet(mesh_path)));
-
-		WorldObject obj;
-
-		obj.modelSet(&ip.first->second);
-		m_objects.append(std::move(obj));
-
-		if(key==Stringkey("player"))
-			{
-			r_player=m_objects.end() - 1;
-			}
-
-		if(key==Stringkey("world"))
-			{
-			r_map=m_objects.end() - 1;
-			}
-
-		i.next();
-		}
-	logWrite(LogMessageType::INFORMATION,"Building face rejection tree");
-	m_tree=new FaceRejectionTree(*mapGet().modelGet(),0);
-	nodeid=0;
+	throw ErrorMessage("World is not implemented yet. Stop.");
 	}
 
 World::~World()
@@ -92,7 +59,7 @@ void World::update(uint64_t frame,double delta_t,int64_t wallclock_utc)
 	auto ptr=m_objects.begin();
 	auto ptr_end=m_objects.end();
 	auto dt=static_cast<float>(delta_t);
-	const glm::vec3 g(0.0f,0.0f,-9.81f);
+	const glm::vec3 g(0.0f,0.0f,0.0f);
 	while(ptr!=ptr_end)
 		{
 	//	Integrate position
@@ -110,7 +77,7 @@ void World::update(uint64_t frame,double delta_t,int64_t wallclock_utc)
 
 			if(ptr->modelGet()!=nullptr && length(v)>0.0f)
 				{
-				v=collisionCheck(*m_tree,*ptr,x + dt*v,v);
+			//	v=collisionCheck(*m_tree,*ptr,x + dt*v,v);
 				}
 
 			x+=dt*v;

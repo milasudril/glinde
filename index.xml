@@ -4,6 +4,8 @@
 	<p>Glinde is a 3D engine...</p>
 	<nav>
 		<ul>
+			<li><a href="gamefile.html">Game content files</a></li>
+			<li><a href="rectyperef.html">Record type reference</a></li>
 			<li><a href="apiref.html">API reference</a></li>
 		</ul>
 	</nav>

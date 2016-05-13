@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<docset type="other" root="true">
+	<navpath>
+		<navitem href="index.html">Glinde</navitem>
+	</navpath>
+	<h1>Game content files</h1>
+	<p>Glinde game data is stored in a ZIP archive. The root directory of the archive must contains the <dfn>Index file</dfn> file called <code>index.json</code>, which contains a single <a href="recordtype-world.html">World</a> object encoded in JSON format.</p>
+
+	<h2>Textures</h2>
+	<p>A texture can be any <acronym>PNG</acronym> file that has friendly dimensions. This means that both its width and height should be 2<sup><var>n</var></sup>, where <var>n</var> is an integer.</p>
+</docset>

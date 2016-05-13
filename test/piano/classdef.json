@@ -1,0 +1,6 @@
+{
+	 "name":"piano"
+	,"model":"model.json"
+	,"mass_density":200.0
+	,"mass_dimension":1.0
+}

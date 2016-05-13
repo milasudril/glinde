@@ -11,7 +11,7 @@ dependency[world.o]
 
 #include "arraydynamic.h"
 #include "worldobject.h"
-#include "texturemanager.h"
+#include "resourcemanager.h"
 #include "stringkey.h"
 
 namespace Glinde
@@ -60,7 +60,7 @@ namespace Glinde
 			ArrayDynamic<WorldObject> m_objects;
 			WorldObject* r_player;
 			WorldObject* r_map;
-			TextureManager m_textures;
+			ResourceManager m_resources;
 
 			FaceRejectionTree* m_tree;
 

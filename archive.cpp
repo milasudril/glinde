@@ -61,7 +61,7 @@ static String directoryNormalize(const char* str)
 			case '/':
 				if(elem_current=="..")
 					{
-					ret.truncate().truncate('/');
+					ret.truncate().truncate('/').append('/');
 					}
 				else
 				if(elem_current!="." && elem_current.length()!=0)

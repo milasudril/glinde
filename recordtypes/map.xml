@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<record-type name="Map">
+	<description_brief>An isolated part of a <ref kind="type" name="World"/></description_brief>
+	<fields as-array="true">
+		<item name="title" type="string">
+			<description_brief>Gives the name of the map</description_brief>
+		</item>
+		<item name="model" type="string">
+			<description_brief>Gives the relative path to the map <ref kind="type" name="Model"/></description_brief>
+		</item>
+		<item name="items_init" type="array" subtype="Item">
+			<description_brief>Contains all <ref kind="type" name="Item"/>s that are spawned at load time</description_brief>
+		</item>
+	</fields>
+</record-type>

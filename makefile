@@ -6,5 +6,5 @@ glinde:
 glinde-json-exporter.zip: glinde-json-exporter/__init__.py
 	zip glinde-json-exporter.zip glinde-json-exporter/__init__.py
 
-test.zip: test
+test.zip: test/*
 	./makegame.sh test

@@ -5,7 +5,7 @@ target[name[mesh.o] type[object]]
 #include "mesh.h"
 #include "resourceobject.h"
 #include "narrow_cast.h"
-#include "texturemanager.h"
+#include "resourcemanager.h"
 #include "twins.h"
 #include "debug.h"
 #include <glm/glm.hpp>
@@ -124,7 +124,7 @@ static ArraySimple<Mesh::FaceIndirect> facesLoad(const ResourceObject& source
 	}
 
 static ArrayFixed<const Image*,Mesh::textureCountGet()>
-texturesLoad(TextureManager& textures,const ResourceObject& source
+texturesLoad(ResourceManager& textures,const ResourceObject& source
 	,const char* source_name)
 	{
 	GLINDE_DEBUG_PRINT("Loading textures for %s",source_name);
@@ -148,7 +148,7 @@ texturesLoad(TextureManager& textures,const ResourceObject& source
 
 
 
-Mesh::Mesh(TextureManager& textures,const ResourceObject& source
+Mesh::Mesh(ResourceManager& textures,const ResourceObject& source
 	,const char* source_name):
 	 m_vertices(verticesLoad(source,source_name))
 	,m_normals(normalsLoad(source,source_name,m_vertices.length()))

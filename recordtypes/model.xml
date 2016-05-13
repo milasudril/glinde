@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<record-type name="Model">
+	<description_brief>A graphical representation of an <ref kind="type" name="Item"/></description_brief>
+	<fields as-array="true">
+		<item name="frames" type="array" subtype="MeshCollection">
+			<description_brief>Contains the geometry data for every frame</description_brief>
+		</item>
+		<item name="frame_tags" type="map">
+			<description_brief>Contains labels for different frame numbers</description_brief>
+			<description_detailed><p>This field contains labels for different frame numbers. Each key in this map is a string that maps to a frame number in <ref kind="item" name="frames"/>.</p></description_detailed>
+		</item>
+	</fields>
+</record-type>

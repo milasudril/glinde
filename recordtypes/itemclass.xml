@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<record-type name="ItemClass">
+	<description_brief>Properties shared by all <ref kind="type" name="Item"/>s that belongs to the same class</description_brief>
+	<fields as-array="true">
+		<item name="name" type="string">
+			<description_brief>The name of the <ref kind="type" name="ItemClass"/></description_brief>
+		</item>
+		<item name="model" type="string">
+			<description_brief>Gives the relative path to the <ref kind="type" name="Model"/> representing the ItemClass</description_brief>
+		</item>
+		<item name="mass_density" type="float">
+			<description_brief>The intrisic mass density of an <ref kind="type" name="Item"/> that belongs to the class</description_brief>
+			<description_detailed>
+				<p>This is the intrisic mass density (<var>ρ</var>) of an <ref kind="type" name="Item"/> that belongs to the ItemClass. The density is given in kg/(m<sup><var>β</var></sup>), where <var>β</var> is controlled by <ref kind="item" name="mass_dimension"/>. Its value can be thought of the effective density of the content inside the body of the item. For a human, this value can be set the desired body mass index. The formula for computing the mass is m=<var>ρ</var> <var>h</var> <sup><var>β</var></sup>, where <var>h</var> is the height of the object.</p>
+			</description_detailed>
+		</item>
+		<item name="mass_dimension" type="float">
+			<description_brief>The mass dimension of <ref kind="type" name="Item"/> that belongs to the ItemClass</description_brief>
+			<description_detailed>
+				<p>This is the mass dimension of an <ref kind="type" name="Item"/> that belongs to the ItemClass. If the density of an object is unknown, set this value to 0, and the <ref kind="item" name="mass_density"/> will represent the mass.</p>
+			</description_detailed>
+		</item>
+	</fields>
+</record-type>

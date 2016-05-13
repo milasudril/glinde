@@ -12,21 +12,21 @@ target[name[model.o] type[object]]
 using namespace Glinde;
 
 static ArraySimple<Mesh>
-meshesLoad(TextureManager& textures,const ResourceObject& meshes
+meshesLoad(ResourceManager& rc,const ResourceObject& meshes
 	,const char* source_name)
 	{
 	auto n_meshes=meshes.objectCountGet();
 	GLINDE_DEBUG_PRINT("Got %zu individual meshes",n_meshes);
 
-	return std::move(ArraySimple<Mesh>(n_meshes,[&meshes,&textures,source_name](size_t l)
+	return std::move(ArraySimple<Mesh>(n_meshes,[&meshes,&rc,source_name](size_t l)
 		{
 		auto mesh=meshes.objectGet(l);
-		return Mesh(textures,mesh,source_name);
+		return Mesh(rc,mesh,source_name);
 		}));
 	}
 
 static ArraySimple< Model::Frame >
-framesLoad(TextureManager& textures,const ResourceObject& obj
+framesLoad(ResourceManager& textures,const ResourceObject& obj
 	,const char* source_name)
 	{
 	auto frames=obj.objectGet("frames");
@@ -75,7 +75,7 @@ frameTagsLoad(const ResourceObject& obj, const char* source_name
 	return std::move(ret);
 	}
 
-Model::Model(TextureManager& textures,DataSource& source)
+Model::Model(ResourceManager& textures,DataSource& source)
 	{
 	logWrite(LogMessageType::INFORMATION,"Loading model \"%s\""
 		,source.nameGet());

@@ -18,7 +18,7 @@ dependency[mesh.o]
 namespace Glinde
 	{
 	class Image;
-	class TextureManager;
+	class ResourceManager;
 	class ResourceObject;
 
 	class Mesh
@@ -69,7 +69,7 @@ namespace Glinde
 					const FaceIndirect* r_position;
 				};
 
-			Mesh(TextureManager& textures,const ResourceObject& source
+			Mesh(ResourceManager& textures,const ResourceObject& source
 				,const char* source_name);
 
 			~Mesh();
