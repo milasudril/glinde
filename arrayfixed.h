@@ -104,16 +104,16 @@ namespace Glinde
 			 * This function returns a Range representing the content of the array.
 			 *
 			 */
-			constexpr operator Range<const T*>() const noexcept
-				{return Range<const T*>{data,N};}
+			constexpr operator Range<const T>() const noexcept
+				{return Range<const T>{data,N};}
 
 			/**\brief Array range
 			 *
 			 * This function returns a Range representing the content of the array.
 			 *
 			 */
-			operator Range<const T*>() noexcept
-				{return Range<const T*>{data,N};}
+			operator Range<T>() noexcept
+				{return Range<T>{data,N};}
 
 		private:
 			T data[N];

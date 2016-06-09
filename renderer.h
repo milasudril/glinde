@@ -32,6 +32,7 @@ namespace Glinde
 			~Renderer();
 
 			void sceneRender(World& world,const WorldObject& viewer) noexcept;
+			void overlayRender(const GlTexture& texture);
 			void viewportSizeSet(int width,int height) noexcept;
 
 		private:
@@ -53,7 +54,7 @@ namespace Glinde
 
 			GLuint diffuse_id;
 
-			void render(const Range< const Mesh* >& meshes) noexcept;
+			void render(const Range< const Mesh >& meshes) noexcept;
 		};
 	}
 

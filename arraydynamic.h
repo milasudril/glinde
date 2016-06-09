@@ -20,6 +20,7 @@ target[name[arraydynamic.h] type[include]]
 #include <cstddef>
 #include <utility>
 #include <cassert>
+#include <new>
 
 namespace Glinde
 	{
@@ -139,9 +140,9 @@ namespace Glinde
 			 * This function returns a Range representing the content of the
 			 * array.
 			 */
-			operator Range<const T*>() const noexcept
+			operator Range<const T>() const noexcept
 				{
-				return Range<const T*>(begin(),length());
+				return Range<const T>(begin(),length());
 				}
 
 			/**\brief Array range.
@@ -149,9 +150,9 @@ namespace Glinde
 			 * This function returns a Range representing the content of the
 			 * array.
 			 */
-			operator Range<T*>() noexcept
+			operator Range<T>() noexcept
 				{
-				return Range<T*>(begin(),length());
+				return Range<T>(begin(),length());
 				}
 
 			/**\brief Appends another array object to the array.
@@ -163,11 +164,12 @@ namespace Glinde
 			 * \warning This function may move the array to a new base address,
 			 * and therefore, pointers to elements in the array may become invalid.
 			 */
-			ArrayDynamic& append(const ArrayDynamic& array)
+			ArrayDynamic& append(const Range<const T>& array)
 				{
+				assert(array.length()<=0xffffffffu);
 				if(array.length()==0)
 					{return *this;}
-				return append(array.begin(),array.length());
+				return append(array.begin(),static_cast<uint32_t>(array.length()));
 				}
 
 			/**\brief Appends another array object to the array.
@@ -204,7 +206,7 @@ namespace Glinde
 				auto length_new=static_cast<size_t>( length() ) + 1;
 				if(capacity() < length_new)
 					{resize(length_new);}
-				*end() = obj;
+				new(end())T(obj);
 				m_content.data.length=static_cast<uint32_t>(length_new);
 				return *this;
 				}
@@ -221,7 +223,7 @@ namespace Glinde
 				auto length_new=length() + 1;
 				if(capacity() < length_new)
 					{resize(length_new);}
-				*end() = std::move(obj);
+				new(end())T(std::move(obj));
 				m_content.data.length=length_new;
 				return *this;
 				}

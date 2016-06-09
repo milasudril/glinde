@@ -4,6 +4,9 @@ target[name[archive.o] type[object] dependency[zip;external]]
 
 #include "archive.h"
 #include "errormessage.h"
+#include "utility.h"
+#include "debug.h"
+#include "fileout.h"
 #include <zip.h>
 #include <cstring>
 
@@ -159,4 +162,45 @@ String Archive::filenameFromSibling(const char* sibling,const char* filename)
 	return std::move(
 		directoryNormalize( ret.truncate('/').append('/').append(filename).begin())
 	);
+	}
+
+void Archive::filesProcess(const char* root,FileProcessor&& process)
+	{
+	auto N=zip_get_num_entries(static_cast<zip_t*>(m_handle),0);
+	struct zip_stat sb;
+	for(decltype(N) k=0;k<N;++k)
+		{
+		zip_stat_index(static_cast<zip_t*>(m_handle),k,0,&sb);
+		auto dir=directoryNormalize(sb.name);
+		FileData fd{nullptr,nullptr,0};
+		if(*(dir.end() - 1)=='/')
+			{
+			fd.directory=1;
+			dir.truncate();
+			}
+		fd.filename=dir.begin();
+		process(*this,fd);
+		}
+	}
+
+void Archive::extract(const char* filename_src,const char* file_dest,bool directory)
+	{
+	if(directory)
+		{
+		Utility::mkdir(file_dest);
+		}
+	else
+		{
+		FileOut dest(file_dest);
+		File source(*this,filename_src);
+
+		char buffer[4096];
+		size_t n;
+		do
+			{
+			n=source.read(buffer,4096);
+			dest.write(buffer,n);
+			}
+		while(n==4096);
+		}
 	}

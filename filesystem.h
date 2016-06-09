@@ -60,6 +60,24 @@ namespace Glinde
 			/**\brief Construct a path for a sibling file.
 			 */
 			virtual String filenameFromSibling(const char* sibling,const char* filename)=0;
+
+
+			struct FileData
+				{
+				const char* filename;
+				const char* indir;
+				bool directory;
+				};
+
+			class FileProcessor
+				{
+				public:
+					virtual void operator()(Filesystem& fs,const FileData& data)=0;
+				};
+
+			virtual void filesProcess(const char* root,FileProcessor&& proc)=0;
+
+			virtual void extract(const char* filename_src,const char* file_dest,bool directory)=0;
 		};
 	}
 

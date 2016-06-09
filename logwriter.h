@@ -11,9 +11,6 @@ dependency[logwriter.o]
 
 namespace Glinde
 	{
-#ifdef NDEBUG
-	enum class LogMessageType:unsigned int{INFORMATION,WARNING,ERROR};
-#else
 	/**\brief Contains constants defining message types.
 	 *
 	 * This enumerator contains all possible message types.
@@ -32,10 +29,17 @@ namespace Glinde
 
 		,DEBUG
 		/**The message is a debug message.
-		 \note This message type is only availible in debug mode.
+		 */
+		,LINE_QUOTE
+		/**Indented line useful for quoting program output
 		 */
 		};
-#endif
+
+	class LogWriter
+		{
+		public:
+			virtual void write(LogMessageType type,const char* message)=0;
+		};
 
 	/**\brief Writes a message to the console (or the standard error stream).
 	 *
@@ -46,6 +50,10 @@ namespace Glinde
 	 *
 	*/
 	void logWrite(LogMessageType type,const char* format,...);
+
+	/**\brief Attaches an additional log writer to the log writing system.
+	 */
+	void logWriterAttach(LogWriter* writer);
 
 	/**\brief Registers a "deathtrap" handler, that is called by the operating
 	 * system when the program behaves badley.

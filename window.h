@@ -25,6 +25,7 @@ namespace Glinde
 					virtual void onMouseUp(Window& source,int button)=0;
 
 					virtual void onResize(Window& source,int width,int height)=0;
+					virtual void onClose(Window& source)=0;
 				};
 
 			Window(const char* title,unsigned int width, unsigned int height
@@ -34,9 +35,6 @@ namespace Glinde
 			void buffersSwap() noexcept;
 			bool shouldClose() noexcept;
 			void stickyKeysSet() noexcept;
-
-			EventHandler& eventHandlerGet() noexcept
-				{return *r_handler;}
 
 			void eventHandlerSet(EventHandler& handler_new) noexcept
 				{r_handler=&handler_new;}
@@ -54,7 +52,13 @@ namespace Glinde
 			void cursorShow() noexcept;
 			void cursorHideAndGrab() noexcept;
 
+			static void eventsPoll() noexcept;
+
 		private:
+			class EHWrapper;
+			friend class EHWrapper;
+			EventHandler& eventHandlerGet() noexcept
+				{return *r_handler;}
 			EventHandler* r_handler;
 			void* m_handle;
 		};

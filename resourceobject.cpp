@@ -99,6 +99,11 @@ ResourceObject ResourceObject::objectGet(const char* name) const
 	return ResourceObject(result,name);
 	}
 
+bool ResourceObject::objectExists(const char* name) const noexcept
+	{
+	return json_object_get(static_cast<const json_t*>(m_handle),name)!=NULL;
+	}
+
 size_t ResourceObject::objectCountGet() const noexcept
 	{return json_array_size(static_cast<const json_t*>(m_handle));}
 

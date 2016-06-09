@@ -15,7 +15,7 @@ namespace Glinde
 	template<class T> class Range;
 
 	bool intersect(const Face& a,const Mesh& mesh) noexcept;
-	bool intersect(const Face& a,const Range<const Mesh*>& meshes) noexcept;
+	bool intersect(const Face& a,const Range<const Mesh>& meshes) noexcept;
 	}
 
 #endif

@@ -11,6 +11,7 @@ dependency[mesh.o]
 #include "boundingbox.h"
 #include "stringkey.h"
 #include "face.h"
+#include "faceindirect.h"
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <map>
@@ -24,11 +25,6 @@ namespace Glinde
 	class Mesh
 		{
 		public:
-			struct FaceIndirect:public ArrayFixed<unsigned int,3>
-				{
-				using ArrayFixed<unsigned int,3>::ArrayFixed;
-				};
-
 			class FaceIterator
 				{
 				public:
@@ -74,16 +70,16 @@ namespace Glinde
 
 			~Mesh();
 
-			Range<const glm::vec3*> verticesGet() const noexcept
+			Range<const glm::vec3> verticesGet() const noexcept
 				{return m_vertices;}
 
-			Range<const glm::vec3*> normalsGet() const noexcept
+			Range<const glm::vec3> normalsGet() const noexcept
 				{return m_normals;}
 
-			Range<const glm::vec2*> uvsGet() const noexcept
+			Range<const glm::vec2> uvsGet() const noexcept
 				{return m_uvs;}
 
-			Range<const FaceIndirect*> facesIndirectGet() const noexcept
+			Range<const FaceIndirect> facesIndirectGet() const noexcept
 				{return m_faces;}
 
 			FaceIterator facesBegin() const noexcept
@@ -95,7 +91,7 @@ namespace Glinde
 			static constexpr unsigned int textureCountGet() noexcept
 				{return decltype(r_textures)::length();}
 
-			Range<const Image* const*> texturesGet() const noexcept
+			Range<const Image* const> texturesGet() const noexcept
 				{return r_textures;}
 
 			const BoundingBox& boundingBoxGet() const noexcept
@@ -116,7 +112,7 @@ namespace Glinde
 			friend class FaceIterator;
 		};
 
-	BoundingBox boundingBoxGet(const Range<const Mesh*>& meshes) noexcept;
+	BoundingBox boundingBoxGet(const Range<const Mesh>& meshes) noexcept;
 	}
 
 #endif

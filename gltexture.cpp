@@ -12,13 +12,11 @@ void GlTexture::dataSet(const Image& source) noexcept
 	{
 /*	GLINDE_DEBUG_PRINT("Upload texture data %u x %u"
 		,source.widthGet(),source.heightGet());*/
-
 	glBindTexture(GL_TEXTURE_2D,m_id);
-
 	switch(source.channelCountGet())
 		{
 		case 1:
-			glTexImage2D(GL_TEXTURE_2D,0,GL_RED
+			glTexImage2D(GL_TEXTURE_2D,0,GL_R16F
 				,source.widthGet(),source.heightGet()
 				,0
 				,GL_RED
@@ -27,7 +25,7 @@ void GlTexture::dataSet(const Image& source) noexcept
 			break;
 
 		case 3:
-			glTexImage2D(GL_TEXTURE_2D,0,GL_RGB
+			glTexImage2D(GL_TEXTURE_2D,0,GL_RGB16F
 				,source.widthGet(),source.heightGet()
 				,0
 				,GL_RGB
@@ -35,12 +33,12 @@ void GlTexture::dataSet(const Image& source) noexcept
 				,source.pixelsGet());
 
 		case 4:
-			glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA
+			glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA16F
 				,source.widthGet(),source.heightGet()
 				,0
 				,GL_RGBA
 				,GL_HALF_FLOAT
 				,source.pixelsGet());
 		}
-	glGenerateMipmap(GL_TEXTURE_2D);
+	filterEnable();
 	}

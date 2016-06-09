@@ -7,7 +7,7 @@ target[name[boundingbox.o] type[object]]
 
 using namespace Glinde;
 
-bool Glinde::insideAny(const Range<const glm::vec3*>& vertices,const BoundingBox& box) noexcept
+bool Glinde::insideAny(const Range<const glm::vec3>& vertices,const BoundingBox& box) noexcept
 	{
 	auto v=vertices.begin();
 	auto end=vertices.end();
@@ -20,7 +20,7 @@ bool Glinde::insideAny(const Range<const glm::vec3*>& vertices,const BoundingBox
 	return 0;
 	}
 
-bool Glinde::insideAll(const Range<const glm::vec3*>& vertices,const BoundingBox& box) noexcept
+bool Glinde::insideAll(const Range<const glm::vec3>& vertices,const BoundingBox& box) noexcept
 	{
 	auto v=vertices.begin();
 	auto end=vertices.end();

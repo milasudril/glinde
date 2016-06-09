@@ -37,6 +37,8 @@ namespace Glinde
 	*/
 	void gameLoopRun(UIManager& ui,Window& window
 		,const Timer& world_clock,World& world);
+
+	void gameLoopRun(UIManager& ui,Window& window,const Timer& world_clock);
 	}
 
 #endif

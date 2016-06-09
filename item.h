@@ -21,6 +21,18 @@ namespace Glinde
 			Item()=default;
 			Item(ResourceManager& rc,const Glinde::ResourceObject& item);
 
+			const ItemClass& classGet() const noexcept
+				{return *r_class;}
+
+			const char* tagGet() const noexcept
+				{return m_tag.begin();}
+
+			const glm::vec3& positionGet() const noexcept
+				{return m_position;}
+
+			float rotZGet() const noexcept
+				{return m_rot_z;}
+
 		private:
 			const ItemClass* r_class;
 			String m_tag;

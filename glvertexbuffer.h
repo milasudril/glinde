@@ -29,13 +29,13 @@ namespace Glinde
 				glBufferData(GL_ARRAY_BUFFER,size*sizeof(float),data,usage);
 				}
 
-			void dataSet(const Range<const glm::vec3*>& data,GLenum usage) noexcept
+			void dataSet(const Range<const glm::vec3>& data,GLenum usage) noexcept
 				{
 				dataSet(reinterpret_cast<const float*>(data.begin())
 					,3*static_cast<unsigned int>(data.length()),usage);
 				}
 
-			void dataSet(const Range<const glm::vec2*>& data,GLenum usage) noexcept
+			void dataSet(const Range<const glm::vec2>& data,GLenum usage) noexcept
 				{
 				dataSet(reinterpret_cast<const float*>(data.begin())
 					,2*static_cast<unsigned int>( data.length() ),usage);
@@ -46,6 +46,13 @@ namespace Glinde
 				assert(elem_size==3);
 				attributesBind(index,elem_size);
 				glDrawArrays(GL_TRIANGLES, 0, m_size);
+				}
+
+			void drawPoints(GLuint index,unsigned int elem_size) noexcept
+				{
+				assert(elem_size==3);
+				attributesBind(index,elem_size);
+				glDrawArrays(GL_POINT, 0, m_size);
 				}
 
 			void attributesBind(GLuint index,unsigned int elem_size) noexcept

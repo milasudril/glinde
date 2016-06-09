@@ -114,7 +114,7 @@ bool Glinde::intersect(const Face& a,const Face& b) noexcept
 	return 0;
 	}
 
-bool Glinde::intersect(const Face& face,const Range<const Face*>& faces) noexcept
+bool Glinde::intersect(const Face& face,const Range<const Face>& faces) noexcept
 	{
 	auto begin=faces.begin();
 	auto end=faces.end();

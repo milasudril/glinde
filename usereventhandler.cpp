@@ -24,13 +24,13 @@ void UserEventHandler::onMouseMove(Window& source,double x,double y)
 		auto yaw=4.0f*std::acos(0.0f)*(float(x/w) - 1.0f/2.0f);
 		auto pitch=std::acos(-1.0f)*(1.0f - float(y/h) );
 
-		auto& player=r_world->playerGet();
+	/*	auto& player=r_world->playerGet();
 		player.eyesGet()
 			.pitchSet(pitch)
 			.yawSet(yaw )
 			.headingUpdate();
 
-		player.rotZSet(std::acos(-1.0f)-yaw);
+		player.rotZSet(std::acos(-1.0f)-yaw);*/
 
 		objectUpdate();
 		}
@@ -38,7 +38,7 @@ void UserEventHandler::onMouseMove(Window& source,double x,double y)
 
 void UserEventHandler::objectUpdate()
 	{
-	auto& player=r_world->playerGet();
+/*	auto& player=r_world->playerGet();
 
 	auto F_0=player.dampingGet();
 
@@ -65,7 +65,7 @@ void UserEventHandler::objectUpdate()
 
 	F=F_0*normalize(F);
 
-	player.forceSet(F);
+	player.forceSet(F);*/
 	}
 
 unsigned int UserEventHandler::keyToFlag(uint8_t key)
@@ -147,7 +147,7 @@ void UserEventHandler::onKeyUp(Window& source,uint8_t key)
 
 void UserEventHandler::onMouseDown(Window& source,int button)
 	{
-	auto& player=r_world->playerGet();
+/*	auto& player=r_world->playerGet();
 	auto m=player.massGet();
 	auto g=9.81f;
 	auto t=0.25f;
@@ -158,5 +158,5 @@ void UserEventHandler::onMouseDown(Window& source,int button)
 		case 1:
 			player.normalImpulseSet(glm::vec3(0.0f,0.0f,1.5f*m*g*t));
 			break;
-		}
+		}*/
 	}

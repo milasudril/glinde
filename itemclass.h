@@ -28,6 +28,9 @@ namespace Glinde
 			const char* nameGet() const noexcept
 				{return m_name.begin();}
 
+			const Model& modelGet() const noexcept
+				{return *r_model;}
+
 			float massGet() const noexcept;
 
 		private:

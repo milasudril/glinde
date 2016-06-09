@@ -1,4 +1,4 @@
-Glinie - OpenGL game engine experiment
+Glinde - OpenGL game engine experiment
 ==================================
 
 This is an experimental project launched to study how a 3D engine can be built
@@ -9,4 +9,4 @@ This is an experimental project launched to study how a 3D engine can be built
 
 ## Run
 
-    __wand_targets_rel/glinie
+    __targets_-xxx/glinie

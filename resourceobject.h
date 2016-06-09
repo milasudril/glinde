@@ -64,6 +64,7 @@ namespace Glinde
 			Type typeGet() const noexcept;
 
 			ResourceObject objectGet(const char* name) const;
+			bool objectExists(const char* name) const noexcept;
 			size_t objectCountGet() const noexcept;
 			ResourceObject objectGet(size_t index) const;
 			Iterator objectIteratorGet() noexcept

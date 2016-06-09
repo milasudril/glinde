@@ -11,7 +11,7 @@ target[name[glinde] type[application] ]
 #include "world.h"
 #include "renderer.h"
 #include "archive.h"
-#include "timer.h"
+#include "timerreal.h"
 #include "gameloop.h"
 
 using namespace Glinde;
@@ -23,15 +23,16 @@ int main()
 	try
 		{
 		Archive src{"test.zip"};
-		World world{src};
+	//	World world{src};
+	//	world.siteSet(Stringkey("map00"));
 
-		UserEventHandler event_handler(world);
+	/*	UserEventHandler event_handler(world);
 		UIManager ui;
 		WindowGame mainwin("Glinde",640,480,event_handler,world);
 		Timer world_clock(30.0);
 		logWrite(LogMessageType::INFORMATION
 			,"World clock ticks every %.15g second",world_clock.delayGet());
-		gameLoopRun(ui,mainwin,world_clock,world);
+		gameLoopRun(ui,mainwin,world_clock,world);*/
 		}
 	catch(const ErrorMessage& message)
 		{

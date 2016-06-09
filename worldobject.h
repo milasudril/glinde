@@ -1,5 +1,6 @@
 #ifdef __WAND__
 target[name[worldobject.h] type[include]]
+dependency[worldobject.o]
 #endif
 
 #ifndef GLINDE_WORLDOBJECT_H
@@ -10,11 +11,9 @@ target[name[worldobject.h] type[include]]
 #include "camera.h"
 #include "model.h"
 
-//#include <glm/glm.hpp>
-//#include <glm/gtc/matrix_transform.hpp>
-
 namespace Glinde
 	{
+	class Item;
 
 	class WorldObject
 		{
@@ -26,6 +25,8 @@ namespace Glinde
 				,m_force(0,0,0)
 				,m_mass(0),m_damping(0),m_charge(0)
 				{}
+
+			WorldObject(const Item& item);
 
 			void modelSet(const Model* model) noexcept
 				{

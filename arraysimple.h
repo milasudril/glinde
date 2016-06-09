@@ -201,9 +201,9 @@ namespace Glinde
 			 * This function returns a Range representing the content of the
 			 * array.
 			 */
-			operator Range<const T*>() const noexcept
+			operator Range<const T>() const noexcept
 				{
-				return Range<const T*>(begin(),length());
+				return Range<const T>(begin(),length());
 				}
 
 			/**\brief Array range.
@@ -211,9 +211,9 @@ namespace Glinde
 			 * This function returns a Range representing the content of the
 			 * array.
 			 */
-			operator Range<T*>() noexcept
+			operator Range<T>() noexcept
 				{
-				return Range<T*>(begin(),length());
+				return Range<T>(begin(),length());
 				}
 
 		private:

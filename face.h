@@ -48,7 +48,7 @@ namespace Glinde
 	 * \see intersect(const Face&,const Face&)
 	 *
 	 */
-	bool intersect(const Face& a,const Range<const Face*>& faces) noexcept;
+	bool intersect(const Face& a,const Range<const Face>& faces) noexcept;
 
 
 	/**\brief Creates a translated copy of <var>face</var>

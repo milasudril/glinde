@@ -28,6 +28,15 @@ namespace Glinde
 			const char* nameGet() const noexcept
 				{return m_name.begin();}
 
+			const char* titleGet() const noexcept
+				{return m_title.begin();}
+
+			const Model& modelGet() const noexcept
+				{return *r_model;}
+
+			Range<const Item> itemsGet() const noexcept
+				{return m_items_init;}
+
 		private:
 			String m_name;
 			String m_title;

@@ -8,7 +8,7 @@ dependency[GL;external]
 #define GLINDE_GLELEMENTARRAYBUFFER_H
 
 #include "range.h"
-#include "mesh.h"
+#include "faceindirect.h"
 #include <GL/glew.h>
 
 namespace Glinde
@@ -26,7 +26,7 @@ namespace Glinde
 				glBufferData(GL_ELEMENT_ARRAY_BUFFER,N*sizeof(uint32_t),data,usage);
 				}
 
-			void dataSet(const Range<const Mesh::FaceIndirect*> data,GLenum usage) noexcept
+			void dataSet(const Range<const FaceIndirect> data,GLenum usage) noexcept
 				{
 				dataSet(reinterpret_cast<const uint32_t*>( data.begin() )
 					,3*static_cast<unsigned int>(data.length()),usage);
@@ -36,6 +36,12 @@ namespace Glinde
 				{
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,id);
 				glDrawElements(GL_TRIANGLES, m_size,GL_UNSIGNED_INT,(void*)0);
+				}
+
+			void drawPoints(GLuint index) noexcept
+				{
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,id);
+				glDrawElements(GL_POINTS, m_size,GL_UNSIGNED_INT,(void*)0);
 				}
 
 			~GlElementArrayBuffer()

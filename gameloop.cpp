@@ -28,3 +28,19 @@ void Glinde::gameLoopRun(UIManager& ui,Window& window,const Timer& world_clock
 		++frame_count;
 		}
 	}
+
+void Glinde::gameLoopRun(UIManager& ui,Window& window,const Timer& world_clock)
+	{
+	uint64_t frame_count=0;
+	auto dt=world_clock.delayGet();
+	auto now=time(NULL);
+	while(!window.shouldClose())
+		{
+		ui.eventsPoll();
+		window.redraw();
+		window.buffersSwap();
+		world_clock.wait();
+		++frame_count;
+		}
+	}
+

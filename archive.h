@@ -125,6 +125,10 @@ namespace Glinde
 
 			String filenameFromSibling(const char* sibling,const char* filename);
 
+			void filesProcess(const char* root,FileProcessor&& proc);
+
+			void extract(const char* filename_src,const char* file_dest,bool directory);
+
 		private:
 			void* m_handle;
 			String m_filename;

@@ -13,8 +13,6 @@ target
 #include "errormessage.h"
 #include "debug.h"
 #include "logwriter.h"
-#include "window.h"
-#include "timer.h"
 
 #include <GL/glew.h>
 #include <GL/gl.h>
@@ -37,8 +35,8 @@ UIManager::UIManager()
 	GLINDE_ASSERT_CALL(glfwInit(),==,GL_TRUE);
 
 	glfwWindowHint(GLFW_SAMPLES,4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,5);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,3);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_DOUBLEBUFFER,GL_TRUE);

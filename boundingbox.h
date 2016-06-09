@@ -72,7 +72,7 @@ namespace Glinde
 	 * inside <var>box</var>.
 	 *
 	*/
-	bool insideAny(const Range<const glm::vec3*>& vertices,const BoundingBox& box) noexcept;
+	bool insideAny(const Range<const glm::vec3>& vertices,const BoundingBox& box) noexcept;
 
 	/**\brief Tests whether or not <em>all</em> of the given vertices lay inside
 	 * the bounding box <var>box</var>.
@@ -82,7 +82,7 @@ namespace Glinde
 	 *
 	 * \return A non-zero value if and only if all vertices is inside <var>box</var>.
 	*/
-	bool insideAll(const Range<const glm::vec3*>& vertices,const BoundingBox& box) noexcept;
+	bool insideAll(const Range<const glm::vec3>& vertices,const BoundingBox& box) noexcept;
 
 	/**\brief Generates a fixed array containing all 12 faces enclosing <var>box</var>.
 	 *

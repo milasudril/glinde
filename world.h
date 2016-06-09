@@ -9,14 +9,16 @@ dependency[world.o]
 #ifndef GLINDE_WORLD_H
 #define GLINDE_WORLD_H
 
-#include "arraydynamic.h"
-#include "worldobject.h"
+#include "objectmanager.h"
 #include "resourcemanager.h"
 #include "stringkey.h"
+#include "actionprogram.h"
+
+#include <memory>
 
 namespace Glinde
 	{
-	class Archive;
+	class Filesystem;
 	class FaceRejectionTree;
 	class Model;
 
@@ -26,12 +28,13 @@ namespace Glinde
 		{
 		public:
 			~World();
-			explicit World(Archive& source);
 
-			const WorldObject* objectsBegin() noexcept
+			explicit World(const char* filename);
+
+			const ObjectManager::value_type* objectsBegin() noexcept
 				{return m_objects.begin();}
 
-			const WorldObject* objectsEnd() noexcept
+			const ObjectManager::value_type* objectsEnd() noexcept
 				{return m_objects.end();}
 
 
@@ -55,12 +58,20 @@ namespace Glinde
 			const WorldObject& mapGet() const noexcept
 				{return *r_map;}
 
+			World& siteSet(const Stringkey& key)
+				{
+				r_site=&m_resources.siteGet(key);
+				return *this;
+				}
+
 		private:
-			std::map<Stringkey, Model> m_models;
-			ArrayDynamic<WorldObject> m_objects;
-			WorldObject* r_player;
-			WorldObject* r_map;
+			std::unique_ptr<Filesystem> m_fs;
+			ActionProgram m_program;
 			ResourceManager m_resources;
+			ObjectManager m_objects;
+			WorldObject* r_player;
+			Site* r_site;
+			WorldObject* r_map;
 
 			FaceRejectionTree* m_tree;
 

@@ -9,6 +9,7 @@ target[name[resourcemanager.o] type [object]]
 #include "image.h"
 #include "model.h"
 #include "filesystem.h"
+#include "site.h"
 #include "resourceobject.h"
 #include "errormessage.h"
 #include "narrow_cast.h"
@@ -88,4 +89,17 @@ const Image& ResourceManager::textureGet(const char* sibling,const char* filenam
 		}).first->second;
 	}
 
+Site& ResourceManager::siteGet(const Stringkey& mapname)
+	{
+	auto i_site=m_sites.find(mapname);
+	if(i_site==m_sites.end())
+		{
+		auto i=m_maps.find(mapname);
+		if(i==m_maps.end())
+			{throw ErrorMessage("There is no map for the given site");}
 
+		return m_sites.emplace(std::pair<Stringkey,Site>
+			{mapname,Site(i->second)}).first->second;
+		}
+	return i_site->second;
+	}

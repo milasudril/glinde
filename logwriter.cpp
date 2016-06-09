@@ -4,40 +4,75 @@ target[name[logwriter.o] type [object]]
 
 #include "logwriter.h"
 
+#if __MINGW32__ || __MINGW64__
+	#define __USE_MINGW_ANSI_STDIO 1
+#endif
+
 #include <cstdio>
 #include <cstdarg>
 
 using namespace Glinde;
 
-void Glinde::logWrite(LogMessageType type,const char* format,...)
+namespace
+	{
+	class LogWriterStderr:public LogWriter
+		{
+		public:
+			void write(LogMessageType type, const char* message);
+		};
+	}
+
+void LogWriterStderr::write(LogMessageType type,const char* message)
 	{
 	const char* infostring;
 	switch(type)
 		{
 		case LogMessageType::INFORMATION:
-			infostring="i";
+			infostring="(i)";
 			break;
 
 		case LogMessageType::WARNING:
-			infostring="!";
+			infostring="(!)";
 			break;
 
 		case LogMessageType::ERROR:
-			infostring="x";
+			infostring="(x)";
 			break;
 
-#ifndef NDEBUG
 		case LogMessageType::DEBUG:
-			infostring="DEBUG";
+			infostring="(DEBUG)";
 			break;
-#endif
+
+		case LogMessageType::LINE_QUOTE:
+			infostring=" ";
+			break;
 		}
-	fprintf(stderr,"(%s) ",infostring);
+	fprintf(stderr,"%s %s\n",infostring,message);
+	fflush(stderr);
+	}
+
+static LogWriterStderr s_stderr;
+static LogWriter* s_writer=nullptr;
+
+void Glinde::logWrite(LogMessageType type,const char* format,...)
+	{
+	char msgbuff[4096];
 	va_list list;
 	va_start(list,format);
-	vfprintf(stderr,format,list);
+	vsnprintf(msgbuff,4096,format,list);
 	va_end(list);
-	putc('\n',stderr);
+	msgbuff[4095]=0;
+
+	s_stderr.write(type,msgbuff);
+	if(s_writer!=nullptr)
+		{
+		s_writer->write(type,msgbuff);
+		}
+	}
+
+void Glinde::logWriterAttach(LogWriter* writer)
+	{
+	s_writer=writer;
 	}
 
 

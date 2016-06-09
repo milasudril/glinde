@@ -37,7 +37,7 @@ struct FaceRejectionTree::Node
 	};
 
 static ArrayDynamic< Face >
-facesCollect(const Range<const Mesh*>& meshes)
+facesCollect(const Range<const Mesh>& meshes)
 	{
 	ArrayDynamic<Face> ret;
 	auto mesh_current=meshes.begin();
@@ -57,9 +57,9 @@ facesCollect(const Range<const Mesh*>& meshes)
 	return ret;
 	}
 
-ArrayDynamic<unsigned int> facesFind(const Range<const unsigned int*>& face_indices
+ArrayDynamic<unsigned int> facesFind(const Range<const unsigned int>& face_indices
 	,const BoundingBox& box
-	,const Range< const Face* >& faces)
+	,const Range< const Face >& faces)
 	{
 	ArrayDynamic<unsigned int> ret;
 //	GLINDE_DEBUG_PRINT("Number of faces: %u",face_indices.length());
@@ -90,10 +90,10 @@ ArrayDynamic<unsigned int> facesFind(const Range<const unsigned int*>& face_indi
 	}
 
 FaceRejectionTree::Node* FaceRejectionTree::nodeCreate(
-	 const Range<const unsigned int*>& face_indices
+	 const Range<const unsigned int>& face_indices
 	,const BoundingBox& box
 	,unsigned int depth
-	,const Range<const Face*>& faces)
+	,const Range<const Face>& faces)
 	{
 /*	GLINDE_DEBUG_PRINT("Building FaceRejectionTree level %u for box "
 		"(%.8g,%.8g,%.8g) - (%.8g,%.8g,%.8g)"

@@ -65,6 +65,9 @@ namespace Glinde
 					const Face* r_faces;
 				};
 
+			FaceRejectionTree(FaceRejectionTree&& tree):
+				m_root(tree.m_root)
+				{tree.m_root=nullptr;}
 
 			FaceRejectionTree& operator=(const FaceRejectionTree&)=delete;
 			FaceRejectionTree(const FaceRejectionTree&)=delete;
@@ -85,10 +88,10 @@ namespace Glinde
 			void treeBuild(const Model::Frame& frame);
 
 			static Node* nodeCreate(
-				 const Range<const unsigned int*>& face_indices
+				 const Range<const unsigned int>& face_indices
 				,const BoundingBox& box
 				,unsigned int depth
-				,const Range<const Face*>& faces);
+				,const Range<const Face>& faces);
 
 			ArrayDynamic< Face > m_faces;
 

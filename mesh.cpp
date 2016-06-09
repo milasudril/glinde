@@ -96,21 +96,21 @@ static ArraySimple<glm::vec2> uvsLoad(const ResourceObject& source
 		}));
 	}
 
-static ArraySimple<Mesh::FaceIndirect> facesLoad(const ResourceObject& source
+static ArraySimple<FaceIndirect> facesLoad(const ResourceObject& source
 	,const char* source_name
 	,size_t vertex_count)
 	{
 	auto faces=source.objectGet("faces");
 	auto n_faces=faces.objectCountGet();
-	if(n_faces%Mesh::FaceIndirect::length()!=0)
+	if(n_faces%FaceIndirect::length()!=0)
 		{throw ErrorMessage("%s: Each face needs three vertices",source_name);}
-	n_faces/=Mesh::FaceIndirect::length();
+	n_faces/=FaceIndirect::length();
 
 	GLINDE_DEBUG_PRINT("Got %zu faces",n_faces);
 
-	return std::move(ArraySimple<Mesh::FaceIndirect>(n_faces,[&faces,source_name,vertex_count](size_t k)
+	return std::move(ArraySimple<FaceIndirect>(n_faces,[&faces,source_name,vertex_count](size_t k)
 		{
-		Mesh::FaceIndirect ret;
+		FaceIndirect ret;
 		for(size_t l=0;l<ret.length();++l)
 			{
 			auto face_obj=faces.objectGet(ret.length()*k + l);
@@ -185,7 +185,7 @@ void Mesh::boundingBoxUpdate() noexcept
 	m_box=ret;
 	}
 
-BoundingBox Glinde::boundingBoxGet(const Range<const Mesh*>& meshes) noexcept
+BoundingBox Glinde::boundingBoxGet(const Range<const Mesh>& meshes) noexcept
 	{
 	auto mesh_current=meshes.begin();
 	auto end=meshes.end();

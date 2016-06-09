@@ -11,14 +11,28 @@ target[name[world.o] type[object]]
 #include "facerejectiontree.h"
 #include "intersections.h"
 #include "transformations.h"
+#include "blob.h"
+#include "sdkresource.h"
 
 #include "errormessage.h"
+#include "engine.h"
+GLINDE_BLOB(engine_class,"engine.h");
 
 using namespace Glinde;
 
-World::World(Archive& source):m_resources(source),r_player(nullptr),r_map(nullptr),m_tree(nullptr)
+static const SdkResource SDK[]
 	{
-	throw ErrorMessage("World is not implemented yet. Stop.");
+		{"engine.h",Range<const uint8_t>(engine_class_begin,engine_class_end)}
+	};
+
+World::World(const char* filename):m_fs(new Archive(filename))
+	,m_program(*m_fs.get(),"world.so",Range<const SdkResource>(SDK,1))
+	,m_resources(*m_fs.get())
+	,r_player(nullptr)
+	,r_site(nullptr)
+	,r_map(nullptr),m_tree(nullptr)
+	{
+	m_program.entryPointGet<Engine::EventHandler* (*)()>("eventHandlerCreate")();
 	}
 
 World::~World()
@@ -62,28 +76,30 @@ void World::update(uint64_t frame,double delta_t,int64_t wallclock_utc)
 	const glm::vec3 g(0.0f,0.0f,0.0f);
 	while(ptr!=ptr_end)
 		{
-	//	Integrate position
-		if(ptr!=&mapGet())
-			{
-			auto x=ptr->positionGet();
-			auto v=ptr->velocityGet();
+		auto& obj=ptr->object();
 
-			auto c=ptr->dampingGet();
-			auto F=ptr->forceGet();
-			auto m=ptr->massGet();
+	//	Integrate position
+		if(&obj!=&mapGet())
+			{
+			auto x=obj.positionGet();
+			auto v=obj.velocityGet();
+
+			auto c=obj.dampingGet();
+			auto F=obj.forceGet();
+			auto m=obj.massGet();
 
 			auto a=( F - c*glm::vec3(v.x,v.y,0.0f) + m*g )/m;
 			v+=dt*a;
 
-			if(ptr->modelGet()!=nullptr && length(v)>0.0f)
+			if(obj.modelGet()!=nullptr && length(v)>0.0f)
 				{
 			//	v=collisionCheck(*m_tree,*ptr,x + dt*v,v);
 				}
 
 			x+=dt*v;
-			ptr->normalImpulseSet(glm::vec3(0.0f,0.0f,0.0f));
-			ptr->velocitySet(v);
-			ptr->positionSet(x);
+			obj.normalImpulseSet(glm::vec3(0.0f,0.0f,0.0f));
+			obj.velocitySet(v);
+			obj.positionSet(x);
 			}
 		++ptr;
 		}

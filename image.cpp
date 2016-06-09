@@ -266,7 +266,7 @@ static void fromGamma(Image& image)
 
 static float fromSRGB(float x)
 	{
-	return x<=0.04045f? x/12.92f : std::pow( (x+0.055f)/(1.0f + 0.055f),2.4f);
+	return x<=0.04045f? x/12.92f : std::pow( (x + 0.055f)/(1.0f + 0.055f),2.4f);
 	}
 
 static void fromSRGB(Image& image)

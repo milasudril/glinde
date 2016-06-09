@@ -21,7 +21,7 @@ bool Glinde::intersect(const Face& a,const Mesh& mesh) noexcept
 	return 0;
 	}
 
-bool Glinde::intersect(const Face& a,const Range<const Mesh*>& meshes) noexcept
+bool Glinde::intersect(const Face& a,const Range<const Mesh>& meshes) noexcept
 	{
 	auto i=meshes.begin();
 	auto i_end=meshes.end();

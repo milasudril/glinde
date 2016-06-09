@@ -1,7 +1,7 @@
 #ifdef __WAND__
 target
 	[
-	name[timer.o] type[object] platform[;GNU/Linux]
+	name[timerreal.o] type[object] platform[;GNU/Linux]
 	dependency[rt;external]
 	dependency[pthread;external]
 	]
@@ -9,7 +9,7 @@ target
 
 #define NDEBUG
 
-#include "timer.h"
+#include "timerreal.h"
 #include "errormessage.h"
 #include "debug.h"
 #include <signal.h>
@@ -18,13 +18,13 @@ target
 
 using namespace Glinde;
 
-struct Timer::Impl
+struct TimerReal::Impl
 	{
 	Impl(double frequency)
 		{
-		GLINDE_DEBUG_PRINT("Creating a timer %p",this);
+		GLINDE_DEBUG_PRINT("Creating a timerreal %p",this);
 		if(sem_init(&m_trig,0,1)!=0)
-			{throw ErrorMessage("It was not possible to initialize a semaphore for the timer");}
+			{throw ErrorMessage("It was not possible to initialize a semaphore for the timerreal");}
 
 		sigevent ev;
 
@@ -45,7 +45,7 @@ struct Timer::Impl
 		if(timer_create(CLOCK_MONOTONIC,&ev,&m_id)!=0)
 			{
 			sem_destroy(&m_trig);
-			throw ErrorMessage("It was not possible to create a new timer.");
+			throw ErrorMessage("It was not possible to create a new timerreal.");
 			}
 
 		itimerspec t;
@@ -59,7 +59,7 @@ struct Timer::Impl
 		t.it_value={0,1};
 		if(timer_settime(m_id,0,&t,NULL)!=0)
 			{
-			throw ErrorMessage("It was not possible to set the timer interval.");
+			throw ErrorMessage("It was not possible to set the timerreal interval.");
 			timer_delete(m_id);
 			sem_destroy(&m_trig);
 			}
@@ -76,7 +76,6 @@ struct Timer::Impl
 	void wait() const noexcept
 		{sem_wait(&m_trig);}
 
-//	mutable Event m_trig;
 	mutable sem_t m_trig;
 	timer_t m_id;
 
@@ -96,18 +95,18 @@ struct Timer::Impl
 		}
 	};
 
-Timer::Timer(double frequency)
+TimerReal::TimerReal(double frequency)
 	{
 	m_impl=new Impl(frequency);
 	}
 
-Timer::~Timer()
+TimerReal::~TimerReal()
 	{
 	delete m_impl;
 	}
 
-void Timer::wait() const noexcept
+void TimerReal::wait() const noexcept
 	{m_impl->wait();}
 
-double Timer::delayGet() const noexcept
+double TimerReal::delayGet() const noexcept
 	{return m_impl->delayGet();}

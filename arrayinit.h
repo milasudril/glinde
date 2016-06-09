@@ -211,12 +211,16 @@ namespace Glinde
 			}
 
 		template<class T>
-		void copy(T* begin,T* end,const T* source)
+		size_t copy(T* begin,T* end,const T* source)
 			{
+			auto N=end-begin;
 			if(std::is_trivially_copy_constructible<T>::value)
-				{memcpy(begin,source,sizeof(T)*(end-begin));}
+				{
+				memcpy(begin,source,sizeof(T)*N);
+				}
 			else
 				{copy<T,T>(begin,end,source);}
+			return N;
 			}
 		}
 	}

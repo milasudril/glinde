@@ -1,6 +1,6 @@
 #!/bin/bash
 
-target=__wand_targets_dbg/glinda
+target=$1
 
 address=`"$target" \
 	2>&1 | tee /dev/stderr | grep '^(x) The wicked Witch of the East' \

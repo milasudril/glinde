@@ -21,7 +21,7 @@ target
 
 using namespace Glinde;
 
-static const char* g_frag_shader="#version 450 core\n"
+static const char* g_frag_shader="#version 330 core\n"
 	"out vec3 color;"
 	"in vec2 UV;"
 	"in vec3 pos_worldspace;"
@@ -55,7 +55,7 @@ static const char* g_frag_shader="#version 450 core\n"
 	"	}";
 
 static const char* g_vert_shader=
-	"#version 450 core\n"
+	"#version 330 core\n"
 	"layout(location = 0) in vec3 pos_modelspace;"
 	"layout(location = 1) in vec3 normal_modelspace;"
 	"layout(location = 2) in vec2 uv;"
@@ -112,7 +112,7 @@ Renderer::Renderer()
 Renderer::~Renderer()
 	{}
 
-void Renderer::render(const Range< const Mesh* >& meshes) noexcept
+void Renderer::render(const Range< const Mesh >& meshes) noexcept
 	{
 	auto mesh=meshes.begin();
 	auto mesh_end=meshes.end();
@@ -163,13 +163,14 @@ void Renderer::sceneRender(World& world,const WorldObject& viewer) noexcept
 		auto ptr_end=world.objectsEnd();
 		while(ptr!=ptr_end)
 			{
-			if(ptr->modelGet()!=nullptr)
+			auto& obj=ptr->object();
+			if(obj.modelGet()!=nullptr)
 				{
-				glm::mat4 M=ptr->modelMatrixGet();
+				glm::mat4 M=obj.modelMatrixGet();
 				auto MVP=VP*M;
 				glUniformMatrix4fv(M_id,1,GL_FALSE,&M[0][0]);
 				glUniformMatrix4fv(MVP_id,1,GL_FALSE,&MVP[0][0]);
-				render(ptr->frameCurrentGet().meshes);
+				render(obj.frameCurrentGet().meshes);
 				}
 			++ptr;
 			}
