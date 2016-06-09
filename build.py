@@ -43,6 +43,8 @@ def flagstringGet(profile,do_link,cxxversion):
 	if profile.get('debug',1):
 		debug=1
 		ret+='-g^ '
+	else:
+		ret+='-DNDEBUG^ '
 
 	if profile.get('fastmath',0):
 		ret+='-ffast-math^ '

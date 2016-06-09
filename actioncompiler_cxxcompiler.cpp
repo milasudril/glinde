@@ -159,6 +159,8 @@ ArrayDynamic<String> optionStringCreate(const CxxOptions& options
 
 	if(options.debug())
 		{ret.append(String("-g"));}
+	else
+		{ret.append(String("-DNDEBUG"));}
 
 	if(options.fastmath())
 		{ret.append(String("-ffast-math"));}

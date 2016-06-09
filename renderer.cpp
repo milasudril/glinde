@@ -107,10 +107,21 @@ Renderer::Renderer()
 	glEnable(GL_CULL_FACE);
 	glDepthFunc(GL_LESS);
 	glClearColor(0.5,0.5,0.5,1);
+	vertices.attributesBind(0,3);
+	normals.attributesBind(1,3);
+	uvs.attributesBind(2,2);
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
 	}
 
 Renderer::~Renderer()
-	{}
+	{
+	array.bind();
+	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(1);
+	glDisableVertexAttribArray(0);
+	}
 
 void Renderer::render(const Range< const Mesh >& meshes) noexcept
 	{
@@ -125,9 +136,6 @@ void Renderer::render(const Range< const Mesh >& meshes) noexcept
 
 
 		vertex_indices.dataSet(mesh->facesIndirectGet(),GL_STATIC_DRAW);
-		vertices.attributesBind(0,3);
-		normals.attributesBind(1,3);
-		uvs.attributesBind(2,2);
 			{
 			auto& texture=**(mesh->texturesGet().begin());
 			auto id=texture.idGet();
@@ -148,9 +156,8 @@ void Renderer::render(const Range< const Mesh >& meshes) noexcept
 void Renderer::sceneRender(World& world,const WorldObject& viewer) noexcept
 	{
 	glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glEnableVertexAttribArray(2);
+	array.bind();
+	program.use();
 //	auto V=glm::lookAt(glm::vec3(0,-2,1.7f),glm::vec3(0,0,1.55),glm::vec3(0,0,1));
 //	auto V=glm::lookAt(glm::vec3(0,0,2.5f),glm::vec3(0,0,0),glm::vec3(0,1,0));
 	auto V=viewer.viewMatrixGet();
@@ -175,9 +182,6 @@ void Renderer::sceneRender(World& world,const WorldObject& viewer) noexcept
 			++ptr;
 			}
 		}
-	glEnableVertexAttribArray(2);
-	glEnableVertexAttribArray(1);
-	glDisableVertexAttribArray(0);
 	}
 
 void Renderer::viewportSizeSet(int width,int height) noexcept
