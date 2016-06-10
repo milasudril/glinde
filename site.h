@@ -1,48 +1,36 @@
 #ifdef __WAND__
-target[name[site.h] type[include]]
-dependency[site.o]
+target[name[site.h] type [include]]
 #endif
 
 #ifndef GLINDE_SITE_H
 #define GLINDE_SITE_H
 
-#include "facerejectiontree.h"
-#include "objectmanager.h"
+#include <cstdint>
 
 namespace Glinde
 	{
-	class Map;
-	class Model;
+	class WorldObject;
+	class Stringkey;
 
 	class Site
 		{
 		public:
-			explicit Site(const Map& map);
-			Range<ObjectManager::value_type> objectsGet() noexcept
-				{return m_objects.objectsGet();}
+			class EventHandler
+				{
+				public:
+					virtual void onEnter(Site& site,WorldObject& who)=0;
+					virtual void onLeave(Site& site,WorldObject& who)=0;
+				//	virtual void onCollide(Site& site,WorldObject& a,WorldObject& b)=0;
 
-			Range<const ObjectManager::value_type> objectsGet() const noexcept
-				{return m_objects.objectsGet();}
+				};
 
+			virtual ~Site()=default;
 
-			/**\brief Updates the current state
-			 *
-			 * This function updates the current state.
-			 *
-			 * \param frame the number of frames that have elapsed since the
-			 *              game started
-			 *
-			 * \param delta_t the delay between two frames
-			 *
-			 * \param wallclock_utc the current POSIX time
-			 *
-			*/
-			void update(uint64_t frame,double delta_t,int64_t wallclock_utc) noexcept;
+			virtual void exitTo(const Stringkey& sitename)=0;
+			virtual void exitTo(const Stringkey& sitename,const Stringkey& mapspot)=0;
 
-		private:
-			FaceRejectionTree m_tree;
-			const Model* r_model;
-			ObjectManager m_objects;
+			virtual uint32_t itemSpawn(const Stringkey& mapspot,const Stringkey& classname)=0;
+			virtual uint32_t itemSpawn(float x,float y,float z,const Stringkey& classname)=0;
 		};
 	}
 

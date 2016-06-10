@@ -45,7 +45,7 @@ namespace Glinde
 			EventHandler& r_world_eh;
 			ResourceManager m_resources;
 			WorldObject m_player;
-			Site* r_site;
+			SiteDefault* r_site;
 		};
 	}
 

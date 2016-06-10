@@ -1,8 +1,8 @@
 #ifdef __WAND__
-target[name[site.o] type[object]]
+target[name[sitedefault.o] type[object]]
 #endif
 
-#include "site.h"
+#include "sitedefault.h"
 #include "map.h"
 #include "debug.h"
 #include "intersections.h"
@@ -10,7 +10,7 @@ target[name[site.o] type[object]]
 
 using namespace Glinde;
 
-Site::Site(const Map& map):m_tree(map.modelGet(),0)
+SiteDefault::SiteDefault(const Map& map):r_map(map),m_tree(map.modelGet(),0)
 	{
  	GLINDE_DEBUG_PRINT("Building site from map %s",map.nameGet());
 	r_model=&map.modelGet();
@@ -57,7 +57,7 @@ glm::vec3 collisionCheck(const FaceRejectionTree& tree,const WorldObject& object
 	return v;
 	}
 
-void Site::update(uint64_t frame,double delta_t,int64_t wallclock_utc) noexcept
+void SiteDefault::update(uint64_t frame,double delta_t,int64_t wallclock_utc) noexcept
 	{
 	auto ptr=m_objects.begin();
 	auto ptr_end=m_objects.end();

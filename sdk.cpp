@@ -6,6 +6,9 @@ target[name[sdk.o] type[object]]
 #include "sdkresource.h"
 #include "blob.h"
 
+#include "site.h"
+GLINDE_BLOB(sdk_site,"site.h");
+
 #include "world.h"
 GLINDE_BLOB(sdk_world,"world.h");
 
@@ -16,7 +19,8 @@ using namespace Glinde;
 
 static const SdkResource SDK[]
 	{
-		 {"world.h",Range<const uint8_t>(sdk_world_begin,sdk_world_end)}
+		 {"site.h",Range<const uint8_t>(sdk_site_begin,sdk_site_end)}
+		,{"world.h",Range<const uint8_t>(sdk_world_begin,sdk_world_end)}
 		,{"stringkey.h",Range<const uint8_t>(sdk_stringkey_begin,sdk_stringkey_end)}
 	};
 
