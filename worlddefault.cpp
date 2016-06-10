@@ -5,6 +5,7 @@ target[name[worlddefault.o] type[object]]
 #include "worlddefault.h"
 #include "archive.h"
 #include "sdk.h"
+#include "itemclass.h"
 
 using namespace Glinde;
 
@@ -27,4 +28,11 @@ WorldDefault::WorldDefault(const char* filename):m_fs(new Archive(filename))
 WorldDefault::~WorldDefault()
 	{
 	r_world_eh.onUnload(*this);
+	}
+
+WorldDefault& WorldDefault::playerCreate(const Stringkey& classname)
+	{
+	const auto& item_class=m_resources.itemClassGet(classname);
+	m_player.modelSet(&item_class.modelGet()).massSet(item_class.massGet());
+	return *this;
 	}

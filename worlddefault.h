@@ -9,9 +9,10 @@ dependency[worlddefault.o]
 #ifndef GLINDE_WORLDDEFAULT_H
 #define GLINDE_WORLDDEFAULT_H
 
+#include "world.h"
 #include "resourcemanager.h"
 #include "actionprogram.h"
-#include "world.h"
+#include "worldobject.h"
 
 #include <memory>
 
@@ -35,11 +36,15 @@ namespace Glinde
 				return *this;
 				}
 
+			WorldDefault& playerCreate(const Stringkey& classname);
+
+
 		private:
 			std::unique_ptr<Filesystem> m_fs;
 			ActionProgram m_program;
 			EventHandler& r_world_eh;
 			ResourceManager m_resources;
+			WorldObject m_player;
 			Site* r_site;
 		};
 	}

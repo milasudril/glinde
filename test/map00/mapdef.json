@@ -5,8 +5,7 @@
 ,"items_init":
 	[
 		 {
-		  "class":"human"
-		 ,"position_init":[0.0,0.0,0.0]
+		  "position_init":[0.0,0.0,0.0]
 		 ,"rot_z":0.0
 		 ,"tag":"player_00"
 		 }

@@ -21,8 +21,8 @@ namespace Glinde
 			Item()=default;
 			Item(ResourceManager& rc,const Glinde::ResourceObject& item);
 
-			const ItemClass& classGet() const noexcept
-				{return *r_class;}
+			const ItemClass* classGet() const noexcept
+				{return r_class;}
 
 			const char* tagGet() const noexcept
 				{return m_tag.begin();}

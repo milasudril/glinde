@@ -19,7 +19,8 @@ Site::Site(const Map& map):m_tree(map.modelGet(),0)
 	auto ptr_end=items.end();
 	while(ptr!=ptr_end)
 		{
-		m_objects.insert(WorldObject(*ptr));
+		if(ptr->classGet()!=nullptr)
+			{m_objects.insert(WorldObject(*ptr));}
 		++ptr;
 		}
 	}

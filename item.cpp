@@ -30,5 +30,9 @@ Item::Item(ResourceManager& rc,const Glinde::ResourceObject& item)
 			}
 		}
 
-	r_class=&rc.itemClassGet(Stringkey(static_cast<const char*>(item.objectGet("class"))));
+	r_class=nullptr;
+	if(item.objectExists("class"))
+		{
+		r_class=&rc.itemClassGet(Stringkey(static_cast<const char*>(item.objectGet("class"))));
+		}
 	}

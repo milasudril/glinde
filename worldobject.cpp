@@ -16,7 +16,7 @@ WorldObject::WorldObject(const Item& item):
 	,m_damping(0.0f)
 	,m_charge(0.0f)
 	{
-	auto& item_class=item.classGet();
+	auto& item_class=*item.classGet();
 	GLINDE_DEBUG_PRINT("Spawning object of class %s",item_class.nameGet());
 	modelSet(&item_class.modelGet());
 	positionSet(item.positionGet());

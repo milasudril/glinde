@@ -21,6 +21,7 @@ namespace Glinde
 				};
 			virtual ~World()=default;
 			virtual World& siteSet(const Stringkey& key)=0;
+			virtual World& playerCreate(const Stringkey& classname)=0;
 
 		typedef EventHandler& (*EventHandlerFactory)();
 		};

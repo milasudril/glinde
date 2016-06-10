@@ -228,7 +228,7 @@ void EngineDefault::messageProcess(const Message& msg)
 				if(m_world!=nullptr)
 					{delete m_world;}
 				m_world=world_new;
-				logWrite(LogMessageType::INFORMATION,"WorldDefault successfully loaded");
+				logWrite(LogMessageType::INFORMATION,"World successfully loaded");
 				}
 			}
 			break;

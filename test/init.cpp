@@ -18,8 +18,7 @@ class Init:public World::EventHandler
 	public:
 		void onLoaded(World& world)
 			{
-			world.siteSet(Stringkey("map00"));
-			printf("Hello!\n");
+			world.playerCreate(Stringkey("human")).siteSet(Stringkey("map00"));
 			}
 
 		void onUnload(World& world)

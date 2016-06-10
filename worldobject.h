@@ -28,16 +28,10 @@ namespace Glinde
 
 			WorldObject(const Item& item);
 
-			void modelSet(const Model* model) noexcept
+			WorldObject& modelSet(const Model* model) noexcept
 				{
 				r_model=model;
-				if(model!=nullptr)
-					{
-					auto height=frameCurrentGet().bounding_box.size().z;
-					m_mass=23*height*height;
-				//	TODO: Is damping really connected to the mass
-					m_damping=m_mass/0.0625f;
-					}
+				return *this;
 				}
 
 			void frameStartSet(const Stringkey& key)
