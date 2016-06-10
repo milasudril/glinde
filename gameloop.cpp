@@ -3,7 +3,7 @@ target[name[gameloop.o] type[object]]
 #endif
 
 #include "gameloop.h"
-#include "world.h"
+#include "worlddefault.h"
 #include "window.h"
 #include "timer.h"
 #include "uimanager.h"

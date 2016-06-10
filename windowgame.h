@@ -7,7 +7,7 @@ target[name[windowgame.h] type[include]]
 
 #include "window.h"
 #include "renderer.h"
-#include "world.h"
+#include "worlddefault.h"
 
 namespace Glinde
 	{

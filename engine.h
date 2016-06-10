@@ -9,15 +9,9 @@ target[name[engine.h] type[include]]
 
 namespace Glinde
 	{
-	class World;
 	class Engine
 		{
 		public:
-			class EventHandler
-				{
-				public:
-					virtual void onWorldLoaded(Engine& engine,World& world)=0;
-				};
 
 			virtual void stop()=0;
 			virtual void consoleWrite(const char* message)=0;

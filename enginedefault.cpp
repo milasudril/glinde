@@ -6,7 +6,7 @@ target[name[enginedefault.o] type[object]]
 #include "window.h"
 #include "timerdummy.h"
 #include "message.h"
-#include "world.h"
+#include "worlddefault.h"
 #include "archive.h"
 #include "thread.h"
 
@@ -30,13 +30,13 @@ class EngineDefault::WorldLoader:public Thread::Runner
 
 void EngineDefault::WorldLoader::run() noexcept
 	{
-	World* world=nullptr;
+	WorldDefault* world=nullptr;
 	try
 		{
 		logWrite(LogMessageType::INFORMATION,"Loading world from \"%s\""
 			,m_filename.begin());
 
-		world=new World(m_filename.begin());
+		world=new WorldDefault(m_filename.begin());
 		}
 	catch(const ErrorMessage& msg)
 		{
@@ -175,7 +175,7 @@ EngineDefault& EngineDefault::worldLoadAsync(const char* file)
 	return *this;
 	}
 
-void EngineDefault::worldLoadedPost(World* world)
+void EngineDefault::worldLoadedPost(WorldDefault* world)
 	{
 	m_messages.post(Message
 		{
@@ -222,13 +222,13 @@ void EngineDefault::messageProcess(const Message& msg)
 				delete m_world_loader;
 				m_world_loader_task=nullptr;
 				}
-			auto world_new=msg.dataGetPointer<World>();
+			auto world_new=msg.dataGetPointer<WorldDefault>();
 			if(world_new!=nullptr)
 				{
 				if(m_world!=nullptr)
 					{delete m_world;}
 				m_world=world_new;
-				logWrite(LogMessageType::INFORMATION,"World successfully loaded");
+				logWrite(LogMessageType::INFORMATION,"WorldDefault successfully loaded");
 				}
 			}
 			break;

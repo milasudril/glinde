@@ -13,7 +13,7 @@ target
 #include "renderer.h"
 #include "glshader.h"
 #include "worldobject.h"
-#include "world.h"
+#include "worlddefault.h"
 #include "debug.h"
 #include "range.h"
 #include "model.h"

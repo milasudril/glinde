@@ -8,7 +8,7 @@ target[name[glinde] type[application] ]
 #include "logwriter.h"
 #include "usereventhandler.h"
 #include "worldobject.h"
-#include "world.h"
+#include "worlddefault.h"
 #include "renderer.h"
 #include "archive.h"
 #include "timerreal.h"

@@ -7,15 +7,29 @@
 //@	}
 
 #include "common/hello.h"
-#include <glinde/engine.h>
+#include <glinde/world.h>
+#include <glinde/stringkey.h>
+#include <cstdio>
 
 using namespace Glinde;
 
-extern "C"
+class Init:public World::EventHandler
 	{
-	Engine::EventHandler* eventHandlerCreate()
-		{
-		hello();
-		return nullptr;
-		}
+	public:
+		void onLoaded(World& world)
+			{
+			world.siteSet(Stringkey("map00"));
+			printf("Hello!\n");
+			}
+
+		void onUnload(World& world)
+			{
+			printf("Good bye\n");
+			delete this;
+			}
+	};
+
+World::EventHandler& Glinde_World_EventHandler_create()
+	{
+	return *(new Init);
 	}

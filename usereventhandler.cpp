@@ -5,7 +5,7 @@ target[name[usereventhandler.o] type[object]]
 
 #include "usereventhandler.h"
 #include "worldobject.h"
-#include "world.h"
+#include "worlddefault.h"
 #include "debug.h"
 
 using namespace Glinde;

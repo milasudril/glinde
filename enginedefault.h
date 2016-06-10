@@ -17,7 +17,7 @@ namespace Glinde
 	class Window;
 	class Timer;
 	class Clock;
-	class World;
+	class WorldDefault;
 	class Thread;
 
 	class EngineDefault:public Engine
@@ -59,7 +59,7 @@ namespace Glinde
 			const Timer* r_timer;
 			Clock* r_clock;
 
-			World* m_world;
+			WorldDefault* m_world;
 			Thread* m_world_loader_task;
 			WorldLoader* m_world_loader;
 
@@ -71,7 +71,7 @@ namespace Glinde
 			bool m_stop;
 
 
-			void worldLoadedPost(World* world);
+			void worldLoadedPost(WorldDefault* world);
 
 			void messageProcess(const Message& msg);
 		};
