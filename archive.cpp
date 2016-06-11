@@ -147,7 +147,7 @@ size_t Archive::File::read(void* buffer,size_t n_bytes)
 		throw ErrorMessage("An error occured when reading data.");
 		}
 
-	return ret;
+	return static_cast<size_t>(ret);
 	}
 
 void Archive::cd(const char* dir_new)

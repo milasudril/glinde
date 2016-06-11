@@ -1,1 +1,1 @@
-{"debug": 0, "optlevel": 0.66, "cxx_minversion": 201103, "warnall": 1, "fastmath": 1, "native": 1, "console": 0, "warnsize": 1}
+{"debug": 0, "console": 0, "optlevel": 0.66, "warnsize": 1, "fastmath": 1, "cxx_minversion": 201103, "warnall": 1, "native": 1}

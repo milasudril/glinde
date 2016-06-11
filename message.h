@@ -29,7 +29,7 @@ namespace Glinde
 				{
 				m_content.data={seq,type,time,0,nullptr};
 				auto src=data.begin();
-				auto l=static_cast<uint64_t>( data.length()*sizeof(T) );
+				auto l=static_cast<size_t>( data.length()*sizeof(T) );
 				copyAlloc(src,l);
 				}
 
@@ -55,7 +55,8 @@ namespace Glinde
 			Message(const Message& msg)
 				{
 				m_content.x=msg.m_content.x;
-				copyAlloc(msg.m_content.data.data,msg.m_content.data.length);
+				copyAlloc(msg.m_content.data.data
+					,static_cast<size_t>(msg.m_content.data.length));
 				}
 
 			~Message();
@@ -114,7 +115,7 @@ namespace Glinde
 				}
 
 		private:
-			void copyAlloc(const void* src,uint64_t length);
+			void copyAlloc(const void* src,size_t length);
 			union
 				{
 				vec4_t<int64_t> x;

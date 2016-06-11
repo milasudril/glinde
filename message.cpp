@@ -8,7 +8,7 @@ target[name[message.o] type[object]]
 
 using namespace Glinde;
 
-void Message::copyAlloc(const void* src,uint64_t N)
+void Message::copyAlloc(const void* src,size_t N)
 	{
 	if(src!=nullptr)
 		{
