@@ -18,7 +18,7 @@ class Init:public World::EventHandler
 	public:
 		void onLoaded(World& world)
 			{
-			world.playerCreate(Stringkey("human")).siteSet(Stringkey("map00"));
+			world.siteSet(Stringkey("map00"));
 			}
 
 		void onUnload(World& world) noexcept
@@ -35,6 +35,9 @@ class Init:public World::EventHandler
 
 		void onSiteCreated(World& world,Site& site)
 			{
+#if 0
+			site->eventHandlerSet(m_handlers[site.idGet()]);
+#endif
 			fprintf(stderr,"Created site %p\n",&site);
 			}
 

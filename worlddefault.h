@@ -39,7 +39,12 @@ namespace Glinde
 			WorldDefault& playerCreate(const Stringkey& classname);
 
 			void siteCreated(Site& site)
-				{m_world_eh->onSiteCreated(*this,site);}
+				{
+				m_world_eh->onSiteCreated(*this,site);
+#if 0
+				site->init();
+#endif
+				}
 
 			void siteDestroying(Site& site) noexcept
 				{m_world_eh->onSiteDestroy(*this,site);}

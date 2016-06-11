@@ -34,6 +34,22 @@ namespace Glinde
 			Range<const ObjectManager::value_type> objectsGet() const noexcept
 				{return m_objects.objectsGet();}
 
+			Site& eventHandlerSet(EventHandler& eh) noexcept
+				{
+				r_eh=&eh;
+				return *this;
+				}
+
+			EventHandler& eventHandlerGet() noexcept
+				{return *r_eh;}
+
+			Site& init() noexcept
+				{
+				if(r_eh!=nullptr)
+					{r_eh->onInit(*this);}
+				return *this;
+				}
+
 
 			/**\brief Updates the current state
 			 *
@@ -52,6 +68,7 @@ namespace Glinde
 		private:
 			const Map* r_map;
 			World* r_world;
+			EventHandler* r_eh;
 			FaceRejectionTree m_tree;
 			const Model* r_model;
 			ObjectManager m_objects;

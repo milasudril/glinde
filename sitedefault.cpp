@@ -12,7 +12,7 @@ target[name[sitedefault.o] type[object]]
 using namespace Glinde;
 
 SiteDefault::SiteDefault(const Map& map,World& world_notify):r_map(&map)
-	,r_world(&world_notify),m_tree(map.modelGet(),0)
+	,r_world(&world_notify),r_eh(nullptr),m_tree(map.modelGet(),0)
 	{
  	GLINDE_DEBUG_PRINT("Building site from map %s",map.nameGet());
 	r_model=&map.modelGet();
@@ -29,7 +29,8 @@ SiteDefault::SiteDefault(const Map& map,World& world_notify):r_map(&map)
 	}
 
 SiteDefault::SiteDefault(SiteDefault&& obj) noexcept:
-	 r_map(obj.r_map),r_world(obj.r_world),m_tree(std::move(obj.m_tree))
+	 r_map(obj.r_map),r_world(obj.r_world),r_eh(obj.r_eh)
+	,m_tree(std::move(obj.m_tree))
 	,r_model(obj.r_model),m_objects(std::move(obj.m_objects))
 	{
 	obj.r_world=nullptr;
@@ -40,6 +41,7 @@ SiteDefault& SiteDefault::operator=(SiteDefault&& obj) noexcept
 	{
 	std::swap(r_map,obj.r_map);
 	std::swap(r_world,obj.r_world);
+	std::swap(r_eh,obj.r_eh);
 	std::swap(m_tree,obj.m_tree);
 	std::swap(r_model,obj.r_model);
 	std::swap(m_objects,obj.m_objects);
