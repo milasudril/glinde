@@ -56,15 +56,26 @@ EngineDefault::EngineDefault():m_world(nullptr),m_world_loader_task(nullptr)
 
 EngineDefault::~EngineDefault()
 	{
+	cleanup();
+	}
+
+void EngineDefault::cleanup()
+	{
 	logWriterAttach(nullptr);
 	if(m_world_loader_task!=nullptr)
 		{
 		delete m_world_loader_task;
+		m_world_loader_task=nullptr;
 		delete m_world_loader;
+		m_world_loader=nullptr;
 		}
 	if(m_world!=nullptr)
-		{delete m_world;}
+		{
+		delete m_world;
+		m_world=nullptr;
+		}
 	}
+
 
 EngineDefault& EngineDefault::timerSet(const Timer* timer) noexcept
 	{
@@ -193,6 +204,7 @@ void EngineDefault::messageProcess(const Message& msg)
 		{
 		case MessageID::STOP:
 			m_stop=1;
+			cleanup();
 			break;
 
 		case MessageID::CONSOLE_WRITE_STRING:
@@ -220,6 +232,7 @@ void EngineDefault::messageProcess(const Message& msg)
 				{
 				delete m_world_loader_task;
 				delete m_world_loader;
+				m_world_loader=nullptr;
 				m_world_loader_task=nullptr;
 				}
 			auto world_new=msg.dataGetPointer<WorldDefault>();

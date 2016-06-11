@@ -1,4 +1,4 @@
-all: glinde-json-exporter.zip release debug test.zip doc
+all: glinde-json-exporter.zip test.zip debug release doc
 
 glinde: build.py config_in.json
 	./build.py

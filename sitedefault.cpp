@@ -4,13 +4,15 @@ target[name[sitedefault.o] type[object]]
 
 #include "sitedefault.h"
 #include "map.h"
+#include "world.h"
 #include "debug.h"
 #include "intersections.h"
 #include "transformations.h"
 
 using namespace Glinde;
 
-SiteDefault::SiteDefault(const Map& map):r_map(map),m_tree(map.modelGet(),0)
+SiteDefault::SiteDefault(const Map& map,World& world_notify):r_map(&map)
+	,r_world(&world_notify),m_tree(map.modelGet(),0)
 	{
  	GLINDE_DEBUG_PRINT("Building site from map %s",map.nameGet());
 	r_model=&map.modelGet();
@@ -23,6 +25,32 @@ SiteDefault::SiteDefault(const Map& map):r_map(map),m_tree(map.modelGet(),0)
 			{m_objects.insert(WorldObject(*ptr));}
 		++ptr;
 		}
+	r_world->siteCreated(*this);
+	}
+
+SiteDefault::SiteDefault(SiteDefault&& obj) noexcept:
+	 r_map(obj.r_map),r_world(obj.r_world),m_tree(std::move(obj.m_tree))
+	,r_model(obj.r_model),m_objects(std::move(obj.m_objects))
+	{
+	obj.r_world=nullptr;
+	r_world->siteMoved(*this);
+	}
+
+SiteDefault& SiteDefault::operator=(SiteDefault&& obj) noexcept
+	{
+	std::swap(r_map,obj.r_map);
+	std::swap(r_world,obj.r_world);
+	std::swap(m_tree,obj.m_tree);
+	std::swap(r_model,obj.r_model);
+	std::swap(m_objects,obj.m_objects);
+	r_world->siteMoved(*this);
+	return *this;
+	}
+
+SiteDefault::~SiteDefault()
+	{
+	if(r_world!=nullptr)
+		{r_world->siteDestroying(*this);}
 	}
 
 

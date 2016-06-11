@@ -17,6 +17,7 @@ namespace Glinde
 	class ItemClass;
 	class Map;
 	class Stringkey;
+	class World;
 
 	class ResourceManager
 		{
@@ -27,7 +28,7 @@ namespace Glinde
 			const Model& modelGet(const char* sibling_file,const char* filename);
 			const ItemClass& itemClassGet(const Stringkey& classname) const;
 			const Image& textureGet(const char* sibling_file,const char* filename);
-			SiteDefault& siteGet(const Stringkey& mapname);
+			SiteDefault& siteGet(const Stringkey& mapname,World& world_notify);
 
 		private:
 			Filesystem& r_source;

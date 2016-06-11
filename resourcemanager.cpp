@@ -89,7 +89,7 @@ const Image& ResourceManager::textureGet(const char* sibling,const char* filenam
 		}).first->second;
 	}
 
-SiteDefault& ResourceManager::siteGet(const Stringkey& mapname)
+SiteDefault& ResourceManager::siteGet(const Stringkey& mapname,World& world_notify)
 	{
 	auto i_site=m_sites.find(mapname);
 	if(i_site==m_sites.end())
@@ -99,7 +99,7 @@ SiteDefault& ResourceManager::siteGet(const Stringkey& mapname)
 			{throw ErrorMessage("There is no map for the given site");}
 
 		return m_sites.emplace(std::pair<Stringkey,SiteDefault>
-			{mapname,SiteDefault(i->second)}).first->second;
+			{mapname,SiteDefault(i->second,world_notify)}).first->second;
 		}
 	return i_site->second;
 	}

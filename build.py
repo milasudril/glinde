@@ -95,7 +95,7 @@ def wand_exec(data,profile):
 		'Wand[paths[targets[__targets_'+socket.gethostname()+'-'\
 			+urllib.parse.quote(profile,safe='')+']]]]]'
 
-	subprocess.run(['wand',arg])
+	subprocess.run(['wand',arg],check=True)
 
 def touch(target,reference):
 	ref=os.path.getmtime(reference)

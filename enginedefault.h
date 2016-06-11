@@ -72,6 +72,7 @@ namespace Glinde
 
 
 			void worldLoadedPost(WorldDefault* world);
+			void cleanup();
 
 			void messageProcess(const Message& msg);
 		};

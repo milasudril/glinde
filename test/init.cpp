@@ -21,10 +21,31 @@ class Init:public World::EventHandler
 			world.playerCreate(Stringkey("human")).siteSet(Stringkey("map00"));
 			}
 
-		void onUnload(World& world)
+		void onUnload(World& world) noexcept
 			{
-			printf("Good bye\n");
+			fprintf(stderr,"Good bye\n");
+			}
+
+		void destroy() noexcept
+			{
+			fprintf(stderr,"I am going to die now\n");
 			delete this;
+			}
+
+
+		void onSiteCreated(World& world,Site& site)
+			{
+			fprintf(stderr,"Created site %p\n",&site);
+			}
+
+		void onSiteDestroy(World& world,Site& site) noexcept
+			{
+			fprintf(stderr,"Site %p is being destroyed\n",&site);
+			}
+
+		void onSiteMoved(World& world,Site& site) noexcept
+			{
+			fprintf(stderr,"Site moved to %p\n",&site);
 			}
 	};
 

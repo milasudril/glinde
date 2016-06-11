@@ -8,6 +8,7 @@ target[name[world.h] type[include]]
 namespace Glinde
 	{
 	class Stringkey;
+	class Site;
 
 	class World
 		{
@@ -16,14 +17,29 @@ namespace Glinde
 				{
 				public:
 					virtual ~EventHandler()=default;
+					virtual void destroy() noexcept=0;
 					virtual void onLoaded(World& world)=0;
-					virtual void onUnload(World& world)=0;
+					virtual void onUnload(World& world){}
+					virtual void onSiteCreated(World& world,Site& site)=0;
+					virtual void onSiteDestroy(World& world,Site& site) noexcept=0;
+					virtual void onSiteMoved(World& world,Site& site) noexcept
+						{}
 				};
 			virtual ~World()=default;
 			virtual World& siteSet(const Stringkey& key)=0;
 			virtual World& playerCreate(const Stringkey& classname)=0;
+			virtual void siteCreated(Site& site)=0;
+			virtual void siteDestroying(Site& site) noexcept=0;
+			virtual void siteMoved(Site& site) noexcept=0;
 
 		typedef EventHandler& (*EventHandlerFactory)();
+
+		class EventHandlerDisposer
+			{
+			public:
+				void operator()(EventHandler* e) const noexcept
+					{e->destroy();}
+			};
 		};
 	}
 

@@ -14,12 +14,20 @@ namespace Glinde
 	{
 	class Map;
 	class Model;
+	class World;
 
 	class SiteDefault:public Site
 		{
 		public:
 			SiteDefault(Map&& map)=delete;
-			explicit SiteDefault(const Map& map);
+			explicit SiteDefault(const Map& map,World& world_notify);
+			SiteDefault(SiteDefault&& obj) noexcept;
+			SiteDefault& operator=(SiteDefault&& obj) noexcept;
+			SiteDefault(const SiteDefault&)=delete;
+			SiteDefault& operator=(const SiteDefault&)=delete;
+
+			~SiteDefault();
+
 			Range<ObjectManager::value_type> objectsGet() noexcept
 				{return m_objects.objectsGet();}
 
@@ -42,7 +50,8 @@ namespace Glinde
 			void update(uint64_t frame,double delta_t,int64_t wallclock_utc) noexcept;
 
 		private:
-			const Map& r_map;
+			const Map* r_map;
+			World* r_world;
 			FaceRejectionTree m_tree;
 			const Model* r_model;
 			ObjectManager m_objects;
