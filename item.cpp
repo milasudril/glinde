@@ -6,14 +6,13 @@ target[name[item.o] type[object]]
 #include "resourceobject.h"
 #include "resourcemanager.h"
 #include "errormessage.h"
-#include "stringkey.h"
 
 using namespace Glinde;
 
-Item::Item(ResourceManager& rc,const Glinde::ResourceObject& item)
+Item::Item(ResourceManager& rc,const Glinde::ResourceObject& item):m_tag("")
 	{
 	m_rot_z=static_cast<float>(static_cast<double>(item.objectGet("rot_z")));
-	m_tag=String(static_cast<const char*>(item.objectGet("tag")));
+	m_tag=Stringkey(static_cast<const char*>(item.objectGet("tag")));
 
 		{
 		auto position_init=item.objectGet("position_init");

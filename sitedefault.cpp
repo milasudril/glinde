@@ -3,7 +3,6 @@ target[name[sitedefault.o] type[object]]
 #endif
 
 #include "sitedefault.h"
-#include "map.h"
 #include "world.h"
 #include "debug.h"
 #include "intersections.h"
@@ -55,6 +54,17 @@ SiteDefault::~SiteDefault()
 		{r_world->siteDestroying(*this);}
 	}
 
+void SiteDefault::spotsVisit(SpotVisitor&& visitor)
+	{
+
+	}
+
+uint32_t SiteDefault::itemSpawn(const Stringkey& mapspot,const Stringkey& classname) noexcept
+	{
+	auto item=r_map->itemFind(mapspot);
+	GLINDE_DEBUG_PRINT("Spawning an item at %p",&item);
+	return static_cast<uint32_t>(-1);
+	}
 
 static
 glm::vec3 collisionCheck(const FaceRejectionTree& tree,const WorldObject& object

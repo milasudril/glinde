@@ -18,8 +18,6 @@ namespace Glinde
 			class EventHandler
 				{
 				public:
-					virtual ~EventHandler()=default;
-					virtual void destory()=0;
 					virtual void onInit(Site& site)=0;
 					virtual void onEnter(Site& site,WorldObject& who)=0;
 					virtual void onLeave(Site& site,WorldObject& who)=0;
@@ -29,8 +27,18 @@ namespace Glinde
 
 			virtual ~Site()=default;
 			virtual Site& eventHandlerSet(EventHandler& handler)=0;
-			virtual EventHandler& eventHandlerGet()=0;
 			virtual Site& init()=0;
+			virtual const Stringkey& idGet() const noexcept=0;
+
+			virtual uint32_t itemSpawn(const Stringkey& mapspot,const Stringkey& classname) noexcept=0;
+
+			class SpotVisitor
+				{
+				public:
+
+				};
+
+			virtual void spotsVisit(SpotVisitor&& visitor)=0;
 
 #if 0
 			virtual void exitTo(const Stringkey& sitename)=0;

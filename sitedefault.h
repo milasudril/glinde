@@ -7,6 +7,7 @@ dependency[sitedefault.o]
 #define GLINDE_SITEDEFAULT_H
 
 #include "site.h"
+#include "map.h"
 #include "facerejectiontree.h"
 #include "objectmanager.h"
 
@@ -40,16 +41,12 @@ namespace Glinde
 				return *this;
 				}
 
-			EventHandler& eventHandlerGet() noexcept
-				{return *r_eh;}
-
 			Site& init() noexcept
 				{
 				if(r_eh!=nullptr)
 					{r_eh->onInit(*this);}
 				return *this;
 				}
-
 
 			/**\brief Updates the current state
 			 *
@@ -64,6 +61,13 @@ namespace Glinde
 			 *
 			*/
 			void update(uint64_t frame,double delta_t,int64_t wallclock_utc) noexcept;
+
+			const Stringkey& idGet() const noexcept
+				{return r_map->idGet();}
+
+			uint32_t itemSpawn(const Stringkey& mapspot,const Stringkey& classname) noexcept;
+
+			void spotsVisit(SpotVisitor&& visitor);
 
 		private:
 			const Map* r_map;

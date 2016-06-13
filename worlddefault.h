@@ -12,7 +12,6 @@ dependency[worlddefault.o]
 #include "world.h"
 #include "resourcemanager.h"
 #include "actionprogram.h"
-#include "worldobject.h"
 
 #include <memory>
 
@@ -36,14 +35,10 @@ namespace Glinde
 				return *this;
 				}
 
-			WorldDefault& playerCreate(const Stringkey& classname);
-
 			void siteCreated(Site& site)
 				{
 				m_world_eh->onSiteCreated(*this,site);
-#if 0
-				site->init();
-#endif
+				site.init();
 				}
 
 			void siteDestroying(Site& site) noexcept
@@ -58,7 +53,6 @@ namespace Glinde
 			ActionProgram m_program;
 			std::unique_ptr<EventHandler,EventHandlerDisposer> m_world_eh;
 			ResourceManager m_resources;
-			WorldObject m_player;
 			SiteDefault* r_site;
 
 			static decltype(m_world_eh) eventHandlerCreate(const ActionProgram& program);

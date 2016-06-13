@@ -40,6 +40,8 @@ namespace Glinde
 			constexpr explicit ArrayFixed(U... values):data{values...}
 				{}
 
+			constexpr ArrayFixed(const ArrayFixed&)=default;
+
 
 			/**\brief Element access
 			 *
@@ -118,6 +120,10 @@ namespace Glinde
 		private:
 			T data[N];
 		};
+
+	template<class T>
+	class ArrayFixed<T,0>
+		{};
 	}
 
 #endif

@@ -29,10 +29,3 @@ WorldDefault::~WorldDefault()
 	{
 	m_world_eh->onUnload(*this);
 	}
-
-WorldDefault& WorldDefault::playerCreate(const Stringkey& classname)
-	{
-	const auto& item_class=m_resources.itemClassGet(classname);
-	m_player.modelSet(&item_class.modelGet()).massSet(item_class.massGet());
-	return *this;
-	}

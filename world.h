@@ -27,7 +27,6 @@ namespace Glinde
 				};
 			virtual ~World()=default;
 			virtual World& siteSet(const Stringkey& key)=0;
-			virtual World& playerCreate(const Stringkey& classname)=0;
 			virtual void siteCreated(Site& site)=0;
 			virtual void siteDestroying(Site& site) noexcept=0;
 			virtual void siteMoved(Site& site) noexcept=0;

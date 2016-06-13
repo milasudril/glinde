@@ -6,7 +6,7 @@ dependency[item.o]
 #ifndef GLINDE_ITEM_H
 #define GLINDE_ITEM_H
 
-#include "string.h"
+#include "stringkey.h"
 #include <glm/vec3.hpp>
 
 namespace Glinde
@@ -24,8 +24,8 @@ namespace Glinde
 			const ItemClass* classGet() const noexcept
 				{return r_class;}
 
-			const char* tagGet() const noexcept
-				{return m_tag.begin();}
+			const Stringkey& tagGet() const noexcept
+				{return m_tag;}
 
 			const glm::vec3& positionGet() const noexcept
 				{return m_position;}
@@ -35,7 +35,7 @@ namespace Glinde
 
 		private:
 			const ItemClass* r_class;
-			String m_tag;
+			Stringkey m_tag;
 			glm::vec3 m_position;
 			float m_rot_z;
 		};

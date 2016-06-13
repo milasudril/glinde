@@ -6,9 +6,11 @@
 //@	,"description":"Sample action program main file"
 //@	}
 
-#include "common/hello.h"
+#include "map00/eventhandler.h"
 #include <glinde/world.h>
 #include <glinde/stringkey.h>
+#include <glinde/mapfixed.h>
+
 #include <cstdio>
 
 using namespace Glinde;
@@ -16,6 +18,11 @@ using namespace Glinde;
 class Init:public World::EventHandler
 	{
 	public:
+		Init()
+			{
+			m_site_handlers.get<Stringkey("map00")>()=&m_map00;
+			}
+
 		void onLoaded(World& world)
 			{
 			world.siteSet(Stringkey("map00"));
@@ -35,9 +42,7 @@ class Init:public World::EventHandler
 
 		void onSiteCreated(World& world,Site& site)
 			{
-#if 0
-			site->eventHandlerSet(m_handlers[site.idGet()]);
-#endif
+			site.eventHandlerSet(*m_site_handlers[site.idGet()]);
 			fprintf(stderr,"Created site %p\n",&site);
 			}
 
@@ -50,6 +55,11 @@ class Init:public World::EventHandler
 			{
 			fprintf(stderr,"Site moved to %p\n",&site);
 			}
+
+	private:
+		MapFixed<Stringkey::HashValue,Site::EventHandler*
+			,Stringkey("map00")> m_site_handlers;
+		Map00::EventHandler m_map00;
 	};
 
 World::EventHandler& Glinde_World_EventHandler_create()
