@@ -65,6 +65,7 @@ namespace Glinde
 
 			Console m_con;
 			LogWriterConsole m_log;
+			uint32_t m_con_index;
 			MessageQueue m_messages;
 			uint64_t m_frame_current;
 			uint32_t m_message_count;

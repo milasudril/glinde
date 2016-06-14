@@ -174,7 +174,7 @@ static ArrayDynamic<Include> includesGet(DataSource&& src,const char* in_dir)
 						ret.append(Include{token.value,Include::Type::SYSTEM});
 						break;
 					default:
-						logWrite(LogMessageType::WARNING,"Illegal preprocessor token %s",token.value.begin());
+						logWrite(Log::MessageType::WARNING,"Illegal preprocessor token %s",token.value.begin());
 						break;
 					}
 				mode=Mode::NORMAL;
@@ -252,7 +252,7 @@ static void targetAdd(Spider& spider,const char* name_src,const char* in_dir
 		}
 	else
 		{
-		logWrite(LogMessageType::WARNING
+		logWrite(Log::MessageType::WARNING
 			,"Target %s in %s has an unkown target type %s",name,name_src,type);
 		}
 	}

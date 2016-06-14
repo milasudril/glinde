@@ -6,17 +6,17 @@ dependency[logwriterconsole.o]
 #ifndef GLINDE_LOGWRITERCONSOLE_H
 #define GLINDE_LOGWRITERCONSOLE_H
 
-#include "logwriter.h"
+#include "log.h"
 
 namespace Glinde
 	{
 	class Engine;
 
-	class LogWriterConsole:public LogWriter
+	class LogWriterConsole:public Log::Writer
 		{
 		public:
 			LogWriterConsole(Engine& engine):r_engine(engine){}
-			void write(LogMessageType type,const char* message);
+			void write(Log::MessageType type,const char* message);
 
 		private:
 			Engine& r_engine;

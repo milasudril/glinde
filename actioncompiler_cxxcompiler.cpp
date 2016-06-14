@@ -113,7 +113,7 @@ static void compilerRun(const Range<const String>& arg_strings)
 			{line.append(ch_in);}
 		else
 			{
-			logWrite(LogMessageType::LINE_QUOTE,line.begin());
+			logWrite(Log::MessageType::LINE_QUOTE,line.begin());
 			line.clear();
 			}
 		}
@@ -151,7 +151,7 @@ ArrayDynamic<String> optionStringCreate(const CxxOptions& options
 
 	if(options.cxxMinversion() > cxxMinversionDefault)
 		{
-		logWrite(LogMessageType::WARNING
+		logWrite(Log::MessageType::WARNING
 			,"Requesting C++ version %llu (default is %llu)"
 			,options.cxxMinversion(),cxxMinversionDefault);
 		ret.append(String(cxxNameGet(options.cxxMinversion())));

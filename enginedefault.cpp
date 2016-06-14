@@ -33,14 +33,14 @@ void EngineDefault::WorldLoader::run() noexcept
 	WorldDefault* world=nullptr;
 	try
 		{
-		logWrite(LogMessageType::INFORMATION,"Loading world from \"%s\""
+		logWrite(Log::MessageType::INFORMATION,"Loading world from \"%s\""
 			,m_filename.begin());
 
 		world=new WorldDefault(m_filename.begin());
 		}
 	catch(const ErrorMessage& msg)
 		{
-		logWrite(LogMessageType::ERROR,"%s",msg.messageGet());
+		logWrite(Log::MessageType::ERROR,"%s",msg.messageGet());
 		}
 
 	r_engine.worldLoadedPost(world);
@@ -50,7 +50,7 @@ EngineDefault::EngineDefault():m_world(nullptr),m_world_loader_task(nullptr)
 	,m_con(25,80),m_log(*this)
 	,m_message_count(0),m_stop(0)
 	{
-	logWriterAttach(&m_log);
+	m_con_index=logWriterAttach(m_log);
 	framecounterSet(0).windowSet(nullptr).timerSet(nullptr);
 	}
 
@@ -61,7 +61,6 @@ EngineDefault::~EngineDefault()
 
 void EngineDefault::cleanup()
 	{
-	logWriterAttach(nullptr);
 	if(m_world_loader_task!=nullptr)
 		{
 		delete m_world_loader_task;
@@ -74,6 +73,7 @@ void EngineDefault::cleanup()
 		delete m_world;
 		m_world=nullptr;
 		}
+	logWriterDetach(m_con_index);
 	}
 
 
@@ -241,7 +241,7 @@ void EngineDefault::messageProcess(const Message& msg)
 				if(m_world!=nullptr)
 					{delete m_world;}
 				m_world=world_new;
-				logWrite(LogMessageType::INFORMATION,"World successfully loaded");
+				logWrite(Log::MessageType::INFORMATION,"World successfully loaded");
 				}
 			}
 			break;

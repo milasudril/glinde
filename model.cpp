@@ -77,7 +77,7 @@ frameTagsLoad(const ResourceObject& obj, const char* source_name
 
 Model::Model(ResourceManager& textures,DataSource& source)
 	{
-	logWrite(LogMessageType::INFORMATION,"Loading model \"%s\""
+	logWrite(Log::MessageType::INFORMATION,"Loading model \"%s\""
 		,source.nameGet());
 	ResourceObject data(source);
 	m_frames=framesLoad(textures,data,source.nameGet());

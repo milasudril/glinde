@@ -83,7 +83,7 @@ namespace
 
 void PNGReader::on_warning(png_struct* pngptr,const char* message)
 	{
-	logWrite(LogMessageType::WARNING,"%s",message);
+	logWrite(Log::MessageType::WARNING,"%s",message);
 	}
 
 void PNGReader::on_error(png_struct* pngptr,const char* message)
@@ -293,12 +293,12 @@ static ColorConverter converterGet(PNGReader::ColorType color_type)
 	switch(color_type)
 		{
 		case PNGReader::ColorType::UNKNOWN:
-			logWrite(LogMessageType::WARNING
+			logWrite(Log::MessageType::WARNING
 				,"Color type for loaded image is unknown. Assuming LINEAR color values.");
 			return nullptr;
 
 		case PNGReader::ColorType::INFORMATION_MISSING:
-			logWrite(LogMessageType::WARNING
+			logWrite(Log::MessageType::WARNING
 				,"Color type information for loaded image is missing. Assuming sRGB.");
 			return fromSRGB;
 
@@ -309,7 +309,7 @@ static ColorConverter converterGet(PNGReader::ColorType color_type)
 			return fromSRGB;
 
 		default:
-			logWrite(LogMessageType::WARNING
+			logWrite(Log::MessageType::WARNING
 				,"Color type for loaded image is unknown. Assuming LINEAR color values.");
 			return nullptr;
 		}

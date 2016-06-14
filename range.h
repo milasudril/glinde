@@ -26,22 +26,16 @@ namespace Glinde
 				r_begin(begin),m_length(static_cast<size_t>(end-begin))
 				{}
 
-			constexpr iterator begin() noexcept
+			constexpr iterator begin() const noexcept
 				{return r_begin;}
 
-			constexpr iterator end() noexcept
+			constexpr iterator end() const noexcept
 				{return r_begin+m_length;}
 
 			constexpr size_t length() const noexcept
 				{return m_length;}
 
-			T& operator[](size_t k) noexcept
-				{
-				assert(k<m_length);
-				return r_begin[k];
-				}
-
-			const T& operator[](size_t k) const noexcept
+			T& operator[](size_t k) const noexcept
 				{
 				assert(k<m_length);
 				return r_begin[k];

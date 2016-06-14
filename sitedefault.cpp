@@ -108,28 +108,26 @@ void SiteDefault::update(uint64_t frame,double delta_t,int64_t wallclock_utc) no
 		auto& obj=ptr->object();
 
 	//	Integrate position
-		if(obj.modelGet()!=r_model)
+		auto x=obj.positionGet();
+		auto v=obj.velocityGet();
+
+		auto c=obj.dampingGet();
+		auto F=obj.forceGet();
+		auto m=obj.massGet();
+
+		auto a=( F - c*glm::vec3(v.x,v.y,0.0f) + m*g )/m;
+		v+=dt*a;
+
+		if(obj.modelGet()!=nullptr && length(v)>0.0f)
 			{
-			auto x=obj.positionGet();
-			auto v=obj.velocityGet();
-
-			auto c=obj.dampingGet();
-			auto F=obj.forceGet();
-			auto m=obj.massGet();
-
-			auto a=( F - c*glm::vec3(v.x,v.y,0.0f) + m*g )/m;
-			v+=dt*a;
-
-			if(obj.modelGet()!=nullptr && length(v)>0.0f)
-				{
-				v=collisionCheck(m_tree,obj,x + dt*v,v);
-				}
-
-			x+=dt*v;
-			obj.normalImpulseSet(glm::vec3(0.0f,0.0f,0.0f));
-			obj.velocitySet(v);
-			obj.positionSet(x);
+			v=collisionCheck(m_tree,obj,x + dt*v,v);
 			}
+
+		x+=dt*v;
+		obj.normalImpulseSet(glm::vec3(0.0f,0.0f,0.0f));
+		obj.velocitySet(v);
+		obj.positionSet(x);
+
 		++ptr;
 		}
 	}

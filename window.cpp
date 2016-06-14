@@ -92,7 +92,7 @@ static size_t instance_count=0;
 
 static void init()
 	{
-	logWrite(LogMessageType::INFORMATION,"Initializing GLFW version %s"
+	logWrite(Log::MessageType::INFORMATION,"Initializing GLFW version %s"
 		,glfwGetVersionString());
 
 	glfwSetErrorCallback(glfwErrorRaise);
@@ -108,7 +108,7 @@ static void init()
 
 static void deinit()
 	{
-	logWrite(LogMessageType::INFORMATION,"Terminating GLFW");
+	logWrite(Log::MessageType::INFORMATION,"Terminating GLFW");
 	glfwTerminate();
 	}
 
@@ -124,14 +124,14 @@ Window::Window(const char* title,unsigned int width,unsigned int height
 	if(instance_count==0)
 		{init();}
 
-	logWrite(LogMessageType::INFORMATION,"Creating an OpenGL window");
+	logWrite(Log::MessageType::INFORMATION,"Creating an OpenGL window");
 //	HACK: Create a window that is one unit wider, so we are able to force a
 //	resize message to be sent (See (1) below).
 	auto window=glfwCreateWindow(width + 1,height,title,NULL,NULL);
 	assert(window!=NULL);
 	glfwMakeContextCurrent(window);
 	glewExperimental=1;
-	logWrite(LogMessageType::INFORMATION,"Initializing GLEW %s"
+	logWrite(Log::MessageType::INFORMATION,"Initializing GLEW %s"
 		,glewGetString(GLEW_VERSION));
 	auto glew_result=glewInit();
 	if(glew_result != GLEW_OK)
@@ -140,7 +140,7 @@ Window::Window(const char* title,unsigned int width,unsigned int height
 			,glewGetErrorString(glew_result));
 		}
 
-	logWrite(LogMessageType::INFORMATION,"Got an OpenGL context with the "
+	logWrite(Log::MessageType::INFORMATION,"Got an OpenGL context with the "
 		"following characteristics:\n\n"
 		"  Vendor: %s\n"
 		"  Renderer: %s\n"

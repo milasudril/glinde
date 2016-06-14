@@ -26,7 +26,7 @@ TargetCxxObject::create(const ResourceObject& target,const CxxCompiler& cxx)
 void TargetCxxObject::compile(Target& target
 	,const Range<const Target* const>& targets_rel)
 	{
-	logWrite(LogMessageType::INFORMATION,"Compiling %s",target.nameSourceGet());
+	logWrite(Log::MessageType::INFORMATION,"Compiling %s",target.nameSourceGet());
 
 	compilerGet().compile(target.nameSourceFullGet(),target.nameFullGet()
 		,options());
@@ -70,7 +70,7 @@ TargetCxxDLL::create(const ResourceObject& target,const CxxCompiler& cxx)
 void TargetCxxDLL::compile(Target& target
 	,const Range<const Target* const>& targets_rel)
 	{
-	logWrite(LogMessageType::INFORMATION,"Compiling %s",target.nameSourceGet());
+	logWrite(Log::MessageType::INFORMATION,"Compiling %s",target.nameSourceGet());
 
 //	TODO: External/internal libraries?
 	ArrayDynamic<String> files;

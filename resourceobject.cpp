@@ -144,7 +144,7 @@ double ResourceObject::floatGet() const noexcept
 	{
 	if(typeGet()==Type::INTEGER)
 		{
-		logWrite(LogMessageType::WARNING
+		logWrite(Log::MessageType::WARNING
 			,"Reading floating point value encoded as integer.");
 		return static_cast<double>(integerGet());
 		}

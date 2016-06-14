@@ -34,7 +34,7 @@ namespace
 					{
 					String extract_to(r_src_prefix);
 					extract_to.append(data.filename);
-					logWrite(LogMessageType::INFORMATION,"Extracting file to %s",extract_to.begin());
+					logWrite(Log::MessageType::INFORMATION,"Extracting file to %s",extract_to.begin());
 					fs.extract(data.filename,extract_to.begin(),data.directory);
 					r_spider.filenameAdd(data.filename + 1,data.directory);
 					}
@@ -75,7 +75,7 @@ static void targetsCreate(Spider& spider
 	{
 	if(directory_is)
 		{
-		logWrite(LogMessageType::INFORMATION,"Adding target for directory %s (in %s)",name_src,in_dir);
+		logWrite(Log::MessageType::INFORMATION,"Adding target for directory %s (in %s)",name_src,in_dir);
 		spider.targetAdd(name_src,name_src,TargetDirectory::create())
 			.dependencyAdd(Dependency{Stringkey(in_dir)});
 		}
@@ -84,7 +84,7 @@ static void targetsCreate(Spider& spider
 		auto loader=spider.loaderGet(name_src);
 		if(loader!=nullptr)
 			{
-			logWrite(LogMessageType::INFORMATION,"Loading targets from %s (in %s)",name_src,in_dir);
+			logWrite(Log::MessageType::INFORMATION,"Loading targets from %s (in %s)",name_src,in_dir);
 			loader->targetsLoad(name_src,in_dir,spider);
 			}
 		}

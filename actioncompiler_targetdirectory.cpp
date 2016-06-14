@@ -20,7 +20,7 @@ std::unique_ptr<TargetDirectory> TargetDirectory::create()
 void TargetDirectory::compile(Target& target
 	,const Range<const Target* const>& targets_related)
 	{
-	logWrite(LogMessageType::INFORMATION,"Creating directory %s",target.nameGet());
+	logWrite(Log::MessageType::INFORMATION,"Creating directory %s",target.nameGet());
 	Utility::mkdir(target.nameFullGet());
 	}
 

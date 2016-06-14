@@ -87,7 +87,7 @@ bool CxxPPTokenizer::read(Token& token)
 					{
 					case '\r':
 					case '\n':
-						logWrite(LogMessageType::WARNING,"%s: Newline after #",m_reader.nameGet());
+						logWrite(Log::MessageType::WARNING,"%s: Newline after #",m_reader.nameGet());
 						state=State::NEWLINE;
 						break;
 
@@ -155,7 +155,7 @@ bool CxxPPTokenizer::read(Token& token)
 
 					case '\r':
 					case '\n':
-						logWrite(LogMessageType::WARNING,"%s: Newline in string",m_reader.nameGet());
+						logWrite(Log::MessageType::WARNING,"%s: Newline in string",m_reader.nameGet());
 						state=State::NEWLINE;
 						goto done;
 
@@ -173,7 +173,7 @@ bool CxxPPTokenizer::read(Token& token)
 
 					case '\r':
 					case '\n':
-						logWrite(LogMessageType::WARNING,"%s: Newline in string",m_reader.nameGet());
+						logWrite(Log::MessageType::WARNING,"%s: Newline in string",m_reader.nameGet());
 						state=State::NEWLINE;
 						goto done;
 

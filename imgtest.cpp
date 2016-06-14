@@ -19,7 +19,7 @@ int main()
 		}
 	catch(const ErrorMessage& message)
 		{
-		logWrite(LogMessageType::ERROR,"%s",message.messageGet());
+		logWrite(Log::MessageType::ERROR,"%s",message.messageGet());
 		return -1;
 		}
 	return 0;

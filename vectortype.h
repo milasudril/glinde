@@ -42,7 +42,7 @@ namespace Glinde
 	 * Glinde::vec4_t<int> a{1,2,3,4};
 	 * Glinde::vec4_t<int> b{4,3,2,1};
 	 * auto c=a+b;
-	 * Glinde::logWrite(LogMessageType::INFORMATION,"c=[%d,%d,%d,%d]"
+	 * Glinde::logWrite(Log::MessageType::INFORMATION,"c=[%d,%d,%d,%d]"
 	 *     ,c[0],c[1],c[2],c[3]);
 	 * \endcode
 	 * will print
@@ -61,7 +61,7 @@ namespace Glinde
 	 * Glinde::vec2_t<int> a{1,2};
 	 * Glinde::vec2_t<int> b{4,3};
 	 * auto c=a+b;
-	 * Glinde::logWrite(LogMessageType::INFORMATION,"c=[%d,%d]",c[0],c[1]);
+	 * Glinde::logWrite(Log::MessageType::INFORMATION,"c=[%d,%d]",c[0],c[1]);
 	 * \endcode
 	 * will print
 	 *

@@ -150,8 +150,8 @@ void Glinde::ActionCompiler::programCompile(Filesystem& source
 	std::map<Stringkey,TargetDefault> targets;
 	CxxCompiler cxx(options);
 
-	logWrite(LogMessageType::INFORMATION,"Identified the following C++ compiler:\n");
-	logWrite(LogMessageType::LINE_QUOTE,"%s",cxx.versionGet());
+	logWrite(Log::MessageType::INFORMATION,"Identified the following C++ compiler:\n");
+	logWrite(Log::MessageType::LINE_QUOTE,"%s",cxx.versionGet());
 
 	TargetCxxLoader cxxloader(cxx);
 
@@ -176,18 +176,18 @@ void Glinde::ActionCompiler::programCompile(Filesystem& source
 	loaders[Stringkey(".h")]=&cxxloader;
 
 
-	logWrite(LogMessageType::INFORMATION,"Preparing action program");
+	logWrite(Log::MessageType::INFORMATION,"Preparing action program");
 
-	logWrite(LogMessageType::INFORMATION,"Looking for program source files");
+	logWrite(Log::MessageType::INFORMATION,"Looking for program source files");
 	SpiderDefault(targets,target_prefix,loaders,source_prefix).scan(source);
 
 	if(targets.size()==0)
 		{throw ErrorMessage("No source files found");}
-	logWrite(LogMessageType::INFORMATION,"Searching for child nodes in dependency graph");
+	logWrite(Log::MessageType::INFORMATION,"Searching for child nodes in dependency graph");
 	auto children=childrenFind(targets);
-	logWrite(LogMessageType::INFORMATION,"Ranking targets");
+	logWrite(Log::MessageType::INFORMATION,"Ranking targets");
 	auto length_max=targetsRank(children,targets.size());
-	logWrite(LogMessageType::INFORMATION,"Compiling action program");
+	logWrite(Log::MessageType::INFORMATION,"Compiling action program");
 	buildAll(children,length_max);
-	logWrite(LogMessageType::INFORMATION,"Action program compiled successfully");
+	logWrite(Log::MessageType::INFORMATION,"Action program compiled successfully");
 	}

@@ -82,15 +82,15 @@ class WindowTest:public Window
 int main()
 	{
 	deathtrapHandlerActivate();
-	logWrite(LogMessageType::INFORMATION,"Glinde is starting up");
+	logWrite(Log::MessageType::INFORMATION,"Glinde is starting up");
 	try
 		{
 		EngineDefault e;
-		logWrite(LogMessageType::INFORMATION,"Engine initialized");
+		logWrite(Log::MessageType::INFORMATION,"Engine initialized");
 		EventHandlerTest test(e);
 		WindowTest mainwin("Console",800,600,test,e.consoleGet());
 		TimerReal world_clock(30);
-		logWrite(LogMessageType::INFORMATION
+		logWrite(Log::MessageType::INFORMATION
 			,"World clock ticks every %.15g second",world_clock.delayGet());
 		e.windowSet(&mainwin).timerSet(&world_clock);
 		e.worldLoadAsync("test.zip");
@@ -98,8 +98,7 @@ int main()
 		}
 	catch(const ErrorMessage& message)
 		{
-		logWriterAttach(nullptr);
-		logWrite(LogMessageType::ERROR,"%s",message.messageGet());
+		logWrite(Log::MessageType::ERROR,"%s",message.messageGet());
 		return -1;
 		}
 	return 0;

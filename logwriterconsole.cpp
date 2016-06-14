@@ -9,33 +9,33 @@ target[name[logwriterconsole.o] type[object]]
 
 using namespace Glinde;
 
-void LogWriterConsole::write(LogMessageType type,const char* message)
+void LogWriterConsole::write(Log::MessageType type,const char* message)
 	{
 	const char* infostring="";
 	uint8_t color_mask=0x07;
 	switch(type)
 		{
-		case LogMessageType::INFORMATION:
+		case Log::MessageType::INFORMATION:
 			infostring="(i) ";
 			color_mask=0x0a;
 			break;
 
-		case LogMessageType::WARNING:
+		case Log::MessageType::WARNING:
 			infostring="(!) ";
 			color_mask=0x0e;
 			break;
 
-		case LogMessageType::ERROR:
+		case Log::MessageType::ERROR:
 			infostring="(x) ";
 			color_mask=0x0c;
 			break;
 
-		case LogMessageType::DEBUG:
+		case Log::MessageType::DEBUG:
 			infostring="(DEBUG) ";
 			color_mask=0x0d;
 			break;
 
-		case LogMessageType::LINE_QUOTE:
+		case Log::MessageType::LINE_QUOTE:
 			infostring="  ";
 			color_mask=0x07;
 			break;
