@@ -14,21 +14,22 @@ namespace Glinde
 	class LogDefault:public Log
 		{
 		public:
-			LogDefault();
+			LogDefault() noexcept;
 
-			void write(MessageType type,const char* format,...);
+			void write(MessageType type,const char* format_string
+				,const std::initializer_list<Variant>& args) noexcept;
 
 			/**\brief Attaches an additional LogWriter to the log writing system.
 			 *
 			 * \return The selected index for the writer. If this is not possible
-			 * the function returns static_cast<unsigned int>(-1).
+			 * the function returns (unsigned int)(-1).
 			 *
 			*/
-			unsigned int writerAttach(Writer& writer);
+			unsigned int writerAttach(Writer& writer) noexcept;
 
 			/**\brief Attaches an additional log writer to the log writing system.
 			*/
-			void writerDetach(unsigned int index);
+			void writerDetach(unsigned int index) noexcept;
 
 
 			/**\brief Registers a "deathtrap" handler, that is called by the operating

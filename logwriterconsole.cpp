@@ -9,7 +9,7 @@ target[name[logwriterconsole.o] type[object]]
 
 using namespace Glinde;
 
-void LogWriterConsole::write(Log::MessageType type,const char* message)
+void LogWriterConsole::write(Log::MessageType type,const char* message) noexcept
 	{
 	const char* infostring="";
 	uint8_t color_mask=0x07;

@@ -152,7 +152,7 @@ void UserEventHandler::onMouseDown(Window& source,int button)
 	auto g=9.81f;
 	auto t=0.25f;
 
-	GLINDE_DEBUG_PRINT("Player clicked %d",button);
+	GLINDE_DEBUG_PRINT("Player clicked #0;",button);
 	switch(button)
 		{
 		case 1:

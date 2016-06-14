@@ -7,13 +7,14 @@ target[name[sitedefault.o] type[object]]
 #include "debug.h"
 #include "intersections.h"
 #include "transformations.h"
+#include "variant.h"
 
 using namespace Glinde;
 
 SiteDefault::SiteDefault(const Map& map,World& world_notify):r_map(&map)
 	,r_world(&world_notify),r_eh(nullptr),m_tree(map.modelGet(),0)
 	{
- 	GLINDE_DEBUG_PRINT("Building site from map %s",map.nameGet());
+ 	GLINDE_DEBUG_PRINT("Building site from map #0;",{map.nameGet()});
 	r_model=&map.modelGet();
 	auto items=map.itemsGet();
 	auto ptr=items.begin();
@@ -62,7 +63,7 @@ void SiteDefault::spotsVisit(SpotVisitor&& visitor)
 uint32_t SiteDefault::itemSpawn(const Stringkey& mapspot,const Stringkey& classname) noexcept
 	{
 	auto item=r_map->itemFind(mapspot);
-	GLINDE_DEBUG_PRINT("Spawning an item at %p",&item);
+	GLINDE_DEBUG_PRINT("Spawning an item at #0;",&item);
 	return static_cast<uint32_t>(-1);
 	}
 

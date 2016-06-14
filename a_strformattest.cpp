@@ -11,16 +11,13 @@ int main()
 	{
 	char buffer[4096];
 
-	Glinde::Variant vars[]=
-		{
-		 &buffer
-		,"A string",int64_t(-144),uint64_t(235),'B',true,acos(-1.0),2.72f
-		};
-
 	Glinde::format(Glinde::Range<char>(buffer,4096)
 		,"#0;, #1;, #2b;, #2o;, #2d;, #2;, #2:12;, #2h;, #3;, #3h;, #4;, #4nh;, "
 		 "#5;\n#6,16;\n#6,15; #7;\n"
-		,Glinde::Range<const Glinde::Variant>(vars,sizeof(vars)/sizeof(vars[0])));
+		,{
+		 &buffer
+		,"A string",int64_t(-144),uint64_t(235),'B',true,acos(-1.0),2.72f
+		});
 
 	printf("%s",buffer);
 	}

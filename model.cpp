@@ -8,6 +8,7 @@ target[name[model.o] type[object]]
 #include "stringkey.h"
 #include "narrow_cast.h"
 #include "logwriter.h"
+#include "variant.h"
 
 using namespace Glinde;
 
@@ -16,7 +17,7 @@ meshesLoad(ResourceManager& rc,const ResourceObject& meshes
 	,const char* source_name)
 	{
 	auto n_meshes=meshes.objectCountGet();
-	GLINDE_DEBUG_PRINT("Got %zu individual meshes",n_meshes);
+	GLINDE_DEBUG_PRINT("Got #0; individual meshes",n_meshes);
 
 	return std::move(ArraySimple<Mesh>(n_meshes,[&meshes,&rc,source_name](size_t l)
 		{
@@ -31,7 +32,7 @@ framesLoad(ResourceManager& textures,const ResourceObject& obj
 	{
 	auto frames=obj.objectGet("frames");
 	auto n_frames=frames.objectCountGet();
-	GLINDE_DEBUG_PRINT("Got %zu frames",n_frames);
+	GLINDE_DEBUG_PRINT("Got #0; frames",n_frames);
 
 	return std::move(ArraySimple<Model::Frame>(n_frames,[&frames,&textures,source_name](size_t k)
 		{
@@ -77,8 +78,8 @@ frameTagsLoad(const ResourceObject& obj, const char* source_name
 
 Model::Model(ResourceManager& textures,DataSource& source)
 	{
-	logWrite(Log::MessageType::INFORMATION,"Loading model \"%s\""
-		,source.nameGet());
+	logWrite(Log::MessageType::INFORMATION,"Loading model \"#0;\""
+		,{source.nameGet()});
 	ResourceObject data(source);
 	m_frames=framesLoad(textures,data,source.nameGet());
 	m_frame_tags=frameTagsLoad(data,source.nameGet(),m_frames.length());

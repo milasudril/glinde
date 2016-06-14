@@ -6,6 +6,7 @@ target[name[worldobject.o] type[object]]
 #include "item.h"
 #include "itemclass.h"
 #include "debug.h"
+#include "variant.h"
 
 using namespace Glinde;
 
@@ -17,7 +18,7 @@ WorldObject::WorldObject(const Item& item):
 	,m_charge(0.0f)
 	{
 	auto& item_class=*item.classGet();
-	GLINDE_DEBUG_PRINT("Spawning object of class %s",item_class.nameGet());
+	GLINDE_DEBUG_PRINT("Spawning object of class #0;",item_class.nameGet());
 	modelSet(&item_class.modelGet());
 	positionSet(item.positionGet());
 	massSet(item_class.massGet());

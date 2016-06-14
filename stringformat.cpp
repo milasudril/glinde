@@ -73,6 +73,8 @@ static char* convert(char* result,T value,unsigned int radix) noexcept
 		{return convert_impl<T>(result,value,radix);}
 	}
 
+///Pointer
+
 static size_t format(const Range<char>& range,const void* ptr
 	,const Range<const char>& argstring) noexcept
 	{
@@ -85,8 +87,8 @@ static size_t format(const Range<char>& range,const void* ptr
 		}
 	else
 		{
-		char buffer[2*sizeof(ptr)+1];
-		auto pos_out=convert(buffer,reinterpret_cast<uintptr_t>(ptr),16);
+		char buffer[2 + 2*sizeof(ptr)+1]={"0x"};
+		auto pos_out=convert(buffer+2,reinterpret_cast<uintptr_t>(ptr),16);
 		auto n=std::min(static_cast<size_t>(pos_out-buffer),range.length());
 		memcpy(pos,buffer,n);
 		return n;
@@ -94,7 +96,7 @@ static size_t format(const Range<char>& range,const void* ptr
 	return 0;
 	}
 
-///Pointers
+///String constant
 
 static size_t format(const Range<char>& range,const char* cstr
 	,const Range<const char>& argstring) noexcept
@@ -379,14 +381,14 @@ static char* process(const Range<char>& range,const Variant& var
 		default:
 			{
 		//	User-specified type...
-			std::pair<const void*,const Variant::Formatter*> obj=var;
+			auto obj=std::pair<const void*,const Variant::Formatter*>(var);
 			pos+=obj.second->format(range,obj.first,argstring);
 			}
 		}
 	return pos;
 	}
 
-void Glinde::format(const Range<char>& buffer,const char* format
+void Glinde::format(const Range<char>& buffer,const char* format_string
 	,const Range<const Variant>& args)
 	{
 	auto write_pos=buffer.begin();
@@ -405,9 +407,9 @@ void Glinde::format(const Range<char>& buffer,const char* format
 	const char* argpos=nullptr;
 	size_t index_current=0;
 
-	while(write_pos!=write_end && *format!='\0')
+	while(write_pos!=write_end && *format_string!='\0')
 		{
-		auto ch_in=*format;
+		auto ch_in=*format_string;
 		switch(state)
 			{
 			case State::NORMAL:
@@ -417,7 +419,7 @@ void Glinde::format(const Range<char>& buffer,const char* format
 						state=State::PLACEHOLDER_BEGIN;
 						break;
 					default:
-						*write_pos=*format;
+						*write_pos=ch_in;
 						++write_pos;
 					}
 				break;
@@ -425,12 +427,12 @@ void Glinde::format(const Range<char>& buffer,const char* format
 			case State::PLACEHOLDER_BEGIN:
 				if(ch_in>='0' && ch_in<='9')
 					{
-					numpos=format;
+					numpos=format_string;
 					state=State::PLACEHOLDER_INDEX;
 					}
 				else
 					{
-					*write_pos=*format;
+					*write_pos=ch_in;
 					++write_pos;
 					state=State::NORMAL;
 					}
@@ -439,7 +441,7 @@ void Glinde::format(const Range<char>& buffer,const char* format
 			case State::PLACEHOLDER_INDEX:
 				if(!(ch_in>='0'&& ch_in<='9'))
 					{
-					index_current=string2uint<size_t>(Range<const char>(numpos,format));
+					index_current=string2uint<size_t>(Range<const char>(numpos,format_string));
 					if(index_current>=args.length()) //Ignore out-of-bounds index
 						{state=State::NORMAL;}
 					else
@@ -447,12 +449,12 @@ void Glinde::format(const Range<char>& buffer,const char* format
 						{
 						state=State::NORMAL;
 						write_pos=process(Range<char>(write_pos,write_end)
-							,args[index_current],Range<const char>(format,format));
+							,args[index_current],Range<const char>(format_string,format_string));
 						}
 					else
 						{
 						state=State::PLACEHOLDER_ARGSTRING;
-						argpos=format;
+						argpos=format_string;
 						}
 					}
 				break;
@@ -462,11 +464,11 @@ void Glinde::format(const Range<char>& buffer,const char* format
 					{
 					state=State::NORMAL;
 					write_pos=process(Range<char>(write_pos,write_end)
-						,args[index_current],Range<const char>(argpos,format));
+						,args[index_current],Range<const char>(argpos,format_string));
 					}
 				break;
 			}
-		++format;
+		++format_string;
 		}
 	if(write_pos!=write_end)
 		{

@@ -10,6 +10,8 @@ target[name[logdefault.o] type [object]]
 	#define __USE_MINGW_ANSI_STDIO 1
 #endif
 
+#include "stringformat.h"
+#include "variant.h"
 #include <cstdio>
 #include <cstdarg>
 #include <cstring>
@@ -21,11 +23,11 @@ namespace
 	class LogWriterStderr:public Log::Writer
 		{
 		public:
-			void write(Log::MessageType type, const char* message);
+			void write(Log::MessageType type, const char* message) noexcept;
 		};
 	}
 
-void LogWriterStderr::write(Log::MessageType type,const char* message)
+void LogWriterStderr::write(Log::MessageType type,const char* message) noexcept
 	{
 	const char* infostring;
 	switch(type)
@@ -56,30 +58,30 @@ void LogWriterStderr::write(Log::MessageType type,const char* message)
 
 static LogWriterStderr s_writer_stderr;
 
-LogDefault::LogDefault()
+LogDefault::LogDefault() noexcept
 	{
 	memset(m_writers.begin(),0,sizeof(m_writers));
 	writerAttach(s_writer_stderr);
 	}
 
-void LogDefault::write(Log::MessageType type,const char* format,...)
+void LogDefault::write(Log::MessageType type,const char* format_string
+	,const std::initializer_list<Variant>& args) noexcept
 	{
 	char msgbuff[4096];
-	va_list list;
-	va_start(list,format);
-	vsnprintf(msgbuff,4096,format,list);
-	va_end(list);
-	msgbuff[4095]=0;
-
-	for(unsigned int k=0;k<m_writers.length();++k)
+	format(Range<char>(msgbuff,sizeof(msgbuff)/sizeof(msgbuff[0])),format_string
+		,args);
+	auto k=static_cast<unsigned int>( m_writers.length() );
+	while(k!=0)
 		{
-		auto writer=m_writers[k];
-		if(writer!=nullptr)
-			{writer->write(type,msgbuff);}
+		--k;
+		if(m_writers[k]!=nullptr)
+			{
+			m_writers[k]->write(type,msgbuff);
+			}
 		}
 	}
 
-unsigned int LogDefault::writerAttach(Log::Writer& writer)
+unsigned int LogDefault::writerAttach(Log::Writer& writer) noexcept
 	{
 	auto k=static_cast<unsigned int>( m_writers.length() );
 	while(k!=0)
@@ -94,7 +96,7 @@ unsigned int LogDefault::writerAttach(Log::Writer& writer)
 	return static_cast<unsigned int>(-1);
 	}
 
-void LogDefault::writerDetach(unsigned int index)
+void LogDefault::writerDetach(unsigned int index) noexcept
 	{
 	if(index!=static_cast<unsigned int>(-1))
 		{m_writers[index]=nullptr;}
@@ -108,7 +110,7 @@ void Glinde::deathtrapHandlerActivate()
 #include <signal.h>
 #include <unistd.h>
 
-inline static const void* faultAddressGet(ucontext_t* context)
+inline static const void* faultAddressGet(ucontext_t* context) noexcept
 	{
 #if (__amd64 || __x86_64 || __x86_64__ || __amd64__)
 	return reinterpret_cast<void*>(context->uc_mcontext.gregs[REG_RIP]);
@@ -147,10 +149,10 @@ inline static const void* faultAddressGet(ucontext_t* context)
 
 	auto ptr=faultAddressGet((ucontext_t*)context);
 
-	auto n=snprintf(buffer,1024
-		,"(x) The wicked Witch of the East has setup a deathtrap because of %s "
-		"at %p. The program will now terminate.\n",reason,ptr);
-	write(STDERR_FILENO,buffer,n);
+	format(Range<char>(buffer,sizeof(buffer)/sizeof(buffer[0]))
+		,"(x) The wicked Witch of the East has setup a deathtrap because of #0; "
+		"at #1;. The program will now terminate.\n",{reason,ptr});
+	write(STDERR_FILENO,buffer,strlen(buffer));
 	_exit(signal);
 	}
 

@@ -6,6 +6,7 @@ target[name[actioncompiler_targetdirectory.o] type[object]]
 #include "logwriter.h"
 #include "debug.h"
 #include "utility.h"
+#include "variant.h"
 
 using namespace Glinde;
 using namespace ActionCompiler;
@@ -20,7 +21,8 @@ std::unique_ptr<TargetDirectory> TargetDirectory::create()
 void TargetDirectory::compile(Target& target
 	,const Range<const Target* const>& targets_related)
 	{
-	logWrite(Log::MessageType::INFORMATION,"Creating directory %s",target.nameGet());
+	logWrite(Log::MessageType::INFORMATION,"Creating directory #0;"
+		,{target.nameGet()});
 	Utility::mkdir(target.nameFullGet());
 	}
 

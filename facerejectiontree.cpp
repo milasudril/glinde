@@ -62,7 +62,6 @@ ArrayDynamic<unsigned int> facesFind(const Range<const unsigned int>& face_indic
 	,const Range< const Face >& faces)
 	{
 	ArrayDynamic<unsigned int> ret;
-//	GLINDE_DEBUG_PRINT("Number of faces: %u",face_indices.length());
 
 	auto face_index=face_indices.begin();
 	auto face_index_end=face_indices.end();
@@ -75,12 +74,9 @@ ArrayDynamic<unsigned int> facesFind(const Range<const unsigned int>& face_indic
 		auto index=*face_index;
 		assert(index < faces.length());
 
-	//	GLINDE_DEBUG_PRINT("  Hit test face %u@%u",face,3*face);
 	//	TODO add line cross check
 		if(insideAny(f[index],box) || intersect(f[index],boxFaces))
 			{
-		//	if(box.max.z>=2 && f[index][0].z>0)
-			//	{GLINDE_DEBUG_PRINT("%u is inside box",index);}
 			ret.append(index);
 			}
 		++face_index;
@@ -95,11 +91,6 @@ FaceRejectionTree::Node* FaceRejectionTree::nodeCreate(
 	,unsigned int depth
 	,const Range<const Face>& faces)
 	{
-/*	GLINDE_DEBUG_PRINT("Building FaceRejectionTree level %u for box "
-		"(%.8g,%.8g,%.8g) - (%.8g,%.8g,%.8g)"
-		,depth
-		,box.min.x,box.min.y,box.min.z
-		,box.max.x,box.max.y,box.max.z);*/
 	auto size=0.5f*glm::vec4(box.size(),0.0f);
 
 //	Terminate if the box becomes too small

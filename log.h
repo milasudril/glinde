@@ -5,8 +5,12 @@ target[name[log.h] type[include]]
 #ifndef GLINDE_LOG_H
 #define GLINDE_LOG_H
 
+#include <initializer_list>
+
 namespace Glinde
 	{
+	class Variant;
+
 	class Log
 		{
 		public:
@@ -37,7 +41,7 @@ namespace Glinde
 			class Writer
 				{
 				public:
-					virtual void write(MessageType type,const char* message)=0;
+					virtual void write(MessageType type,const char* message) noexcept=0;
 				};
 
 			/**\brief Writes a message to the console (or the standard error stream).
@@ -45,10 +49,10 @@ namespace Glinde
 			* This function writes a message to the console.
 			*
 			* \param type is any value listed in Log::MessageType
-			* \param format is a `printf`-style format string
 			*
 			*/
-			virtual void write(MessageType type,const char* format,...)=0;
+			virtual void write(MessageType type,const char* format
+				,const std::initializer_list<Variant>& args) noexcept=0;
 		};
 	}
 

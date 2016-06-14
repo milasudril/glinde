@@ -8,6 +8,7 @@ target[name[actioncompiler_cxxcompiler.o] type[object]]
 #include "readbuffer.h"
 #include "errormessage.h"
 #include "logwriter.h"
+#include "variant.h"
 
 using namespace Glinde;
 using namespace Glinde::ActionCompiler;
@@ -113,7 +114,7 @@ static void compilerRun(const Range<const String>& arg_strings)
 			{line.append(ch_in);}
 		else
 			{
-			logWrite(Log::MessageType::LINE_QUOTE,line.begin());
+			logWrite(Log::MessageType::LINE_QUOTE,"#0;",{line.begin()});
 			line.clear();
 			}
 		}
@@ -152,8 +153,8 @@ ArrayDynamic<String> optionStringCreate(const CxxOptions& options
 	if(options.cxxMinversion() > cxxMinversionDefault)
 		{
 		logWrite(Log::MessageType::WARNING
-			,"Requesting C++ version %llu (default is %llu)"
-			,options.cxxMinversion(),cxxMinversionDefault);
+			,"Requesting C++ version #0; (default is #1;)"
+			,{options.cxxMinversion(),cxxMinversionDefault});
 		ret.append(String(cxxNameGet(options.cxxMinversion())));
 		}
 

@@ -6,6 +6,7 @@ target[name[resourceobject.o] type[object] dependency[jansson;external]]
 #include "errormessage.h"
 #include "datasource.h"
 #include "logwriter.h"
+#include "variant.h"
 #include "debug.h"
 
 #include <jansson.h>
@@ -145,7 +146,7 @@ double ResourceObject::floatGet() const noexcept
 	if(typeGet()==Type::INTEGER)
 		{
 		logWrite(Log::MessageType::WARNING
-			,"Reading floating point value encoded as integer.");
+			,"Reading floating point value encoded as integer.",{});
 		return static_cast<double>(integerGet());
 		}
 	return json_real_value(static_cast<const json_t*>(m_handle));

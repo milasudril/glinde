@@ -11,6 +11,7 @@ target[name[actioncompiler_spiderdefault.o] type[object]]
 #include "logwriter.h"
 #include "stringkey.h"
 #include "utility.h"
+#include "variant.h"
 
 using namespace Glinde;
 using namespace Glinde::ActionCompiler;
@@ -34,7 +35,8 @@ namespace
 					{
 					String extract_to(r_src_prefix);
 					extract_to.append(data.filename);
-					logWrite(Log::MessageType::INFORMATION,"Extracting file to %s",extract_to.begin());
+					logWrite(Log::MessageType::INFORMATION
+						,"Extracting file to #0;",{extract_to.begin()});
 					fs.extract(data.filename,extract_to.begin(),data.directory);
 					r_spider.filenameAdd(data.filename + 1,data.directory);
 					}
@@ -75,7 +77,8 @@ static void targetsCreate(Spider& spider
 	{
 	if(directory_is)
 		{
-		logWrite(Log::MessageType::INFORMATION,"Adding target for directory %s (in %s)",name_src,in_dir);
+		logWrite(Log::MessageType::INFORMATION
+			,"Adding target for directory #0; (in #1;)",{name_src,in_dir});
 		spider.targetAdd(name_src,name_src,TargetDirectory::create())
 			.dependencyAdd(Dependency{Stringkey(in_dir)});
 		}
@@ -84,7 +87,8 @@ static void targetsCreate(Spider& spider
 		auto loader=spider.loaderGet(name_src);
 		if(loader!=nullptr)
 			{
-			logWrite(Log::MessageType::INFORMATION,"Loading targets from %s (in %s)",name_src,in_dir);
+			logWrite(Log::MessageType::INFORMATION
+				,"Loading targets from #0; (in #1;)",{name_src,in_dir});
 			loader->targetsLoad(name_src,in_dir,spider);
 			}
 		}

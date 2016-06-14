@@ -4,6 +4,7 @@ target[name[actioncompiler_cxxpptokenizer.o] type[object]]
 
 #include "actioncompiler_cxxpptokenizer.h"
 #include "logwriter.h"
+#include "variant.h"
 
 using namespace Glinde;
 using namespace ActionCompiler;
@@ -87,7 +88,8 @@ bool CxxPPTokenizer::read(Token& token)
 					{
 					case '\r':
 					case '\n':
-						logWrite(Log::MessageType::WARNING,"%s: Newline after #",m_reader.nameGet());
+						logWrite(Log::MessageType::WARNING,"#0;: Newline after ##"
+							,{m_reader.nameGet()});
 						state=State::NEWLINE;
 						break;
 
@@ -155,7 +157,8 @@ bool CxxPPTokenizer::read(Token& token)
 
 					case '\r':
 					case '\n':
-						logWrite(Log::MessageType::WARNING,"%s: Newline in string",m_reader.nameGet());
+						logWrite(Log::MessageType::WARNING,"#0;: Newline in string"
+							,{m_reader.nameGet()});
 						state=State::NEWLINE;
 						goto done;
 
@@ -173,7 +176,8 @@ bool CxxPPTokenizer::read(Token& token)
 
 					case '\r':
 					case '\n':
-						logWrite(Log::MessageType::WARNING,"%s: Newline in string",m_reader.nameGet());
+						logWrite(Log::MessageType::WARNING,"#0;: Newline in string"
+							,{m_reader.nameGet()});
 						state=State::NEWLINE;
 						goto done;
 

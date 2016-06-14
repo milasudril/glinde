@@ -3,15 +3,12 @@ target
 	[
 	name[timerreal.o] type[object] platform[;GNU/Linux]
 	dependency[rt;external]
-	dependency[pthread;external]
 	]
 #endif
 
-#define NDEBUG
 
 #include "timerreal.h"
 #include "errormessage.h"
-#include "debug.h"
 #include <signal.h>
 #include <time.h>
 #include <semaphore.h>
@@ -22,7 +19,6 @@ struct TimerReal::Impl
 	{
 	Impl(double frequency)
 		{
-		GLINDE_DEBUG_PRINT("Creating a timerreal %p",this);
 		if(sem_init(&m_trig,0,1)!=0)
 			{throw ErrorMessage("It was not possible to initialize a semaphore for the timerreal");}
 
@@ -81,7 +77,6 @@ struct TimerReal::Impl
 
 	static void sig_handler(int signal,siginfo_t* si,void* uc)
 		{
-		GLINDE_DEBUG_PRINT("Hello %p",si->si_ptr);
 		sem_post( reinterpret_cast<sem_t*>(uc) );
 		}
 

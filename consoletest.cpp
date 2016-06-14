@@ -7,6 +7,7 @@ target[name[consoletest] type[application] ]
 #include "enginedefault.h"
 #include "consolerenderer.h"
 #include "rendereroverlay.h"
+#include "variant.h"
 
 #include "window.h"
 #include "timerreal.h"
@@ -17,6 +18,7 @@ target[name[consoletest] type[application] ]
 #include "glelementarraybuffer.h"
 #include "gltexture.h"
 #include "glframebuffer.h"
+
 
 using namespace Glinde;
 
@@ -82,23 +84,23 @@ class WindowTest:public Window
 int main()
 	{
 	deathtrapHandlerActivate();
-	logWrite(Log::MessageType::INFORMATION,"Glinde is starting up");
+	logWrite(Log::MessageType::INFORMATION,"Glinde is starting up",{});
 	try
 		{
 		EngineDefault e;
-		logWrite(Log::MessageType::INFORMATION,"Engine initialized");
+		logWrite(Log::MessageType::INFORMATION,"Engine initialized",{});
 		EventHandlerTest test(e);
 		WindowTest mainwin("Console",800,600,test,e.consoleGet());
 		TimerReal world_clock(30);
 		logWrite(Log::MessageType::INFORMATION
-			,"World clock ticks every %.15g second",world_clock.delayGet());
+			,"World clock ticks every #0; second",{world_clock.delayGet()});
 		e.windowSet(&mainwin).timerSet(&world_clock);
 		e.worldLoadAsync("test.zip");
 		e.run();
 		}
 	catch(const ErrorMessage& message)
 		{
-		logWrite(Log::MessageType::ERROR,"%s",message.messageGet());
+		logWrite(Log::MessageType::ERROR,"#0;",{message.messageGet()});
 		return -1;
 		}
 	return 0;

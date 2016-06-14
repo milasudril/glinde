@@ -6,6 +6,7 @@ target[name[imgtest] type[application]]
 #include "archive.h"
 #include "logwriter.h"
 #include "errormessage.h"
+#include "variant.h"
 
 using namespace Glinde;
 
@@ -19,7 +20,7 @@ int main()
 		}
 	catch(const ErrorMessage& message)
 		{
-		logWrite(Log::MessageType::ERROR,"%s",message.messageGet());
+		logWrite(Log::MessageType::ERROR,"#0;",{message.messageGet()});
 		return -1;
 		}
 	return 0;

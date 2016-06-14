@@ -12,6 +12,7 @@ target[name[actioncompiler_main.o] type[object]]
 #include "logwriter.h"
 #include "utility.h"
 #include "fileout.h"
+#include "variant.h"
 
 using namespace Glinde;
 using namespace Glinde::ActionCompiler;
@@ -72,7 +73,7 @@ static size_t targetsRank(const Range<TargetDefault*>& children,size_t n_nodes)
 	auto ptr_end=children.end();
 	while(ptr!=ptr_end)
 		{
-		GLINDE_DEBUG_PRINT("Computing ranks for %s",(*ptr)->nameGet());
+		GLINDE_DEBUG_PRINT("Computing ranks for #0;",(*ptr)->nameGet());
 		ret=std::max(targetsRank((*ptr)->dependencies(),0,n_nodes),ret);
 		++ptr;
 		}
@@ -93,7 +94,8 @@ static void buildJobCreate(const Range<Dependency>& deps
 			assert(rank>=1);
 			if(compile_list[rank]==nullptr)
 				{
-				GLINDE_DEBUG_PRINT("Target %s has rank %zu/%zu",target->nameGet(),rank,compile_list.length());
+				GLINDE_DEBUG_PRINT("Target #0; has rank #1;/#2;"
+					,target->nameGet(),rank,compile_list.length());
 				compile_list[rank]=target;
 				buildJobCreate(target->dependencies(),compile_list);
 				}
@@ -105,7 +107,7 @@ static void buildJobCreate(const Range<Dependency>& deps
 static ArraySimple<Target*> buildJobCreate(TargetDefault& child
 	,size_t path_length)
 	{
-	GLINDE_DEBUG_PRINT("\"%s\" path_length: %zu",child.nameGet(),path_length);
+	GLINDE_DEBUG_PRINT("\"#0;\" path_length: #1;",child.nameGet(),path_length);
 	ArraySimple<Target*> ret(path_length + 1);
 	memset(ret.begin(),0,ret.length()*sizeof(Target*));
 	ret[0]=&child;
@@ -150,8 +152,8 @@ void Glinde::ActionCompiler::programCompile(Filesystem& source
 	std::map<Stringkey,TargetDefault> targets;
 	CxxCompiler cxx(options);
 
-	logWrite(Log::MessageType::INFORMATION,"Identified the following C++ compiler:\n");
-	logWrite(Log::MessageType::LINE_QUOTE,"%s",cxx.versionGet());
+	logWrite(Log::MessageType::INFORMATION,"Identified the following C++ compiler:\n",{});
+	logWrite(Log::MessageType::LINE_QUOTE,"#0;",{cxx.versionGet()});
 
 	TargetCxxLoader cxxloader(cxx);
 
@@ -176,18 +178,18 @@ void Glinde::ActionCompiler::programCompile(Filesystem& source
 	loaders[Stringkey(".h")]=&cxxloader;
 
 
-	logWrite(Log::MessageType::INFORMATION,"Preparing action program");
+	logWrite(Log::MessageType::INFORMATION,"Preparing action program",{});
 
-	logWrite(Log::MessageType::INFORMATION,"Looking for program source files");
+	logWrite(Log::MessageType::INFORMATION,"Looking for program source files",{});
 	SpiderDefault(targets,target_prefix,loaders,source_prefix).scan(source);
 
 	if(targets.size()==0)
 		{throw ErrorMessage("No source files found");}
-	logWrite(Log::MessageType::INFORMATION,"Searching for child nodes in dependency graph");
+	logWrite(Log::MessageType::INFORMATION,"Searching for child nodes in dependency graph",{});
 	auto children=childrenFind(targets);
-	logWrite(Log::MessageType::INFORMATION,"Ranking targets");
+	logWrite(Log::MessageType::INFORMATION,"Ranking targets",{});
 	auto length_max=targetsRank(children,targets.size());
-	logWrite(Log::MessageType::INFORMATION,"Compiling action program");
+	logWrite(Log::MessageType::INFORMATION,"Compiling action program",{});
 	buildAll(children,length_max);
-	logWrite(Log::MessageType::INFORMATION,"Action program compiled successfully");
+	logWrite(Log::MessageType::INFORMATION,"Action program compiled successfully",{});
 	}

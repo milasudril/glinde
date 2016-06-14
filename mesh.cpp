@@ -8,6 +8,7 @@ target[name[mesh.o] type[object]]
 #include "resourcemanager.h"
 #include "twins.h"
 #include "debug.h"
+#include "variant.h"
 #include <glm/glm.hpp>
 
 using namespace Glinde;
@@ -20,7 +21,7 @@ static ArraySimple<glm::vec3> verticesLoad(const ResourceObject& source
 	if(n_verts%3!=0)
 		{throw ErrorMessage("%s: Each vertex needs three components",source_name);}
 	n_verts/=3;
-	GLINDE_DEBUG_PRINT("Got %zu vertices",n_verts);
+	GLINDE_DEBUG_PRINT("Got #0; vertices",n_verts);
 	return std::move(ArraySimple<glm::vec3>(n_verts,[&verts](size_t k)
 		{
 		glm::vec3 ret;
@@ -49,7 +50,7 @@ static ArraySimple<glm::vec3> normalsLoad(const ResourceObject& source
 			,source_name,n_normals,vertex_count);
 		}
 
-	GLINDE_DEBUG_PRINT("Got %zu normals",n_normals);
+	GLINDE_DEBUG_PRINT("Got #0; normals",n_normals);
 
 	return std::move(ArraySimple<glm::vec3>(n_normals,[&normals](size_t k)
 		{
@@ -80,7 +81,7 @@ static ArraySimple<glm::vec2> uvsLoad(const ResourceObject& source
 			,n_uvs,vertex_count);
 		}
 
-	GLINDE_DEBUG_PRINT("Got %zu uv coordinates",n_uvs);
+	GLINDE_DEBUG_PRINT("Got #0; uv coordinates",n_uvs);
 
 	return std::move(ArraySimple<glm::vec2>(n_uvs,[&uvs](size_t k)
 		{
@@ -106,7 +107,7 @@ static ArraySimple<FaceIndirect> facesLoad(const ResourceObject& source
 		{throw ErrorMessage("%s: Each face needs three vertices",source_name);}
 	n_faces/=FaceIndirect::length();
 
-	GLINDE_DEBUG_PRINT("Got %zu faces",n_faces);
+	GLINDE_DEBUG_PRINT("Got #0; faces",n_faces);
 
 	return std::move(ArraySimple<FaceIndirect>(n_faces,[&faces,source_name,vertex_count](size_t k)
 		{
@@ -127,7 +128,7 @@ static ArrayFixed<const Image*,Mesh::textureCountGet()>
 texturesLoad(ResourceManager& textures,const ResourceObject& source
 	,const char* source_name)
 	{
-	GLINDE_DEBUG_PRINT("Loading textures for %s",source_name);
+	GLINDE_DEBUG_PRINT("Loading textures for #0;",source_name);
 	auto textures_lump=source.objectGet("textures");
 	auto n_textures=textures_lump.objectCountGet();
 	if(n_textures>=Mesh::textureCountGet())

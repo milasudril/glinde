@@ -13,6 +13,7 @@ target
 #include "errormessage.h"
 #include "logwriter.h"
 #include "debug.h"
+#include "variant.h"
 
 #include <GL/glew.h>
 #include <GL/gl.h>
@@ -47,7 +48,7 @@ class Window::EHWrapper
 				break;
 
 			default:
-				GLINDE_DEBUG_PRINT("Unknown keyboard action %d",action);
+				GLINDE_DEBUG_PRINT("Unknown keyboard action #0;",action);
 			}
 		}
 
@@ -65,7 +66,7 @@ class Window::EHWrapper
 				break;
 
 			default:
-				GLINDE_DEBUG_PRINT("Unknown mouse action %d",action);
+				GLINDE_DEBUG_PRINT("Unknown mouse action #0;",action);
 			}
 		}
 
@@ -92,8 +93,8 @@ static size_t instance_count=0;
 
 static void init()
 	{
-	logWrite(Log::MessageType::INFORMATION,"Initializing GLFW version %s"
-		,glfwGetVersionString());
+	logWrite(Log::MessageType::INFORMATION,"Initializing GLFW version #0;"
+		,{glfwGetVersionString()});
 
 	glfwSetErrorCallback(glfwErrorRaise);
 	GLINDE_ASSERT_CALL(glfwInit(),==,GL_TRUE);
@@ -108,7 +109,7 @@ static void init()
 
 static void deinit()
 	{
-	logWrite(Log::MessageType::INFORMATION,"Terminating GLFW");
+	logWrite(Log::MessageType::INFORMATION,"Terminating GLFW",{});
 	glfwTerminate();
 	}
 
@@ -124,15 +125,15 @@ Window::Window(const char* title,unsigned int width,unsigned int height
 	if(instance_count==0)
 		{init();}
 
-	logWrite(Log::MessageType::INFORMATION,"Creating an OpenGL window");
+	logWrite(Log::MessageType::INFORMATION,"Creating an OpenGL window",{});
 //	HACK: Create a window that is one unit wider, so we are able to force a
 //	resize message to be sent (See (1) below).
 	auto window=glfwCreateWindow(width + 1,height,title,NULL,NULL);
 	assert(window!=NULL);
 	glfwMakeContextCurrent(window);
 	glewExperimental=1;
-	logWrite(Log::MessageType::INFORMATION,"Initializing GLEW %s"
-		,glewGetString(GLEW_VERSION));
+	logWrite(Log::MessageType::INFORMATION,"Initializing GLEW #0;"
+		,{glewGetString(GLEW_VERSION)});
 	auto glew_result=glewInit();
 	if(glew_result != GLEW_OK)
 		{
@@ -142,12 +143,12 @@ Window::Window(const char* title,unsigned int width,unsigned int height
 
 	logWrite(Log::MessageType::INFORMATION,"Got an OpenGL context with the "
 		"following characteristics:\n\n"
-		"  Vendor: %s\n"
-		"  Renderer: %s\n"
-		"  Version: %s\n"
-		"  GLSL version: %s\n"
-		,glGetString(GL_VENDOR),glGetString(GL_RENDERER),glGetString(GL_VERSION)
-		,glGetString(GL_SHADING_LANGUAGE_VERSION));
+		"  Vendor:   #0;\n"
+		"  Renderer: #1;\n"
+		"  Version:  #2;\n"
+		"  GLSL version: #3;\n"
+		,{glGetString(GL_VENDOR),glGetString(GL_RENDERER),glGetString(GL_VERSION)
+		,glGetString(GL_SHADING_LANGUAGE_VERSION)});
 
 	r_handler=&handler;
 	m_handle=window;

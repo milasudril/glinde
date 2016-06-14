@@ -13,6 +13,7 @@ target
 #include "cpuinfo.h"
 #include "debug.h"
 #include "narrow_cast.h"
+#include "variant.h"
 #include <png.h>
 #include <cmath>
 #include <memory>
@@ -83,7 +84,7 @@ namespace
 
 void PNGReader::on_warning(png_struct* pngptr,const char* message)
 	{
-	logWrite(Log::MessageType::WARNING,"%s",message);
+	logWrite(Log::MessageType::WARNING,"libpng: #0;",{message});
 	}
 
 void PNGReader::on_error(png_struct* pngptr,const char* message)
@@ -201,7 +202,6 @@ template<class T>
 static void pixelsScale(const T* pixels_in,Image::SampleType* pixels_out,uint32_t N)
 	{
 	auto factor=static_cast<float>( ( 1L<<(8L*sizeof(T)) ) - 1 );
-	GLINDE_DEBUG_PRINT("Conversion factor: %.7g N=%u",factor,N);
 
 	while(N)
 		{
@@ -274,7 +274,6 @@ static void fromSRGB(Image& image)
 	auto ptr=image.pixelsGet();
 	auto n_ch=image.channelCountGet();
 	auto N=image.widthGet() * image.heightGet() * n_ch;
-	GLINDE_DEBUG_PRINT("Converting image from sRGB %u %u",n_ch,N);
 
 	auto k=0;
 	while(N!=0)
@@ -294,12 +293,12 @@ static ColorConverter converterGet(PNGReader::ColorType color_type)
 		{
 		case PNGReader::ColorType::UNKNOWN:
 			logWrite(Log::MessageType::WARNING
-				,"Color type for loaded image is unknown. Assuming LINEAR color values.");
+				,"Color type for loaded image is unknown. Assuming LINEAR color values.",{});
 			return nullptr;
 
 		case PNGReader::ColorType::INFORMATION_MISSING:
 			logWrite(Log::MessageType::WARNING
-				,"Color type information for loaded image is missing. Assuming sRGB.");
+				,"Color type information for loaded image is missing. Assuming sRGB.",{});
 			return fromSRGB;
 
 		case PNGReader::ColorType::GAMMACORRECTED:
@@ -310,7 +309,7 @@ static ColorConverter converterGet(PNGReader::ColorType color_type)
 
 		default:
 			logWrite(Log::MessageType::WARNING
-				,"Color type for loaded image is unknown. Assuming LINEAR color values.");
+				,"Color type for loaded image is unknown. Assuming LINEAR color values.",{});
 			return nullptr;
 		}
 	}
@@ -319,12 +318,13 @@ static ColorConverter converterGet(PNGReader::ColorType color_type)
 
 Image::Image(DataSource& source,uint32_t id)
 	{
-	GLINDE_DEBUG_PRINT("Reading image %s",source.nameGet());
+	logWrite(Log::MessageType::INFORMATION,"Reading image #0;"
+		,{source.nameGet()});
 		{
 		uint8_t magic[8]="xxxxxxx";
 		if(source.read(magic,8)!=8)
 			{
-			GLINDE_DEBUG_PRINT("magic: %s",magic);
+			GLINDE_DEBUG_PRINT("magic: #0;",magic);
 			throw ErrorMessage("An I/O error occured while reading the image "
 				"magic number.");
 			}
@@ -354,7 +354,7 @@ Image::Image(DataSource& source,uint32_t id)
 		converter(*this);
 		}
 
-	GLINDE_DEBUG_PRINT("Loaded an image of size %u x %u",widthGet(),heightGet());
+	GLINDE_DEBUG_PRINT("Loaded an image of size #0; x #1;",widthGet(),heightGet());
 	}
 
 Image::Image(uint32_t width,uint32_t height,uint32_t n_channels,uint32_t id):

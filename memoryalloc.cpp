@@ -7,6 +7,7 @@ target[name[memoryalloc.o] type[object] dependency[jemalloc;external]]
 #include "memoryalloc.h"
 #include "errormessage.h"
 #include "debug.h"
+#include "variant.h"
 #include <jemalloc/jemalloc.h>
 
 using namespace Glinde;
@@ -19,7 +20,7 @@ void* Glinde::memoryAllocate(size_t N)
 		throw ErrorMessage("It was not possible to allocate %zu bytes of memory"
 			,N);
 		}
-	GLINDE_DEBUG_PRINT("Allocated %zu bytes at %p",N,ret);
+	GLINDE_DEBUG_PRINT("Allocated #0; bytes at #1;",N,ret);
 	return ret;
 	}
 
@@ -27,7 +28,7 @@ void Glinde::memoryFree(void* buffer)
 	{
 	if(buffer!=nullptr)
 		{
-		GLINDE_DEBUG_PRINT("DeAllocating %p",buffer);
+		GLINDE_DEBUG_PRINT("DeAllocating #0;",buffer);
 		dallocx(buffer,MALLOCX_ALIGN(64));
 		}
 	}

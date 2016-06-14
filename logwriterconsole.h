@@ -16,7 +16,7 @@ namespace Glinde
 		{
 		public:
 			LogWriterConsole(Engine& engine):r_engine(engine){}
-			void write(Log::MessageType type,const char* message);
+			void write(Log::MessageType type,const char* message) noexcept;
 
 		private:
 			Engine& r_engine;

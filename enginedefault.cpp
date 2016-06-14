@@ -9,6 +9,7 @@ target[name[enginedefault.o] type[object]]
 #include "worlddefault.h"
 #include "archive.h"
 #include "thread.h"
+#include "variant.h"
 
 using namespace Glinde;
 
@@ -33,14 +34,14 @@ void EngineDefault::WorldLoader::run() noexcept
 	WorldDefault* world=nullptr;
 	try
 		{
-		logWrite(Log::MessageType::INFORMATION,"Loading world from \"%s\""
-			,m_filename.begin());
+		logWrite(Log::MessageType::INFORMATION,"Loading world from \"#0;\""
+			,{m_filename.begin()});
 
 		world=new WorldDefault(m_filename.begin());
 		}
 	catch(const ErrorMessage& msg)
 		{
-		logWrite(Log::MessageType::ERROR,"%s",msg.messageGet());
+		logWrite(Log::MessageType::ERROR,"#0;",{msg.messageGet()});
 		}
 
 	r_engine.worldLoadedPost(world);
@@ -241,7 +242,7 @@ void EngineDefault::messageProcess(const Message& msg)
 				if(m_world!=nullptr)
 					{delete m_world;}
 				m_world=world_new;
-				logWrite(Log::MessageType::INFORMATION,"World successfully loaded");
+				logWrite(Log::MessageType::INFORMATION,"World successfully loaded",{});
 				}
 			}
 			break;

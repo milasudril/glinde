@@ -73,6 +73,18 @@ namespace Glinde
 				m_type.type=UINT;
 				}
 
+			Variant(int32_t x) noexcept
+				{
+				m_data.x_int64=x;
+				m_type.type=INT;
+				}
+
+			Variant(uint32_t x) noexcept
+				{
+				m_data.x_uint64=x;
+				m_type.type=UINT;
+				}
+
 			Variant(char x) noexcept
 				{
 				m_data.x_char=x;
@@ -97,55 +109,55 @@ namespace Glinde
 				m_type.type=FLOAT;
 				}
 
-			operator std::pair<const void*,const Formatter*>() const noexcept
+			explicit operator std::pair<const void*,const Formatter*>() const noexcept
 				{
 				assert(!(m_type.type&msb<uintptr_t>()));
 				return {m_data.x_vptr,m_type.fmt};
 				};
 
-			operator const void*() const noexcept
+			explicit operator const void*() const noexcept
 				{
 				assert(m_type.type==POINTER);
 				return m_data.x_vptr;
 				}
 
-			operator const char*() const noexcept
+			explicit operator const char*() const noexcept
 				{
 				assert(m_type.type==STRING);
 				return m_data.x_cptr;
 				}
 
-			operator int64_t() const noexcept
+			explicit operator int64_t() const noexcept
 				{
 				assert(m_type.type==INT);
 				return m_data.x_int64;
 				}
 
-			operator uint64_t() const noexcept
+			explicit operator uint64_t() const noexcept
 				{
 				assert(m_type.type==UINT);
 				return m_data.x_uint64;
 				}
 
-			operator char() const noexcept
+			explicit operator char() const noexcept
 				{
 				assert(m_type.type==CHAR);
 				return m_data.x_char;
 				}
 
-			operator bool() const noexcept
+			explicit operator bool() const noexcept
 				{
 				assert(m_type.type==BOOL);
 				return m_data.x_bool;
 				}
 
-			operator double() const noexcept
+			explicit operator double() const noexcept
 				{
 				assert(m_type.type==DOUBLE);
 				return m_data.x_double;
 				}
 
-			operator float() const noexcept
+			explicit operator float() const noexcept
 				{
 				assert(m_type.type==FLOAT);
 				return m_data.x_float;

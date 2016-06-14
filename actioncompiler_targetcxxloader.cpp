@@ -14,6 +14,7 @@ target[name[actioncompiler_targetcxxloader.o] type[object]]
 #include "logwriter.h"
 #include "stringkey.h"
 #include "debug.h"
+#include "variant.h"
 
 using namespace Glinde;
 using namespace Glinde::ActionCompiler;
@@ -174,7 +175,8 @@ static ArrayDynamic<Include> includesGet(DataSource&& src,const char* in_dir)
 						ret.append(Include{token.value,Include::Type::SYSTEM});
 						break;
 					default:
-						logWrite(Log::MessageType::WARNING,"Illegal preprocessor token %s",token.value.begin());
+						logWrite(Log::MessageType::WARNING,"Illegal preprocessor token #0;"
+							,{token.value.begin()});
 						break;
 					}
 				mode=Mode::NORMAL;
@@ -207,7 +209,8 @@ static void includeAdd(Target& target,const Include& include,const char* src_pre
 				auto path=String(base).append(ref);
 				if(strcmp(path.begin(),target.nameGet())!=0)
 					{
-					GLINDE_DEBUG_PRINT("Got extra dependency %s %s",target.nameGet(),path.begin());
+					GLINDE_DEBUG_PRINT("Got extra dependency #0; #1;"
+						,target.nameGet(),path.begin());
 					target.dependencyAdd(Dependency{Stringkey(path.begin())});
 					}
 				}
@@ -239,7 +242,7 @@ static void targetAdd(Spider& spider,const char* name_src,const char* in_dir
 
 	if(details)
 		{
-		GLINDE_DEBUG_PRINT("Creating target %s",name.begin());
+		GLINDE_DEBUG_PRINT("Creating target #0;",name.begin());
 		auto& target=spider.targetAdd(name.begin(),name_src,std::move(details));
 		auto ptr=includes.begin();
 		auto ptr_end=includes.end();
@@ -253,7 +256,8 @@ static void targetAdd(Spider& spider,const char* name_src,const char* in_dir
 	else
 		{
 		logWrite(Log::MessageType::WARNING
-			,"Target %s in %s has an unkown target type %s",name,name_src,type);
+			,"Target #0; in #1; has an unkown target type #2;"
+				,{name.begin(),name_src,type});
 		}
 	}
 

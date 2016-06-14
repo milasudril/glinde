@@ -11,7 +11,10 @@ dependency[logwriter.o]
 
 namespace Glinde
 	{
-	void logWrite(Log::MessageType type,const char* message,...) noexcept;
+	void logWrite(Log::MessageType type,const char* format
+		,const std::initializer_list<Variant>& args) noexcept;
+	void logWriteDebug(const char* file,uint64_t line,const char* format
+		,const std::initializer_list<Variant>& args) noexcept;
 	uint32_t logWriterAttach(Log::Writer& writer) noexcept;
 	void logWriterDetach(uint32_t index) noexcept;
 	void deathtrapHandlerActivate() noexcept;

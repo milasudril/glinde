@@ -5,13 +5,14 @@ target[name[gltexture.o] type[object]]
 #include "gltexture.h"
 #include "image.h"
 #include "debug.h"
+#include "variant.h"
 
 using namespace Glinde;
 
 void GlTexture::dataSet(const Image& source) noexcept
 	{
-/*	GLINDE_DEBUG_PRINT("Upload texture data %u x %u"
-		,source.widthGet(),source.heightGet());*/
+	GLINDE_DEBUG_PRINT("Upload texture data #0; x #1;"
+		,source.widthGet(),source.heightGet());
 	glBindTexture(GL_TEXTURE_2D,m_id);
 	switch(source.channelCountGet())
 		{

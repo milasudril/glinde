@@ -7,6 +7,7 @@ target[name[actioncompiler_targetcxxtargets.o] type[object]]
 #include "arraysimple.h"
 #include "logwriter.h"
 #include "utility.h"
+#include "variant.h"
 
 using namespace Glinde;
 using namespace ActionCompiler;
@@ -26,7 +27,7 @@ TargetCxxObject::create(const ResourceObject& target,const CxxCompiler& cxx)
 void TargetCxxObject::compile(Target& target
 	,const Range<const Target* const>& targets_rel)
 	{
-	logWrite(Log::MessageType::INFORMATION,"Compiling %s",target.nameSourceGet());
+	logWrite(Log::MessageType::INFORMATION,"Compiling #0;",{target.nameSourceGet()});
 
 	compilerGet().compile(target.nameSourceFullGet(),target.nameFullGet()
 		,options());
@@ -34,7 +35,7 @@ void TargetCxxObject::compile(Target& target
 
 bool TargetCxxObject::upToDate(const Target& target,const Range<const Target* const>& targets_related) const noexcept
 	{
-	GLINDE_DEBUG_PRINT("Checking status for %s",target.nameGet());
+	GLINDE_DEBUG_PRINT("Checking status for #0;",target.nameGet());
 	if(Utility::newer(target.nameSourceGet(),target.nameFullGet()))
 		{return 0;}
 	auto ptr=targets_related.begin();
@@ -42,7 +43,7 @@ bool TargetCxxObject::upToDate(const Target& target,const Range<const Target* co
 	while(ptr!=ptr_end)
 		{
 		auto x=*ptr;
-		GLINDE_DEBUG_PRINT("  %s",x->nameGet());
+		GLINDE_DEBUG_PRINT("  #0;",x->nameGet());
 		if(dynamic_cast<const TargetCxxInclude*>( &(x->detailsGet()) )!=nullptr)
 			{
 			if(Utility::newer(x->nameSourceFullGet(),x->nameFullGet()))
@@ -70,7 +71,7 @@ TargetCxxDLL::create(const ResourceObject& target,const CxxCompiler& cxx)
 void TargetCxxDLL::compile(Target& target
 	,const Range<const Target* const>& targets_rel)
 	{
-	logWrite(Log::MessageType::INFORMATION,"Compiling %s",target.nameSourceGet());
+	logWrite(Log::MessageType::INFORMATION,"Compiling #0;",{target.nameSourceGet()});
 
 //	TODO: External/internal libraries?
 	ArrayDynamic<String> files;
@@ -92,7 +93,7 @@ void TargetCxxDLL::compile(Target& target
 
 bool TargetCxxDLL::upToDate(const Target& target,const Range<const Target* const>& targets_related) const noexcept
 	{
-	GLINDE_DEBUG_PRINT("Checking status for %s",target.nameGet());
+	GLINDE_DEBUG_PRINT("Checking status for #0;",target.nameGet());
 	if(Utility::newer(target.nameSourceGet(),target.nameFullGet()))
 		{return 0;}
 	auto ptr=targets_related.begin();
@@ -100,7 +101,7 @@ bool TargetCxxDLL::upToDate(const Target& target,const Range<const Target* const
 	while(ptr!=ptr_end)
 		{
 		auto x=*ptr;
-		GLINDE_DEBUG_PRINT("  %s",x->nameGet());
+		GLINDE_DEBUG_PRINT("  #0;",x->nameGet());
 		if(Utility::newer(x->nameSourceFullGet(),x->nameFullGet()))
 			{return 0;}
 		++ptr;

@@ -27,8 +27,7 @@ target[name[debug.h] type[include]]
 	 * the `printf` convention.
 	*/
 	#define GLINDE_DEBUG_PRINT(format,...)\
-		Glinde::logWrite(Glinde::Log::MessageType::DEBUG\
-			,"%s:%u: " format,__FILE__,__LINE__,##__VA_ARGS__)
+		Glinde::logWriteDebug(__FILE__,__LINE__,format,{__VA_ARGS__})
 
 	/**\brief Function call with assertion on return value
 	 *
