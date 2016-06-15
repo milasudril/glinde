@@ -5,6 +5,7 @@ target[name[fileout.o] type[object] platform[;GNU/Linux]]
 #include "fileout.h"
 #include "errormessage.h"
 #include "strerror.h"
+#include "variant.h"
 
 #define _FILE_OFFSET_BITS 64
 
@@ -22,8 +23,8 @@ FileOut::FileOut(const char* filename)
 		{
 		char errbuff[256];
 		strerror(errno,errbuff,256);
-		throw ErrorMessage("It was not possible to create the file %s. %s"
-			,filename,errbuff);
+		throw ErrorMessage("It was not possible to create the file #0;. #1;"
+			,{filename,errbuff});
 		}
 	}
 
@@ -37,6 +38,6 @@ size_t FileOut::write(const void* buffer,size_t count)
 	{
 	auto n=::write(static_cast<int>(m_handle),buffer,count);
 	if(n==-1)
-		{throw ErrorMessage("I/O error");}
+		{throw ErrorMessage("I/O error",{});}
 	return n;
 	}

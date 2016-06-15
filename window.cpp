@@ -88,7 +88,7 @@ static size_t instance_count=0;
 [[noreturn]] static void glfwErrorRaise(int code,const char* message)
 	{
 	throw ErrorMessage("The following error occured when trying to initialize "
-		"the window system:\n%s",message);
+		"the window system:\n#0;",{message});
 	}
 
 static void init()
@@ -137,8 +137,8 @@ Window::Window(const char* title,unsigned int width,unsigned int height
 	auto glew_result=glewInit();
 	if(glew_result != GLEW_OK)
 		{
-		throw ErrorMessage("Faild to initialize GLEW. %s"
-			,glewGetErrorString(glew_result));
+		throw ErrorMessage("Faild to initialize GLEW. #1;"
+			,{glewGetErrorString(glew_result)});
 		}
 
 	logWrite(Log::MessageType::INFORMATION,"Got an OpenGL context with the "

@@ -6,6 +6,7 @@ target[name[pipein.o] type[object] platform[;GNU/Linux]]
 #include "errormessage.h"
 #include "arraysimple.h"
 #include "strerror.h"
+#include "variant.h"
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -35,7 +36,7 @@ PipeIn::PipeIn(Stream stream_capture,const char* command
 		{
 		char errbuff[256];
 		strerror(errno,errbuff,256);
-		throw ErrorMessage("It was not possible to create an IPC pipe. %s",errbuff);
+		throw ErrorMessage("It was not possible to create an IPC pipe. #0;",{errbuff});
 		}
 
 	if(pipe(child_execfailed)==-1)
@@ -45,7 +46,7 @@ PipeIn::PipeIn(Stream stream_capture,const char* command
 		close(child_to_parent[1]);
 		char errbuff[256];
 		strerror(status,errbuff,256);
-		throw ErrorMessage("It was not possible to create an IPC pipe. %s",errbuff);
+		throw ErrorMessage("It was not possible to create an IPC pipe. #0;",{errbuff});
 		}
 
 //	Fill argument array
@@ -65,7 +66,7 @@ PipeIn::PipeIn(Stream stream_capture,const char* command
 		close(child_execfailed[1]);
 		char errbuff[256];
 		strerror(status,errbuff,256);
-		throw ErrorMessage("It was not possible to create a child process. %s",errbuff);
+		throw ErrorMessage("It was not possible to create a child process. #0;",{errbuff});
 		}
 
 	if(child==0)
@@ -98,7 +99,8 @@ PipeIn::PipeIn(Stream stream_capture,const char* command
 		char errbuff[256];
 		strerror(status,errbuff,256);
 		waitpid(child,&status,0);
-		throw ErrorMessage("It was not possible to start %s. %s",argv[0],errbuff);
+		throw ErrorMessage("It was not possible to start #0;. #0;1"
+			,{argv[0],errbuff});
 		}
 
 //	Everything is OK. Ready to go
@@ -135,7 +137,7 @@ size_t PipeIn::read(void* buffer,size_t count)
 		if(n==0)
 			{return n_read;}
 		if(n==-1)
-			{throw ErrorMessage("I/O error");}
+			{throw ErrorMessage("I/O error",{});}
 		pos+=n;
 		n_read+=n;
 		}

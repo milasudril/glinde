@@ -39,7 +39,7 @@ static size_t targetsRank(const Range<Dependency>& deps,size_t rank_current
 	,size_t depth_max)
 	{
 	if(depth_max==0)
-		{throw ErrorMessage("It is not possible to compile the action program. Cyclic dependency detected.");}
+		{throw ErrorMessage("It is not possible to compile the action program. Cyclic dependency detected.",{});}
 	auto ptr=deps.begin();
 	auto ptr_end=deps.end();
 	auto ret=rank_current;
@@ -184,7 +184,7 @@ void Glinde::ActionCompiler::programCompile(Filesystem& source
 	SpiderDefault(targets,target_prefix,loaders,source_prefix).scan(source);
 
 	if(targets.size()==0)
-		{throw ErrorMessage("No source files found");}
+		{throw ErrorMessage("No source files found",{});}
 	logWrite(Log::MessageType::INFORMATION,"Searching for child nodes in dependency graph",{});
 	auto children=childrenFind(targets);
 	logWrite(Log::MessageType::INFORMATION,"Ranking targets",{});

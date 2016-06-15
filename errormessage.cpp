@@ -3,17 +3,14 @@ target[name[errormessage.o] type[object]]
 #endif
 
 #include "errormessage.h"
+#include "stringformat.h"
 #include <cstdio>
 #include <cstdarg>
 
 using namespace Glinde;
 
-ErrorMessage::ErrorMessage(const char* format,...) noexcept
+ErrorMessage::ErrorMessage(const char* format_string
+	,const std::initializer_list<Variant>& args) noexcept
 	{
-	va_list list;
-	va_start(list,format);
-	vsnprintf(m_buffer,SIZE_BUFFER-1,format,list);
-	va_end(list);
-
-	m_buffer[SIZE_BUFFER-1]=0;
+	format(m_buffer,format_string,args);
 	}

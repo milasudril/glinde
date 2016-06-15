@@ -20,7 +20,7 @@ Item::Item(ResourceManager& rc,const Glinde::ResourceObject& item):m_tag("")
 		if(N!=3)
 			{
 			throw ErrorMessage("Error loading an item from the map definition: "
-				"The number of coordinates has to be equal to three.");
+				"The number of coordinates has to be equal to three.",{});
 			}
 
 		for(int k=0;k<3;++k)

@@ -5,6 +5,7 @@ target[name[filein.o] type[object] platform[;GNU/Linux]]
 #include "filein.h"
 #include "errormessage.h"
 #include "strerror.h"
+#include "variant.h"
 
 #define _FILE_OFFSET_BITS 64
 
@@ -22,8 +23,8 @@ FileIn::FileIn(const char* filename):m_name(filename)
 		{
 		char errbuff[256];
 		strerror(errno,errbuff,256);
-		throw ErrorMessage("It was not possible to open the file %s. %s"
-			,filename,errbuff);
+		throw ErrorMessage("It was not possible to open the file #0;. #1;"
+			,{filename,errbuff});
 		}
 	}
 
@@ -43,7 +44,7 @@ size_t FileIn::read(void* buffer,size_t count)
 		if(n==0)
 			{return n_read;}
 		if(n==-1)
-			{throw ErrorMessage("I/O error");}
+			{throw ErrorMessage("I/O error",{});}
 		pos+=n;
 		n_read+=n;
 		}

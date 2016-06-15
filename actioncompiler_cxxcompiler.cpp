@@ -29,7 +29,7 @@ static String compilerIdentify()
 		{
 		throw ErrorMessage("It was not possible to identify the C++ compiler, "
 			"but the corresponding command exists. "
-			"The compiler returned status code %d.",result);
+			"The compiler returned status code #0;.",{result});
 		}
 
 	return std::move(version);
@@ -123,7 +123,7 @@ static void compilerRun(const Range<const String>& arg_strings)
 	if(result!=0)
 		{
 		throw ErrorMessage(
-"The compiler returned status code %d. See STDERR for more information.",result);
+"The compiler returned status code #0;. See STDERR for more information.",{result});
 		}
 	}
 

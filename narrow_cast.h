@@ -6,6 +6,7 @@ target[name[narrow_cast.h] type[include]]
 #define GLINDE_NARROWCAST_H
 
 #include "errormessage.h"
+#include "variant.h"
 #include <limits>
 #include <type_traits>
 
@@ -18,7 +19,7 @@ namespace Glinde
 		auto ymax=std::numeric_limits<T>::max();
 		if(x<0
 			|| static_cast<typename std::make_unsigned<T>::type>(x) > ymax)
-			{throw ErrorMessage("A quantity is outside its valid range.");}
+			{throw ErrorMessage("A quantity is outside its valid range.",{});}
 
 		return static_cast<T>(x);
 		}
@@ -28,7 +29,7 @@ namespace Glinde
 	narrow_cast(const U& x)
 		{
 		if(x>std::numeric_limits<T>::max() || x<std::numeric_limits<T>::min())
-			{throw ErrorMessage("A quantity is outside its valid range.");}
+			{throw ErrorMessage("A quantity is outside its valid range.",{});}
 
 		return static_cast<T>(x);
 		}

@@ -5,6 +5,7 @@ target[name[utility.o] type[object] platform[;GNU/Linux] dependency[uuid;externa
 #include "utility.h"
 #include "errormessage.h"
 #include "strerror.h"
+#include "variant.h"
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <uuid/uuid.h>
@@ -18,8 +19,8 @@ void Utility::mkdir(const char* dirname)
 		{
 		char errbuff[256];
 		strerror(errno,errbuff,256);
-		throw ErrorMessage("It was not possible to create directory %s. %s"
-			,dirname,errbuff);
+		throw ErrorMessage("It was not possible to create directory #0;. #1;"
+			,{dirname,errbuff});
 		}
 	}
 

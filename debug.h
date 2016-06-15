@@ -23,8 +23,8 @@ target[name[debug.h] type[include]]
 
 	/**\brief Prints a debug message to the console
 	 *
-	 * This macro prints a debug message to the console. The macro follows
-	 * the `printf` convention.
+	 * This macro prints a debug message to the console. The format string
+	 * follows the syntax of format.
 	*/
 	#define GLINDE_DEBUG_PRINT(format,...)\
 		Glinde::logWriteDebug(__FILE__,__LINE__,format,{__VA_ARGS__})

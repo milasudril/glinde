@@ -13,6 +13,7 @@ target[name[resourcemanager.o] type [object]]
 #include "resourceobject.h"
 #include "errormessage.h"
 #include "narrow_cast.h"
+#include "variant.h"
 
 using namespace Glinde;
 
@@ -55,7 +56,7 @@ const ItemClass& ResourceManager::itemClassGet(const Stringkey& classname) const
 	{
 	auto i=m_classes.find(classname);
 	if(i==m_classes.end())
-		{throw ErrorMessage("Item class has not been loaded.");}
+		{throw ErrorMessage("Item class has not been loaded.",{});}
 	return i->second;
 	}
 
@@ -96,7 +97,7 @@ SiteDefault& ResourceManager::siteGet(const Stringkey& mapname,World& world_noti
 		{
 		auto i=m_maps.find(mapname);
 		if(i==m_maps.end())
-			{throw ErrorMessage("There is no map for the given site");}
+			{throw ErrorMessage("There is no map for the given site",{});}
 
 		return m_sites.emplace(std::pair<Stringkey,SiteDefault>
 			{mapname,SiteDefault(i->second,world_notify)}).first->second;

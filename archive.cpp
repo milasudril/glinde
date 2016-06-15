@@ -7,6 +7,7 @@ target[name[archive.o] type[object] dependency[zip;external]]
 #include "utility.h"
 #include "debug.h"
 #include "fileout.h"
+#include "variant.h"
 #include <zip.h>
 #include <cstring>
 
@@ -18,37 +19,37 @@ using namespace Glinde;
 	switch(result)
 		{
 		case ZIP_ER_EXISTS:
-			throw ErrorMessage(message_str,filename,"The file already exists");
+			throw ErrorMessage(message_str,{filename,"The file already exists"});
 
 		case ZIP_ER_INCONS:
-			throw ErrorMessage(message_str,filename,"Bad checksum");
+			throw ErrorMessage(message_str,{filename,"Bad checksum"});
 
 		case ZIP_ER_MEMORY:
-			throw ErrorMessage(message_str,filename,"Out of memory");
+			throw ErrorMessage(message_str,{filename,"Out of memory"});
 
 		case ZIP_ER_NOENT:
-			throw ErrorMessage(message_str,filename,"The file does not exist");
+			throw ErrorMessage(message_str,{filename,"The file does not exist"});
 
 		case ZIP_ER_NOZIP:
-			throw ErrorMessage(message_str,filename,"The file is not a zip archive");
+			throw ErrorMessage(message_str,{filename,"The file is not a zip archive"});
 
 		case ZIP_ER_OPEN:
-			throw ErrorMessage(message_str,filename,"The file could not be opened");
+			throw ErrorMessage(message_str,{filename,"The file could not be opened"});
 
 		case ZIP_ER_READ:
-			throw ErrorMessage(message_str,filename,"Read error");
+			throw ErrorMessage(message_str,{filename,"Read error"});
 
 		case ZIP_ER_SEEK:
-			throw ErrorMessage(message_str,filename,"The file is stored on a non-seeking device");
+			throw ErrorMessage(message_str,{filename,"The file is stored on a non-seeking device"});
 
 		case ZIP_ER_COMPNOTSUPP:
-			throw ErrorMessage(message_str,filename,"Unsupported compression method");
+			throw ErrorMessage(message_str,{filename,"Unsupported compression method"});
 
 		case ZIP_ER_ZLIB:
-			throw ErrorMessage(message_str,filename,"Failed to initialize zlib");
+			throw ErrorMessage(message_str,{filename,"Failed to initialize zlib"});
 
 		default:
-			throw ErrorMessage(message_str,filename,"Unknown error");
+			throw ErrorMessage(message_str,{filename,"Unknown error"});
 		}
 	}
 
@@ -88,7 +89,7 @@ Archive::Archive(const char* filename)
 	auto handle=zip_open(filename,ZIP_CHECKCONS,&result);
 	if(handle==NULL)
 		{
-		archiveErrorRaise("It is not possible open the archive \"%s\". %s.",filename,result);
+		archiveErrorRaise("It is not possible open the archive \"#0;\". #1;.",filename,result);
 		}
 	m_handle=handle;
 
@@ -125,7 +126,7 @@ Archive::File::File(Archive& archive,const char* filename)
 		{
 		int status;
 		zip_error_get(a,&status,NULL);
-		archiveErrorRaise("It is not possible open the file \"%s\". %s."
+		archiveErrorRaise("It is not possible open the file \"#0;\". #1;."
 			,filename_temp.begin(),status);
 		}
 	m_filename=String(archive.m_filename).append(':').append(filename_temp);
@@ -144,7 +145,7 @@ size_t Archive::File::read(void* buffer,size_t n_bytes)
 
 	if(ret < 0)
 		{
-		throw ErrorMessage("An error occured when reading data.");
+		throw ErrorMessage("An error occured when reading data.",{});
 		}
 
 	return static_cast<size_t>(ret);

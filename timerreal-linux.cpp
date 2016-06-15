@@ -3,12 +3,14 @@ target
 	[
 	name[timerreal.o] type[object] platform[;GNU/Linux]
 	dependency[rt;external]
+	dependency[pthread;external]
 	]
 #endif
 
 
 #include "timerreal.h"
 #include "errormessage.h"
+#include "variant.h"
 #include <signal.h>
 #include <time.h>
 #include <semaphore.h>
@@ -20,7 +22,7 @@ struct TimerReal::Impl
 	Impl(double frequency)
 		{
 		if(sem_init(&m_trig,0,1)!=0)
-			{throw ErrorMessage("It was not possible to initialize a semaphore for the timerreal");}
+			{throw ErrorMessage("It was not possible to initialize a semaphore for the timerreal",{});}
 
 		sigevent ev;
 
@@ -36,12 +38,12 @@ struct TimerReal::Impl
 		if(sigaction(SIGRTMIN,&sa,NULL)!=0)
 			{
 			sem_destroy(&m_trig);
-			throw ErrorMessage("It was not possible to register a new signal handler for SIGRTMIN.");
+			throw ErrorMessage("It was not possible to register a new signal handler for SIGRTMIN.",{});
 			}
 		if(timer_create(CLOCK_MONOTONIC,&ev,&m_id)!=0)
 			{
 			sem_destroy(&m_trig);
-			throw ErrorMessage("It was not possible to create a new timerreal.");
+			throw ErrorMessage("It was not possible to create a new timerreal.",{});
 			}
 
 		itimerspec t;
@@ -55,7 +57,7 @@ struct TimerReal::Impl
 		t.it_value={0,1};
 		if(timer_settime(m_id,0,&t,NULL)!=0)
 			{
-			throw ErrorMessage("It was not possible to set the timerreal interval.");
+			throw ErrorMessage("It was not possible to set the timerreal interval.",{});
 			timer_delete(m_id);
 			sem_destroy(&m_trig);
 			}

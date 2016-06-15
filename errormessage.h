@@ -9,10 +9,13 @@ dependency[errormessage.o]
 /**\file errormessage.h \brief Defines an error message.
  */
 
-#include <cstddef>
+#include "arrayfixed.h"
+
 
 namespace Glinde
 	{
+	class Variant;
+
 	/**\brief Class representing a formated error message.
 	 *
 	 * The exception handling within Glinde is based on throwing ErrorMessage
@@ -27,8 +30,8 @@ namespace Glinde
 		public:
 			/**\brief Initializes an ErrorMessage.
 			 *
-			 * This constructor initializes the ErrorMessage by following
-			 * `printf`-style conventions.
+			 * This constructor initializes the ErrorMessage. The format string
+			 * follows the syntax of format.
 			 *
 			 * \note If the message does not fit within the internal buffer, it
 			 * is truncated, but always zero terminated. However, this should
@@ -36,7 +39,8 @@ namespace Glinde
 			 * anyways.
 			 *
 			*/
-			explicit ErrorMessage(const char* format,...) noexcept;
+			explicit ErrorMessage(const char* format_string
+				,const std::initializer_list<Variant>& args) noexcept;
 
 
 			/**\brief Retrievs a pointer to the error message.
@@ -44,11 +48,10 @@ namespace Glinde
 			 * This function returns a pointer to the error message.
 			*/
 			const char* messageGet() const noexcept
-				{return m_buffer;}
+				{return m_buffer.begin();}
 
 		private:
-			static constexpr size_t SIZE_BUFFER=1024;
-			char m_buffer[SIZE_BUFFER];
+			ArrayFixed<char,1024> m_buffer;
 		};
 	}
 

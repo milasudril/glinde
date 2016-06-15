@@ -62,7 +62,7 @@ static void targetsPatch(std::map<Stringkey,TargetDefault>& targets)
 				{
 				auto x=targets.find(ptr->idGet());
 				if(x==i_end)
-					{throw ErrorMessage("Action program is incomplete");}
+					{throw ErrorMessage("Action program is incomplete",{});}
 				ptr->targetSet(&x->second);
 				++(x->second.childrenCount());
 				}
@@ -131,8 +131,9 @@ Target& SpiderDefault::targetAdd(const char* name,const char* name_src
 	auto i_key=r_targets.find(key);
 	if(i_key!=r_targets.end())
 		{
-		throw ErrorMessage("Error while processing file %s: Target has "
-			"%s already been defined in %s",name_src,name,i_key->second.nameSourceGet());
+		throw ErrorMessage("Error while processing file #0;: Target has "
+			"#1; already been defined in #2;"
+			,{name_src,name,i_key->second.nameSourceGet()});
 		}
 
 	auto ip=r_targets.emplace(key,TargetDefault(name,name_src,std::move(details)));

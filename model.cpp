@@ -58,17 +58,17 @@ frameTagsLoad(const ResourceObject& obj, const char* source_name
 		auto frame=narrow_cast<size_t>(static_cast<long long int>(tmp.second));
 		if(frame>=frame_count)
 			{
-			throw ErrorMessage("%s: Frame tag %s refers to an invalid frame number. "
-				"Valid range is 0 to %zu"
-				,source_name,frame_count-1);
+			throw ErrorMessage("#0;: Frame tag #1; refers to an invalid frame number. "
+				"Valid range is 0 to #2;"
+				,{source_name,frame_count-1});
 			}
 
 		auto ip=ret.emplace(Stringkey(tmp.first),frame);
 
 		if(!ip.second)
 			{
-			throw ErrorMessage("%s: The tag %s (or one with identical hash), "
-				"has already been used for another frame",source_name,tmp.first);
+			throw ErrorMessage("#0;: The tag #1; (or one with identical hash), "
+				"has already been used for another frame",{source_name,tmp.first});
 			}
 
 		i.next();
@@ -94,7 +94,7 @@ size_t Model::frameIndexGet(const Stringkey& key) const
 	auto i=m_frame_tags.find(Stringkey(key));
 	if(i==m_frame_tags.end())
 		{
-		throw ErrorMessage("Invalid key %s",key);
+		throw ErrorMessage("Invalid key #0;",{static_cast<uint64_t>(key)});
 		}
 	return i->second;
 	}

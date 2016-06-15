@@ -4,6 +4,7 @@ target[name[glprogram.o] type[object]]
 
 #include "glprogram.h"
 #include "errormessage.h"
+#include "variant.h"
 
 using namespace Glinde;
 
@@ -20,7 +21,7 @@ void GlProgram::link()
 			char buffer[512];
 			glGetProgramInfoLog(id,512,NULL,buffer);
 			throw ErrorMessage("An error occured while trying to link an OpenGL shader program:\n"
-				"%s",buffer);
+				"#0;",{buffer});
 			}
 		}
 	}

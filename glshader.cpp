@@ -4,6 +4,7 @@ target[name[glshader.o] type[object]]
 
 #include "glshader.h"
 #include "errormessage.h"
+#include "variant.h"
 
 using namespace Glinde;
 
@@ -20,8 +21,8 @@ void GlShader::compile()
 			char buffer[512];
 			glGetShaderInfoLog(id,512,NULL,buffer);
 			throw ErrorMessage("An error occured while trying to compile an OpenGL shader:\n"
-				"%s"
-				,buffer);
+				"#0;"
+				,{buffer});
 			}
 		}
 	}

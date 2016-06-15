@@ -90,9 +90,8 @@ void PNGReader::on_warning(png_struct* pngptr,const char* message)
 void PNGReader::on_error(png_struct* pngptr,const char* message)
 	{
 	auto source=reinterpret_cast<DataSource*>(png_get_io_ptr(pngptr));
-	throw ErrorMessage("%s: An error occured while decoding the image. %s"
-		,source->nameGet()
-		,message);
+	throw ErrorMessage("#0;: An error occured while decoding the image. #1;"
+		,{source->nameGet(),message});
 	}
 
 void PNGReader::on_read(png_struct* pngptr,uint8_t* data,png_size_t N)
@@ -100,8 +99,8 @@ void PNGReader::on_read(png_struct* pngptr,uint8_t* data,png_size_t N)
 	auto source=reinterpret_cast<DataSource*>(png_get_io_ptr(pngptr));
 	if(source->read(data,N)!=N)
 		{
-		throw ErrorMessage("%s: Possible end of file while decoding the image."
-			,source->nameGet());
+		throw ErrorMessage("#0;: Possible end of file while decoding the image."
+			,{source->nameGet()});
 		}
 	}
 
@@ -158,7 +157,7 @@ void PNGReader::channelBitsConversionSetup()
 		default:
 			{
 			auto source=reinterpret_cast<DataSource*>(png_get_io_ptr(m_handle));
-			throw ErrorMessage("%s: Unknown number of channels in image.",source->nameGet());
+			throw ErrorMessage("#0;: Unknown number of channels in image.",{source->nameGet()});
 			}
 		}
 	}
@@ -248,7 +247,7 @@ void PNGReader::pixelsRead(Image::SampleType* pixels_out)
 		default:
 			{
 			auto source=reinterpret_cast<DataSource*>(png_get_io_ptr(m_handle));
-			throw ErrorMessage("%s: Unsupported sample size.",source->nameGet());
+			throw ErrorMessage("#0;: Unsupported sample size.",{source->nameGet()});
 			}
 		}
 
@@ -326,12 +325,12 @@ Image::Image(DataSource& source,uint32_t id)
 			{
 			GLINDE_DEBUG_PRINT("magic: #0;",magic);
 			throw ErrorMessage("An I/O error occured while reading the image "
-				"magic number.");
+				"magic number.",{});
 			}
 
 		if(png_sig_cmp(magic,0,8))
 			{
-			throw ErrorMessage("The image file has an unknown encoding.");
+			throw ErrorMessage("The image file has an unknown encoding.",{});
 			}
 		}
 

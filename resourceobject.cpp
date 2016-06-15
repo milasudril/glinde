@@ -49,8 +49,8 @@ ResourceObject::ResourceObject(DataSource& readhandler)
 	m_handle=json_load_callback(loadCallback,&readhandler,0,&status);
 	if(m_handle==nullptr)
 		{
-		throw ErrorMessage("Could not load JSON data. %s:%d: %s."
-			,readhandler.nameGet(),status.line,status.text);
+		throw ErrorMessage("Could not load JSON data. #0;:#1;: #2;."
+			,{readhandler.nameGet(),status.line,status.text});
 		}
 	}
 
@@ -94,7 +94,7 @@ ResourceObject ResourceObject::objectGet(const char* name) const
 	auto result=json_object_get(static_cast<const json_t*>(m_handle),name);
 	if(result==NULL)
 		{
-		throw ErrorMessage("Could not get child object \"%s\".",name);
+		throw ErrorMessage("Could not get child object \"#0;\".",{name});
 		}
 
 	return ResourceObject(result,name);
@@ -113,7 +113,7 @@ ResourceObject ResourceObject::objectGet(size_t index) const
 	auto result=json_array_get(static_cast<const json_t*>(m_handle),index);
 	if(result==NULL)
 		{
-		throw ErrorMessage("Could not get child object number %zu.",index + 1);
+		throw ErrorMessage("Could not get child object number #0;.",{index + 1});
 		}
 	return ResourceObject(result,nullptr);
 	}
@@ -157,7 +157,7 @@ ResourceObject::operator const char*() const
 	auto ret=stringGet();
 	if(ret==nullptr)
 		{
-		throw ErrorMessage("Current resource object is not a string.");
+		throw ErrorMessage("Current resource object is not a string.",{});
 		}
 	return ret;
 	}
@@ -166,7 +166,7 @@ ResourceObject::operator long long int() const
 	{
 	if(typeGet()!=Type::INTEGER)
 		{
-		throw ErrorMessage("Current resource object is not an integer.");
+		throw ErrorMessage("Current resource object is not an integer.",{});
 		}
 	return integerGet();
 	}
@@ -180,6 +180,6 @@ ResourceObject::operator double() const
 			return floatGet();
 
 		default:
-			throw ErrorMessage("Current resource object is not an integer.");
+			throw ErrorMessage("Current resource object is not an integer.",{});
 		}
 	}

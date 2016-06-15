@@ -4,6 +4,7 @@ target[name[glframebuffer.o] type[object]]
 
 #include "glframebuffer.h"
 #include "errormessage.h"
+#include "variant.h"
 
 using namespace Glinde;
 
@@ -27,6 +28,6 @@ void GlFramebuffer::targetSet(GlTexture& texture,unsigned int width,unsigned int
 	auto res=glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	if(res!=GL_FRAMEBUFFER_COMPLETE)
 		{
-		throw ErrorMessage("Failed creating a framebuffer: %d",res);
+		throw ErrorMessage("Failed creating a framebuffer: #0;",{res});
 		}
 	}

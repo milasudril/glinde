@@ -4,6 +4,7 @@ target[name[plugin.o] type[object] platform[;GNU/Linux] dependency[dl;external] 
 
 #include "plugin.h"
 #include "errormessage.h"
+#include "variant.h"
 #include <dlfcn.h>
 
 using namespace Glinde;
@@ -14,7 +15,7 @@ Plugin::Plugin(const char* filename):m_name(filename)
 	if(m_handle==NULL)
 		{
 		auto err=dlerror();
-		for(int k=0;k<2;++k)
+		for(int k=0;k<2;++k) //Trim error message from the dynamic loader.
 			{
 			while(*err!=':' && *err!='\0')
 				{++err;}
@@ -22,8 +23,8 @@ Plugin::Plugin(const char* filename):m_name(filename)
 				{break;}
 			++err;
 			}
-		throw ErrorMessage("It was not possible to load the plugin %s.%s"
-			,filename,err);
+		throw ErrorMessage("It was not possible to load the plugin #0;.#1;"
+			,{filename,err});
 		}
 	}
 
@@ -38,8 +39,8 @@ void Plugin::entryPointGet(const char* name,intptr_t* p_loc) const
 	auto sym=dlsym(m_handle,name);
 	if(sym==NULL)
 		{
-		throw ErrorMessage("It was not possible to find the entry point %s in %s. %s"
-			,name,m_name.begin(),dlerror());
+		throw ErrorMessage("It was not possible to find the entry point #0; in #1;. #2;"
+			,{name,m_name.begin(),dlerror()});
 		}
 	*p_loc=reinterpret_cast<intptr_t>(sym);
 	}
