@@ -4,8 +4,6 @@ target[name[errormessage.o] type[object]]
 
 #include "errormessage.h"
 #include "stringformat.h"
-#include <cstdio>
-#include <cstdarg>
 
 using namespace Glinde;
 
