@@ -22,7 +22,7 @@ namespace Glinde
 		class TargetDefault:public Target
 			{
 			public:
-				TargetDefault(const char* name,const char* name_src
+				TargetDefault(size_t id,const char* name,const char* name_src
 					,std::unique_ptr<TargetDetails>&& details);
 
 				Range<Dependency> dependencies() noexcept
@@ -37,20 +37,11 @@ namespace Glinde
 					return *this;
 					}
 
-				size_t rankGet() const noexcept
-					{return m_rank;}
-
-				TargetDefault& rankSet(size_t rank) noexcept
-					{
-					m_rank=rank;
-					return *this;
-					}
+				size_t idGet() const noexcept
+					{return m_id;}
 
 				bool leafIs() const noexcept
 					{return m_child_count==0;}
-
-				bool visited() const noexcept
-					{return m_rank!=static_cast<size_t>(-1);}
 
 				size_t& childrenCount() noexcept
 					{return m_child_count;}
@@ -91,7 +82,7 @@ namespace Glinde
 				String m_name_full;
 				String m_name_src;
 				String m_name_src_full;
-				size_t m_rank;
+				size_t m_id;
 				size_t m_child_count;
 				ArrayDynamic<Dependency> m_dependencies;
 				std::unique_ptr<TargetDetails> m_details;

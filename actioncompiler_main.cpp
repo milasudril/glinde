@@ -17,131 +17,82 @@ target[name[actioncompiler_main.o] type[object]]
 using namespace Glinde;
 using namespace Glinde::ActionCompiler;
 
-static ArrayDynamic<TargetDefault*> childrenFind(std::map<Stringkey,TargetDefault>& targets)
+static ArrayDynamic<const TargetDefault*> childrenFind(std::map<Stringkey,TargetDefault>& targets)
 	{
-	ArrayDynamic<TargetDefault*> ret;
+	ArrayDynamic<const TargetDefault*> ret;
 	auto i=targets.begin();
 	auto i_end=targets.end();
 	while(i!=i_end)
 		{
 		auto& node=i->second;
 		if(node.leafIs())
-			{
-			node.rankSet(0);
-			ret.append(&node);
-			}
+			{ret.append(&node);}
 		++i;
 		}
 	return std::move(ret);
 	}
 
-static size_t targetsRank(const Range<Dependency>& deps,size_t rank_current
-	,size_t depth_max)
+static void toposort(const Target& target_current,const Range<uint32_t>& colors
+	,ArrayDynamic<const Target*>& targets_out)
 	{
-	if(depth_max==0)
-		{throw ErrorMessage("It is not possible to compile the action program. Cyclic dependency detected.",{});}
-	auto ptr=deps.begin();
-	auto ptr_end=deps.end();
-	auto ret=rank_current;
-	while(ptr!=ptr_end)
+	auto id=target_current.idGet();
+	colors[id]=1;
+	auto deps=target_current.dependencies();
+	auto pos=deps.begin();
+	while(pos!=deps.end())
 		{
-		auto target=ptr->target();
-		if(target!=nullptr)
+		auto target_next=pos->target();
+		if(target_next==nullptr)
 			{
-			auto rank=target->visited()?target->rankGet():0;
-
-		//	Update ranks for next levels
-			auto rank_next=std::max(rank_current + 1,rank);
-			if(rank_next!=rank)
-				{
-			//	Only process next level if rank changed.
-				target->rankSet(rank_next);
-				ret=std::max( targetsRank(target->dependencies(),rank_next,depth_max-1), ret);
-				}
-			else
-				{ret=std::max(ret,rank_next);}
-			++ptr;
+			throw ErrorMessage("The target #0; contains an undefined reference to #1;."
+				,{target_current.nameGet(),pos->nameGet()});
 			}
-		}
-	return ret;
-	}
-
-static size_t targetsRank(const Range<TargetDefault*>& children,size_t n_nodes)
-	{
-	size_t ret=0;
-	auto ptr=children.begin();
-	auto ptr_end=children.end();
-	while(ptr!=ptr_end)
-		{
-		GLINDE_DEBUG_PRINT("Computing ranks for #0;",(*ptr)->nameGet());
-		ret=std::max(targetsRank((*ptr)->dependencies(),0,n_nodes),ret);
-		++ptr;
-		}
-	return ret;
-	}
-
-static void buildJobCreate(const Range<Dependency>& deps
-	,Range<Target*> compile_list)
-	{
-	auto ptr=deps.begin();
-	auto ptr_end=deps.end();
-	while(ptr!=ptr_end)
-		{
-		auto target=ptr->target();
-		if(target!=nullptr)
+		switch(colors[target_next->idGet()])
 			{
-			auto rank=target->rankGet();
-			assert(rank>=1);
-			if(compile_list[rank]==nullptr)
-				{
-				GLINDE_DEBUG_PRINT("Target #0; has rank #1;/#2;"
-					,target->nameGet(),rank,compile_list.length());
-				compile_list[rank]=target;
-				buildJobCreate(target->dependencies(),compile_list);
-				}
-			++ptr;
+			case 1:
+				throw ErrorMessage("A cyclic dependency between #0; and #1; was detected."
+					,{target_current.nameGet(),target_next->nameGet()});
+			case 0:
+				toposort(*target_next,colors,targets_out);
 			}
+		++pos;
+		}
+	colors[id]=2;
+	targets_out.append(&target_current);
+	}
+
+static void buildJobExecute(const Range<const Target* const>& targets)
+	{
+	auto target_current=targets.begin();
+	auto targets_end=targets.end();
+	while(target_current!=targets_end)
+		{
+		auto targets_rel=Range<const Target* const>(targets.begin(),target_current);
+		if(!( (*target_current)->upToDate(targets_rel) ))
+			{const_cast<Target*>(*target_current)->compile(targets_rel);}
+
+		++target_current;
 		}
 	}
 
-static ArraySimple<Target*> buildJobCreate(TargetDefault& child
-	,size_t path_length)
+static void buildAll(const Range<const TargetDefault* const>& children,size_t n_nodes)
 	{
-	GLINDE_DEBUG_PRINT("\"#0;\" path_length: #1;",child.nameGet(),path_length);
-	ArraySimple<Target*> ret(path_length + 1);
-	memset(ret.begin(),0,ret.length()*sizeof(Target*));
-	ret[0]=&child;
-	buildJobCreate(child.dependencies(),ret);
-	return std::move(ret);
-	}
+	GLINDE_DEBUG_PRINT("There are #0; nodes",n_nodes);
 
-static void buildJobExecute(const Range<Target*>& targets_rel)
-	{
-	auto end=targets_rel.end();
-	auto begin=targets_rel.begin();
-	auto N=0;
-	while(end!=begin)
-		{
-		--end;
-		if(*end!=nullptr)
-			{
-			auto r=Range<const Target* const>
-				(const_cast<const Target* const*>(end) + 1,N);
-			if(! (*end)->upToDate(r) )
-				{(*end)->compile(r);}
-			}
-		++N;
-		}
-	}
+	ArraySimple<uint32_t> colors(n_nodes);
+	ArrayDynamic<const Target*> targets;
 
-static void buildAll(const Range<TargetDefault*>& targets,size_t path_length)
-	{
-	auto ptr=targets.begin();
-	auto ptr_end=targets.end();
-	while(ptr!=ptr_end)
+	memset(colors.begin(),0,sizeof(uint32_t)*n_nodes);
+
+	auto child_current=children.begin();
+	auto children_end=children.end();
+	while(child_current!=children_end)
 		{
-		buildJobExecute(buildJobCreate(**ptr,path_length));
-		++ptr;
+		memset(colors.begin(),0,sizeof(uint32_t)*n_nodes);
+		targets.clear();
+		toposort(**child_current,colors,targets);
+		buildJobExecute(targets);
+		++child_current;
 		}
 	}
 
@@ -187,9 +138,9 @@ void Glinde::ActionCompiler::programCompile(Filesystem& source
 		{throw ErrorMessage("No source files found",{});}
 	logWrite(Log::MessageType::INFORMATION,"Searching for child nodes in dependency graph",{});
 	auto children=childrenFind(targets);
-	logWrite(Log::MessageType::INFORMATION,"Ranking targets",{});
-	auto length_max=targetsRank(children,targets.size());
 	logWrite(Log::MessageType::INFORMATION,"Compiling action program",{});
-	buildAll(children,length_max);
+
+	buildAll(children,targets.size());
+
 	logWrite(Log::MessageType::INFORMATION,"Action program compiled successfully",{});
 	}

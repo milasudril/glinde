@@ -18,6 +18,7 @@ namespace Glinde
 	uint32_t logWriterAttach(Log::Writer& writer) noexcept;
 	void logWriterDetach(uint32_t index) noexcept;
 	void deathtrapHandlerActivate() noexcept;
+	Log& logGlobalGet() noexcept;
 	}
 
 #endif

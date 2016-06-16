@@ -30,13 +30,9 @@ namespace Glinde
 
 				virtual Target& dependencyAdd(Dependency&& dep)=0;
 
-				virtual size_t rankGet() const noexcept=0;
-
-				virtual Target& rankSet(size_t rank) noexcept=0;
-
 				virtual bool leafIs() const noexcept=0;
 
-				virtual bool visited() const noexcept=0;
+				virtual size_t idGet() const noexcept=0;
 
 				virtual size_t& childrenCount() noexcept=0;
 

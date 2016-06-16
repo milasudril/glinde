@@ -76,16 +76,16 @@ void TargetCxxDLL::compile(Target& target
 //	TODO: External/internal libraries?
 	ArrayDynamic<String> files;
 	files.append( String(target.nameSourceFullGet()) );
-	auto ptr_target=targets_rel.begin();
+	auto ptr_begin=targets_rel.begin();
 	auto ptr_end=targets_rel.end();
-	while(ptr_target!=ptr_end)
+	while(ptr_begin!=ptr_end)
 		{
-		auto x=*ptr_target;
+		--ptr_end;
+		auto x=*ptr_end;
 		if(dynamic_cast<const TargetCxxObject*>(&(x->detailsGet()))!=nullptr)
 			{
 			files.append(String(x->nameFullGet()));
 			}
-		++ptr_target;
 		}
 
  	compilerGet().link(files,target.nameFullGet(),options());

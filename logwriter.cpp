@@ -10,6 +10,11 @@ using namespace Glinde;
 
 static LogDefault s_log;
 
+Log& Glinde::logGlobalGet() noexcept
+	{
+	return s_log;
+	}
+
 unsigned int Glinde::logWriterAttach(Log::Writer& writer) noexcept
 	{return s_log.writerAttach(writer);}
 

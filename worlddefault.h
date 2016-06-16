@@ -55,7 +55,8 @@ namespace Glinde
 			ResourceManager m_resources;
 			SiteDefault* r_site;
 
-			static decltype(m_world_eh) eventHandlerCreate(const ActionProgram& program);
+			static decltype(m_world_eh)
+			eventHandlerCreate(const ActionProgram& program);
 		};
 	}
 

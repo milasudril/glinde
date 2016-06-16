@@ -9,6 +9,7 @@ namespace Glinde
 	{
 	class Stringkey;
 	class Site;
+	class Log;
 
 	class World
 		{
@@ -31,7 +32,7 @@ namespace Glinde
 			virtual void siteDestroying(Site& site) noexcept=0;
 			virtual void siteMoved(Site& site) noexcept=0;
 
-		typedef EventHandler& (*EventHandlerFactory)();
+		typedef EventHandler& (*EventHandlerFactory)(Log& log);
 
 		class EventHandlerDisposer
 			{
@@ -44,7 +45,12 @@ namespace Glinde
 
 extern "C"
 	{
-	Glinde::World::EventHandler& Glinde_World_EventHandler_create();
+#if _WIN32 || _WIN64
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+	EXPORT Glinde::World::EventHandler& Glinde_World_EventHandler_create(Glinde::Log& log);
 	}
 
 #endif

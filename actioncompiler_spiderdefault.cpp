@@ -135,8 +135,8 @@ Target& SpiderDefault::targetAdd(const char* name,const char* name_src
 			"#1; already been defined in #2;"
 			,{name_src,name,i_key->second.nameSourceGet()});
 		}
-
-	auto ip=r_targets.emplace(key,TargetDefault(name,name_src,std::move(details)));
+	auto id=r_targets.size();
+	auto ip=r_targets.emplace(key,TargetDefault(id,name,name_src,std::move(details)));
 	auto& ret=ip.first->second;
 	ret.sourcePrefixSet(sourcePrefixGet()).targetPrefixSet(targetPrefixGet());
 	return (ip.first)->second;
