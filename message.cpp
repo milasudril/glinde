@@ -14,12 +14,16 @@ void Message::copyAlloc(const void* src,size_t N)
 		{
 		auto mem=memoryAllocate(N);
 		memcpy(mem,src,N);
-		m_content.data.length=N;
-		m_content.data.data=mem;
+		m_content.data.r_object=mem;
+		m_content.data.m_content.sizes[0]=N;
 		}
 	}
 
-Message::~Message()
+void Message::dataFree() noexcept
 	{
-	memoryFree(m_content.data.data);
+	if((m_content.data.r_object!=nullptr) && (m_content.data.m_handler&OBJECT_OWNED))
+		{memoryFree(m_content.data.r_object);}
 	}
+
+void Message::no_op(const Message& data)
+	{}

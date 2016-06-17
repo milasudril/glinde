@@ -25,16 +25,17 @@ namespace Glinde
 	class Variant
 		{
 		public:
-			static constexpr uintptr_t POINTER=0|msb<uintptr_t>();
-			static constexpr uintptr_t STRING=1|msb<uintptr_t>();
-			static constexpr uintptr_t INT=2|msb<uintptr_t>();
-			static constexpr uintptr_t UINT=3|msb<uintptr_t>();
-			static constexpr uintptr_t CHAR=4|msb<uintptr_t>();
-			static constexpr uintptr_t BOOL=5|msb<uintptr_t>();
-			static constexpr uintptr_t DOUBLE=6|msb<uintptr_t>();
-			static constexpr uintptr_t FLOAT=7|msb<uintptr_t>();
+			static constexpr uintptr_t USER_OBJECT=0;
+			static constexpr uintptr_t POINTER=1;
+			static constexpr uintptr_t STRING=2;
+			static constexpr uintptr_t INT=3;
+			static constexpr uintptr_t UINT=4;
+			static constexpr uintptr_t CHAR=5;
+			static constexpr uintptr_t BOOL=6;
+			static constexpr uintptr_t DOUBLE=7;
+			static constexpr uintptr_t FLOAT=8;
 
-			class Formatter
+			class alignas(16) Formatter
 				{
 				public:
 					virtual size_t format(const Range<char>& buffer
@@ -44,7 +45,7 @@ namespace Glinde
 			Variant(const void* object,const Formatter& fmt) noexcept
 				{
 				static_assert(sizeof(&fmt)==sizeof(uintptr_t),"Pointer size incompatible");
-				assert( !(reinterpret_cast<uintptr_t>(&fmt) & msb<uintptr_t>()) );
+				assert( (reinterpret_cast<uintptr_t>(&fmt)&0xf)==0  );
 				m_data.x_vptr=object;
 				m_type.fmt=&fmt;
 				}
@@ -111,7 +112,7 @@ namespace Glinde
 
 			explicit operator std::pair<const void*,const Formatter*>() const noexcept
 				{
-				assert(!(m_type.type&msb<uintptr_t>()));
+				assert( (m_type.type&0xf)==0 );
 				return {m_data.x_vptr,m_type.fmt};
 				};
 

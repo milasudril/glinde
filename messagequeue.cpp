@@ -7,23 +7,6 @@ target[name[messagequeue.o] type[object]]
 
 using namespace Glinde;
 
-MessageQueue::MessageQueue(){}
-MessageQueue::~MessageQueue(){}
-
-MessageQueue& MessageQueue::post(Message&& message)
-	{
-	Mutex::LockGuard guard(m_mutex);
-	m_queue.push(std::move(message));
-	return *this;
-	}
-
-MessageQueue& MessageQueue::post(const Message& message)
-	{
-	Mutex::LockGuard guard(m_mutex);
-	m_queue.push(message);
-	return *this;
-	}
-
 bool MessageQueue::get(Message& message) noexcept
 	{
 	Mutex::LockGuard guard(m_mutex);
@@ -33,5 +16,6 @@ bool MessageQueue::get(Message& message) noexcept
 	auto& msg=const_cast<Message&>( m_queue.top() );
 	message=std::move(msg);
 	m_queue.pop();
+	m_seq.append(message.seqGet());
 	return 1;
 	}
