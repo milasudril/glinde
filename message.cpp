@@ -8,22 +8,21 @@ target[name[message.o] type[object]]
 
 using namespace Glinde;
 
+Message::Processor Message::s_noop;
+
 void Message::copyAlloc(const void* src,size_t N)
 	{
 	if(src!=nullptr)
 		{
 		auto mem=memoryAllocate(N);
 		memcpy(mem,src,N);
-		m_content.data.r_object=mem;
-		m_content.data.m_content.sizes[0]=N;
+		m_msg.content.data.intptrs[0]=reinterpret_cast<uintptr_t>( mem );
+		m_msg.content.data.intptrs[1]=N;
 		}
 	}
 
 void Message::dataFree() noexcept
 	{
-	if((m_content.data.r_object!=nullptr) && (m_content.data.m_handler&OBJECT_OWNED))
-		{memoryFree(m_content.data.r_object);}
+	if(m_msg.content.handler&OBJECT_OWNED)
+		{memoryFree(reinterpret_cast<void*>(m_msg.content.data.intptrs[0]));}
 	}
-
-void Message::no_op(const Message& data)
-	{}

@@ -13,8 +13,6 @@ dependency[messagequeue.o]
 
 namespace Glinde
 	{
-	class Message;
-
 	class MessageQueue
 		{
 		public:
@@ -22,8 +20,7 @@ namespace Glinde
 			~MessageQueue();
 
 			template<class T>
-			void post(uint64_t time,Message::Handler handler
-				,const Range<const T>& data
+			void post(uint64_t time,Message::Processor& handler,const Range<const T>& data
 				,typename std::enable_if< std::is_trivially_copyable<T>::value >::type* dummy=nullptr)
 				{
 				Mutex::LockGuard guard(m_mutex);
@@ -32,12 +29,11 @@ namespace Glinde
 				}
 
 			template<class T,size_t N>
-			void post(uint64_t time,Message::Handler handler,void* object
-				,const ArrayFixed<T,N>& data)
+			void post(uint64_t time,Message::Processor& handler,const ArrayFixed<T,N>& data)
 				{
 				Mutex::LockGuard guard(m_mutex);
 				auto seq=seqGet();
-				m_queue.push(Message{time,seq,handler,object,data});
+				m_queue.push(Message{time,seq,handler,data});
 				}
 
 			bool get(Message& message) noexcept;
