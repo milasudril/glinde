@@ -4,6 +4,7 @@ target[name[message.o] type[object]]
 
 #include "message.h"
 #include "memoryalloc.h"
+#include "narrow_cast.h"
 #include <cstring>
 
 using namespace Glinde;
@@ -16,13 +17,13 @@ void Message::copyAlloc(const void* src,size_t N)
 		{
 		auto mem=memoryAllocate(N);
 		memcpy(mem,src,N);
-		m_msg.content.data.intptrs[0]=reinterpret_cast<uintptr_t>( mem );
-		m_msg.content.data.intptrs[1]=N;
+		m_msg.content.pointer=mem;
+		m_msg.content.params.dwords[0]=narrow_cast<uint32_t>(N);
 		}
 	}
 
 void Message::dataFree() noexcept
 	{
 	if(m_msg.content.handler&OBJECT_OWNED)
-		{memoryFree(reinterpret_cast<void*>(m_msg.content.data.intptrs[0]));}
+		{memoryFree(m_msg.content.pointer);}
 	}

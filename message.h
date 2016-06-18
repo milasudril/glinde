@@ -27,23 +27,46 @@ namespace Glinde
 					virtual void operator()(const Message& data){}
 				};
 
-			inline Message();
+			Message()
+				{
+				m_msg.x=vec4_t<int64_t>{0,0,0,0};
+				m_msg.content.handler=mangle(s_noop,0);
+				}
 
-			template<class T>
+			template<class T,size_t N>
 			explicit Message(uint64_t time,uint16_t seq,Processor& handler,const Range<const T>& data
+				,const ArrayFixed<uint32_t,N>& params
 				,typename std::enable_if< std::is_trivially_copyable<T>::value >::type* dummy=nullptr)
 				{
+				static_assert(N + 1 <= length<uint32_t>(),"Parameter array too large for a message pack");
 				m_msg.content={makeTime(time,seq),mangle(handler,OBJECT_OWNED)};
 				auto src=data.begin();
 				auto l= data.length()*sizeof(T);
 				copyAlloc(src,l);
+				auto r=paramPointerGet<uint32_t>();
+				for(unsigned int k=0;k<N;++k)
+					{r[k + 1]=params[k];}
 				}
 
-			inline Message(const Message& msg);
+			Message(const Message& msg)
+				{
+				m_msg.x=msg.m_msg.x;
+				if(m_msg.content.handler & OBJECT_OWNED)
+					{
+					copyAlloc(m_msg.content.pointer,m_msg.content.params.dwords[0]);
+					}
+				}
 
 			template<class T,size_t N>
 			explicit Message(uint64_t time,uint16_t seq,Processor& handler
-				,const ArrayFixed<T,N>& data);
+				,void* pointer,const ArrayFixed<T,N>& params)
+				{
+				static_assert(N<=length<T>(),"Array too large for the message");
+				m_msg.content={makeTime(time,seq),mangle(handler,0),pointer};
+				auto r=paramPointerGet<T>();
+				for(unsigned int k=0;k<N;++k)
+					{r[k]=params[k];}
+				}
 
 			Message(Message&& msg) noexcept
 				{
@@ -70,22 +93,42 @@ namespace Glinde
 				return *this;
 				}
 
-			inline uint64_t timeGet() const noexcept;
+			uint64_t timeGet() const noexcept
+				{return m_msg.content.time>>sizeof(uint16_t);}
 
-			inline uint16_t seqGet() const noexcept;
+			uint16_t seqGet() const noexcept
+				{return static_cast<uint16_t>(m_msg.content.time&0xffff);}
 
-			inline bool operator<(const Message& msg) const noexcept;
+			bool operator<(const Message& msg) const noexcept
+				{return m_msg.content.time > msg.m_msg.content.time;}
 
-			inline void clear() noexcept;
+			void clear() noexcept
+				{
+				dataFree();
+				m_msg.content.handler=mangle(s_noop,0);
+				}
 
-			inline void process() const;
+			void process() const
+				{handlerGet(m_msg.content.handler)(*this);}
 
 			template<class T>
 			Range<const T> paramsGet() const noexcept
-				{return Range<const T>(dataPointerGet<const T>(),length<T>());}
+				{return Range<const T>(paramPointerGet<const T>(),length<T>());}
 
 			template<class T>
-			Range<const T> dataGet() const noexcept;
+			Range<const T> dataGet() const noexcept
+				{
+				return Range<const T>
+					{
+					 reinterpret_cast<const T*>(m_msg.content.pointer)
+					,m_msg.content.params.dwords[0]
+					};
+				}
+
+			void* objectGet() const noexcept
+				{
+				return m_msg.content.pointer;
+				}
 
 
 		private:
@@ -95,47 +138,36 @@ namespace Glinde
 			static constexpr uint8_t OBJECT_OWNED=0x1;
 			static Processor s_noop;
 
-			template<size_t N,class D=void> union Data{};
+			template<size_t N,class D=void> union Parameters{};
 
-			template<size_t N,class D=void> struct Msg{};
-
-			template<class D> union Data<4,D>
+			template<class D> union Parameters<4,D>
 				{
-				uintptr_t intptrs[5];
-				uint64_t qwords[2];
-				uint32_t dwords[5];
-				uint16_t words[10];
-				uint8_t bytes[20];
-				};
-
-			template<class D> union Data<8,D>
-				{
-				uintptr_t intptrs[2];
 				uint64_t qwords[2];
 				uint32_t dwords[4];
 				uint16_t words[8];
 				uint8_t bytes[16];
 				};
 
-			template<class D> struct Msg<4,D>
+			template<class D> union Parameters<8,D>
 				{
-				uint64_t time;
-				uintptr_t handler;
-				uint32_t filler;
-				Data<4> data;
+				uint64_t qwords[1];
+				uint32_t dwords[2];
+				uint16_t words[4];
+				uint8_t bytes[8];
 				};
 
-			template<class D> struct Msg<8,D>
+			struct Msg
 				{
 				uint64_t time;
 				uintptr_t handler;
-				Data<8> data;
+				void* pointer;
+				Parameters<sizeof(void*)> params;
 				};
 
 			union
 				{
 				vec4_t<int64_t> x;
-				Msg<sizeof(void*)> content;
+				Msg content;
 				} m_msg;
 
 
@@ -143,10 +175,10 @@ namespace Glinde
 			static constexpr size_t length();
 
 			template<class T>
-			const T* dataPointerGet() const noexcept;
+			const T* paramPointerGet() const noexcept;
 
 			template<class T>
-			T* dataPointerGet() noexcept;
+			T* paramPointerGet() noexcept;
 
 			static inline uintptr_t mangle(Processor& handler,uint8_t val) noexcept
 				{
@@ -159,116 +191,55 @@ namespace Glinde
 		};
 
 
-	Message::Message()
-		{
-		m_msg.x=vec4_t<int64_t>{0,0,0,0};
-		m_msg.content.handler=mangle(s_noop,0);
-		}
-
-	Message::Message(const Message& msg)
-		{
-		m_msg.x=msg.m_msg.x;
-		if(m_msg.content.handler & OBJECT_OWNED)
-			{
-			copyAlloc(
-				 reinterpret_cast<const void*>(m_msg.content.data.intptrs[0])
-				,m_msg.content.data.intptrs[1]);
-			}
-		}
-
-	template<class T,size_t N>
-	Message::Message(uint64_t time,uint16_t seq,Processor& handler
-		,const ArrayFixed<T,N>& data)
-		{
-		static_assert(N<=length<T>(),"Array too large for the message");
-		m_msg.content={makeTime(time,seq),mangle(handler,0)};
-		auto r=dataPointerGet<T>();
-		for(unsigned int k=0;k<N;++k)
-			{r[k]=data[k];}
-		}
-
-	uint64_t Message::timeGet() const noexcept
-		{return m_msg.content.time>>sizeof(uint16_t);}
-
-	uint16_t Message::seqGet() const noexcept
-		{return static_cast<uint16_t>(m_msg.content.time&0xffff);}
-
-	bool Message::operator<(const Message& msg) const noexcept
-		{
-		if(m_msg.content.time > msg.m_msg.content.time)
-			{return 1;}
-		return 0;
-		}
-
-	void Message::clear() noexcept
-		{
-		dataFree();
-		m_msg.content.handler=mangle(s_noop,0);
-		}
-
-	void Message::process() const
-		{handlerGet(m_msg.content.handler)(*this);}
-
-	template<class T>
-	Range<const T> Message::dataGet() const noexcept
-		{
-		return Range<const T>(
-			 reinterpret_cast<const T*>(m_msg.content.data.intptrs[0])
-			,m_msg.content.data.intptrs[1]
-			);
-		}
-
-
-
 	template<>
 	constexpr size_t Message::length<uint8_t>()
-		{return sizeof(Data<sizeof(void*)>::bytes)/sizeof(uint8_t);}
+		{return sizeof(Parameters<sizeof(void*)>::bytes)/sizeof(uint8_t);}
 
 	template<>
 	constexpr size_t Message::length<uint16_t>()
-		{return sizeof(Data<sizeof(void*)>::words)/sizeof(uint16_t);}
+		{return sizeof(Parameters<sizeof(void*)>::words)/sizeof(uint16_t);}
 
 	template<>
 	constexpr size_t Message::length<uint32_t>()
-		{return sizeof(Data<sizeof(void*)>::dwords)/sizeof(uint32_t);}
+		{return sizeof(Parameters<sizeof(void*)>::dwords)/sizeof(uint32_t);}
 
 	template<>
 	constexpr size_t Message::length<uint64_t>()
-		{return sizeof(Data<sizeof(void*)>::qwords)/sizeof(uint64_t);}
+		{return sizeof(Parameters<sizeof(void*)>::qwords)/sizeof(uint64_t);}
 
 
 	template<>
-	const uint8_t* Message::dataPointerGet() const noexcept
-		{return m_msg.content.data.bytes;}
+	const uint8_t* Message::paramPointerGet() const noexcept
+		{return m_msg.content.params.bytes;}
 
 	template<>
-	const uint16_t* Message::dataPointerGet() const noexcept
-		{return m_msg.content.data.words;}
+	const uint16_t* Message::paramPointerGet() const noexcept
+		{return m_msg.content.params.words;}
 
 	template<>
-	const uint32_t* Message::dataPointerGet() const noexcept
-		{return m_msg.content.data.dwords;}
+	const uint32_t* Message::paramPointerGet() const noexcept
+		{return m_msg.content.params.dwords;}
 
 	template<>
-	const uint64_t* Message::dataPointerGet() const noexcept
-		{return m_msg.content.data.qwords;}
+	const uint64_t* Message::paramPointerGet() const noexcept
+		{return m_msg.content.params.qwords;}
 
 
 	template<>
-	uint8_t* Message::dataPointerGet() noexcept
-		{return m_msg.content.data.bytes;}
+	uint8_t* Message::paramPointerGet() noexcept
+		{return m_msg.content.params.bytes;}
 
 	template<>
-	uint16_t* Message::dataPointerGet() noexcept
-		{return m_msg.content.data.words;}
+	uint16_t* Message::paramPointerGet() noexcept
+		{return m_msg.content.params.words;}
 
 	template<>
-	uint32_t* Message::dataPointerGet() noexcept
-		{return m_msg.content.data.dwords;}
+	uint32_t* Message::paramPointerGet() noexcept
+		{return m_msg.content.params.dwords;}
 
 	template<>
-	uint64_t* Message::dataPointerGet() noexcept
-		{return m_msg.content.data.qwords;}
+	uint64_t* Message::paramPointerGet() noexcept
+		{return m_msg.content.params.qwords;}
 	}
 
 #endif

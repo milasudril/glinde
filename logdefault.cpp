@@ -59,10 +59,28 @@ void LogWriterStderr::write(Log::MessageType type,const char* message) noexcept
 
 static LogWriterStderr s_writer_stderr;
 
-LogDefault::LogDefault() noexcept
+LogDefault::LogDefault() noexcept:r_queue(nullptr)
 	{
 	memset(m_writers.begin(),0,sizeof(m_writers));
 	writerAttach(s_writer_stderr);
+	}
+
+void LogDefault::write(MessageType type,const char* message)
+	{
+	auto k=static_cast<unsigned int>( m_writers.length() );
+	while(k!=0)
+		{
+		--k;
+		if(m_writers[k]!=nullptr)
+			{m_writers[k]->write(type,message);}
+		}
+	}
+
+void LogDefault::operator()(const Message& message)
+	{
+	auto data=message.dataGet<char>();
+	auto type=static_cast<MessageType>( message.paramsGet<uint32_t>()[1] );
+	write(type,data.begin());
 	}
 
 void LogDefault::write(Log::MessageType type,const char* format_string
@@ -71,14 +89,13 @@ void LogDefault::write(Log::MessageType type,const char* format_string
 	char msgbuff[4096];
 	format(Range<char>(msgbuff,sizeof(msgbuff)/sizeof(msgbuff[0])),format_string
 		,args);
-	auto k=static_cast<unsigned int>( m_writers.length() );
-	while(k!=0)
+	if(r_queue==nullptr)
+		{write(type,msgbuff);}
+	else
 		{
-		--k;
-		if(m_writers[k]!=nullptr)
-			{
-			m_writers[k]->write(type,msgbuff);
-			}
+		auto r=Range<const char>(msgbuff,strlen(msgbuff) + 1);
+		ArrayFixed<uint32_t,1> params{static_cast<uint32_t>( type )};
+		r_queue->post(0,*this,r,params);
 		}
 	}
 

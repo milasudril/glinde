@@ -5,6 +5,7 @@ dependency[logdefault.o]
 
 #include "log.h"
 #include "arrayfixed.h"
+#include "message.h"
 
 #ifndef GLINDE_LOGDEFAULT_H
 #define GLINDE_LOGDEFAULT_H
@@ -12,7 +13,7 @@ dependency[logdefault.o]
 namespace Glinde
 	{
 	class MessageQueue;
-	class LogDefault:public Log
+	class LogDefault:public Log,public Message::Processor
 		{
 		public:
 			LogDefault() noexcept;
@@ -51,9 +52,13 @@ namespace Glinde
 			void queueAttatch(MessageQueue* queue)
 				{r_queue=queue;}
 
+			void operator()(const Message& message);
+
 		private:
 			ArrayFixed<Writer*,4> m_writers;
 			MessageQueue* r_queue;
+
+			void write(MessageType type,const char* message);
 		};
 	}
 

@@ -19,13 +19,14 @@ namespace Glinde
 			MessageQueue():m_seq_next(0){}
 			~MessageQueue();
 
-			template<class T>
+			template<class T,size_t N>
 			void post(uint64_t time,Message::Processor& handler,const Range<const T>& data
+				,const ArrayFixed<uint32_t,N>& params
 				,typename std::enable_if< std::is_trivially_copyable<T>::value >::type* dummy=nullptr)
 				{
 				Mutex::LockGuard guard(m_mutex);
 				auto seq=seqGet();
-				m_queue.push(Message{time,seq,handler,data});
+				m_queue.push(Message{time,seq,handler,data,params});
 				}
 
 			template<class T,size_t N>
