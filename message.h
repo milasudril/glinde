@@ -21,6 +21,12 @@ namespace Glinde
 	class Message
 		{
 		public:
+		//	TODO replace function pointer by a pointer to an
+			class alignas(16) Processor
+				{
+				public:
+					virtual void operator()(const Message& data)=0;
+				};
 			static __attribute__((aligned(16)))  void no_op(const Message& data);
 
 			typedef void ( __attribute__((aligned(16))) *Handler)(const Message& msg);
@@ -135,7 +141,7 @@ namespace Glinde
 					uint64_t m_time;
 					uintptr_t m_handler;
 					void* r_object;
-					union Content
+					union Content§
 						{
 					#if __x86_64__ || __amd64 || __amd64__ || __x86_64 || _M_X64 \
 						|| _M_AMD64

@@ -11,6 +11,7 @@ dependency[logdefault.o]
 
 namespace Glinde
 	{
+	class MessageQueue;
 	class LogDefault:public Log
 		{
 		public:
@@ -47,8 +48,12 @@ namespace Glinde
 			*/
 			void deathtrapHandlerActivate();
 
+			void queueAttatch(MessageQueue* queue)
+				{r_queue=queue;}
+
 		private:
 			ArrayFixed<Writer*,4> m_writers;
+			MessageQueue* r_queue;
 		};
 	}
 

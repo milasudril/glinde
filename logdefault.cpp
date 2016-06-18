@@ -12,6 +12,7 @@ target[name[logdefault.o] type [object]]
 
 #include "stringformat.h"
 #include "variant.h"
+#include "messagequeue.h"
 #include <cstdio>
 #include <cstdarg>
 #include <cstring>
@@ -102,9 +103,15 @@ void LogDefault::writerDetach(unsigned int index) noexcept
 		{m_writers[index]=nullptr;}
 	}
 
+
+
+///Deathtrap handlers
+
 #if (_WIN32 || _WIN64)
 void Glinde::deathtrapHandlerActivate()
-	{}
+	{
+//	TODO
+	}
 #else
 
 #include <signal.h>

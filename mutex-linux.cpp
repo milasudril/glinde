@@ -4,7 +4,6 @@ target[name[mutex.o] type[object] platform[;GNU/Linux] dependency[pthread;extern
 
 #include "mutex.h"
 #include <pthread.h>
-#include <type_traits>
 
 using namespace Glinde;
 
