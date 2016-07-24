@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[glshader.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"glshader.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "glshader.h"
 #include "errormessage.h"
 #include "variant.h"

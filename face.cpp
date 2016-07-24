@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[face.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"face.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "face.h"
 #include "twins.h"
 #include <glm/glm.hpp>

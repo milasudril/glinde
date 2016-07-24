@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[strerror.o] type[object] platform[;GNU/Linux]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"strerror.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "strerror.h"
 
 #ifdef _GNU_SOURCE

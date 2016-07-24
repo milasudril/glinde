@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[vectortype.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"vectortype.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 /**\file vectortype.h \brief Defines data types for enabling vectorized code.
  */
 

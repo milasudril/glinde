@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[variant.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"variant.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_VARIANT_H
 #define GLINDE_VARIANT_H
 

@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[imgtest] type[application]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"imgtest",
+//@	            "type":"application"
+//@	        }
+//@	    ]
+//@	}
 #include "image.h"
 #include "archive.h"
 #include "logwriter.h"

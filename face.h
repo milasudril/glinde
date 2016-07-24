@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[face.h] type[include]]
-dependency[face.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"face.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"face.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 
 /**\file face.h \brief Defines a Face
  */

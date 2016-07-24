@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[strerror.h] type[include]]
-dependency[strerror.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"strerror.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"strerror.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_STRERROR_H
 #define GLINDE_STRERROR_H
 

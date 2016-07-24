@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[transformations.h] type[include]]
-dependency[transformations.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"transformations.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"transformations.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_TRANSFORMATINOS_H
 #define GLINDE_TRANSFORMATINOS_H
 

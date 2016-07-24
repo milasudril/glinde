@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[transformations.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"transformations.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "transformations.h"
 
 using namespace Glinde;

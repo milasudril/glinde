@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[faceindirect.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"faceindirect.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_FACEINDIRECT_H
 #define GLINDE_FACEINDIRECT_H
 

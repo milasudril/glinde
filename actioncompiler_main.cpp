@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[actioncompiler_main.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"actioncompiler_main.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "actioncompiler_main.h"
 #include "actioncompiler_spiderdefault.h"
 #include "actioncompiler_targetdefault.h"
@@ -81,8 +87,6 @@ static void buildAll(const Range<const TargetDefault* const>& children,size_t n_
 
 	ArraySimple<uint32_t> colors(n_nodes);
 	ArrayDynamic<const Target*> targets;
-
-	memset(colors.begin(),0,sizeof(uint32_t)*n_nodes);
 
 	auto child_current=children.begin();
 	auto children_end=children.end();

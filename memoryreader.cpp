@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[memoryreader.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"memoryreader.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "memoryreader.h"
 #include <algorithm>
 #include <cstring>

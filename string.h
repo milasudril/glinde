@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[string.h] type[include]]
-dependency[string.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"string.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"string.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_STRING_H
 #define GLINDE_STRING_H
 

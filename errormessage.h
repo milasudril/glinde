@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[errormessage.h] type[include]]
-dependency[errormessage.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"errormessage.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"errormessage.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef ERRORMESSAGE_H
 #define ERRORMESSAGE_H
 
@@ -10,7 +20,7 @@ dependency[errormessage.o]
  */
 
 #include "arrayfixed.h"
-
+#include <initializer_list>
 
 namespace Glinde
 	{

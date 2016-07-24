@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[glframebuffer.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"glframebuffer.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "glframebuffer.h"
 #include "errormessage.h"
 #include "variant.h"

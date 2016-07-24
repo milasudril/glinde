@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[sdk.h] type[include]]
-dependency[sdk.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"sdk.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"sdk.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_SDK_H
 #define GLINDE_SDK_H
 

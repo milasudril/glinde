@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[datasource.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"datasource.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 /**\file datasource.h \brief Definition of an abstract data source
  */
 

@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[arraydynamic.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"arraydynamic.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 /**\file arraydynamic.h \brief Definition of an array that can grow
  */
 

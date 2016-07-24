@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[mesh.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"mesh.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "mesh.h"
 #include "resourceobject.h"
 #include "narrow_cast.h"

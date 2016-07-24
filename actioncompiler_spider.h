@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[actioncompiler_spider.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"actioncompiler_spider.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_ACTIONCOMPILER_SPIDER_H
 #define GLINDE_ACTIONCOMPILER_SPIDER_H
 

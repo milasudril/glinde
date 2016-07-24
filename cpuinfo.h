@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[cpuinfo.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"cpuinfo.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_CPUINFO_H
 #define GLINDE_CPUINFO_H
 

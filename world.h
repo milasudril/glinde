@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[world.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"world.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_WORLD_H
 #define GLINDE_WORLD_H
 

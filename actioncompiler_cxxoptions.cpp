@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[actioncompiler_cxxoptions.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"actioncompiler_cxxoptions.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "actioncompiler_cxxoptions.h"
 #include "resourceobject.h"
 

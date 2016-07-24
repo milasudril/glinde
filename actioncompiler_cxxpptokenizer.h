@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[actioncompiler_cxxpptokenizer.h] type[include]]
-dependency[actioncompiler_cxxpptokenizer.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"actioncompiler_cxxpptokenizer.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"actioncompiler_cxxpptokenizer.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_ACTIONCOMPILER_CXXPPTOKENIZER_H
 #define GLINDE_ACTIONCOMPILER_CXXPPTOKENIZER_H
 

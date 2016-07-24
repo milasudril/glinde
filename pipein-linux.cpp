@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[pipein.o] type[object] platform[;GNU/Linux]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"pipein.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "pipein.h"
 #include "errormessage.h"
 #include "arraysimple.h"

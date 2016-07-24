@@ -1,7 +1,18 @@
-#ifdef __WAND__
-target[name[resourceobject.o] type[object] dependency[jansson;external]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[
+//@	                {
+//@	                    "ref":"jansson",
+//@	                    "rel":"external"
+//@	                }
+//@	            ],
+//@	            "name":"resourceobject.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "resourceobject.h"
 #include "errormessage.h"
 #include "datasource.h"

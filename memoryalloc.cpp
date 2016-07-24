@@ -1,7 +1,18 @@
-#ifdef __WAND__
-target[name[memoryalloc.o] type[object] dependency[jemalloc;external]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[
+//@	                {
+//@	                    "ref":"jemalloc",
+//@	                    "rel":"external"
+//@	                }
+//@	            ],
+//@	            "name":"memoryalloc.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #ifndef NDEBUG
 	#define NDEBUG
 #endif

@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[sitedefault.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"sitedefault.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "sitedefault.h"
 #include "world.h"
 #include "debug.h"

@@ -1,29 +1,43 @@
-#ifdef __WAND__
-target[name[enginedefault.h] type[include]]
-dependency[enginedefault.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"enginedefault.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"enginedefault.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_ENGINEDEFAULT_H
 #define GLINDE_ENGINEDEFAULT_H
 
 #include "engine.h"
 #include "console.h"
 #include "logwriterconsole.h"
-#include "messagequeue.h"
+#include "handle.h"
 #include "string.h"
+#include "message.h"
 
 namespace Glinde
 	{
+	class MessageQueue;
 	class Window;
 	class Timer;
 	class Clock;
 	class WorldDefault;
+
+	template<class Runner>
 	class Thread;
 
 	class EngineDefault:public Engine
 		{
 		public:
-			EngineDefault();
+			EngineDefault(MessageQueue& messages);
 			~EngineDefault();
 
 			void run();
@@ -55,18 +69,34 @@ namespace Glinde
 		private:
 			class WorldLoader;
 
+			MessageQueue& r_messages;
+			class WorldOwner:public Message::Processor
+				{
+				public:
+					virtual void operator()(const Message& data);
+
+					WorldDefault* world() noexcept
+						{return m_world;}
+
+					WorldOwner();
+					~WorldOwner();
+
+				private:
+					WorldDefault* m_world;
+				} m_world_status;
+
+
 			Window* r_window;
 			const Timer* r_timer;
 			Clock* r_clock;
 
 			WorldDefault* m_world;
-			Thread* m_world_loader_task;
-			WorldLoader* m_world_loader;
+			Thread<WorldLoader>* m_world_loader;
 
 			Console m_con;
 			LogWriterConsole m_log;
 			uint32_t m_con_index;
-			MessageQueue m_messages;
+
 			uint64_t m_frame_current;
 			uint32_t m_message_count;
 			bool m_stop;
@@ -74,8 +104,6 @@ namespace Glinde
 
 			void worldLoadedPost(WorldDefault* world);
 			void cleanup();
-
-			void messageProcess(const Message& msg);
 		};
 	}
 

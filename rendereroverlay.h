@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[rendereroverlay.h] type[include]]
-dependency[rendereroverlay.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"rendereroverlay.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"rendereroverlay.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_RENDEREROVERLAY_H
 #define GLINDE_RENDEREROVERLAY_H
 

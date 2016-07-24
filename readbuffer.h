@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[readbuffer.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"readbuffer.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_READBUFFER_H
 #define GLINDE_READBUFFER_H
 

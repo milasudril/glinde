@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[resourceobject.h] type[include] ]
-dependency[resourceobject.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"resourceobject.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"resourceobject.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_RESOURCEOBJECT_H
 #define GLINDE_RESOURCEOBJECT_H
 

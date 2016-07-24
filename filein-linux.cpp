@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[filein.o] type[object] platform[;GNU/Linux]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"filein.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "filein.h"
 #include "errormessage.h"
 #include "strerror.h"

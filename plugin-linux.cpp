@@ -1,7 +1,18 @@
-#ifdef __WAND__
-target[name[plugin.o] type[object] platform[;GNU/Linux] dependency[dl;external] ]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[
+//@	                {
+//@	                    "ref":"dl",
+//@	                    "rel":"external"
+//@	                }
+//@	            ],
+//@	            "name":"plugin.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "plugin.h"
 #include "errormessage.h"
 #include "variant.h"

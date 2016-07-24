@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[map.h] type[include]]
-dependency[map.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"map.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"map.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_MAP_H
 #define GLINDE_MAP_H
 

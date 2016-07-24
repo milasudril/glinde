@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[actioncompiler_targetloader.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"actioncompiler_targetloader.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_ACTIONCOMPILER_TARGETLOADER_H
 #define GLIDNE_ACTIONCOMPILER_TARGETLOADER_H
 

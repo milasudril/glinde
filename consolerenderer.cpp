@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[consolerenderer.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"consolerenderer.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "consolerenderer.h"
 #include "console.h"
 

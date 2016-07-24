@@ -1,7 +1,18 @@
-#ifdef __WAND__
-target[name[mutex.o] type[object] platform[;GNU/Linux] dependency[pthread;external]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[
+//@	                {
+//@	                    "ref":"pthread",
+//@	                    "rel":"external"
+//@	                }
+//@	            ],
+//@	            "name":"mutex.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "mutex.h"
 #include <pthread.h>
 

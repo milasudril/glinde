@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[worldobject.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"worldobject.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "worldobject.h"
 #include "item.h"
 #include "itemclass.h"

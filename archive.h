@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[archive.h] type[include]]
-dependency[archive.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"archive.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"archive.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 /**\file archive.h \brief Definition of a ZIP archive reader class
  */
 

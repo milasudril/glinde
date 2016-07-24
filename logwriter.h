@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[logwriter.h] type[include]]
-dependency[logwriter.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"logwriter.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"logwriter.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_LOGWRITER_H
 #define GLINDE_LOGWRITER_H
 
@@ -11,14 +21,24 @@ dependency[logwriter.o]
 
 namespace Glinde
 	{
+	class MessageQueue;
+
 	void logWrite(Log::MessageType type,const char* format
 		,const std::initializer_list<Variant>& args) noexcept;
-	void logWriteDebug(const char* file,uint64_t line,const char* format
-		,const std::initializer_list<Variant>& args) noexcept;
-	uint32_t logWriterAttach(Log::Writer& writer) noexcept;
-	void logWriterDetach(uint32_t index) noexcept;
+
+	unsigned int logWriterAttach(Log::Writer& writer) noexcept;
+
+	void logWriterDetach(unsigned int index) noexcept;
+
+	unsigned int logQueueAttach(MessageQueue& queue) noexcept;
+
+	void logQueueDetach(unsigned int index) noexcept;
+
 	void deathtrapHandlerActivate() noexcept;
+
 	Log& logGlobalGet() noexcept;
+
+
 	}
 
 #endif

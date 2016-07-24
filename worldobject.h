@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[worldobject.h] type[include]]
-dependency[worldobject.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"worldobject.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"worldobject.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_WORLDOBJECT_H
 #define GLINDE_WORLDOBJECT_H
 

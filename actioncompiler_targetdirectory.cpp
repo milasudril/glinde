@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[actioncompiler_targetdirectory.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"actioncompiler_targetdirectory.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "actioncompiler_targetdirectory.h"
 #include "logwriter.h"
 #include "debug.h"

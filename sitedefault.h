@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[sitedefault.h] type[include]]
-dependency[sitedefault.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"sitedefault.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"sitedefault.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_SITEDEFAULT_H
 #define GLINDE_SITEDEFAULT_H
 

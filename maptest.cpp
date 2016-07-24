@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[maptest] type[application]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"maptest",
+//@	            "type":"application"
+//@	        }
+//@	    ]
+//@	}
 #include "mapfixed.h"
 #include "stringkey.h"
 #include <cstdio>

@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[twins.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"twins.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_TWINS_H
 #define GLINDE_TWINS_H
 

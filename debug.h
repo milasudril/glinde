@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[debug.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[{"ref":"debug.o","rel":"implementation"}],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"debug.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 /**\file debug.h \brief Debugging macros
  *
  * This file contains macros for use when debugging.
@@ -17,9 +23,10 @@ target[name[debug.h] type[include]]
 	#define GLINDE_ASSERT_CALL(function,relation,value) (function)
 #else
 
-#include "logwriter.h"
 #include <cassert>
 #include <cstdarg>
+#include <cstdint>
+#include <initializer_list>
 
 	/**\brief Prints a debug message to the console
 	 *
@@ -40,6 +47,14 @@ target[name[debug.h] type[include]]
 	 *
 	*/
 	#define GLINDE_ASSERT_CALL(function,relation,value) assert((function) relation (value))
+
+namespace Glinde
+	{
+	class Variant;
+	void logWriteDebug(const char* file,uint64_t line,const char* format
+		,const std::initializer_list<Variant>& args) noexcept;
+	}
+
 #endif
 
 #endif

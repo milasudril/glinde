@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[thread.h] type[include]]
-dependency[thread.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"thread.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"thread.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_THREAD_H
 #define GLINDE_THREAD_H
 
@@ -10,22 +20,33 @@ dependency[thread.o]
 
 namespace Glinde
 	{
-	class Thread
+	class ThreadBase
 		{
 		public:
-			class Runner
-				{
-				public:
-					virtual ~Runner()=default;
-					virtual void run() noexcept=0;
+			virtual void run()=0;
 
-				};
+		protected:
+			ThreadBase();
+			virtual ~ThreadBase();
 
-			Thread(Runner& runner);
-			~Thread();
+			void start();
 
 		private:
 			intptr_t m_handle;
+		};
+
+	template<class Runner>
+	class Thread:private ThreadBase
+		{
+		public:
+			Thread(Runner&& runner):m_runner(runner)
+				{start();}
+
+			void run()
+				{m_runner();}
+
+		private:
+			Runner m_runner;
 		};
 	}
 

@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[actioncompiler_spiderdefault.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"actioncompiler_spiderdefault.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "actioncompiler_spiderdefault.h"
 #include "actioncompiler_targetdefault.h"
 #include "actioncompiler_targetcxxloader.h"

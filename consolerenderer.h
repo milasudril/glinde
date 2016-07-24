@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[consolerenderer.h] type[include]]
-dependency[consolerenderer.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"consolerenderer.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"consolerenderer.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #include "glvertexarray.h"
 #include "gltexture.h"
 #include "glprogram.h"

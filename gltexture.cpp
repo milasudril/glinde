@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[gltexture.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"gltexture.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "gltexture.h"
 #include "image.h"
 #include "debug.h"

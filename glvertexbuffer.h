@@ -1,9 +1,22 @@
-#ifdef __WAND__
-target[name[glvertexbuffer.h] type[include]]
-dependency[GLEW;external]
-dependency[GL;external]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"GLEW",
+//@	            "rel":"external"
+//@	        },
+//@	        {
+//@	            "ref":"GL",
+//@	            "rel":"external"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"glvertexbuffer.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_GLVERTEXBUFFER_H
 #define GLINDE_GLVERTEXBUFFER_H
 

@@ -1,10 +1,26 @@
-#ifdef __WAND__
-target[name[glframebuffer.h] type[include]]
-dependency[glframebuffer.o]
-dependency[GLEW;external]
-dependency[GL;external]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"glframebuffer.o",
+//@	            "rel":"implementation"
+//@	        },
+//@	        {
+//@	            "ref":"GLEW",
+//@	            "rel":"external"
+//@	        },
+//@	        {
+//@	            "ref":"GL",
+//@	            "rel":"external"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"glframebuffer.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_GLFRAMEBUFFER_H
 #define GLINDE_GLFRAMEBUFFER_H
 

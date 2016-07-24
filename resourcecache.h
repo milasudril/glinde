@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[resourcecache.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"resourcecache.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_RESOURCECACHE_H
 #define GLINDE_RESOURCECACHE_H
 

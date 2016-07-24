@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[console.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"console.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "console.h"
 #include "arrayfixed.h"
 #include "blob.h"

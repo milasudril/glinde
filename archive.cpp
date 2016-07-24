@@ -1,7 +1,18 @@
-#ifdef __WAND__
-target[name[archive.o] type[object] dependency[zip;external]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[
+//@	                {
+//@	                    "ref":"zip",
+//@	                    "rel":"external"
+//@	                }
+//@	            ],
+//@	            "name":"archive.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "archive.h"
 #include "errormessage.h"
 #include "utility.h"

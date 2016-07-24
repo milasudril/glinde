@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[stringformat.h] type[include]]
-dependency[stringformat.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"stringformat.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"stringformat.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_STRINGFORMAT_H
 #define GLINDE_STRINGFORMAT_H
 

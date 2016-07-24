@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[site.h] type [include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"site.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_SITE_H
 #define GLINDE_SITE_H
 

@@ -1,9 +1,22 @@
-#ifdef __WAND__
-target[name[glelementarraybuffer.h] type[include]]
-dependency[GLEW;external]
-dependency[GL;external]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"GLEW",
+//@	            "rel":"external"
+//@	        },
+//@	        {
+//@	            "ref":"GL",
+//@	            "rel":"external"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"glelementarraybuffer.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_GLELEMENTARRAYBUFFER_H
 #define GLINDE_GLELEMENTARRAYBUFFER_H
 

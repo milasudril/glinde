@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[intersections.h] type[include]]
-dependency[intersections.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"intersections.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"intersections.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_INTERSECTIONS_H
 #define GLINDE_INTERSECTIONS_H
 

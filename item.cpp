@@ -1,11 +1,18 @@
-#ifdef __WAND__
-target[name[item.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"item.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "item.h"
 #include "resourceobject.h"
 #include "resourcemanager.h"
 #include "errormessage.h"
+#include "variant.h"
 
 using namespace Glinde;
 

@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[gameloop.h] type[include]]
-dependency[gameloop.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"gameloop.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"gameloop.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 /**\file gameloop.h \brief Declares the gameLoopRun function
  *
  */

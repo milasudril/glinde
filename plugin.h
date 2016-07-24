@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[plugin.h] type[include]]
-dependency[plugin.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"plugin.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"plugin.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 
 #ifndef GLINDE_PLUGIN_H
 #define GLINDE_PLUGIN_H

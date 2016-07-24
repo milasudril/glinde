@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[stringformat.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"stringformat.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "stringformat.h"
 #include "variant.h"
 #include "range.h"

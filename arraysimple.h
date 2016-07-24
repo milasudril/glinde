@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[arraysimple.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"arraysimple.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 /** \file arraysimple.h \brief Definition of ArraySimple
 */
 

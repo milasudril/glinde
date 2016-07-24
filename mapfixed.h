@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[mapfixed.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"mapfixed.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_MAPFIXED_H
 #define GLINDE_MAPFIXED_H
 

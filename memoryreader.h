@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[memoryreader.h] type[include]]
-dependency[memoryreader.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"memoryreader.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"memoryreader.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #include "datasource.h"
 #include "vectortype.h"
 #include <cstdint>

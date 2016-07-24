@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[facerejectiontree.h] type[include]]
-dependency[facerejectiontree.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"facerejectiontree.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"facerejectiontree.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 /**\file facerejectiontree.h \brief Defines the FaceRejectionTree class
 */
 

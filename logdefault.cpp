@@ -1,15 +1,20 @@
-#ifdef __WAND__
-target[name[logdefault.o] type [object]]
-#endif
-
-#include "logdefault.h"
-#include "stringformat.h"
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"logdefault.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 
 #if __MINGW32__ || __MINGW64__
 	#define __USE_MINGW_ANSI_STDIO 1
 #endif
 
+
+#include "logdefault.h"
 #include "stringformat.h"
 #include "variant.h"
 #include "messagequeue.h"

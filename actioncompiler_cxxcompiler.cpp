@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[actioncompiler_cxxcompiler.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"actioncompiler_cxxcompiler.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "actioncompiler_cxxcompiler.h"
 #include "actioncompiler_cxxpptokenizer.h"
 #include "pipein.h"

@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[mesh.h] type[include]]
-dependency[mesh.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"mesh.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"mesh.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_MESH_H
 #define GLINDE_MESH_H
 

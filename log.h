@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[log.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"log.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_LOG_H
 #define GLINDE_LOG_H
 

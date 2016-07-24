@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[console.h] type[include]]
-dependency[console.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"console.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"console.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_CONSOLE_H
 #define GLINDE_CONSOLE_H
 

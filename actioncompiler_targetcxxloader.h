@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[actioncompiler_targetcxxloader.h] type[include]]
-dependency[actioncompiler_targetcxxloader.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"actioncompiler_targetcxxloader.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"actioncompiler_targetcxxloader.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef ACTIONCOMPILER_TARGETCXXLOADER_H
 #define ACTIONCOMPILER_TARGETCXXLOADER_H
 

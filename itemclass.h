@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[itemclass.h] type[include]]
-dependency[itemclass.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"itemclass.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"itemclass.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_ITEMCLASS_H
 #define GLINDE_ITEMCLASS_H
 

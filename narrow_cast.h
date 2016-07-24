@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[narrow_cast.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"narrow_cast.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_NARROWCAST_H
 #define GLINDE_NARROWCAST_H
 

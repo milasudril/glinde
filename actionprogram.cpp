@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[actionprogram.o]type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"actionprogram.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "actionprogram.h"
 #include "actioncompiler_main.h"
 #include "actioncompiler_cxxoptions.h"

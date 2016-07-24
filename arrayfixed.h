@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[arrayfixed.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"arrayfixed.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 /** \file arrayfixed.h \brief Definition of ArrayFixed
 */
 

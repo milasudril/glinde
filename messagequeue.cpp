@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[messagequeue.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"messagequeue.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "messagequeue.h"
 #include "message.h"
 

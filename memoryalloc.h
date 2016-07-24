@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[memoryalloc.h] type[include]]
-dependency[memoryalloc.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"memoryalloc.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"memoryalloc.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 /**\file memoryalloc.h \brief Memory allocation routines.
  *
  * The memory allocation routines declared in this file are SSE safe.

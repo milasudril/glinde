@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[glprogram.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"glprogram.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "glprogram.h"
 #include "errormessage.h"
 #include "variant.h"

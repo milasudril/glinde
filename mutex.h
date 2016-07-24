@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[mutex.h] type[include]]
-dependency[mutex.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"mutex.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"mutex.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_MUTEX_H
 #define GLINDE_MUTEX_H
 

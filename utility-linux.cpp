@@ -1,7 +1,18 @@
-#ifdef __WAND__
-target[name[utility.o] type[object] platform[;GNU/Linux] dependency[uuid;external]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[
+//@	                {
+//@	                    "ref":"uuid",
+//@	                    "rel":"external"
+//@	                }
+//@	            ],
+//@	            "name":"utility.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "utility.h"
 #include "errormessage.h"
 #include "strerror.h"

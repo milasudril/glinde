@@ -1,14 +1,26 @@
-#ifdef __WAND__
-target
-	[
-	name[window.o]
-	type[object]
-	dependency[GL;external]
-	dependency[GLEW;external]
-	dependency[glfw;external]
-	]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[
+//@	                {
+//@	                    "ref":"GL",
+//@	                    "rel":"external"
+//@	                },
+//@	                {
+//@	                    "ref":"GLEW",
+//@	                    "rel":"external"
+//@	                },
+//@	                {
+//@	                    "ref":"glfw",
+//@	                    "rel":"external"
+//@	                }
+//@	            ],
+//@	            "name":"window.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "window.h"
 #include "errormessage.h"
 #include "logwriter.h"

@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[pipein.h] type[include]]
-dependency[pipein.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"pipein.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"pipein.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_PIPEIN_H
 #define GLINDE_PIPEIN_H
 

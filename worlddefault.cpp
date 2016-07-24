@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[worlddefault.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"worlddefault.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "worlddefault.h"
 #include "archive.h"
 #include "sdk.h"

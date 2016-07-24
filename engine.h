@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[engine.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"engine.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_ENGINE_H
 #define GLINDE_ENGINE_H
 

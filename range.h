@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[range.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"range.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_RANGE_H
 #define GLINDE_RANGE_H
 #include <cassert>

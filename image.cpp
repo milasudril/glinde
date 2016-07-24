@@ -1,11 +1,22 @@
-#ifdef __WAND__
-target
-	[
-	name[image.o] type[object] dependency[png;external]
-	dependency[Half;external]
-	]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[
+//@	                {
+//@	                    "ref":"png",
+//@	                    "rel":"external"
+//@	                },
+//@	                {
+//@	                    "ref":"Half",
+//@	                    "rel":"external"
+//@	                }
+//@	            ],
+//@	            "name":"image.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "image.h"
 #include "datasource.h"
 #include "errormessage.h"

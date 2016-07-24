@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[message.h] type[include]]
-dependency[message.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"message.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"message.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_MESSAGE_H
 #define GLINDE_MESSAGE_H
 
@@ -113,7 +123,7 @@ namespace Glinde
 
 			template<class T>
 			Range<const T> paramsGet() const noexcept
-				{return Range<const T>(paramPointerGet<const T>(),length<T>());}
+				{return Range<const T>(paramPointerGet<T>(),length<T>());}
 
 			template<class T>
 			Range<const T> dataGet() const noexcept
@@ -172,13 +182,13 @@ namespace Glinde
 
 
 			template<class T>
-			static constexpr size_t length();
+			inline static constexpr size_t length();
 
 			template<class T>
-			const T* paramPointerGet() const noexcept;
+			inline const T* paramPointerGet() const noexcept;
 
 			template<class T>
-			T* paramPointerGet() noexcept;
+			inline T* paramPointerGet() noexcept;
 
 			static inline uintptr_t mangle(Processor& handler,uint8_t val) noexcept
 				{
@@ -209,36 +219,36 @@ namespace Glinde
 
 
 	template<>
-	const uint8_t* Message::paramPointerGet() const noexcept
+	inline const uint8_t* Message::paramPointerGet<uint8_t>() const noexcept
 		{return m_msg.content.params.bytes;}
 
 	template<>
-	const uint16_t* Message::paramPointerGet() const noexcept
+	inline const uint16_t* Message::paramPointerGet<uint16_t>() const noexcept
 		{return m_msg.content.params.words;}
 
 	template<>
-	const uint32_t* Message::paramPointerGet() const noexcept
+	inline const uint32_t* Message::paramPointerGet<uint32_t>() const noexcept
 		{return m_msg.content.params.dwords;}
 
 	template<>
-	const uint64_t* Message::paramPointerGet() const noexcept
+	inline const uint64_t* Message::paramPointerGet<uint64_t>() const noexcept
 		{return m_msg.content.params.qwords;}
 
 
 	template<>
-	uint8_t* Message::paramPointerGet() noexcept
+	inline uint8_t* Message::paramPointerGet<uint8_t>() noexcept
 		{return m_msg.content.params.bytes;}
 
 	template<>
-	uint16_t* Message::paramPointerGet() noexcept
+	inline uint16_t* Message::paramPointerGet<uint16_t>() noexcept
 		{return m_msg.content.params.words;}
 
 	template<>
-	uint32_t* Message::paramPointerGet() noexcept
+	inline uint32_t* Message::paramPointerGet<uint32_t>() noexcept
 		{return m_msg.content.params.dwords;}
 
 	template<>
-	uint64_t* Message::paramPointerGet() noexcept
+	inline uint64_t* Message::paramPointerGet<uint64_t>() noexcept
 		{return m_msg.content.params.qwords;}
 	}
 

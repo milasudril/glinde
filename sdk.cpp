@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[sdk.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"sdk.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "sdk.h"
 #include "sdkresource.h"
 #include "blob.h"

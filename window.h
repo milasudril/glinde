@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[window.h] type[include]]
-dependency[window.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"window.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"window.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_WINDOW_H
 #define GLINDE_WINDOW_H
 

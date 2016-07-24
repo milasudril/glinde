@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[model.h] type[include]]
-dependency[model.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"model.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"model.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_MODEL_H
 #define GLINDE_MODEL_H
 

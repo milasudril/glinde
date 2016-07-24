@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[logwriterconsole.h] type[include]]
-dependency[logwriterconsole.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"logwriterconsole.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"logwriterconsole.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_LOGWRITERCONSOLE_H
 #define GLINDE_LOGWRITERCONSOLE_H
 

@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[camera.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"camera.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 /**\file camera.h \brief Defines the Camera class.
  */
 

@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[boundingbox.h] type[include]]
-dependency[boundingbox.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"boundingbox.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"boundingbox.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 /**\file boundingbox.h \brief Defines the BoundingBox class
  */
 

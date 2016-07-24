@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[glvertexarray.h] type[include]]
-dependency[GLEW;external]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"GLEW",
+//@	            "rel":"external"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"glvertexarray.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_GLVERTEXARRAY_H
 #define GLINDE_GLVERTEXARRAY_H
 

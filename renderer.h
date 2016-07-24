@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[renderer.h] type[include]]
-dependency[renderer.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"renderer.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"renderer.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_RENDERER_H
 #define GLINDE_RENDERER_H
 

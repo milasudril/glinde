@@ -1,13 +1,20 @@
-#ifdef __WAND__
-target[name[consoletest] type[application] ]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"consoletest",
+//@	            "type":"application"
+//@	        }
+//@	    ]
+//@	}
 #include "errormessage.h"
 #include "logwriter.h"
 #include "enginedefault.h"
 #include "consolerenderer.h"
 #include "rendereroverlay.h"
 #include "variant.h"
+#include "handle.h"
 
 #include "window.h"
 #include "timerreal.h"
@@ -18,7 +25,7 @@ target[name[consoletest] type[application] ]
 #include "glelementarraybuffer.h"
 #include "gltexture.h"
 #include "glframebuffer.h"
-
+#include "messagequeue.h"
 
 using namespace Glinde;
 
@@ -87,7 +94,11 @@ int main()
 	logWrite(Log::MessageType::INFORMATION,"Glinde is starting up",{});
 	try
 		{
-		EngineDefault e;
+		MessageQueue queue;
+		Handle<unsigned int,-1,decltype(&logQueueDetach)>
+			queue_guard(logQueueAttach(queue),&logQueueDetach);
+
+		EngineDefault e(queue);
 		logWrite(Log::MessageType::INFORMATION,"Engine initialized",{});
 		EventHandlerTest test(e);
 		WindowTest mainwin("Console",800,600,test,e.consoleGet());

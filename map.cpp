@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[map.o] type [object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"map.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "map.h"
 #include "resourceobject.h"
 #include "datasource.h"

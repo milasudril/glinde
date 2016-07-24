@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[filein.h] type[include]]
-dependency[filein.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"filein.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"filein.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_FILEIN_H
 #define GLINDE_FILEIN_H
 

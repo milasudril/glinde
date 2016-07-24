@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[timerreal.h] type[include]]
-dependency[timerreal.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"timerreal.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"timerreal.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 /**\file timerreal.h \brief Defines a periodic timer.
  */
 

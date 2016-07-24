@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[logwriter.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"logwriter.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "logwriter.h"
 #include "logdefault.h"
 #include "stringformat.h"
@@ -21,6 +27,15 @@ unsigned int Glinde::logWriterAttach(Log::Writer& writer) noexcept
 void Glinde::logWriterDetach(unsigned int index) noexcept
 	{s_log.writerDetach(index);}
 
+unsigned int Glinde::logQueueAttach(MessageQueue& q) noexcept
+	{
+	s_log.queueAttach(q);
+	return 0;
+	}
+
+void Glinde::logQueueDetach(unsigned int index) noexcept
+	{s_log.queueDetach(index);}
+
 void Glinde::deathtrapHandlerActivate() noexcept
 	{s_log.deathtrapHandlerActivate();}
 
@@ -29,18 +44,3 @@ void Glinde::logWrite(Log::MessageType type
 	{
 	s_log.write(type,format,args);
 	}
-
-void Glinde::logWriteDebug(const char* file,uint64_t line
-	,const char* format_string
-	,const std::initializer_list<Variant>& args) noexcept
-	{
-	char buffer_a[4096];
-	format(Range<char>(buffer_a,sizeof(buffer_a)/sizeof(buffer_a[0]))
-		,format_string,args);
-
-	char buffer_b[4096];
-	format(Range<char>(buffer_b,sizeof(buffer_b)/sizeof(buffer_b[0]))
-		,"#0;:#1;: #2;",{file,line,buffer_a});
-	s_log.write(Log::MessageType::DEBUG,"#0;",{buffer_b});
-	}
-

@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[logdefault.h] type[include]]
-dependency[logdefault.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"logdefault.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"logdefault.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #include "log.h"
 #include "arrayfixed.h"
 #include "message.h"
@@ -49,8 +59,14 @@ namespace Glinde
 			*/
 			void deathtrapHandlerActivate();
 
-			void queueAttatch(MessageQueue* queue)
-				{r_queue=queue;}
+			unsigned int queueAttach(MessageQueue& queue) noexcept
+				{
+				r_queue=&queue;
+				return 0;
+				}
+
+			void queueDetach(unsigned int index) noexcept
+				{r_queue=nullptr;}
 
 			void operator()(const Message& message);
 

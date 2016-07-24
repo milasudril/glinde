@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[message.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"message.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "message.h"
 #include "memoryalloc.h"
 #include "narrow_cast.h"

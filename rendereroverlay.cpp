@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[rendereroverlay.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"rendereroverlay.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "rendereroverlay.h"
 
 #include "glprogram.h"

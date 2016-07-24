@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[filesystem.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"filesystem.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 /**\file filesystem.h \brief Definition of an abstract fil system
  */
 

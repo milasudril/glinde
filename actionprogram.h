@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[actionprogram.h] type[include]]
-dependency[actionprogram.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"actionprogram.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"actionprogram.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_ACTIONPROGRAM_H
 #define GLINDE_ACTIONPROGRAM_H
 

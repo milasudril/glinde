@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[arrayinit.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"arrayinit.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_ARRAYINIT_H
 #define GLINDE_ARRAYINIT_H
 

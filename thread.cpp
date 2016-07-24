@@ -1,27 +1,41 @@
-#ifdef __WAND__
-target[name[thread.o] type[object] platform[;GNU/Linux] dependency[pthread;external]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[
+//@	                {
+//@	                    "ref":"pthread",
+//@	                    "rel":"external"
+//@	                }
+//@	            ],
+//@	            "name":"thread.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "thread.h"
 #include <pthread.h>
 
 using namespace Glinde;
 
-static void* thread_entry(void* runner)
+static void* thread_entry(void* thread)
 	{
-	reinterpret_cast<Thread::Runner*>(runner)->run();
+	reinterpret_cast<ThreadBase*>(thread)->run();
 	return nullptr;
 	}
 
-Thread::Thread(Runner& runner)
+ThreadBase::ThreadBase()
 	{
 	static_assert(sizeof(m_handle)>=sizeof(pthread_t),"Handle type is too small");
-
-	pthread_create(reinterpret_cast<pthread_t*>(&m_handle)
-		,NULL,thread_entry,&runner);
 	}
 
-Thread::~Thread()
+void ThreadBase::start()
+	{
+	pthread_create(reinterpret_cast<pthread_t*>(&m_handle)
+		,NULL,thread_entry,this);
+	}
+
+ThreadBase::~ThreadBase()
 	{
 	pthread_join(m_handle,NULL);
 	}

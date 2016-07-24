@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[sdkresource.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"sdkresource.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_SDKRESOURCE_H
 #define GLINDE_SDKRESOURCE_H
 

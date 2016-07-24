@@ -1,9 +1,22 @@
-#ifdef __WAND__
-target[name[program.h] type[include]]
-dependency[GLEW;external]
-dependency[glprogram.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"GLEW",
+//@	            "rel":"external"
+//@	        },
+//@	        {
+//@	            "ref":"glprogram.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"glprogram.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_GLPROGRAM_H
 #define GLINDE_GLPROGRAM_H
 

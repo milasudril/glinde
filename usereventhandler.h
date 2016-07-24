@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[usereventhandler.h] type[include]]
-dependency[usereventhandler.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"usereventhandler.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"usereventhandler.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_USEREVENTHANDLER_H
 #define GLINDE_USEREVENTHANDLER_H
 

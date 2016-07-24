@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[stringkey.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"stringkey.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_STRINGKEY_H
 #define GLINDE_STRINGKEY_H
 

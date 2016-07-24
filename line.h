@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[line.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"line.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_LINE_H
 #define GLINDE_LINE_H
 

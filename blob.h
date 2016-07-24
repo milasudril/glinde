@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[include_binary.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"blob.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_BLOB_H
 #define GLINDE_BLOB_H
 

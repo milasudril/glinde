@@ -1,9 +1,22 @@
-#ifdef __WAND__
-target[name[shader.h] type[include]]
-dependency[GLEW;external]
-dependency[glshader.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"GLEW",
+//@	            "rel":"external"
+//@	        },
+//@	        {
+//@	            "ref":"glshader.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"glshader.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_GLSHADER_H
 #define GLINDE_GLSHADER_H
 

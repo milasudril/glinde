@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[messagequeue.h] type[include]]
-dependency[messagequeue.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"messagequeue.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"messagequeue.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_MESSAGEQUEUE_H
 #define GLINDE_MESSAGEQUEUE_H
 
@@ -17,7 +27,6 @@ namespace Glinde
 		{
 		public:
 			MessageQueue():m_seq_next(0){}
-			~MessageQueue();
 
 			template<class T,size_t N>
 			void post(uint64_t time,Message::Processor& handler,const Range<const T>& data
@@ -30,11 +39,12 @@ namespace Glinde
 				}
 
 			template<class T,size_t N>
-			void post(uint64_t time,Message::Processor& handler,const ArrayFixed<T,N>& data)
+			void post(uint64_t time,Message::Processor& handler,void* pointer
+				,const ArrayFixed<T,N>& data)
 				{
 				Mutex::LockGuard guard(m_mutex);
 				auto seq=seqGet();
-				m_queue.push(Message{time,seq,handler,data});
+				m_queue.push(Message{time,seq,handler,pointer,data});
 				}
 
 			bool get(Message& message) noexcept;

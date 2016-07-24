@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[image.h] type[include]]
-dependency[image.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"image.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"image.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_IMAGE_H
 #define GLINDE_IMAGE_H
 

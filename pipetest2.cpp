@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[pipetest] type[application]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"pipetest",
+//@	            "type":"application"
+//@	        }
+//@	    ]
+//@	}
 #include "pipein.h"
 #include "readbuffer.h"
 #include "errormessage.h"

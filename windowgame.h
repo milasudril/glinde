@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[windowgame.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"windowgame.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_WINDOWGAME_H
 #define GLINDE_WINDOWGAME_H
 

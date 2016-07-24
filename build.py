@@ -87,7 +87,7 @@ def wand_exec(data,profile):
 	flagstring_compile=flagstringGet(data[profile],0,cxxversion)
 	flagstring_link=flagstringGet(data[profile],1,cxxversion)
 
-	arg='config_set[components[Handler^ C++[envblock[LC_ALL[C]] '\
+	arg='config_set[components[Wand[actions[treeexport]] Handler^ C++[envblock[LC_ALL[C]] '\
 		'commands[ '\
 		'compile_obj[g++^ '+flagstring_compile+'"%0"^ -o^ "%1"] '\
 		'compile_app[g++^ '+flagstring_link+'"%0"^ %4^-o^ "%1"] '\

@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[timerdummy.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"timerdummy.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 
 #ifndef GLINDE_TIMERREAL_H
 #define GLINDE_TIMERREAL_H

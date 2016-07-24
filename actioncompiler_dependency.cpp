@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[actioncompiler_dependency.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"actioncompiler_dependency.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "actioncompiler_dependency.h"
 
 using namespace Glinde;

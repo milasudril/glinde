@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[model.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"model.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "model.h"
 #include "resourceobject.h"
 #include "datasource.h"

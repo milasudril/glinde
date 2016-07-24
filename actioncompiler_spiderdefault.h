@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[actioncompiler_spiderdefault.h] type[include]]
-dependency[actioncompiler_spiderdefault.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"actioncompiler_spiderdefault.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"actioncompiler_spiderdefault.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_ACTIONCOMPILER_SPIDERDFAULT_H
 #define GLINDE_ACTIONCOMPILER_SPIDERDFAULT_H
 

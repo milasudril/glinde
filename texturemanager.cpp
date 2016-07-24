@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[texturemanager.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"texturemanager.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "texturemanager.h"
 #include "filesystem.h"
 #include "stringkey.h"

@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[fileout.h] type[include]]
-dependency[fileout.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"fileout.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"fileout.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_FILEOUT_H
 #define GLINDE_FILEOUT_H
 #include <cstdint>

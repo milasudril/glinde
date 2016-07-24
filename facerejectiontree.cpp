@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[facerejectiontree.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"facerejectiontree.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "facerejectiontree.h"
 #include "arraydynamic.h"
 #include "model.h"

@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[objectmanager.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"objectmanager.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLIDNE_OBJECTMANAGER_H
 #define GLINDE_OBJECTMANAGER_H
 

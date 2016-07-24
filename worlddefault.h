@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[worlddefault.h] type[include]]
-dependency[worlddefault.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"worlddefault.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"worlddefault.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 /**\file worlddefault.h \brief Defines the WorldDefault class
  */
 
@@ -10,8 +20,9 @@ dependency[worlddefault.o]
 #define GLINDE_WORLDDEFAULT_H
 
 #include "world.h"
-#include "resourcemanager.h"
+#include "resourcemanagerdefault.h"
 #include "actionprogram.h"
+#include "site.h"
 
 #include <memory>
 
@@ -52,7 +63,7 @@ namespace Glinde
 			std::unique_ptr<Filesystem> m_fs;
 			ActionProgram m_program;
 			std::unique_ptr<EventHandler,EventHandlerDisposer> m_world_eh;
-			ResourceManager m_resources;
+			ResourceManagerDefault m_resources;
 			SiteDefault* r_site;
 
 			static decltype(m_world_eh)

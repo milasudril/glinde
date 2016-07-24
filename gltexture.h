@@ -1,10 +1,26 @@
-#ifdef __WAND__
-target[name[gltexture.h] type[include]]
-dependency[GLEW;external]
-dependency[GL;external]
-dependency[gltexture.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"GLEW",
+//@	            "rel":"external"
+//@	        },
+//@	        {
+//@	            "ref":"GL",
+//@	            "rel":"external"
+//@	        },
+//@	        {
+//@	            "ref":"gltexture.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"gltexture.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_GLTEXTURE_H
 #define GLINDE_GLTEXTURE_H
 

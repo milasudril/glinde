@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[errormessage.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"errormessage.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "errormessage.h"
 #include "stringformat.h"
 

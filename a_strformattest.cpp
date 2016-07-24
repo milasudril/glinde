@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[a_strformattest] type[application]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"a_strformattest",
+//@	            "type":"application"
+//@	        }
+//@	    ]
+//@	}
 #include "stringformat.h"
 #include "range.h"
 #include <cstdio>

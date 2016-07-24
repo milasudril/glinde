@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[actioncompiler_cxxcompiler.h] type[include]]
-dependency[actioncompiler_cxxcompiler.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"actioncompiler_cxxcompiler.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"actioncompiler_cxxcompiler.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_ACTIONCOMPILER_CXXCOMPILER_H
 #define GLINDE_ACTIONCOMPILER_CXXCOMPILER_H
 

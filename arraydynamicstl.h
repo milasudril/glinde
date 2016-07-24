@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[arraydynamicstl.h] type[include]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"arraydynamicstl.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_ARRAYDYNAMICSTL_H
 #define GLINDE_ARRAYDYNAMICSTL_H
 

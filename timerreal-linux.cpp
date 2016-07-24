@@ -1,12 +1,22 @@
-#ifdef __WAND__
-target
-	[
-	name[timerreal.o] type[object] platform[;GNU/Linux]
-	dependency[rt;external]
-	dependency[pthread;external]
-	]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[
+//@	                {
+//@	                    "ref":"rt",
+//@	                    "rel":"external"
+//@	                },
+//@	                {
+//@	                    "ref":"pthread",
+//@	                    "rel":"external"
+//@	                }
+//@	            ],
+//@	            "name":"timerreal.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 
 #include "timerreal.h"
 #include "errormessage.h"

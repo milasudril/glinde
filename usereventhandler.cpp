@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[usereventhandler.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"usereventhandler.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 
 #include "usereventhandler.h"
 #include "worldobject.h"

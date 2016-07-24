@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[utility.h] type[include]]
-dependency[utility.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"utility.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"utility.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef GLINDE_UTILITY_H
 #define GLINDE_UTILITY_H
 

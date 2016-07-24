@@ -1,53 +1,86 @@
-#ifdef __WAND__
-target[name[enginedefault.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"enginedefault.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "enginedefault.h"
 #include "window.h"
 #include "timerdummy.h"
-#include "message.h"
 #include "worlddefault.h"
 #include "archive.h"
 #include "thread.h"
 #include "variant.h"
+#include "messagequeue.h"
 
 using namespace Glinde;
 
 static const TimerDummy s_timer(30.0);
 
-class EngineDefault::WorldLoader:public Thread::Runner
+class EngineDefault::WorldLoader
 	{
 	public:
-		WorldLoader(EngineDefault& engine,const char* filename):
-			r_engine(engine),m_filename(filename)
+		WorldLoader(MessageQueue& messages,EngineDefault::WorldOwner& notifier
+			,const char* filename):
+			r_messages(messages),r_notifier(notifier),m_filename(filename)
 			{}
 
-		void run() noexcept;
+		void operator()() noexcept;
 
 	private:
-		EngineDefault& r_engine;
+		MessageQueue& r_messages;
+		EngineDefault::WorldOwner& r_notifier;
 		String m_filename;
 	};
 
-void EngineDefault::WorldLoader::run() noexcept
+void EngineDefault::WorldLoader::operator()() noexcept
 	{
-	WorldDefault* world=nullptr;
 	try
 		{
 		logWrite(Log::MessageType::INFORMATION,"Loading world from \"#0;\""
 			,{m_filename.begin()});
 
-		world=new WorldDefault(m_filename.begin());
+		r_messages.post(0,r_notifier,new WorldDefault(m_filename.begin())
+			,ArrayFixed<uint32_t,1>{0u} );
 		}
 	catch(const ErrorMessage& msg)
 		{
 		logWrite(Log::MessageType::ERROR,"#0;",{msg.messageGet()});
+		r_messages.post(0,r_notifier,nullptr,ArrayFixed<uint32_t,1>{0u} );
 		}
-
-	r_engine.worldLoadedPost(world);
 	}
 
-EngineDefault::EngineDefault():m_world(nullptr),m_world_loader_task(nullptr)
+
+void EngineDefault::WorldOwner::operator()(const Message& data)
+	{
+	auto world_new=reinterpret_cast<WorldDefault*>(data.objectGet());
+	if(world_new!=nullptr)
+		{
+		if(m_world!=nullptr)
+			{delete m_world;}
+		m_world=world_new;
+		logWrite(Log::MessageType::INFORMATION,"World successfully initialized",{});
+		}
+	}
+
+EngineDefault::WorldOwner::WorldOwner():m_world(nullptr)
+	{}
+
+EngineDefault::WorldOwner::~WorldOwner()
+	{
+	if(m_world!=nullptr)
+		{delete m_world;}
+	}
+
+
+
+
+EngineDefault::EngineDefault(MessageQueue& messages):r_messages(messages)
+	,m_world_loader(nullptr)
 	,m_con(25,80),m_log(*this)
 	,m_message_count(0),m_stop(0)
 	{
@@ -62,18 +95,8 @@ EngineDefault::~EngineDefault()
 
 void EngineDefault::cleanup()
 	{
-	if(m_world_loader_task!=nullptr)
-		{
-		delete m_world_loader_task;
-		m_world_loader_task=nullptr;
-		delete m_world_loader;
-		m_world_loader=nullptr;
-		}
-	if(m_world!=nullptr)
-		{
-		delete m_world;
-		m_world=nullptr;
-		}
+	if(m_world_loader!=nullptr)
+		{delete m_world_loader;}
 	logWriterDetach(m_con_index);
 	}
 
@@ -85,16 +108,6 @@ EngineDefault& EngineDefault::timerSet(const Timer* timer) noexcept
 	}
 
 
-enum MessageID:uint32_t
-	{
-	 INVALID
-	,STOP
-	,CONSOLE_WRITE_STRING
-	,CONSOLE_WRITE_CHAR
-	,CONSOLE_COLORMASK_SET
-	,WORLD_LOAD
-	,WORLD_LOADED
-	};
 
 void EngineDefault::run()
 	{
@@ -104,14 +117,14 @@ void EngineDefault::run()
 		{
 		if(msg.timeGet() <= m_frame_current)
 			{
-			messageProcess(msg);
+			msg.process();
 			msg.clear();
-			while(m_messages.get(msg))
+			while(r_messages.get(msg))
 				{
 				if(msg.timeGet() > m_frame_current)
 					{break;}
 
-				messageProcess(msg);
+				msg.process();
 				msg.clear();
 				}
 			}
@@ -131,122 +144,33 @@ void EngineDefault::run()
 
 void EngineDefault::stop()
 	{
-	m_messages.post(Message
-		{
-		 __sync_fetch_and_add(&m_message_count,1)
-		,MessageID::STOP
-		,m_frame_current
-		});
+	m_stop=1;
 	}
 
 void EngineDefault::consoleWrite(const char* string)
 	{
-	auto l=strlen(string) + 1;
-	m_messages.post(Message
-		{
-		 __sync_fetch_and_add(&m_message_count,1)
-		,MessageID::CONSOLE_WRITE_STRING
-		,m_frame_current
-		,Range<const char>(string,l)
-		});
+	m_con.writeUTF8(string);
 	}
 
 void EngineDefault::consoleWrite(char ch)
 	{
-	m_messages.post(Message
-		{
-		 __sync_fetch_and_add(&m_message_count,1)
-		,MessageID::CONSOLE_WRITE_CHAR
-		,m_frame_current
-		,ch
-		});
+	m_con.write(ch);
 	}
 
 void EngineDefault::consoleColorMaskSet(uint8_t color_mask)
 	{
-	m_messages.post(Message
-		{
-		 __sync_fetch_and_add(&m_message_count,1)
-		,MessageID::CONSOLE_COLORMASK_SET
-		,m_frame_current
-		,color_mask
-		});
+	m_con.colorMaskSet(color_mask);
 	}
 
 
 EngineDefault& EngineDefault::worldLoadAsync(const char* file)
 	{
-	auto l=strlen(file) + 1;
-	m_messages.post(Message
-		{
-		 __sync_fetch_and_add(&m_message_count,1)
-		,MessageID::WORLD_LOAD
-		,m_frame_current
-		,Range<const char>(file,l)
-		});
+	if(m_world_loader!=nullptr)
+		{delete m_world_loader;}
+	m_world_loader=new Thread<WorldLoader>
+		{WorldLoader(r_messages,m_world_status,file)};
 	return *this;
 	}
 
-void EngineDefault::worldLoadedPost(WorldDefault* world)
-	{
-	m_messages.post(Message
-		{
-		 __sync_fetch_and_add(&m_message_count,1)
-		,MessageID::WORLD_LOADED
-		,m_frame_current
-		,world
-		});
-	}
-
-
-void EngineDefault::messageProcess(const Message& msg)
-	{
-	switch(msg.typeGet())
-		{
-		case MessageID::STOP:
-			m_stop=1;
-			cleanup();
-			break;
-
-		case MessageID::CONSOLE_WRITE_STRING:
-			m_con.writeUTF8(msg.dataGetRange<char>().begin());
-			break;
-
-		case MessageID::CONSOLE_WRITE_CHAR:
-			m_con.write(msg.dataGetValue<char>());
-			break;
-
-		case MessageID::CONSOLE_COLORMASK_SET:
-			m_con.colorMaskSet(msg.dataGetValue<uint8_t>());
-			break;
-
-		case MessageID::WORLD_LOAD:
-			if(m_world_loader_task!=nullptr)
-				{delete m_world_loader_task;}
-			m_world_loader=new WorldLoader(*this,msg.dataGetRange<char>().begin());
-			m_world_loader_task=new Thread(*m_world_loader);
-			break;
-
-		case MessageID::WORLD_LOADED:
-			{
-			if(m_world_loader_task!=nullptr)
-				{
-				delete m_world_loader_task;
-				delete m_world_loader;
-				m_world_loader=nullptr;
-				m_world_loader_task=nullptr;
-				}
-			auto world_new=msg.dataGetPointer<WorldDefault>();
-			if(world_new!=nullptr)
-				{
-				if(m_world!=nullptr)
-					{delete m_world;}
-				m_world=world_new;
-				logWrite(Log::MessageType::INFORMATION,"World successfully initialized",{});
-				}
-			}
-			break;
-		}
-	}
 
 

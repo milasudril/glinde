@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[string.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"string.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "string.h"
 #include "debug.h"
 #include "errormessage.h"

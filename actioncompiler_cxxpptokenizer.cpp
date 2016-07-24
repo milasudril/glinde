@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[actioncompiler_cxxpptokenizer.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"actioncompiler_cxxpptokenizer.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "actioncompiler_cxxpptokenizer.h"
 #include "logwriter.h"
 #include "variant.h"

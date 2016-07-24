@@ -1,8 +1,18 @@
-#ifdef __WAND__
-target[name[texturemanager.h] type[include]]
-dependency[texturemanager.o]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[
+//@	        {
+//@	            "ref":"texturemanager.o",
+//@	            "rel":"implementation"
+//@	        }
+//@	    ],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"texturemanager.h",
+//@	            "type":"include"
+//@	        }
+//@	    ]
+//@	}
 #ifndef TEXTUREMANAGER_H
 #define TEXTUREMANAGER_H
 

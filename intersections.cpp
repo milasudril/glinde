@@ -1,7 +1,13 @@
-#ifdef __WAND__
-target[name[intersections.o] type[object]]
-#endif
-
+//@	{
+//@	    "dependencies_extra":[],
+//@	    "targets":[
+//@	        {
+//@	            "dependencies":[],
+//@	            "name":"intersections.o",
+//@	            "type":"object"
+//@	        }
+//@	    ]
+//@	}
 #include "intersections.h"
 #include "mesh.h"
 #include "face.h"
