@@ -285,15 +285,11 @@ static void fromSRGB(Image& image)
 	auto n_ch=image.channelCountGet();
 	auto N=image.widthGet() * image.heightGet() * n_ch;
 
-	auto k=0;
 	while(N!=0)
 		{
-		ptr[0]=fromSRGB(ptr[0]);
-		ptr[1]=fromSRGB(ptr[1]);
-		ptr[2]=fromSRGB(ptr[2]);
-		ptr+=n_ch;
-		++k;
-		N-=n_ch;
+		*ptr=fromSRGB(*ptr);
+		++ptr;
+		--N;
 		}
 	}
 

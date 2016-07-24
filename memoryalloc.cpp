@@ -1,21 +1,11 @@
 //@	{
-//@	    "dependencies_extra":[],
-//@	    "targets":[
-//@	        {
-//@	            "dependencies":[
-//@	                {
-//@	                    "ref":"jemalloc",
-//@	                    "rel":"external"
-//@	                }
-//@	            ],
-//@	            "name":"memoryalloc.o",
-//@	            "type":"object"
-//@	        }
-//@	    ]
+//@	"targets":
+//@		[{
+//@		 "dependencies":[{"ref":"jemalloc","rel":"external"}]
+//@		,"name":"memoryalloc.o","type":"object"
+//@		,"cxxoptions":{"cflags_extra":["DNDEBUG"]}
+//@		}]
 //@	}
-#ifndef NDEBUG
-	#define NDEBUG
-#endif
 
 #include "memoryalloc.h"
 #include "errormessage.h"

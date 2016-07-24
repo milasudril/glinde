@@ -31,5 +31,7 @@ void Message::copyAlloc(const void* src,size_t N)
 void Message::dataFree() noexcept
 	{
 	if(m_msg.content.handler&OBJECT_OWNED)
-		{memoryFree(m_msg.content.pointer);}
+		{
+		memoryFree(m_msg.content.pointer);
+		}
 	}

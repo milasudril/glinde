@@ -145,22 +145,26 @@ Window::Window(const char* title,unsigned int width,unsigned int height
 	glfwMakeContextCurrent(window);
 	glewExperimental=1;
 	logWrite(Log::MessageType::INFORMATION,"Initializing GLEW #0;"
-		,{glewGetString(GLEW_VERSION)});
+		,{reinterpret_cast<const char*>(glewGetString(GLEW_VERSION))});
 	auto glew_result=glewInit();
 	if(glew_result != GLEW_OK)
 		{
 		throw ErrorMessage("Faild to initialize GLEW. #1;"
-			,{glewGetErrorString(glew_result)});
+			,{reinterpret_cast<const char*>(glewGetErrorString(glew_result))});
 		}
 
 	logWrite(Log::MessageType::INFORMATION,"Got an OpenGL context with the "
 		"following characteristics:\n\n"
-		"  Vendor:   #0;\n"
-		"  Renderer: #1;\n"
-		"  Version:  #2;\n"
+		"  Vendor:       #0;\n"
+		"  Renderer:     #1;\n"
+		"  Version:      #2;\n"
 		"  GLSL version: #3;\n"
-		,{glGetString(GL_VENDOR),glGetString(GL_RENDERER),glGetString(GL_VERSION)
-		,glGetString(GL_SHADING_LANGUAGE_VERSION)});
+		,{
+		 reinterpret_cast<const char*>(glGetString(GL_VENDOR))
+		,reinterpret_cast<const char*>(glGetString(GL_RENDERER))
+		,reinterpret_cast<const char*>(glGetString(GL_VERSION))
+		,reinterpret_cast<const char*>(glGetString(GL_SHADING_LANGUAGE_VERSION))
+		});
 
 	r_handler=&handler;
 	m_handle=window;

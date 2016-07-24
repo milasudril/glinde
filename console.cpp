@@ -191,6 +191,11 @@ Console& Console::writeRaw(const char* string)
 
 Console& Console::writeUTF8(const char* string)
 	{
+	if(string==nullptr)
+		{
+		writeRaw("(null)");
+		return *this;
+		}
 	auto cp=m_codepoint;
 	auto state=m_utf8_state;
 	while(*string!='\0')
