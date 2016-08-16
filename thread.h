@@ -17,6 +17,7 @@
 #define GLINDE_THREAD_H
 
 #include <cstdint>
+#include <utility>
 
 namespace Glinde
 	{
@@ -30,6 +31,7 @@ namespace Glinde
 			virtual ~ThreadBase();
 
 			void start();
+			void synchronize() noexcept;
 
 		private:
 			intptr_t m_handle;
@@ -39,11 +41,14 @@ namespace Glinde
 	class Thread:private ThreadBase
 		{
 		public:
-			Thread(Runner&& runner):m_runner(runner)
+			Thread(Runner&& runner):m_runner(std::move(runner))
 				{start();}
 
 			void run()
 				{m_runner();}
+
+			~Thread() noexcept
+				{synchronize();}
 
 		private:
 			Runner m_runner;

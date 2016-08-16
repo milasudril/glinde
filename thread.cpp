@@ -35,7 +35,8 @@ void ThreadBase::start()
 		,NULL,thread_entry,this);
 	}
 
-ThreadBase::~ThreadBase()
-	{
-	pthread_join(m_handle,NULL);
-	}
+ThreadBase::~ThreadBase() noexcept
+	{}
+
+void ThreadBase::synchronize() noexcept
+	{pthread_join(m_handle,NULL);}
