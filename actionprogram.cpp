@@ -45,21 +45,26 @@ namespace
 	class FileExtractor:public Filesystem::FileProcessor
 		{
 		public:
-			FileExtractor(const char* dir_target):r_dir_target(dir_target)
+			FileExtractor(const char* dir_target,const Maike::Session& maike):
+				r_dir_target(dir_target),r_maike(maike)
 				{}
 
 			void operator()(Filesystem& fs,const Filesystem::FileData& data)
 				{
-				logWrite(Log::MessageType::INFORMATION,"Extracting #0;"
-					,{data.filename});
-			//TODO: Check if data.filename is a program source file
-				fs.extract(data.filename
-					,String(r_dir_target).append(data.filename).begin()
-					,data.directory);
+			//	Only extract files that Maike can load
+				if(Maike::loaderHas(r_maike,data.filename) || data.directory)
+					{
+					logWrite(Log::MessageType::INFORMATION,"Extracting #0;"
+						,{data.filename});
+					fs.extract(data.filename
+						,String(r_dir_target).append(data.filename).begin()
+						,data.directory);
+					}
 				}
 			
 		private:
 			const char* r_dir_target;
+			const Maike::Session& r_maike;
 		};
 	}
 
@@ -130,7 +135,7 @@ static Plugin pluginCreate(Filesystem& source,const char* name
 	auto maike=Maike::sessionCreate();
 	maikeConfig(*maike,dirtemp);
 
-	source.filesProcess("/",FileExtractor(dirtemp));
+	source.filesProcess("/",FileExtractor(dirtemp,*maike));
 	sdkCopy(sdk,sdk_prefix.begin());
 	Maike::targetCompile(*maike,name);
 
