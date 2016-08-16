@@ -42,6 +42,38 @@ static void sdkCopy(const Range<const SdkResource>& sdk,const char* path)
 
 namespace 
 	{
+	class MaikeStdout:public Maike::DataSink
+		{
+		public:
+			size_t write(const void* buffer,size_t n)
+				{
+				auto data=reinterpret_cast<const uint8_t*>(buffer);
+				while(n!=0)
+					{
+					if(*data=='\n')
+						{
+						logWrite(Log::MessageType::INFORMATION,"#0;",{m_buffer.begin()});
+						m_buffer.clear();
+						}
+					else
+						{m_buffer.append(*data);}
+					++data;
+					--n;
+					}
+				return n;
+				};
+	
+			void destroy(){}
+
+		private:
+			String m_buffer;
+		};
+	}
+
+static MaikeStdout s_stdout;
+
+namespace 
+	{
 	class FileExtractor:public Filesystem::FileProcessor
 		{
 		public:
@@ -131,7 +163,7 @@ static Plugin pluginCreate(Filesystem& source,const char* name
 	auto sdk_prefix=String(dirtemp).append("/glinde");
 
 //	Maike::versionPrint();
-	Maike::init(maikeException);
+	Maike::init(s_stdout,s_stdout,maikeException);
 	auto maike=Maike::sessionCreate();
 	maikeConfig(*maike,dirtemp);
 
