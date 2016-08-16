@@ -1,13 +1,7 @@
-all: glinde-json-exporter.zip test.zip debug release doc
+all: glinde glinde-json-exporter.zip test.zip doc
 
-glinde: build.py config_in.json
-	./build.py
-
-release: glinde-json-exporter.zip test.zip build.py config_in.json
-	./build.py release
-
-debug: glinde-json-exporter.zip test.zip build.py config_in.json
-	./build.py debug
+glinde:
+	maike --targets=consoletest
 
 glinde-json-exporter.zip: glinde-json-exporter/__init__.py
 	zip glinde-json-exporter.zip glinde-json-exporter/__init__.py

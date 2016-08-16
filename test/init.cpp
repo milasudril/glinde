@@ -1,5 +1,5 @@
 //@	{
-//@	 "targets":[{"name":"world.so","type":"plugin"}]
+//@	 "targets":[{"name":"world.so","type":"lib_dynamic"}]
 //@	,"author":["Torbjörn Rathsman"]
 //@	,"year":2016
 //@	,"license":"Public domain"

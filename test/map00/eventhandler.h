@@ -1,6 +1,6 @@
 //@	{
 //@	 "targets":[{"name":"eventhandler.h","type":"include"}]
-//@ ,"dependencies_extra":[{"ref":"eventhandler.o"}]
+//@ ,"dependencies_extra":[{"ref":"eventhandler.o","rel":"implementation"}]
 //@	,"author":["Torbjörn Rathsman"]
 //@	,"year":2016
 //@	,"license":"Public domain"

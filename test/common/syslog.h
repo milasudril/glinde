@@ -1,6 +1,6 @@
 //@	{
 //@	 "targets":[{"name":"syslog.h","type":"include"}]
-//@	,"dependencies_extra":[{"ref":"syslog.o"}]
+//@	,"dependencies_extra":[{"ref":"syslog.o","rel":"implementation"}]
 //@	,"author":["Torbjörn Rathsman"]
 //@	,"year":2016
 //@	,"license":"Public domain"
