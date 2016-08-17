@@ -23,6 +23,7 @@
 #include "resourcemanagerdefault.h"
 #include "actionprogram.h"
 #include "site.h"
+#include "messagequeue.h"
 
 #include <memory>
 
@@ -45,6 +46,9 @@ namespace Glinde
 				r_site=&m_resources.siteGet(key,*this);
 				return *this;
 				}
+
+			SiteDefault* siteGet() noexcept
+				{return r_site;}
 
 			void siteCreated(Site& site)
 				{

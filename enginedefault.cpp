@@ -16,6 +16,7 @@
 #include "thread.h"
 #include "variant.h"
 #include "messagequeue.h"
+#include "sitedefault.h"
 
 using namespace Glinde;
 
@@ -130,11 +131,22 @@ void EngineDefault::run()
 			}
 
 		Window::eventsPoll();
+		auto world=m_world_status.world();
+		if(world!=nullptr)
+			{
+			auto site=world->siteGet();
+			if(site!=nullptr)
+				{
+				site->update(m_frame_current,dt,0);
+				logWrite(Log::MessageType::INFORMATION,"#0;",{dt*m_frame_current});
+				}
+			}
 		if(r_window!=nullptr)
 			{
 			r_window->redraw();
 			r_window->buffersSwap();
 			}
+
 		r_timer->wait();
 		++m_frame_current;
 		}

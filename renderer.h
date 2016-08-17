@@ -30,7 +30,7 @@
 namespace Glinde
 	{
 	class WorldObject;
-	class World;
+	class SiteDefault;
 	class Mesh;
 
 	template<class T> class Range;
@@ -41,7 +41,7 @@ namespace Glinde
 			Renderer();
 			~Renderer();
 
-			void sceneRender(World& world,const WorldObject& viewer) noexcept;
+			void sceneRender(const SiteDefault& site,const WorldObject& viewer) noexcept;
 			void overlayRender(const GlTexture& texture);
 			void viewportSizeSet(int width,int height) noexcept;
 

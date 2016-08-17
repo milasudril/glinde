@@ -18,7 +18,7 @@
 #include "renderer.h"
 #include "glshader.h"
 #include "worldobject.h"
-#include "worlddefault.h"
+#include "sitedefault.h"
 #include "debug.h"
 #include "range.h"
 #include "model.h"
@@ -158,7 +158,7 @@ void Renderer::render(const Range< const Mesh >& meshes) noexcept
 		}
 	}
 
-void Renderer::sceneRender(World& world,const WorldObject& viewer) noexcept
+void Renderer::sceneRender(const SiteDefault& site,const WorldObject& viewer) noexcept
 	{
 	glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
 	array.bind();
@@ -171,8 +171,9 @@ void Renderer::sceneRender(World& world,const WorldObject& viewer) noexcept
 	glUniform1i(diffuse_id,0);
 
 		{
-		auto ptr=world.objectsBegin();
-		auto ptr_end=world.objectsEnd();
+		auto objects=site.objectsGet();
+		auto ptr=objects.begin();
+		auto ptr_end=objects.end();
 		while(ptr!=ptr_end)
 			{
 			auto& obj=ptr->object();

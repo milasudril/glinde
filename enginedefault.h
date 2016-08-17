@@ -90,7 +90,6 @@ namespace Glinde
 			const Timer* r_timer;
 			Clock* r_clock;
 
-			WorldDefault* m_world;
 			Thread<WorldLoader>* m_world_loader;
 
 			Console m_con;
