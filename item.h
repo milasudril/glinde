@@ -43,6 +43,8 @@ namespace Glinde
 			float rotZGet() const noexcept
 				{return m_rot_z;}
 
+			Item& classSet(ResourceManager& rc,const Stringkey& classname);
+
 		private:
 			const ItemClass* r_class;
 			Stringkey m_tag;

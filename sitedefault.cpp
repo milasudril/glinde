@@ -63,13 +63,14 @@ SiteDefault::~SiteDefault()
 
 void SiteDefault::spotsVisit(SpotVisitor&& visitor)
 	{
-
 	}
 
 uint32_t SiteDefault::itemSpawn(const Stringkey& mapspot,const Stringkey& classname) noexcept
 	{
-	auto item=r_map->itemFind(mapspot);
+	auto item=*r_map->itemFind(mapspot);
 	GLINDE_DEBUG_PRINT("Spawning an item at #0;",&item);
+//	item.classSet(r_world->resourcesGet(),classname);
+//	WorldObject wo(*item);
 	return static_cast<uint32_t>(-1);
 	}
 

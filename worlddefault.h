@@ -62,6 +62,20 @@ namespace Glinde
 			void siteMoved(Site& site) noexcept
 				{m_world_eh->onSiteMoved(*this,site);}
 
+			template<class T,size_t N>
+			void messagePost(uint64_t time,Message::Processor& handler,void* pointer
+				,const ArrayFixed<T,N>& data)
+				{r_msg_queue->post(time,handler,pointer,data);}
+
+			template<class T,size_t N>
+			void messagePost(uint64_t time,Message::Processor& handler,const Range<const T>& data
+				,const ArrayFixed<uint32_t,N>& params
+				,typename std::enable_if< std::is_trivially_copyable<T>::value >::type* dummy=nullptr)
+				{r_msg_queue->post(time,handler,data,params);}
+
+			ResourceManager& resourcesGet() noexcept
+				{return m_resources;}
+
 
 		private:
 			std::unique_ptr<Filesystem> m_fs;
@@ -69,6 +83,7 @@ namespace Glinde
 			std::unique_ptr<EventHandler,EventHandlerDisposer> m_world_eh;
 			ResourceManagerDefault m_resources;
 			SiteDefault* r_site;
+			MessageQueue* r_msg_queue;
 
 			static decltype(m_world_eh)
 			eventHandlerCreate(const ActionProgram& program);

@@ -36,7 +36,7 @@ namespace Glinde
 				,m_mass(0),m_damping(0),m_charge(0)
 				{}
 
-			WorldObject(const Item& item);
+			explicit WorldObject(const Item& item);
 
 			WorldObject& modelSet(const Model* model) noexcept
 				{

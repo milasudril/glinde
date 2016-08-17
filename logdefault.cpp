@@ -100,7 +100,7 @@ void LogDefault::write(Log::MessageType type,const char* format_string
 		{
 		auto r=Range<const char>(msgbuff,strlen(msgbuff) + 1);
 		ArrayFixed<uint32_t,1> params{static_cast<uint32_t>( type )};
-		r_queue->post(0,*this,r,params);
+		r_queue->post(Message{0,*this,r,params});
 		}
 	}
 

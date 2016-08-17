@@ -44,12 +44,12 @@ namespace Glinde
 				}
 
 			template<class T,size_t N>
-			explicit Message(uint64_t time,uint16_t seq,Processor& handler,const Range<const T>& data
+			explicit Message(uint64_t time,Processor& handler,const Range<const T>& data
 				,const ArrayFixed<uint32_t,N>& params
 				,typename std::enable_if< std::is_trivially_copyable<T>::value >::type* dummy=nullptr)
 				{
 				static_assert(N + 1 <= length<uint32_t>(),"Parameter array too large for a message pack");
-				m_msg.content={makeTime(time,seq),mangle(handler,OBJECT_OWNED)};
+				m_msg.content={makeTime(time,0),mangle(handler,OBJECT_OWNED)};
 				auto src=data.begin();
 				auto l= data.length()*sizeof(T);
 				copyAlloc(src,l);
@@ -68,11 +68,11 @@ namespace Glinde
 				}
 
 			template<class T,size_t N>
-			explicit Message(uint64_t time,uint16_t seq,Processor& handler
+			explicit Message(uint64_t time,Processor& handler
 				,void* pointer,const ArrayFixed<T,N>& params)
 				{
 				static_assert(N<=length<T>(),"Array too large for the message");
-				m_msg.content={makeTime(time,seq),mangle(handler,0),pointer};
+				m_msg.content={makeTime(time,0),mangle(handler,0),pointer};
 				auto r=paramPointerGet<T>();
 				for(unsigned int k=0;k<N;++k)
 					{r[k]=params[k];}
@@ -108,6 +108,11 @@ namespace Glinde
 
 			uint16_t seqGet() const noexcept
 				{return static_cast<uint16_t>(m_msg.content.time&0xffff);}
+
+			void seqSet(uint16_t seq) noexcept
+				{
+				m_msg.content.time=makeTime(timeGet(),seq);
+				}
 
 			bool operator<(const Message& msg) const noexcept
 				{return m_msg.content.time > msg.m_msg.content.time;}

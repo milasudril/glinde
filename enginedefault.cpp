@@ -45,13 +45,13 @@ void EngineDefault::WorldLoader::operator()() noexcept
 		logWrite(Log::MessageType::INFORMATION,"Loading world from \"#0;\""
 			,{m_filename.begin()});
 
-		r_messages.post(0,r_notifier,new WorldDefault(m_filename.begin())
-			,ArrayFixed<uint32_t,1>{0u} );
+		r_messages.post(Message{0,r_notifier,new WorldDefault(m_filename.begin())
+			,ArrayFixed<uint32_t,1>{0u}} );
 		}
 	catch(const ErrorMessage& msg)
 		{
 		logWrite(Log::MessageType::ERROR,"#0;",{msg.messageGet()});
-		r_messages.post(0,r_notifier,nullptr,ArrayFixed<uint32_t,1>{0u} );
+		r_messages.post(Message{0,r_notifier,nullptr,ArrayFixed<uint32_t,1>{0u}} );
 		}
 	}
 
@@ -138,7 +138,7 @@ void EngineDefault::run()
 			if(site!=nullptr)
 				{
 				site->update(m_frame_current,dt,0);
-				logWrite(Log::MessageType::INFORMATION,"#0;",{dt*m_frame_current});
+			//	logWrite(Log::MessageType::INFORMATION,"#0;",{dt*m_frame_current});
 				}
 			}
 		if(r_window!=nullptr)
