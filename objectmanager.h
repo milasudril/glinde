@@ -112,6 +112,13 @@ namespace Glinde
 			uint32_t objectsCount() const noexcept
 				{return m_objects.length();}
 
+			uint32_t idGet() const noexcept
+				{
+				if(m_ids.length()==0)
+					{return m_id_next + 1;}
+				return *(m_ids.end() - 1);
+				}
+
 		private:
 			ArrayDynamic<value_type> m_objects;
 			ArrayDynamic<uint32_t> m_ids;

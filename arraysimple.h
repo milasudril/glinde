@@ -44,7 +44,7 @@ namespace Glinde
 			 * This is the default constructor. An ArraySimple, that has been
 			 * initialized by this constructor, is empty.
 			*/
-			ArraySimple():m_content{0,0}
+			ArraySimple() noexcept:m_content{0,0}
 				{}
 
 			/**\brief Size initialize constructor.

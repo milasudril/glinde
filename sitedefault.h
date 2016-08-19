@@ -20,6 +20,7 @@
 #include "map.h"
 #include "facerejectiontree.h"
 #include "objectmanager.h"
+#include "message.h"
 
 namespace Glinde
 	{
@@ -44,7 +45,7 @@ namespace Glinde
 
 			Range<const ObjectManager::value_type> objectsGet() const noexcept
 				{return m_objects.objectsGet();}
-
+	
 			Site& eventHandlerSet(EventHandler& eh) noexcept
 				{
 				r_eh=&eh;
@@ -86,6 +87,15 @@ namespace Glinde
 			FaceRejectionTree m_tree;
 			const Model* r_model;
 			ObjectManager m_objects;
+
+			class ItemSpawner:public Message::Processor
+				{
+				public:
+					ItemSpawner(ObjectManager& manager);
+					void operator()(const Message& message);
+				private:
+					ObjectManager& r_manager;
+				} m_spawner;
 		};
 	}
 

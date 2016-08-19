@@ -47,7 +47,7 @@ namespace Glinde
 			 * This is the default constructor. When the array is initialized
 			 * , it is empty.
 			*/
-			ArrayDynamic():m_content{0,0,0,0}
+			ArrayDynamic() noexcept:m_content{0,0,0,0}
 				{}
 
 			/**\brief Move constructor.

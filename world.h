@@ -16,6 +16,8 @@ namespace Glinde
 	class Stringkey;
 	class Site;
 	class Log;
+	class ResourceManager;
+	class Message;
 
 	class World
 		{
@@ -37,6 +39,8 @@ namespace Glinde
 			virtual void siteCreated(Site& site)=0;
 			virtual void siteDestroying(Site& site) noexcept=0;
 			virtual void siteMoved(Site& site) noexcept=0;
+			virtual ResourceManager& resourcesGet() noexcept=0;
+			virtual void messagePost(Message&& message) noexcept=0;
 
 		typedef EventHandler& (*EventHandlerFactory)(Log& log);
 

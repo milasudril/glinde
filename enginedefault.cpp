@@ -45,7 +45,8 @@ void EngineDefault::WorldLoader::operator()() noexcept
 		logWrite(Log::MessageType::INFORMATION,"Loading world from \"#0;\""
 			,{m_filename.begin()});
 
-		r_messages.post(Message{0,r_notifier,new WorldDefault(m_filename.begin())
+		r_messages.post(Message{0,r_notifier
+			,new WorldDefault(m_filename.begin(),r_messages)
 			,ArrayFixed<uint32_t,1>{0u}} );
 		}
 	catch(const ErrorMessage& msg)

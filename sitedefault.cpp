@@ -19,6 +19,7 @@ using namespace Glinde;
 
 SiteDefault::SiteDefault(const Map& map,World& world_notify):r_map(&map)
 	,r_world(&world_notify),r_eh(nullptr),m_tree(map.modelGet(),0)
+	,m_spawner(m_objects)
 	{
  	GLINDE_DEBUG_PRINT("Building site from map #0;",{map.nameGet()});
 	r_model=&map.modelGet();
@@ -38,6 +39,7 @@ SiteDefault::SiteDefault(SiteDefault&& obj) noexcept:
 	 r_map(obj.r_map),r_world(obj.r_world),r_eh(obj.r_eh)
 	,m_tree(std::move(obj.m_tree))
 	,r_model(obj.r_model),m_objects(std::move(obj.m_objects))
+	,m_spawner(m_objects)
 	{
 	obj.r_world=nullptr;
 	r_world->siteMoved(*this);
@@ -65,13 +67,29 @@ void SiteDefault::spotsVisit(SpotVisitor&& visitor)
 	{
 	}
 
+
+SiteDefault::SiteDefault::ItemSpawner(ObjectManager& objects):r_objects(objects)
+	{}
+
+void SiteDefault::ItemSpawner::operator()(const Message& message)
+	{
+
+	}
+	
+
 uint32_t SiteDefault::itemSpawn(const Stringkey& mapspot,const Stringkey& classname) noexcept
 	{
 	auto item=*r_map->itemFind(mapspot);
-	GLINDE_DEBUG_PRINT("Spawning an item at #0;",&item);
-//	item.classSet(r_world->resourcesGet(),classname);
-//	WorldObject wo(*item);
-	return static_cast<uint32_t>(-1);
+	GLINDE_DEBUG_PRINT("Spawning an item at #0; #1; #2;",&item
+		,static_cast<Stringkey::HashValue>(mapspot)
+		,static_cast<Stringkey::HashValue>(classname));
+
+	r_world->messagePost(Message{0,m_spawner,nullptr
+		,ArrayFixed<Stringkey::HashValue,2>
+			{mapspot,classname}});
+
+	item.classSet(r_world->resourcesGet(),classname);
+	return m_objects.insert(WorldObject(item));
 	}
 
 static

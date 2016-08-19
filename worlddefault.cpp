@@ -23,10 +23,11 @@ auto WorldDefault::eventHandlerCreate(const ActionProgram& program)->decltype(m_
 	}
 
 
-WorldDefault::WorldDefault(const char* filename):m_fs(new Archive(filename))
+WorldDefault::WorldDefault(const char* filename,MessageQueue& msg_queue):
+	 m_fs(new Archive(filename))
 	,m_program(*m_fs.get(),"world.so",sdk())
 	,m_world_eh(eventHandlerCreate(m_program))
-	,m_resources(*m_fs.get()),r_site(nullptr)
+	,m_resources(*m_fs.get()),r_site(nullptr),r_msg_queue(&msg_queue)
 	{
 	logWrite(Log::MessageType::INFORMATION,"World successfully loaded",{});
 	m_world_eh->onLoaded(*this);

@@ -37,7 +37,7 @@ namespace Glinde
 	class WorldDefault:public World
 		{
 		public:
-			explicit WorldDefault(const char* filename);
+			explicit WorldDefault(const char* filename,MessageQueue& msg_queue);
 
 			~WorldDefault();
 
@@ -61,17 +61,9 @@ namespace Glinde
 
 			void siteMoved(Site& site) noexcept
 				{m_world_eh->onSiteMoved(*this,site);}
-
-			template<class T,size_t N>
-			void messagePost(uint64_t time,Message::Processor& handler,void* pointer
-				,const ArrayFixed<T,N>& data)
-				{r_msg_queue->post(time,handler,pointer,data);}
-
-			template<class T,size_t N>
-			void messagePost(uint64_t time,Message::Processor& handler,const Range<const T>& data
-				,const ArrayFixed<uint32_t,N>& params
-				,typename std::enable_if< std::is_trivially_copyable<T>::value >::type* dummy=nullptr)
-				{r_msg_queue->post(time,handler,data,params);}
+			
+			void messagePost(Message&& message) noexcept
+				{r_msg_queue->post(std::move(message));}
 
 			ResourceManager& resourcesGet() noexcept
 				{return m_resources;}
