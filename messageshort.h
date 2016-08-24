@@ -14,12 +14,6 @@ namespace Glinde
 	class MessageShort
 		{
 		public:
-			class Processor
-				{
-				public:
-					virtual void operator()(MessageShort&& message)=0;
-				};
-
 			class Time
 				{
 				public:
@@ -51,6 +45,14 @@ namespace Glinde
 					uint64_t m_val;
 				};
 
+		private:
+			class ProcessorImpl
+				{
+				public:
+					virtual void operator()(MessageShort&& message)=0;
+				};
+		public:
+
 			bool operator>(const MessageShort&msg) const noexcept
 				{return m_content.msg.seq > msg.m_content.msg.seq;}
 
@@ -59,10 +61,22 @@ namespace Glinde
 				{
 				static_assert(sizeof(T)<=16,"The given type is larger than data");
 				return std::move(reinterpret_cast<T&>(m_content.msg.data));
-				}
+				};
 
-			template<class T>
-			MessageShort(Time seq,Processor& receiver,T&& data) noexcept
+			template<class T,class Callback>
+			class Processor:public ProcessorImpl
+				{
+				public:
+					Processor(Callback&& process):m_process(std::move(process)){}
+
+				private:
+					void operator()(MessageShort&& msg)
+						{return m_process(msg.timeGet(),std::move(msg.dataRelease<T>()));}
+					Callback m_process;
+				};
+
+			template<class T,class Callback>
+			MessageShort(Time seq,Processor<T,Callback>& receiver,T&& data) noexcept
 				{
 				static_assert(sizeof(T)<=16,"Objects of type T does not fit in the message");
 				m_content.msg.seq=seq;
@@ -91,6 +105,9 @@ namespace Glinde
 			void process()
 				{(*m_content.msg.receiver)(std::move(*this));}
 
+			Time timeGet() const noexcept
+				{return m_content.msg.seq;}
+
 		private:
 			template<size_t N=sizeof(void*),bool dummy=true>
 			struct Message{};
@@ -99,7 +116,7 @@ namespace Glinde
 			struct Message<4,dummy>
 				{
 				Time seq;
-				Processor* receiver;
+				ProcessorImpl* receiver;
 				int32_t padding;
 				uint8_t data[16];
 				};
@@ -108,7 +125,7 @@ namespace Glinde
 			struct Message<8,dummy>
 				{
 				Time seq;
-				Processor* receiver;
+				ProcessorImpl* receiver;
 				uint8_t data[16];
 				};
 

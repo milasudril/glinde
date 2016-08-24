@@ -2,6 +2,7 @@
 
 #include "messageshort.h"
 #include <cstdio>
+#include <queue>
 
 class Type
 	{
@@ -11,7 +12,8 @@ class Type
 
 		~Type()
 			{
-			printf("Destroy %p%s\n",this,(x==0)?" [zombie]":"");}
+			printf("Destroy %p%s\n",this,(x==0)?" [zombie]":"");
+			}
 
 		Type(const Type& obj):x(obj.x)
 			{printf("Copy %p to %p\n",&obj,this);}
@@ -36,17 +38,19 @@ class Type
 			return *this;
 			}
 
+		int xGet() const noexcept
+			{return x;}
+
 	private:
 		int x;
 	};
 
-class Processor:public Glinde::MessageShort::Processor
+class Callback
 	{
 	public:
-		void operator()(Glinde::MessageShort&& msg)
+		void operator()(Glinde::MessageShort::Time t,Type&& data)
 			{
-			printf("Processor\n");
-			auto data=msg.dataRelease<Type>();
+			printf("Processor %p %d\n",&data,data.xGet());
 			printf("--\n");
 			}
 	};
@@ -55,8 +59,14 @@ int main()
 	{
 	using namespace Glinde;
 	Type x;
-	Processor proc;
-	MessageShort foo(MessageShort::Time(0,0),proc,std::move(x));
-	foo.process();
+	std::priority_queue<MessageShort,std::vector<MessageShort>
+		,std::greater<MessageShort>> q;
+
+	MessageShort::Processor<Type,Callback> proc{Callback()};
+
+	q.push(MessageShort(MessageShort::Time(0,0),proc,Type()));
+	auto msg=std::move(const_cast<MessageShort&>(q.top()));
+	msg.process();
+
 	return 0;
 	}
