@@ -1,260 +1,168 @@
-//@	{
-//@	    "dependencies_extra":[
-//@	        {
-//@	            "ref":"message.o",
-//@	            "rel":"implementation"
-//@	        }
-//@	    ],
-//@	    "targets":[
-//@	        {
-//@	            "dependencies":[],
-//@	            "name":"message.h",
-//@	            "type":"include"
-//@	        }
-//@	    ]
-//@	}
+//@ {"targets":[{"name":"message.h","type":"include"}]}
+
 #ifndef GLINDE_MESSAGE_H
 #define GLINDE_MESSAGE_H
 
 #include "vectortype.h"
-#include "arrayfixed.h"
-#include <utility>
-#include <type_traits>
+#include "debug.h"
+#include "variant.h"
 #include <cstdint>
-#include <cassert>
+#include <cstddef>
+#include <utility>
+#include <new>
 
 namespace Glinde
 	{
-	constexpr uint64_t makeTime(uint64_t time,uint16_t seq)
-		{return ( time<<static_cast<uint64_t>(8*sizeof(seq)) )|seq;}
-
 	class Message
 		{
 		public:
-			class alignas(16) Processor
+			class Time
 				{
 				public:
-					virtual void operator()(const Message& data){}
+					Time()=default;
+					Time(const Time&)=default;
+					Time(Time&&)=default;
+					Time& operator=(const Time&)=default;
+					Time& operator=(Time&&)=default;
+					~Time()=default;
+
+					explicit Time(uint64_t frame,uint16_t seq) noexcept
+						{m_val=((frame<<16)|seq);}
+
+					explicit Time(uint64_t frame) noexcept:m_val(frame<<16)
+						{}
+
+					uint64_t timeGet() const noexcept
+						{return m_val>>16;}
+					
+					Time& seqSet(uint16_t seq) noexcept
+						{
+						m_val=((timeGet()<<16)|seq);
+						return *this;
+						}
+
+					bool operator>(Time t) const noexcept
+						{return m_val>t.m_val;}
+
+					uint16_t seqGet() const noexcept
+						{return m_val&0xffff;}
+				private:
+					uint64_t m_val;
 				};
 
+		private:
+			class ProcessorImpl
+				{
+				public:
+					virtual void operator()(Message&& message)=0;
+				};
+		public:
+
+			bool operator>(const Message& msg) const noexcept
+				{return m_content.msg.seq > msg.m_content.msg.seq;}
+
+			template<class T>
+			T dataRelease() noexcept
+				{
+				static_assert(sizeof(T)<=16,"The given type is larger than data");
+				return std::move(reinterpret_cast<T&>(m_content.msg.data));
+				};
+
+			template<class T,class Callback>
+			class Processor:public ProcessorImpl
+				{
+				public:
+					Processor(Callback&& process):m_process(std::move(process)){}
+
+					Callback& callback() noexcept
+						{return m_process;}
+
+				private:
+					void operator()(Message&& msg)
+						{
+						auto obj=msg.dataRelease<T>();
+						m_process(msg.timeGet(),obj);
+						}
+					Callback m_process;
+				};
+
+			template<class T,class Callback>
+			explicit Message(Time seq,Processor<T,Callback>& receiver,T&& data) noexcept
+				{
+				static_assert(sizeof(T)<=16,"Objects of type T does not fit in the message");
+				m_content.msg.seq=seq;
+				m_content.msg.receiver=&receiver;
+				new(&m_content.msg.data)T(std::move(data));
+				}
+
+			Message(const Message&)=delete;
+			Message& operator=(const Message&)=delete;
+
 			Message()
-				{
-				m_msg.x=vec4_t<int64_t>{0,0,0,0};
-				m_msg.content.handler=mangle(s_noop,0);
-				}
-
-			template<class T,size_t N>
-			explicit Message(uint64_t time,Processor& handler,const Range<const T>& data
-				,const ArrayFixed<uint32_t,N>& params
-				,typename std::enable_if< std::is_trivially_copyable<T>::value >::type* dummy=nullptr)
-				{
-				static_assert(N + 1 <= length<uint32_t>(),"Parameter array too large for a message pack");
-				m_msg.content={makeTime(time,0),mangle(handler,OBJECT_OWNED)};
-				auto src=data.begin();
-				auto l= data.length()*sizeof(T);
-				copyAlloc(src,l);
-				auto r=paramPointerGet<uint32_t>();
-				for(unsigned int k=0;k<N;++k)
-					{r[k + 1]=params[k];}
-				}
-
-			Message(const Message& msg)
-				{
-				m_msg.x=msg.m_msg.x;
-				if(m_msg.content.handler & OBJECT_OWNED)
-					{
-					copyAlloc(m_msg.content.pointer,m_msg.content.params.dwords[0]);
-					}
-				}
-
-			template<class T,size_t N>
-			explicit Message(uint64_t time,Processor& handler
-				,void* pointer,const ArrayFixed<T,N>& params)
-				{
-				static_assert(N<=length<T>(),"Array too large for the message");
-				m_msg.content={makeTime(time,0),mangle(handler,0),pointer};
-				auto r=paramPointerGet<T>();
-				for(unsigned int k=0;k<N;++k)
-					{r[k]=params[k];}
-				}
-
+				{m_content.x=vec4_t<uint64_t>{0,0,0,0};}
+	
 			Message(Message&& msg) noexcept
 				{
-				assert(&msg!=this);
-				m_msg.x=msg.m_msg.x;
-				Message null;
-				msg.m_msg.x=null.m_msg.x;
+				m_content.x=msg.m_content.x;
+				msg.m_content.x=vec4_t<uint64_t>{0,0,0,0};
 				}
 
-			~Message()
-				{dataFree();}
+			void clear() noexcept
+				{m_content.x=vec4_t<uint64_t>{0,0,0,0};}
 
 			Message& operator=(Message&& msg) noexcept
 				{
-				std::swap(msg.m_msg.x,m_msg.x);
+				std::swap(m_content.x,msg.m_content.x);
 				return *this;
 				}
 
-			Message& operator=(const Message& msg)
+			void process()
 				{
-				assert(&msg!=this);
-				Message copy(msg);
-				*this=std::move(copy);
-				return *this;
+				if(m_content.msg.receiver!=nullptr)
+					{(*m_content.msg.receiver)(std::move(*this));}
 				}
 
 			uint64_t timeGet() const noexcept
-				{return m_msg.content.time>>sizeof(uint16_t);}
+				{return m_content.msg.seq.timeGet();}
 
 			uint16_t seqGet() const noexcept
-				{return static_cast<uint16_t>(m_msg.content.time&0xffff);}
+				{return m_content.msg.seq.seqGet();}
 
-			void seqSet(uint16_t seq) noexcept
+			Message& seqSet(uint16_t seq) noexcept
 				{
-				m_msg.content.time=makeTime(timeGet(),seq);
+				m_content.msg.seq.seqSet(seq);
+				return *this;
 				}
 
-			bool operator<(const Message& msg) const noexcept
-				{return m_msg.content.time > msg.m_msg.content.time;}
-
-			void clear() noexcept
-				{
-				dataFree();
-				m_msg.content.handler=mangle(s_noop,0);
-				}
-
-			void process() const
-				{handlerGet(m_msg.content.handler)(*this);}
-
-			template<class T>
-			Range<const T> paramsGet() const noexcept
-				{return Range<const T>(paramPointerGet<T>(),length<T>());}
-
-			template<class T>
-			Range<const T> dataGet() const noexcept
-				{
-				return Range<const T>
-					{
-					 reinterpret_cast<const T*>(m_msg.content.pointer)
-					,m_msg.content.params.dwords[0]
-					};
-				}
-
-			void* objectGet() const noexcept
-				{
-				return m_msg.content.pointer;
-				}
-
+			
 
 		private:
-			void copyAlloc(const void* src,size_t length);
-			void dataFree() noexcept;
+			template<size_t N=sizeof(void*),bool dummy=true>
+			struct MessageData{};
 
-			static constexpr uint8_t OBJECT_OWNED=0x1;
-			static Processor s_noop;
-
-			template<size_t N,class D=void> union Parameters{};
-
-			template<class D> union Parameters<4,D>
+			template<bool dummy>
+			struct MessageData<4,dummy>
 				{
-				uint64_t qwords[2];
-				uint32_t dwords[4];
-				uint16_t words[8];
-				uint8_t bytes[16];
+				Time seq;
+				ProcessorImpl* receiver;
+				int32_t padding;
+				uint8_t data[16];
 				};
 
-			template<class D> union Parameters<8,D>
+			template<bool dummy>
+			struct MessageData<8,dummy>
 				{
-				uint64_t qwords[1];
-				uint32_t dwords[2];
-				uint16_t words[4];
-				uint8_t bytes[8];
-				};
-
-			struct Msg
-				{
-				uint64_t time;
-				uintptr_t handler;
-				void* pointer;
-				Parameters<sizeof(void*)> params;
+				Time seq;
+				ProcessorImpl* receiver;
+				uint8_t data[16];
 				};
 
 			union
 				{
-				vec4_t<int64_t> x;
-				Msg content;
-				} m_msg;
-
-
-			template<class T>
-			inline static constexpr size_t length();
-
-			template<class T>
-			inline const T* paramPointerGet() const noexcept;
-
-			template<class T>
-			inline T* paramPointerGet() noexcept;
-
-			static inline uintptr_t mangle(Processor& handler,uint8_t val) noexcept
-				{
-				assert((reinterpret_cast<uintptr_t>(&handler)&0xf)==0);
-				return reinterpret_cast<uintptr_t>(&handler)|val;
-				}
-
-			static inline Processor& handlerGet(uintptr_t x) noexcept
-				{return *( reinterpret_cast<Processor*>(x&(~0xf) ) );}
+				vec4_t<uint64_t> x;
+				MessageData< sizeof(void*) > msg;
+				} m_content;
 		};
-
-
-	template<>
-	constexpr size_t Message::length<uint8_t>()
-		{return sizeof(Parameters<sizeof(void*)>::bytes)/sizeof(uint8_t);}
-
-	template<>
-	constexpr size_t Message::length<uint16_t>()
-		{return sizeof(Parameters<sizeof(void*)>::words)/sizeof(uint16_t);}
-
-	template<>
-	constexpr size_t Message::length<uint32_t>()
-		{return sizeof(Parameters<sizeof(void*)>::dwords)/sizeof(uint32_t);}
-
-	template<>
-	constexpr size_t Message::length<uint64_t>()
-		{return sizeof(Parameters<sizeof(void*)>::qwords)/sizeof(uint64_t);}
-
-
-	template<>
-	inline const uint8_t* Message::paramPointerGet<uint8_t>() const noexcept
-		{return m_msg.content.params.bytes;}
-
-	template<>
-	inline const uint16_t* Message::paramPointerGet<uint16_t>() const noexcept
-		{return m_msg.content.params.words;}
-
-	template<>
-	inline const uint32_t* Message::paramPointerGet<uint32_t>() const noexcept
-		{return m_msg.content.params.dwords;}
-
-	template<>
-	inline const uint64_t* Message::paramPointerGet<uint64_t>() const noexcept
-		{return m_msg.content.params.qwords;}
-
-
-	template<>
-	inline uint8_t* Message::paramPointerGet<uint8_t>() noexcept
-		{return m_msg.content.params.bytes;}
-
-	template<>
-	inline uint16_t* Message::paramPointerGet<uint16_t>() noexcept
-		{return m_msg.content.params.words;}
-
-	template<>
-	inline uint32_t* Message::paramPointerGet<uint32_t>() noexcept
-		{return m_msg.content.params.dwords;}
-
-	template<>
-	inline uint64_t* Message::paramPointerGet<uint64_t>() noexcept
-		{return m_msg.content.params.qwords;}
 	}
 
 #endif

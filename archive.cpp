@@ -111,7 +111,9 @@ Archive::Archive(const char* filename)
 Archive::~Archive()
 	{
 	if(m_handle!=NULL)
-		{zip_close(static_cast<zip*>(m_handle));}
+		{
+		zip_close(static_cast<zip*>(m_handle));
+		}
 	}
 
 static const char* prefixStrip(const char* filename)

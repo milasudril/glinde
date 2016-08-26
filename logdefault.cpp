@@ -64,7 +64,16 @@ void LogWriterStderr::write(Log::MessageType type,const char* message) noexcept
 
 static LogWriterStderr s_writer_stderr;
 
-LogDefault::LogDefault() noexcept:r_queue(nullptr)
+void LogDefault::MessageCallback::operator()(uint64_t time
+	,const MessageData& logmessage)
+	{
+//	auto data=message.dataGet<char>();
+//	auto type=static_cast<MessageType>( message.paramsGet<uint32_t>()[1] );
+	r_log->write(logmessage.typeGet(),logmessage.textGet());
+	}
+
+
+LogDefault::LogDefault() noexcept:m_msg_proc(MessageCallback(*this)),r_queue(nullptr)
 	{
 	memset(m_writers.begin(),0,sizeof(m_writers));
 	writerAttach(s_writer_stderr);
@@ -81,13 +90,6 @@ void LogDefault::write(MessageType type,const char* message)
 		}
 	}
 
-void LogDefault::operator()(const Message& message)
-	{
-	auto data=message.dataGet<char>();
-	auto type=static_cast<MessageType>( message.paramsGet<uint32_t>()[1] );
-	write(type,data.begin());
-	}
-
 void LogDefault::write(Log::MessageType type,const char* format_string
 	,const std::initializer_list<Variant>& args) noexcept
 	{
@@ -98,9 +100,7 @@ void LogDefault::write(Log::MessageType type,const char* format_string
 		{write(type,msgbuff);}
 	else
 		{
-		auto r=Range<const char>(msgbuff,strlen(msgbuff) + 1);
-		ArrayFixed<uint32_t,1> params{static_cast<uint32_t>( type )};
-		r_queue->post(Message{0,*this,r,params});
+		r_queue->post(Message{Message::Time(0),m_msg_proc,MessageData(type,msgbuff)});
 		}
 	}
 
@@ -123,6 +123,19 @@ void LogDefault::writerDetach(unsigned int index) noexcept
 	{
 	if(index!=static_cast<unsigned int>(-1))
 		{m_writers[index]=nullptr;}
+	}
+
+LogDefault::MessageData::MessageData(MessageType type,const char* text):m_type(type)
+	{
+	auto l=strlen(text)+1;
+	m_message=reinterpret_cast<char*>(memoryAllocate(l*sizeof(char)));
+	memcpy(m_message,text,l);
+	}
+
+LogDefault::MessageData::~MessageData() noexcept
+	{
+	if(m_message!=nullptr)
+		{memoryFree(m_message);}
 	}
 
 

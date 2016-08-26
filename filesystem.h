@@ -84,6 +84,8 @@ namespace Glinde
 			virtual void filesProcess(const char* root,FileProcessor&& proc)=0;
 
 			virtual void extract(const char* filename_src,const char* file_dest,bool directory)=0;
+
+			virtual ~Filesystem()=default;
 		};
 	}
 

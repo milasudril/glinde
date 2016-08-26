@@ -68,10 +68,10 @@ void SiteDefault::spotsVisit(SpotVisitor&& visitor)
 	}
 
 
-SiteDefault::SiteDefault::ItemSpawner(ObjectManager& objects):r_objects(objects)
+SiteDefault::ItemSpawner::ItemSpawner(ObjectManager& manager):r_manager(manager)
 	{}
 
-void SiteDefault::ItemSpawner::operator()(const Message& message)
+void SiteDefault::ItemSpawner::operator()(uint64_t time,const ItemSpawnMessage& msg)
 	{
 
 	}
@@ -84,12 +84,9 @@ uint32_t SiteDefault::itemSpawn(const Stringkey& mapspot,const Stringkey& classn
 		,static_cast<Stringkey::HashValue>(mapspot)
 		,static_cast<Stringkey::HashValue>(classname));
 
-	r_world->messagePost(Message{0,m_spawner,nullptr
-		,ArrayFixed<Stringkey::HashValue,2>
-			{mapspot,classname}});
-
-	item.classSet(r_world->resourcesGet(),classname);
-	return m_objects.insert(WorldObject(item));
+/*	r_world->messagePost(Message(Message::Time(0)
+		,m_spawner,ItemSpawnMessage{mapspot,classname}));*/
+	return m_objects.idGet();
 	}
 
 static

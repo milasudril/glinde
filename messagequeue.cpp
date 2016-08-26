@@ -22,6 +22,5 @@ bool MessageQueue::get(Message& message) noexcept
 	auto& msg=const_cast<Message&>( m_queue.top() );
 	message=std::move(msg);
 	m_queue.pop();
-	m_seq.append(message.seqGet());
 	return 1;
 	}

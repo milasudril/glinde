@@ -13,6 +13,7 @@
 
 #include "arraydynamic.h"
 #include "worldobject.h"
+#include "idgenerator.h"
 #include <utility>
 
 namespace Glinde
@@ -47,13 +48,14 @@ namespace Glinde
 					value_type& operator=(value_type&&)=default;
 				};
 
-			ObjectManager():m_id_next(0)
-				{
-				}
+			uint32_t idGet() noexcept
+				{return m_idgen.idGet();}
 
 			ObjectManager& insert(WorldObject&& obj)
+				{return insert(std::move(obj),idGet());}
+
+			ObjectManager& insert(WorldObject&& obj,uint32_t id)
 				{
-				auto id=idGet();
 				assert(id<=m_idmap.length());
 				if(id==m_idmap.length())
 					{m_idmap.append(m_objects.length());}
@@ -74,7 +76,7 @@ namespace Glinde
 
 				swap(m_objects[pos],*(m_objects.end()-1));
 				m_idmap[ m_objects[pos].id() ]=pos;
-				m_ids.append(id);
+				m_idgen.idRelease(id);
 				m_idmap[id]=static_cast<uint32_t>(-1);
 				return *this;
 				}
@@ -108,35 +110,13 @@ namespace Glinde
 			Range<value_type> objectsGet() noexcept
 				{return m_objects;}
 
-
 			uint32_t objectsCount() const noexcept
 				{return m_objects.length();}
 
-			uint32_t idGet() const noexcept
-				{
-				if(m_ids.length()==0)
-					{return m_id_next + 1;}
-				return *(m_ids.end() - 1);
-				}
-
 		private:
+			IdGenerator<uint32_t> m_idgen;
 			ArrayDynamic<value_type> m_objects;
-			ArrayDynamic<uint32_t> m_ids;
 			ArrayDynamic<uint32_t> m_idmap;
-			uint32_t m_id_next;
-
-			uint32_t idGet() noexcept
-				{
-				if(m_ids.length()==0)
-					{
-					auto ret=m_id_next;
-					++m_id_next;
-					return ret;
-					}
-				auto ret=*(m_ids.end() - 1);
-				m_ids.truncate();
-				return ret;
-				}
 		};
 
 	inline void swap(ObjectManager::value_type& a,ObjectManager::value_type& b)

@@ -70,10 +70,10 @@ namespace Glinde
 			class WorldLoader;
 
 			MessageQueue& r_messages;
-			class WorldOwner:public Message::Processor
+			class WorldOwner
 				{
 				public:
-					virtual void operator()(const Message& data);
+					virtual void operator()(uint64_t time,WorldDefault* world);
 
 					WorldDefault* world() noexcept
 						{return m_world;}
@@ -83,8 +83,8 @@ namespace Glinde
 
 				private:
 					WorldDefault* m_world;
-				} m_world_status;
-
+				};
+			Message::Processor<WorldDefault*,WorldOwner> m_world_status;
 
 			Window* r_window;
 			const Timer* r_timer;

@@ -24,13 +24,12 @@
 #include "actionprogram.h"
 #include "site.h"
 #include "messagequeue.h"
-
 #include <memory>
 
 namespace Glinde
 	{
-	class Filesystem;
 	class Stringkey;
+	class Filesystem;
 
 	/**\brief Class representing the current game.
 	*/

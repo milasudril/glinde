@@ -25,7 +25,8 @@ static const TimerDummy s_timer(30.0);
 class EngineDefault::WorldLoader
 	{
 	public:
-		WorldLoader(MessageQueue& messages,EngineDefault::WorldOwner& notifier
+		WorldLoader(MessageQueue& messages
+			,Message::Processor<WorldDefault*,EngineDefault::WorldOwner>& notifier
 			,const char* filename):
 			r_messages(messages),r_notifier(notifier),m_filename(filename)
 			{}
@@ -34,7 +35,7 @@ class EngineDefault::WorldLoader
 
 	private:
 		MessageQueue& r_messages;
-		EngineDefault::WorldOwner& r_notifier;
+		Message::Processor<WorldDefault*,EngineDefault::WorldOwner>& r_notifier;
 		String m_filename;
 	};
 
@@ -45,21 +46,20 @@ void EngineDefault::WorldLoader::operator()() noexcept
 		logWrite(Log::MessageType::INFORMATION,"Loading world from \"#0;\""
 			,{m_filename.begin()});
 
-		r_messages.post(Message{0,r_notifier
-			,new WorldDefault(m_filename.begin(),r_messages)
-			,ArrayFixed<uint32_t,1>{0u}} );
+		r_messages.post(Message{Message::Time(0),r_notifier
+			,new WorldDefault(m_filename.begin(),r_messages)} );
 		}
 	catch(const ErrorMessage& msg)
 		{
 		logWrite(Log::MessageType::ERROR,"#0;",{msg.messageGet()});
-		r_messages.post(Message{0,r_notifier,nullptr,ArrayFixed<uint32_t,1>{0u}} );
+		r_messages.post(Message{Message::Time(0),r_notifier
+			,static_cast<WorldDefault*>(nullptr)} );
 		}
 	}
 
 
-void EngineDefault::WorldOwner::operator()(const Message& data)
+void EngineDefault::WorldOwner::operator()(uint64_t time,WorldDefault* world_new)
 	{
-	auto world_new=reinterpret_cast<WorldDefault*>(data.objectGet());
 	if(world_new!=nullptr)
 		{
 		if(m_world!=nullptr)
@@ -75,13 +75,16 @@ EngineDefault::WorldOwner::WorldOwner():m_world(nullptr)
 EngineDefault::WorldOwner::~WorldOwner()
 	{
 	if(m_world!=nullptr)
-		{delete m_world;}
+		{
+		delete m_world;
+		}
 	}
 
 
 
 
 EngineDefault::EngineDefault(MessageQueue& messages):r_messages(messages)
+	,m_world_status(EngineDefault::WorldOwner{})
 	,m_world_loader(nullptr)
 	,m_con(25,80),m_log(*this)
 	,m_message_count(0),m_stop(0)
@@ -132,7 +135,7 @@ void EngineDefault::run()
 			}
 
 		Window::eventsPoll();
-		auto world=m_world_status.world();
+		auto world=m_world_status.callback().world();
 		if(world!=nullptr)
 			{
 			auto site=world->siteGet();

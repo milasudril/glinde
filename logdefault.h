@@ -16,6 +16,7 @@
 #include "log.h"
 #include "arrayfixed.h"
 #include "message.h"
+#include "string.h"
 
 #ifndef GLINDE_LOGDEFAULT_H
 #define GLINDE_LOGDEFAULT_H
@@ -23,7 +24,7 @@
 namespace Glinde
 	{
 	class MessageQueue;
-	class LogDefault:public Log,public Message::Processor
+	class LogDefault:public Log
 		{
 		public:
 			LogDefault() noexcept;
@@ -68,9 +69,50 @@ namespace Glinde
 			void queueDetach(unsigned int index) noexcept
 				{r_queue=nullptr;}
 
-			void operator()(const Message& message);
-
 		private:
+			class MessageData
+				{
+				public:
+					MessageData():m_message(nullptr){}
+					explicit MessageData(MessageType type,const char* text);
+					~MessageData() noexcept;
+					MessageData(const MessageData&)=delete;
+					MessageData& operator=(const MessageData&)=delete;
+					MessageData(MessageData&& msgdata) noexcept:
+						m_message(msgdata.m_message),m_type(msgdata.m_type)
+						{msgdata.m_message=nullptr;}
+					MessageData& operator=(MessageData&& msgdata) noexcept
+						{
+						std::swap(msgdata.m_message,m_message);
+						m_type=msgdata.m_type;
+						return *this;
+						}
+
+					const char* textGet() const noexcept
+						{return m_message;}
+
+					MessageType typeGet() const noexcept
+						{return m_type;}
+
+				private:
+					char* m_message;
+					MessageType m_type;
+				};
+
+			class MessageCallback
+				{
+				public:
+					MessageCallback(LogDefault& log):r_log(&log)
+						{}
+
+					void operator()(uint64_t time,const MessageData& logmessage);
+
+				private:
+					LogDefault* r_log;
+				};
+
+			Message::Processor<MessageData,MessageCallback> m_msg_proc;
+
 			ArrayFixed<Writer*,4> m_writers;
 			MessageQueue* r_queue;
 

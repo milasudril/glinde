@@ -31,7 +31,8 @@ namespace Glinde
 			void post(Message&& message)
 				{
 				Mutex::LockGuard guard(m_mutex);
-				message.seqSet( seqGet() );
+				message.seqSet( m_seq_next );
+				++m_seq_next;
 				m_queue.push(std::move(message));
 				}
 
@@ -39,21 +40,9 @@ namespace Glinde
 
 		private:
 			Mutex m_mutex;
-			std::priority_queue< Message,ArrayDynamicSTL<Message> > m_queue;
-			ArrayDynamic<uint16_t> m_seq;
+			std::priority_queue< Message,ArrayDynamicSTL<Message>
+				,std::greater<Message> > m_queue;
 			uint16_t m_seq_next;
-			uint16_t seqGet()
-				{
-				if(m_seq.length()==0)
-					{
-					auto ret=m_seq_next;
-					++m_seq_next;
-					return ret;
-					}
-				auto ret=*(m_seq.end() - 1);
-				m_seq.truncate();
-				return ret;
-				}
 		};
 	};
 

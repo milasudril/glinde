@@ -162,8 +162,9 @@ static Plugin pluginCreate(Filesystem& source,const char* name
 	auto src_prefix=String(dirtemp).append("/src");
 	auto sdk_prefix=String(dirtemp).append("/glinde");
 
-//	Maike::versionPrint();
+	Maike::versionPrint(s_stdout);
 	Maike::init(s_stdout,s_stdout,maikeException);
+	
 	auto maike=Maike::sessionCreate();
 	maikeConfig(*maike,dirtemp);
 

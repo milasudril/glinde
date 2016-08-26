@@ -88,14 +88,21 @@ namespace Glinde
 			const Model* r_model;
 			ObjectManager m_objects;
 
-			class ItemSpawner:public Message::Processor
+			struct ItemSpawnMessage
+				{
+				Stringkey mapspot;
+				Stringkey classname;
+				};
+
+			class ItemSpawner
 				{
 				public:
 					ItemSpawner(ObjectManager& manager);
-					void operator()(const Message& message);
+					void operator()(uint64_t time,const ItemSpawnMessage& msg);
 				private:
 					ObjectManager& r_manager;
-				} m_spawner;
+				};
+			Message::Processor<ItemSpawnMessage,ItemSpawner> m_spawner;
 		};
 	}
 
