@@ -76,9 +76,26 @@ namespace Glinde
 			const Stringkey& idGet() const noexcept
 				{return r_map->idGet();}
 
-			uint32_t itemSpawn(const Stringkey& mapspot,const Stringkey& classname) noexcept;
+			uint32_t itemSpawnSync(const Stringkey& mapspot,const Stringkey& classname);
+
+			uint32_t itemSpawnAsync(uint64_t delay,const Stringkey& mapspot,const Stringkey& classname);
 
 			void spotsVisit(SpotVisitor&& visitor);
+
+			uint32_t playerGet() const noexcept
+				{return m_player;}
+
+			SiteDefault& playerSet(uint32_t tid) noexcept
+				{
+				m_player=tid;
+				return *this;
+				}
+
+			WorldObject* objectGet(uint32_t tid) noexcept
+				{return m_objects.objectGet(tid);}
+
+			const Model& modelGet() const noexcept
+				{return *r_model;}
 
 		private:
 			const Map* r_map;
@@ -90,8 +107,8 @@ namespace Glinde
 
 			struct ItemSpawnMessage
 				{
-				Stringkey mapspot;
-				Stringkey classname;
+			/*	Stringkey mapspot;
+				Stringkey classname;*/
 				};
 
 			class ItemSpawner
@@ -103,6 +120,7 @@ namespace Glinde
 					ObjectManager& r_manager;
 				};
 			Message::Processor<ItemSpawnMessage,ItemSpawner> m_spawner;
+			uint32_t m_player;
 		};
 	}
 

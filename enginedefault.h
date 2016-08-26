@@ -22,11 +22,13 @@
 #include "handle.h"
 #include "string.h"
 #include "message.h"
+#include "windowgame.h"
+#include "sitedefault.h"
+#include "worlddefault.h"
 
 namespace Glinde
 	{
 	class MessageQueue;
-	class Window;
 	class Timer;
 	class Clock;
 	class WorldDefault;
@@ -42,9 +44,11 @@ namespace Glinde
 
 			void run();
 
-			EngineDefault& windowSet(Window* window) noexcept
+			EngineDefault& windowSet(WindowGame* window) noexcept
 				{
 				r_window=window;
+				if(r_window!=nullptr)
+					{r_window->engineSet(this);}
 				return *this;
 				}
 
@@ -66,6 +70,12 @@ namespace Glinde
 
 			EngineDefault& worldLoadAsync(const char* file);
 
+			SiteDefault* siteGet()
+				{
+				auto world=m_world_status.callback().world();
+				return world!=nullptr?world->siteGet():nullptr;
+				}
+
 		private:
 			class WorldLoader;
 
@@ -86,7 +96,7 @@ namespace Glinde
 				};
 			Message::Processor<WorldDefault*,WorldOwner> m_world_status;
 
-			Window* r_window;
+			WindowGame* r_window;
 			const Timer* r_timer;
 			Clock* r_clock;
 

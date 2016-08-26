@@ -12,37 +12,18 @@
 #define GLINDE_WINDOWGAME_H
 
 #include "window.h"
-#include "renderer.h"
-#include "worlddefault.h"
 
 namespace Glinde
 	{
+	class EngineDefault;
 	class WindowGame:public Window
 		{
 		public:
 			WindowGame(const char* title,int width,int height
-				,EventHandler& handler
-				,World& world):Window(title,width,height,handler)
-				,r_world(&world)
-				{
-			//	cursorHide();
-				cursorHideAndGrab();
-				}
+				,EventHandler& handler):Window(title,width,height,handler)
+				{}
 
-			void redraw() noexcept
-				{
-				renderer.sceneRender(*r_world,r_world->playerGet());
-				}
-
-			void resized(int width,int height)  noexcept
-				{
-				renderer.viewportSizeSet(width,height);
-				}
-
-		private:
-			Renderer renderer;
-			World* r_world;
-			const WorldObject* r_viewer;
+			virtual WindowGame& engineSet(EngineDefault* e) noexcept=0;
 		};
 	}
 

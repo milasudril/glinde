@@ -29,33 +29,37 @@ void UserEventHandler::onMouseMove(Window& source,double x,double y)
 		{
 		auto yaw=4.0f*std::acos(0.0f)*(float(x/w) - 1.0f/2.0f);
 		auto pitch=std::acos(-1.0f)*(1.0f - float(y/h) );
+		auto site=r_engine!=nullptr?r_engine->siteGet():nullptr;
+		auto player=site!=nullptr?site->objectGet(site->playerGet()):nullptr;
+		if(player==nullptr)
+			{return;}
 
-	/*	auto& player=r_world->playerGet();
-		player.eyesGet()
-			.pitchSet(pitch)
+		player->eyesGet().pitchSet(pitch)
 			.yawSet(yaw )
 			.headingUpdate();
-
-		player.rotZSet(std::acos(-1.0f)-yaw);*/
-
+		player->rotZSet(std::acos(-1.0f)-yaw);
 		objectUpdate();
 		}
 	}
 
 void UserEventHandler::objectUpdate()
 	{
-/*	auto& player=r_world->playerGet();
+	auto site=r_engine!=nullptr?r_engine->siteGet():nullptr;
+	auto player=site!=nullptr?site->objectGet(site->playerGet()):nullptr;
+	if(player==nullptr)
+		{return;}
 
-	auto F_0=player.dampingGet();
+
+	auto F_0=1.0f; //player->dampingGet();
 
 	glm::vec3 F={0,0,0};
 	if(m_move_flags==0)
 		{
-		player.forceSet(F);
+		player->forceSet(F);
 		return;
 		}
 
-	auto& heading=player.headingGet();
+	auto& heading=player->headingGet();
 
 	if(m_move_flags&MOVE_FORWARD)
 		{F+=glm::vec3(heading.x,heading.y,0.0f);}
@@ -71,7 +75,7 @@ void UserEventHandler::objectUpdate()
 
 	F=F_0*normalize(F);
 
-	player.forceSet(F);*/
+	player->forceSet(F);
 	}
 
 unsigned int UserEventHandler::keyToFlag(uint8_t key)

@@ -19,7 +19,7 @@ using namespace Glinde;
 
 SiteDefault::SiteDefault(const Map& map,World& world_notify):r_map(&map)
 	,r_world(&world_notify),r_eh(nullptr),m_tree(map.modelGet(),0)
-	,m_spawner(m_objects)
+	,m_spawner(m_objects),m_player(0)
 	{
  	GLINDE_DEBUG_PRINT("Building site from map #0;",{map.nameGet()});
 	r_model=&map.modelGet();
@@ -32,14 +32,14 @@ SiteDefault::SiteDefault(const Map& map,World& world_notify):r_map(&map)
 			{m_objects.insert(WorldObject(*ptr));}
 		++ptr;
 		}
-	r_world->siteCreated(*this);
+	world_notify.siteCreated(*this);
 	}
 
 SiteDefault::SiteDefault(SiteDefault&& obj) noexcept:
 	 r_map(obj.r_map),r_world(obj.r_world),r_eh(obj.r_eh)
 	,m_tree(std::move(obj.m_tree))
 	,r_model(obj.r_model),m_objects(std::move(obj.m_objects))
-	,m_spawner(m_objects)
+	,m_spawner(m_objects),m_player(obj.m_player)
 	{
 	obj.r_world=nullptr;
 	r_world->siteMoved(*this);
@@ -53,6 +53,7 @@ SiteDefault& SiteDefault::operator=(SiteDefault&& obj) noexcept
 	std::swap(m_tree,obj.m_tree);
 	std::swap(r_model,obj.r_model);
 	std::swap(m_objects,obj.m_objects);
+	std::swap(m_player,obj.m_player);
 	r_world->siteMoved(*this);
 	return *this;
 	}
@@ -77,16 +78,28 @@ void SiteDefault::ItemSpawner::operator()(uint64_t time,const ItemSpawnMessage& 
 	}
 	
 
-uint32_t SiteDefault::itemSpawn(const Stringkey& mapspot,const Stringkey& classname) noexcept
+uint32_t SiteDefault::itemSpawnSync(const Stringkey& mapspot,const Stringkey& classname)
 	{
 	auto item=*r_map->itemFind(mapspot);
-	GLINDE_DEBUG_PRINT("Spawning an item at #0; #1; #2;",&item
+	GLINDE_DEBUG_PRINT("Spawning an item at #0; #1; #2; [m_spawner #3;]",&item
 		,static_cast<Stringkey::HashValue>(mapspot)
-		,static_cast<Stringkey::HashValue>(classname));
+		,static_cast<Stringkey::HashValue>(classname),&m_spawner);
+	item.classSet(r_world->resourcesGet(),classname);
+	auto id=m_objects.idGet();
+	m_objects.insert(WorldObject(item),id);
+	return id;
+	}
 
-/*	r_world->messagePost(Message(Message::Time(0)
-		,m_spawner,ItemSpawnMessage{mapspot,classname}));*/
-	return m_objects.idGet();
+uint32_t SiteDefault::itemSpawnAsync(uint64_t delay,const Stringkey& mapspot,const Stringkey& classname)
+	{
+	auto item=*r_map->itemFind(mapspot);
+	GLINDE_DEBUG_PRINT("Spawning an item at #0; #1; #2; [m_spawner #3;]",&item
+		,static_cast<Stringkey::HashValue>(mapspot)
+		,static_cast<Stringkey::HashValue>(classname),&m_spawner);
+
+	r_world->messagePost(Message(Message::Time(0)
+		,m_spawner,ItemSpawnMessage{}));
+	return -1;
 	}
 
 static

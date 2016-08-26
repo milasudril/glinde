@@ -11,7 +11,7 @@
 		 }
 		,{
 		 "class":"piano"
-		,"position_init":[-0.92,1.4,0]
+		,"position_init":[-0.92,1.4,0.0]
 		,"rot_z":0.0
 		,"tag":"doorlock_1"
 		}

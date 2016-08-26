@@ -17,16 +17,17 @@
 #define GLINDE_USEREVENTHANDLER_H
 
 #include "window.h"
+#include "enginedefault.h"
 
 namespace Glinde
 	{
-	class World;
+	class Engine;
 
 	class UserEventHandler:public Window::EventHandler
 		{
 		public:
-			explicit UserEventHandler(World& world):
-				r_world(&world),m_move_flags(0)
+			explicit UserEventHandler(EngineDefault& engine):
+				r_engine(&engine),m_move_flags(0)
 				{}
 
 			void onKeyDown(Window& source,uint8_t scancode);
@@ -39,8 +40,11 @@ namespace Glinde
 
 			void onResize(Window& source,int width,int height){}
 
+			virtual void onClose(Window& source)
+				{r_engine->stop();}
+
 		private:
-			World* r_world;
+			EngineDefault* r_engine;
 
 			unsigned int keyToFlag(uint8_t key);
 			void objectUpdate();

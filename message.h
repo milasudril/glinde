@@ -80,6 +80,7 @@ namespace Glinde
 				private:
 					void operator()(Message&& msg)
 						{
+					//	GLINDE_DEBUG_PRINT("m_process [#1;]: #0;",&m_process,__PRETTY_FUNCTION__);
 						auto obj=msg.dataRelease<T>();
 						m_process(msg.timeGet(),obj);
 						}
@@ -92,6 +93,7 @@ namespace Glinde
 				static_assert(sizeof(T)<=16,"Objects of type T does not fit in the message");
 				m_content.msg.seq=seq;
 				m_content.msg.receiver=&receiver;
+			//	GLINDE_DEBUG_PRINT("receiver [#1;]: #0;",&receiver,__PRETTY_FUNCTION__);
 				new(&m_content.msg.data)T(std::move(data));
 				}
 
@@ -118,6 +120,7 @@ namespace Glinde
 
 			void process()
 				{
+			//	GLINDE_DEBUG_PRINT("receiver [#1;]: #0;",m_content.msg.receiver,__PRETTY_FUNCTION__);
 				if(m_content.msg.receiver!=nullptr)
 					{(*m_content.msg.receiver)(std::move(*this));}
 				}

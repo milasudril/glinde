@@ -1,12 +1,12 @@
 all: glinde glinde-json-exporter.zip test.zip doc
 
 glinde:
-	maike --targets=consoletest
+	maike --targets=glinde
 
 glinde-json-exporter.zip: glinde-json-exporter/__init__.py
 	zip glinde-json-exporter.zip glinde-json-exporter/__init__.py
 
-test.zip: test/*
+test.zip:  $(wildcard test/**/*)
 	./makegame.sh test
 
 doc:

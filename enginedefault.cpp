@@ -9,7 +9,7 @@
 //@	    ]
 //@	}
 #include "enginedefault.h"
-#include "window.h"
+#include "windowgame.h"
 #include "timerdummy.h"
 #include "worlddefault.h"
 #include "archive.h"

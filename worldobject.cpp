@@ -28,4 +28,5 @@ WorldObject::WorldObject(const Item& item):
 	modelSet(&item_class.modelGet());
 	positionSet(item.positionGet());
 	massSet(item_class.massGet());
+	rotZSet(item.rotZGet());
 	}

@@ -43,7 +43,7 @@ static const char* g_frag_shader="#version 330 core\n"
 	"	color=frag_color_fg * fg + frag_color_bg*(1.0 - fg);"
 	"	}";
 
-ConsoleRenderer::ConsoleRenderer(const Console& console):r_console(&console)
+ConsoleRenderer::ConsoleRenderer():r_console(nullptr)
 	{
 	GlShader vertex_shader(GL_VERTEX_SHADER);
 	vertex_shader.sourceSet(g_vert_shader).compile();
@@ -61,7 +61,25 @@ ConsoleRenderer::ConsoleRenderer(const Console& console):r_console(&console)
 
 	m_fontmap_loc=m_program.uniformGet("fontmap");
 	m_voffset_loc=m_program.uniformGet("v_offset");
-	m_fontmap.dataSet(console.fontmapGet());
+
+
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(3);
+	m_vbo.attributesBind(0,3);
+	m_color_fg.attributesBind(1,3);
+	m_color_bg.attributesBind(2,3);
+	m_uvs.attributesBind(3,2);
+	}
+
+ConsoleRenderer& ConsoleRenderer::consoleSet(const Console* console) noexcept
+	{
+	r_console=console;
+	if(r_console==nullptr)
+		{return *this;}
+
+	m_fontmap.dataSet(console->fontmapGet());
 	m_fontmap.filterDisable();
 
 	auto width=static_cast<uint32_t>(r_console->windowWidthGet());
@@ -74,14 +92,7 @@ ConsoleRenderer::ConsoleRenderer(const Console& console):r_console(&console)
 	m_color_fg.dataSet(r_console->colorsFgGet(),GL_STATIC_DRAW);
 	m_color_bg.dataSet(r_console->colorsBgGet(),GL_STATIC_DRAW);
 
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glEnableVertexAttribArray(2);
-	glEnableVertexAttribArray(3);
-	m_vbo.attributesBind(0,3);
-	m_color_fg.attributesBind(1,3);
-	m_color_bg.attributesBind(2,3);
-	m_uvs.attributesBind(3,2);
+	return *this;
 	}
 
 ConsoleRenderer::~ConsoleRenderer()
@@ -95,6 +106,8 @@ ConsoleRenderer::~ConsoleRenderer()
 
 void ConsoleRenderer::render() noexcept
 	{
+	if(r_console==nullptr)
+		{return;}
 	m_array.bind();
 	m_fb.bind();
 	glDisable(GL_DEPTH_TEST);

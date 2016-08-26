@@ -108,10 +108,7 @@ Renderer::Renderer()
 
 	glUniform3f(lightpos_id,0.0f,0.0f,2.4f);
 
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
-	glDepthFunc(GL_LESS);
-	glClearColor(0.5,0.5,0.5,1);
+	glClearColor(0.25,0.25,0.25,1);
 	vertices.attributesBind(0,3);
 	normals.attributesBind(1,3);
 	uvs.attributesBind(2,2);
@@ -147,7 +144,7 @@ void Renderer::render(const Range< const Mesh >& meshes) noexcept
 			auto tex=textures.resourceGet(id);
 			if(!tex.second)
 				{
-				GLINDE_DEBUG_PRINT("Cache miss for texture %u",id);
+				GLINDE_DEBUG_PRINT("Cache miss for texture #0;",id);
 				tex.first.tagSet(id).objectGet().dataSet(texture);
 				}
 			tex.first.objectGet().bind();
@@ -161,6 +158,9 @@ void Renderer::render(const Range< const Mesh >& meshes) noexcept
 void Renderer::sceneRender(const SiteDefault& site,const WorldObject& viewer) noexcept
 	{
 	glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glDepthFunc(GL_LESS);
 	array.bind();
 	program.use();
 //	auto V=glm::lookAt(glm::vec3(0,-2,1.7f),glm::vec3(0,0,1.55),glm::vec3(0,0,1));
@@ -169,6 +169,11 @@ void Renderer::sceneRender(const SiteDefault& site,const WorldObject& viewer) no
 	glUniformMatrix4fv(V_id,1,GL_FALSE,&V[0][0]);
 	auto VP=P*V;
 	glUniform1i(diffuse_id,0);
+
+		{
+		glUniformMatrix4fv(MVP_id,1,GL_FALSE,&VP[0][0]);
+		render(site.modelGet().frameGet(0).meshes);
+		}
 
 		{
 		auto objects=site.objectsGet();
@@ -192,7 +197,7 @@ void Renderer::sceneRender(const SiteDefault& site,const WorldObject& viewer) no
 
 void Renderer::viewportSizeSet(int width,int height) noexcept
 	{
-	GLINDE_DEBUG_PRINT("Viewport size changed to %d x %d",width,height);
+	GLINDE_DEBUG_PRINT("Viewport size changed to #0; x #1;",width,height);
 	glViewport(0,0,width,height);
 	P=glm::perspective(2.5f*std::acos(0.0f)/3.0f,float(width)/float(height),0.1f,1000.0f);
 	}

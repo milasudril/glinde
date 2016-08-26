@@ -29,14 +29,17 @@ namespace Glinde
 			ConsoleRenderer(Console&&)=delete;
 			~ConsoleRenderer();
 
-			explicit ConsoleRenderer(const Console& console);
+			ConsoleRenderer();
+
 			void render() noexcept;
+
 			const GlTexture& textureGet() const noexcept
 				{return m_result;}
 
+			ConsoleRenderer& consoleSet(const Console* console) noexcept;
+
 		private:
 			const Console* r_console;
-
 			GlVertexArray m_array;
 			GlProgram m_program;
 			GlTexture m_result;

@@ -36,7 +36,10 @@ namespace Glinde
 			virtual Site& init()=0;
 			virtual const Stringkey& idGet() const noexcept=0;
 
-			virtual uint32_t itemSpawn(const Stringkey& mapspot,const Stringkey& classname) noexcept=0;
+			virtual uint32_t itemSpawnSync(const Stringkey& mapspot,const Stringkey& classname)=0;
+			virtual uint32_t itemSpawnAsync(uint64_t delay,const Stringkey& mapspot,const Stringkey& classname)=0;
+			virtual uint32_t playerGet() const noexcept=0;
+			virtual Site& playerSet(uint32_t tid) noexcept=0;
 
 			class SpotVisitor
 				{
@@ -45,6 +48,8 @@ namespace Glinde
 				};
 
 			virtual void spotsVisit(SpotVisitor&& visitor)=0;
+
+			
 
 #if 0
 			virtual void exitTo(const Stringkey& sitename)=0;

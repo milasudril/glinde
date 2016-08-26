@@ -32,7 +32,7 @@ namespace Glinde
 	class GlVertexBuffer
 		{
 		public:
-			GlVertexBuffer()
+			GlVertexBuffer():m_size(0)
 				{glGenBuffers(1,&id);}
 
 			void dataSet(const float* data,unsigned int size,GLenum usage) noexcept
