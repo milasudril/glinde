@@ -48,7 +48,7 @@ static const char* g_frag_shader="#version 330 core\n"
 	""
 	"void main()"
 	"	{"
-	"	vec3 light_color=vec3(1,1,1);"
+	"	vec3 light_color=vec3(1,0.875,0.75);"
 	"	float power=1.0f;"
 	"	float d=length(lightpos_worldspace - pos_worldspace);"
 	"	vec3 n=normalize(normal_cameraspace);"
@@ -171,6 +171,8 @@ void Renderer::sceneRender(const SiteDefault& site,const WorldObject& viewer) no
 	glUniform1i(diffuse_id,0);
 
 		{
+		glm::mat4 M;
+		glUniformMatrix4fv(M_id,1,GL_FALSE,&M[0][0]);
 		glUniformMatrix4fv(MVP_id,1,GL_FALSE,&VP[0][0]);
 		render(site.modelGet().frameGet(0).meshes);
 		}

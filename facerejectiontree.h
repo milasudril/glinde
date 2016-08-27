@@ -76,12 +76,13 @@ namespace Glinde
 				};
 
 			FaceRejectionTree(FaceRejectionTree&& tree) noexcept:
-				m_root(tree.m_root)
+				m_root(tree.m_root),m_faces(std::move(tree.m_faces))
 				{tree.m_root=nullptr;}
 
 			FaceRejectionTree& operator=(FaceRejectionTree&& tree) noexcept
 				{
 				std::swap(tree.m_root,m_root);
+				std::swap(tree.m_faces,m_faces);
 				return *this;
 				}
 
