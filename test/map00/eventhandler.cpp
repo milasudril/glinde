@@ -29,5 +29,5 @@ void EventHandler::onInit(Site& site)
 	auto tid=site.itemSpawnSync(Stringkey("player_00"),Stringkey("human"));
 	g_syslog->write(Log::MessageType::INFORMATION,"Spawned player_00 as tid #0;"
 		,{tid});
-	site.playerSet(tid);
+	site.playerSet(1);
 	}

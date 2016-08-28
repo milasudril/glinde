@@ -50,7 +50,7 @@ void UserEventHandler::objectUpdate()
 		{return;}
 
 
-	auto F_0=10.0f; //player->dampingGet();
+	auto F_0=100.0f; //player->dampingGet();
 
 	glm::vec3 F={0,0,0};
 	if(m_move_flags==0)

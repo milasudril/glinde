@@ -113,11 +113,13 @@ glm::vec3 collisionCheck(const FaceRejectionTree& tree,const WorldObject& object
 
 	auto faces=tree.facesFind(glm::vec4(offset,1.0f) + bb.mid()
 		,2.0f*bb.size());
+	auto M=glm::inverse(object.modelMatrixGet());
 
 	while(faces.first!=faces.second)
 		{
 		auto& face=*faces.first;
-		if(intersect(face - offset,frame_current.meshes))
+		auto face_transformed=M*face;
+		if(intersect(face_transformed,frame_current.meshes))
 			{
 			auto n=glm::normalize(glm::cross(face[1] - face[0],face[2]-face[0]));
 			auto R=basisFromVector(n);
@@ -125,11 +127,12 @@ glm::vec3 collisionCheck(const FaceRejectionTree& tree,const WorldObject& object
 			auto J=object.normalImpulseGet();
 			auto m=object.massGet();
 
-			v_normal[0]=std::max(0.0f,glm::dot(J,n)/m);
+			v_normal[0]=std::max(0.05f,glm::dot(J,n)/m);
 			v=R*v_normal;
 			}
 		++faces.first;
 		}
+
 	return v;
 	}
 
@@ -147,7 +150,7 @@ void SiteDefault::update(uint64_t frame,double delta_t,int64_t wallclock_utc) no
 		auto x=obj.positionGet();
 		auto v=obj.velocityGet();
 
-		auto c=obj.dampingGet();
+		auto c=200.0f;//obj.dampingGet();
 		auto F=obj.forceGet();
 		auto m=obj.massGet();
 
@@ -156,7 +159,18 @@ void SiteDefault::update(uint64_t frame,double delta_t,int64_t wallclock_utc) no
 
 		if(obj.modelGet()!=nullptr && length(v)>0.0f)
 			{
-			v=collisionCheck(m_tree,obj,x + dt*v,v);
+		/*	auto& frame_current=obj.frameCurrentGet();
+			auto& bb_a=frame_current.bounding_box;
+			auto ptr_other=ptr+1;
+			while(ptr_other!=ptr_end)
+				{
+				auto& b=ptr->object();
+				if(b.modelGet()!=nullptr)
+					{}
+				++ptr_other;
+				}*/
+			if(length(v)>0)
+				{v=collisionCheck(m_tree,obj,x + dt*v,v);}
 			}
 
 		x+=dt*v;
@@ -167,4 +181,3 @@ void SiteDefault::update(uint64_t frame,double delta_t,int64_t wallclock_utc) no
 		++ptr;
 		}
 	}
-

@@ -4,7 +4,8 @@
 //@	        {
 //@	            "dependencies":[],
 //@	            "name":"face.o",
-//@	            "type":"object"
+//@	            "type":"object",
+//@				"cxxoptions":{"cflags_extra":["O2"]}
 //@	        }
 //@	    ]
 //@	}
@@ -14,6 +15,8 @@
 
 using namespace Glinde;
 
+static constexpr float epsilon=2.4414062e-04f;
+
 inline static ArrayFixed<float,3> distancesGet(const glm::vec3& normal
 	,const glm::vec3& v_0
 	,const Face& face) noexcept
@@ -22,7 +25,7 @@ inline static ArrayFixed<float,3> distancesGet(const glm::vec3& normal
 	for(size_t k=0;k<ret.length();++k)
 		{
 		ret[k]=glm::dot(normal,face[k]-v_0);
-		ret[k]=std::abs(ret[k])>2.4414062e-04f?ret[k]:0.0f;
+		ret[k]=std::abs(ret[k])>epsilon?ret[k]:0.0f;
 		}
 	return ret;
 	}
@@ -76,7 +79,7 @@ inline static Twins<float> linesegmentIntersection(const glm::vec3& direction
 //	All possible projections have the same sign. Therefore, all vertices of a
 //	are on the same side of b. Conclude that there is no intersection.
 //	Note: This is also the case for two coplanar triangles.
-	if(distances[0]*distances[1]>=0.0f && distances[0]*distances[2]>=0)
+	if(distances[0]*distances[1]>=0.0f && distances[0]*distances[2]>=0.0f)
 		{return {0.0f,0.0f};}
 
 //	Genereate a suitable permutation so element 1 refers to the opposite vertex
@@ -92,7 +95,7 @@ inline static Twins<float> linesegmentIntersection(const glm::vec3& direction
 
 inline static bool intersect(const Twins<float>& a,const Twins<float>& b) noexcept
 	{
-	if(a.second<=b.first + 2.4414062e-04f || b.second<=a.first + 2.4414062e-04f)
+	if(a.second<=b.first + epsilon || b.second<=a.first + epsilon)
 		{return 0;}
 	return 1;
 	}
