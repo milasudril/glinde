@@ -1,5 +1,9 @@
 //@	{
-//@	 "targets":[{"name":"world.so","type":"lib_dynamic"}]
+//@	 "targets":
+//@		[{
+//@		 "name":"world.so","type":"lib_dynamic"
+//@		,"dependencies":[{"ref":"maikeconfig.json","rel":"generated"}]
+//@		}]
 //@	,"author":["Torbjörn Rathsman"]
 //@	,"year":2016
 //@	,"license":"Public domain"

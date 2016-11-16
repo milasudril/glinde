@@ -1,9 +1,14 @@
 //@	{
-//@	    "targets":[
-//@	        {
-//@	            "dependencies":[{"ref":"maike","rel":"external"}],
-//@	            "name":"actionprogram.o",
-//@	            "type":"object"
+//@	"targets":
+//@		[
+//@			{
+//@			"dependencies":
+//@				[
+//@				 {"ref":"maike","rel":"external"}
+//@				,{"ref":"maikeconfig.json","rel":"generated"}
+//@				]
+//@			,"name":"actionprogram.o"
+//@			,"type":"object"
 //@	        }
 //@	    ]
 //@	}
@@ -19,9 +24,7 @@
 #include "logwriter.h"
 #include <maike/maike.hpp>
 
-//TODO: We should use the configuration used when compiling maike.
-//      => Add python script
-GLINDE_BLOB(maikeconfig,"maikeconfig.json");
+GLINDE_BLOB(maikeconfig,MAIKE_TARGET(maikeconfig.json));
 
 using namespace Glinde;
 
@@ -153,6 +156,7 @@ static void maikeConfig(Maike::Session& maike,const char* dirtemp)
 		Maike::configClear(maike);
 		Maike::sysvarsLoad(maike);
 		Maike::configAppend(maike,maikeconfig);
+		Maike::scanRecursiveSet(maike,1);
 		}
 	}
 
