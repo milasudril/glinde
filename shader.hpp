@@ -24,14 +24,17 @@ namespace Angle
 	class Shader
 		{
 		public:
-			explicit Shader(const char* source,ShaderType type)
+			template<class ExceptionHandler>
+			explicit Shader(const char* source,ShaderType type,ExceptionHandler&& eh)
 				{
+				assert(glCreateShader!=nullptr);
 				m_handle=glCreateShader(native_type(type));
 				assert(m_handle!=0);
 
+				
 				}
 
-			~Shader();
+			~Shader() noexcept;
 				{glDeleteShader(m_handle);}
 		private:
 			GLuint m_handle;
