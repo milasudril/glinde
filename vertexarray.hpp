@@ -3,6 +3,7 @@
 #ifndef ANGLE_VERTEXARRAY_HPP
 #define ANGLE_VERTEXARRAY_HPP
 
+#include "arraysize.hpp"
 #include "valuetype.hpp"
 #include <utility>
 #include <cassert>
@@ -12,136 +13,86 @@ namespace Angle
 	template<GLsizei index,class T>
 	GLuint get(const T&);
 
-	template<GLsizei N>
-	class VertexArrays
+	template<class BatchLayout>
+	class VertexArray
 		{
 		public:
-			template<GLsizei k>
-			struct Index
-				{static constexpr GLsizei value=k;};
-
-			VertexArrays(const VertexArrays&)=delete;
-
-			VertexArrays(VertexArrays&& obj) noexcept:m_handles(obj.m_handles)
+			struct Attribute
 				{
-				obj.for_each([](auto& vaos,auto index)
-					{vaos.m_handles[decltype(index)::value]=0;});
-				}
+				GLint elem_count;
+				ValueType type;
+				bool normalized;
+				GLuint offset;
+				};
 
-			VertexArrays& operator=(const VertexArrays&)=delete;
+			VertexArray(const VertexArray&)=delete;
 
-			VertexArrays& operator=(VertexArrays&& obj)
+			VertexArray(VertexArray&& obj) noexcept:m_handle(obj.m_handle)
+				{obj.m_handle=0;}
+
+			VertexArray& operator=(const VertexArray&)=delete;
+
+			VertexArray operator=(VertexArray&& obj)
 				{
-				obj.for_each([this](auto& vaos,auto index)
-					{
-					auto i=decltype(index)::value;
-					std::swap(vaos.m_handles[i],m_handles[i]);
-					});
+				std::swap(obj.m_handle,m_handle);
 				return *this;
 				}
 
 
-			VertexArrays() noexcept
+			VertexArray() noexcept
 				{
 				assert(glGenVertexArrays!=nullptr);
-				glCreateVertexArrays(N,m_handles);
-				for_each([](auto& vaos,auto index)
-					{assert(vaos.m_handles[decltype(index)::value]!=0);});
+				glCreateVertexArrays(1,&m_handle);
+				for(GLuint k=0;k<size(BatchLayout::attributes);++k)
+					{
+					const auto& attribute=BatchLayout::attributes[k];
+					glVertexArrayAttribFormat(m_handle,k
+						,attribute.elem_count
+						,native_type(attribute.type)
+						,attribute.normalized
+						,attribute.offset);
+					}
 				}
 				
-			~VertexArrays()
+			~VertexArray()
 				{
 				glBindVertexArray(0);
-				glDeleteVertexArrays(N,m_handles);
+				glDeleteVertexArrays(1,&m_handle);
 				}
 
-			template<GLsizei index=0>
 			void bind() noexcept
+				{glBindVertexArray(m_handle);}
+
+			template<GLuint attrib>
+			void enableVertexAttribArray() noexcept
 				{
-				static_assert(index>=0 && index<N,"Index out of bounds");
-				glBindVertexArray(m_handles[index]);
+				static_assert(attrib>=0 && attrib<size(BatchLayout::attributes),"Attribute index out of bounds");
+				glEnableVertexArrayAttrib(m_handle,attrib);
 				}
 
-			template<GLsizei index=0>
-			void enableVertexAttribArray(GLuint attrib) noexcept
+			template<GLuint attrib>
+			void disableVertexAttribArray() noexcept
 				{
-				static_assert(index>=0 && index<N,"Index out of bounds");
-				glEnableVertexAttribArray(m_handles[index],attrib);
+				static_assert(attrib>=0 && attrib<size(BatchLayout::attributes),"Attribute index out of bounds");
+				glDisableVertexArrayAttrib(m_handle,attrib);
 				}
 
-			template<GLsizei index=0>
-			void disableVertexAttribArray(GLuint attrib) noexcept
-				{
-				static_assert(index>=0 && index<N,"Index out of bounds");
-				glDisableVertexAttribArray(m_handles[index],attrib);
-				}
-
-			template<GLsizei index=0>
+			template<GLsizei attrib>
 			class AttribContext
 				{
 				public:
-					explicit AttribContext(VertexArrays<N>& vaos,GLuint attrib) noexcept:
-						r_vaos(vaos),m_attrib(attrib)
-						{r_vaos.enableVertexAttribArray<index>(m_attrib);}
+					explicit AttribContext(VertexArray& vao) noexcept:
+						r_vao(vao)
+						{r_vao.enableVertexAttribArray<attrib>();}
 					~AttribContext() noexcept
-						{r_vaos.disableVertexAttribArray<index>(m_attrib);}
+						{r_vao.disableVertexAttribArray<attrib>();}
 				private:
-					VertexArrays<N>& r_vaos;
-					GLuint m_attrib;
+					VertexArray& r_vao;
 				};
-
-			template<GLsizei index=0>
-			auto& attribFormat(GLuint attrib
-				,GLint value_count
-				,ValueType type,bool normalized,GLuint offset) noexcept
-				{
-				static_assert(index>=0 && index<N,"Index out of bounds");
-				glVertexArrayAttribFormat(m_handles[index],attrib,value_count
-					,native_type(type),normalized,offset);
-				return *this;
-				}
-
-			template<GLsizei index=0,GLsizei vbo_index,class VBO>
-			auto& vertexBuffer(GLuint attrib,const VBO& vbos,GLintptr offset,GLsizei stride)
-				{
-				static_assert(index>=0 && index<N,"Index out of bounds");
-			//	TODO: Add static assert on VBO type and attribute index
-				glVertexArrayVertexBuffer(m_handles[index],attrib
-					,get<vbo_index>(vbos),offset,stride);
-				return *this;
-				}
-
-			template<GLsizei index=0,GLsizei vbo_index,class VBO>
-			auto& vertexBuffer(GLuint attrib,VBO&& vbos,GLintptr offset,GLsizei stride)=delete;
-
-			template<class T>
-			void for_each(T&& callback) noexcept
-				{
-				auto cb_temp=std::move(callback);
-				RunLoop<N,T>::doIt(cb_temp,*this);
-				}
 
 		private:
-			template<GLsizei k,class T>
-			struct RunLoop
-				{
-				static void doIt(T& callback,VertexArrays<N>& self)
-					{
-					callback(self,Index<k>{});
-					RunLoop<k-1,T>::doIt(callback,self);
-					}
-				};
-			template<class T>
-			struct RunLoop<0,T>
-				{
-				static void doIt(const T&,const VertexArrays<N>&){}
-				};
-
-			GLuint m_handles[N];
+			GLuint m_handle;
 		};
-
-	class VertexArray:public VertexArrays<1>
-		{};
 	}
 
 #endif
