@@ -16,6 +16,10 @@ namespace Angle
 	template<class BatchLayout>
 	class VertexArray
 		{
+		private:
+			template<GLuint k,bool dummy>
+			class AttribContextPrev;
+
 		public:
 			struct Attribute
 				{
@@ -43,15 +47,7 @@ namespace Angle
 				{
 				assert(glGenVertexArrays!=nullptr);
 				glCreateVertexArrays(1,&m_handle);
-				for(GLuint k=0;k<size(BatchLayout::attributes);++k)
-					{
-					const auto& attribute=BatchLayout::attributes[k];
-					glVertexArrayAttribFormat(m_handle,k
-						,attribute.elem_count
-						,native_type(attribute.type)
-						,attribute.normalized
-						,attribute.offset);
-					}
+              	Init<size(BatchLayout::attributes),true>::doIt(m_handle);
 				}
 				
 			~VertexArray()
@@ -90,7 +86,55 @@ namespace Angle
 					VertexArray& r_vao;
 				};
 
+			class AttribContextAll:public AttribContextPrev<size(BatchLayout::attributes),true>
+				{
+				public:
+					explicit AttribContextAll(VertexArray& vao) noexcept:
+						AttribContextPrev<size(BatchLayout::attributes),true>(vao)
+						{}
+				};
+
 		private:
+			template<GLuint k,bool dummy>
+			struct Init
+				{
+				static void doIt(GLuint handle) noexcept
+					{
+					Init<k-1,dummy>::doIt(handle);                  
+					const auto& attribute=BatchLayout::attributes[k-1];
+					glVertexArrayAttribFormat(handle,k-1
+						,attribute.elem_count
+						,native_type(attribute.type)
+						,attribute.normalized
+						,attribute.offset);
+                	}
+				};
+      
+			template<bool dummy>
+			struct Init<0,dummy>
+				{
+				static void doIt(GLuint) noexcept
+					{}
+				};
+
+			template<GLuint k,bool dummy>
+			class AttribContextPrev:public AttribContextPrev<k-1,dummy>
+				{
+				public:
+					AttribContextPrev(VertexArray& vao) noexcept:
+						AttribContextPrev<k-1,dummy>(vao),m_context(vao)
+						{}
+
+				private:
+					AttribContext<k-1> m_context;
+				};
+			template<bool dummy>
+			class AttribContextPrev<0,dummy>
+				{
+				public:
+					AttribContextPrev(VertexArray& vao) noexcept{}
+				};
+
 			GLuint m_handle;
 		};
 	}

@@ -23,6 +23,6 @@ struct Layout
 int main()
 	{
 	Angle::VertexArray<Layout> vao;
-	decltype(vao)::AttribContext<0> context(vao);
+	decltype(vao)::AttribContextAll context(vao);
 	return 0;
 	}
