@@ -3,6 +3,9 @@
 #ifndef ANGLE_SHADER_HPP
 #define ANGLE_SHADER_HPP
 
+#include "exceptionhandler.hpp"
+
+
 #include <GL/glew.h>
 #include <cassert>
 #include <algorithm>
@@ -44,27 +47,27 @@ namespace Angle
 
 			case ShaderType::FRAGMENT_SHADER:
 				return "fragment shader";
+			default:
+				return "";
 			}
 		}
 
 	class Shader
 		{
 		public:
-			template<class ExceptionHandler>
-			explicit Shader(const char* source,ShaderType type,ExceptionHandler&& eh);
+			explicit Shader(const char* source,ShaderType type);
 
 			~Shader() noexcept
 				{glDeleteShader(m_handle);}
 
-			GLuint handle() noexcept
+			GLuint handle() const noexcept
 				{return m_handle;}
 
 		private:
 			GLuint m_handle;
 		};
 
-	template<class ExceptionHandler>
-	Shader::Shader(const char* source,ShaderType type,ExceptionHandler&& eh)
+	Shader::Shader(const char* source,ShaderType type)
 		{
 		assert(glCreateShader!=nullptr);
 		m_handle=glCreateShader(native_type(type));
@@ -82,8 +85,7 @@ namespace Angle
 			char message[1024];
 			glGetShaderInfoLog(m_handle,std::min(1024,length),NULL,message);
 			glDeleteShader(m_handle);
-			eh(type,message);
-			m_handle=0;
+			r_eh->raise(Error("It was not possible to compile the current ",name(type),". ",message));
 			}
 		}
 	}

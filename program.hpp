@@ -10,59 +10,45 @@ namespace Angle
 	class Program
 		{
 		public:
-			template<class ... T>
-			Program(Shader& shader,T&...shaders)
+			template<class ExceptionHandler,class ... T>
+			Program(ExceptionHandler&& eh,const Shader& shader,const T&...shaders)
 				{
-				int handles[sizeof...(T)+1];
-				fill(handles,shader,shaders...);
+				assert(glCreateProgram!=nullptr);
+				m_handle=glCreateProgram();
+				GLuint handles[sizeof...(T)+1];
+				collect(handles,shader,shaders...);
 				for(size_t k=0;k<sizeof...(T)+1;++k)
-					{printf("%d\n",handles[k]);}
+					{glAttachShader(m_handle,handles[k]);}
+				glLinkProgram(m_handle);
+				auto status=static_cast<GLint>(0);
+				glGetProgramiv(m_handle,GL_LINK_STATUS,&status);
+				if(status!=GL_TRUE)
+					{
+					auto length=static_cast<GLint>(0);
+					glGetProgramiv(m_handle,GL_INFO_LOG_LENGTH,&length);
+					char message[1024];
+					glGetShaderInfoLog(m_handle,std::min(1024,length),NULL,message);
+					for(size_t k=0;k<sizeof...(T)+1;++k)
+						{glDetachShader(m_handle,handles[k]);}
+					glDeleteProgram(m_handle);
+					r_eh->raise(Error("It was not possible to link the shader program. ",message));
+					}
 				}
 
-			template<class ... T>
-			Program(Shader&& shader,T&&...shaders)
-				{
-				int handles[sizeof...(T)+1];
-				fill(handles,shader,shaders...);
-				for(size_t k=0;k<sizeof...(T)+1;++k)
-					{printf("%d\n",handles[k]);}
-				}
+			~Program()
+				{glDeleteProgram(m_handle);}
 
 		private:
-      		static constexpr void fill(int* handles)
+      		static constexpr void collect(GLuint* handles)
 				{}
 			template<class ...T>
-			static constexpr void fill(int* handles,Shader& shader,T&...shaders)
+			static constexpr void collect(GLuint* handles,const Shader& shader,const T&...shaders)
 				{
 				handles[0]=shader.handle();
-				fill(handles+1,shaders...);
+				collect(handles+1,shaders...);
 				}
-			int m_handle;
+			GLuint m_handle;
 		};
-
-/*	template<class ExceptionHandler>
-	Shader::Shader(const char* source,ShaderType type,ExceptionHandler&& eh)
-		{
-		assert(glCreateShader!=nullptr);
-		m_handle=glCreateShader(native_type(type));
-		assert(m_handle!=0);
-
-		auto length=static_cast<GLint>(strlen(source));
-		glShaderSource(m_handle,1,&source,&length);
-		glCompileShader(m_handle);
-		auto status=static_cast<GLint>(0);
-		glGetShaderiv(m_handle,GL_COMPILE_STATUS,&status);
-		if(status!=GL_TRUE)
-			{
-			auto length=static_cast<GLint>(0);
-			glGetShaderiv(m_handle,GL_INFO_LOG_LENGTH,&length);
-			char message[1024];
-			glGetShaderInfoLog(m_handle,std::min(1024,length),NULL,message);
-			glDeleteShader(m_handle);
-			eh(type,message);
-			m_handle=0;
-			}
-		}*/
 	}
 
 #endif

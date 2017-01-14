@@ -9,7 +9,8 @@
 //@	}
 
 #include "vertexarray.hpp"
-#include "shader.hpp"
+#include "program.hpp"
+
 
 struct Layout
 	{
@@ -23,12 +24,9 @@ struct Layout
 
 int main()
 	{
-	Angle::Shader frag_shader("",Angle::ShaderType::FRAGMENT_SHADER
-		,[](auto type,const char* message)
-			{
-			throw "Shader compilation error";
-			}
-		);
+	Angle::Program prgm(Angle::Shader("",Angle::ShaderType::FRAGMENT_SHADER)
+		,Angle::Shader("",Angle::ShaderType::VERTEX_SHADER));
+
 	Angle::VertexArray<Layout> vao;
 	decltype(vao)::AttribContextAll context(vao);
 	return 0;

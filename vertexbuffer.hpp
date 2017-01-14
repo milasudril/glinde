@@ -4,6 +4,7 @@
 #define ANGLE_VERTEXBUFFER_HPP
 
 #include "errorcode.hpp"
+#include "exceptionhandler.hpp"
 #include <cassert>
 #include <utility>
 
@@ -29,8 +30,10 @@ namespace Angle
 	class VertexBuffer
 		{
 		public:
-			template<class ExceptionHandler>
-			VertexBuffer(GLsizei n_elems,ExceptionHandler&& eh):m_capacity(n_elems)
+			typedef ElementType value_type;
+			static constexpr auto vector_size=sizeof(value_type);
+
+			VertexBuffer(GLsizei n_elems):m_capacity(n_elems)
 				{
 				glCreateBuffers(1,&m_handle);
 				glNamedBufferData(m_handle,sizeof(ElementType)*n_elems,NULL,native_type(usage_type));
@@ -38,8 +41,7 @@ namespace Angle
 				if(error!=GL_NO_ERROR)
 					{
 					glDeleteBuffers(1,&m_handle);
-					eh("Could not create a VBO",ErrorCode(error));
-					m_handle=0;
+					r_eh->raise(Error("Failed to allocate vertex buffer storage."));
 					}
 				}
 
@@ -66,8 +68,7 @@ namespace Angle
 				return *this;
 				}
 
-			template<class ExceptionHandler>
-			VertexBuffer& bufferData(const ElementType* data,size_t n_elems,ExceptionHandler&& eh)
+			VertexBuffer& bufferDataResize(const ElementType* data,size_t n_elems)
 				{
 				if(m_capacity==n_elems)
 					{glNamedBufferSubData(m_handle,0,sizeof(ElementType)*n_elems,data);}
@@ -76,7 +77,7 @@ namespace Angle
 					glNamedBufferData(m_handle,sizeof(ElementType)*n_elems,NULL,native_type(usage_type));
 					auto error=glGetError();
 					if(error!=GL_NO_ERROR)
-						{eh("Could not create a VBO",ErrorCode(error));}
+						{r_eh->raise(Error("Failed to allocate vertex buffer storage."));}
 					m_capacity=n_elems;
 					}
 				return *this;
