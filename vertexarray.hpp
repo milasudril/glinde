@@ -10,9 +10,6 @@
 
 namespace Angle
 	{
-	template<GLsizei index,class T>
-	GLuint get(const T&);
-
 	template<class BatchLayout>
 	class VertexArray
 		{
@@ -42,7 +39,6 @@ namespace Angle
 				return *this;
 				}
 
-
 			VertexArray() noexcept
 				{
 				assert(glGenVertexArrays!=nullptr);
@@ -60,17 +56,19 @@ namespace Angle
 				{glBindVertexArray(m_handle);}
 
 			template<GLuint attrib>
-			void enableVertexAttribArray() noexcept
+			VertexArray& enableVertexAttribArray() noexcept
 				{
 				static_assert(attrib>=0 && attrib<size(BatchLayout::attributes),"Attribute index out of bounds");
 				glEnableVertexArrayAttrib(m_handle,attrib);
+				return *this;
 				}
 
 			template<GLuint attrib>
-			void disableVertexAttribArray() noexcept
+			VertexArray& disableVertexAttribArray() noexcept
 				{
 				static_assert(attrib>=0 && attrib<size(BatchLayout::attributes),"Attribute index out of bounds");
 				glDisableVertexArrayAttrib(m_handle,attrib);
+				return *this;
 				}
 
 			template<GLsizei attrib>
@@ -93,6 +91,19 @@ namespace Angle
 						AttribContextPrev<size(BatchLayout::attributes),true>(vao)
 						{}
 				};
+
+			template<GLuint attrib,class VBO>
+			VertexArray& vertexBuffer(const VBO& vbo) noexcept
+				{
+				static_assert(attrib>=0 && attrib<size(BatchLayout::attributes),"Attribute index out of bounds");
+				typedef typename TypeGet<BatchLayout::attributes.type>::type attrib_type;
+				static_assert(std::is_same<typename VBO::value_type,attrib_type>::value,"Attribute type mismatch");
+				glVertexArrayVertexBuffer(m_handle,attrib,vbo.get(),VBO::vector_size);
+				return *this;
+				}
+
+			GLuint handle() noexcept
+				{return m_handle;}
 
 		private:
 			template<GLuint k,bool dummy>

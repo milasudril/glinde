@@ -56,6 +56,9 @@ namespace Angle
 			~Shader() noexcept
 				{glDeleteShader(m_handle);}
 
+			GLuint handle() noexcept
+				{return m_handle;}
+
 		private:
 			GLuint m_handle;
 		};

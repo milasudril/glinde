@@ -4,7 +4,6 @@
 #define ANGLE_VALUETYPE_HPP
 
 #include <GL/glew.h>
-#include <type_traits>
 
 namespace Angle
 	{
