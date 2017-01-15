@@ -11,8 +11,8 @@
 #include "vertexarray.hpp"
 #include "program.hpp"
 #include "init.hpp"
-#include <geosimd/point.hpp>
 
+#include <geosimd/point.hpp>
 #include <GLFW/glfw3.h>
 
 struct GLFWContext
@@ -71,11 +71,18 @@ class Window
 		GLFWwindow* m_handle;
 	};
 
-static constexpr GeoSIMD::Point<float> triangle[]
+static constexpr GeoSIMD::Point<float> verts[]=
 	{
-	 GeoSIMD::Point<float>{-0.5f, -0.5f, 0.0f}
+	 GeoSIMD::Point<float>{0.5f,  0.5f, 0.0f}
 	,GeoSIMD::Point<float>{0.5f, -0.5f, 0.0f}
-	,GeoSIMD::Point<float>{0.0f, 0.5f, 0.0f}
+	,GeoSIMD::Point<float>{-0.5f, -0.5f, 0.0f}
+	,GeoSIMD::Point<float>{-0.5f,  0.5f, 0.0f}
+	};
+
+static constexpr uint16_t faces[]=
+	{
+	 0,1,3
+	,1,2,3
 	};
 
 template<class T>
@@ -129,8 +136,10 @@ int main()
 			,version.version
 			,version.glsl_version);
 
-		Angle::VertexBuffer<GeoSIMD::vec4_t<float>>	vertices(3);
-		vertices.bufferData(native_type(triangle),3);
+		Angle::VertexBuffer<GeoSIMD::vec4_t<float>>	vertbuff(4);
+		vertbuff.bufferData(native_type(verts),4);
+		Angle::VertexBuffer<uint16_t> facebuff(6);
+		facebuff.bufferData(faces,6);
 
 		Angle::Program prgm(
 R"EOF(#version 450 core
@@ -143,19 +152,20 @@ void main()
 out vec4 color;
 void main()
 	{
-	color=vec4(1.0f,0.5f,0.2f,1.0f);
+	color=vec4(0.4f,0.7f,1.0f,1.0f);
 	}
 )EOF"_frag);
 
 		Angle::VertexArray<MyShaderLayout> vertex_array;
-		vertex_array.vertexBuffer<0>(vertices).enableVertexAttrib<0>();
+		vertex_array.vertexBuffer<0>(vertbuff).enableVertexAttrib<0>()
+			.elementBuffer(facebuff);
 
 		while(!glfwWindowShouldClose(mainwin.handle()))
 			{
 			glfwPollEvents();
 			vertex_array.bind();
 			prgm.bind();
-			glDrawArrays(GL_TRIANGLES,0,3);
+			glDrawElements(GL_TRIANGLES,6,native_type(Angle::ConstantGet<uint16_t>::value),0);
 			glfwSwapBuffers(mainwin.handle());
 			}
 
