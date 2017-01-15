@@ -10,6 +10,7 @@
 
 #include "vertexarray.hpp"
 #include "program.hpp"
+#include "init.hpp"
 
 
 struct Layout
