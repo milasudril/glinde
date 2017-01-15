@@ -9,25 +9,26 @@
 
 namespace Angle
 	{
-	template<class ContextProvider>
-	void init(ContextProvider&& provider)
-		{init(provider);}
+	template<class ContextUser>
+	void init(ContextUser&& user)
+		{init(user);}
 
 	struct Version
 		{
 		int16_t major;
 		int16_t minor;
 		
-		enum class Profile:int16_t{CORE,COMPATIBILITY,ANY};
+		enum class Profile:int16_t{CORE,COMPAT,ANY};
 		Profile profile;
 		bool forward_compatible;
 		};
 
-	template<class ContextProvider>
-	void init(ContextProvider& provider)
+	static constexpr Version version_requirements{4,5,Version::Profile::CORE,1};
+
+	template<class ContextUser>
+	void init(ContextUser& user)
 		{
-		provider.require(Version{4,5,Version::Profile::CORE,1});
-		ContextGuard<decltype(provider.contextUserGet())> guard(provider.contextUserGet());
+		ContextGuard<ContextUser> guard(user);
 		glewExperimental=GL_TRUE;
 		auto status=glewInit();
 		if(status!=GLEW_OK)
