@@ -11,7 +11,7 @@ namespace Angle
 		{
 		public:
 			template<class ... T>
-			Program(const Shader& shader,const T&...shaders);
+			explicit Program(const Shader& shader,const T&...shaders);
 
 			~Program() noexcept
 				{glDeleteProgram(m_handle);}
@@ -52,7 +52,7 @@ namespace Angle
 			for(size_t k=0;k<sizeof...(T)+1;++k)
 				{glDetachShader(m_handle,handles[k]);}
 			glDeleteProgram(m_handle);
-			r_eh->raise(Error("It was not possible to link the shader program. ",message));
+			exceptionRaise(Error("It was not possible to link the shader program. ",message));
 			}
 		}
 	}

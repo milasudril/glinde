@@ -3,7 +3,6 @@
 #ifndef ANGLE_VERTEXBUFFER_HPP
 #define ANGLE_VERTEXBUFFER_HPP
 
-#include "errorcode.hpp"
 #include "exceptionhandler.hpp"
 #include <cassert>
 #include <utility>
@@ -41,7 +40,7 @@ namespace Angle
 				if(error!=GL_NO_ERROR)
 					{
 					glDeleteBuffers(1,&m_handle);
-					r_eh->raise(Error("Failed to allocate vertex buffer storage."));
+					exceptionRaise(Error("Failed to allocate vertex buffer storage."));
 					}
 				}
 
@@ -77,7 +76,7 @@ namespace Angle
 					glNamedBufferData(m_handle,sizeof(ElementType)*n_elems,NULL,native_type(usage_type));
 					auto error=glGetError();
 					if(error!=GL_NO_ERROR)
-						{r_eh->raise(Error("Failed to allocate vertex buffer storage."));}
+						{exceptionRaise(Error("Failed to allocate vertex buffer storage."));}
 					m_capacity=n_elems;
 					}
 				return *this;

@@ -85,7 +85,7 @@ namespace Angle
 			char message[1024];
 			glGetShaderInfoLog(m_handle,std::min(1024,length),NULL,message);
 			glDeleteShader(m_handle);
-			r_eh->raise(Error("It was not possible to compile the ",name(type),". ",message));
+			exceptionRaise(Error("It was not possible to compile the ",name(type),". ",message));
 			}
 		}
 	}

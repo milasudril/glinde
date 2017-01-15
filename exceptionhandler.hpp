@@ -12,13 +12,28 @@ namespace Angle
 	{
 	class ExceptionHandler
 		{
-		public:
-			virtual void raise(const Error& err)
-				{throw err;}
+		virtual void raise(const Error& err)
+			{throw err;}
+
+		friend void exceptionRaise(const Error& err);
 		};
 
-	extern ExceptionHandler eh_default;
-	extern ExceptionHandler* r_eh;
+	ExceptionHandler& exceptionHandlerSet(ExceptionHandler* eh) noexcept;
+	void exceptionRaise(const Error& err);
+
+	class ExceptionContext
+		{
+		public:
+			explicit ExceptionContext(ExceptionHandler* eh) noexcept:
+				r_handler_old(exceptionHandlerSet(eh))
+				{}
+		
+			~ExceptionContext() noexcept
+				{exceptionHandlerSet(&r_handler_old);}
+
+		private:
+			ExceptionHandler& r_handler_old;
+		};
 	}
 
 #endif

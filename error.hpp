@@ -9,7 +9,7 @@ namespace Angle
 		{
 		public:
 			template<class T,class...U>
-			constexpr Error(const T& first,const U&...next) noexcept:m_buffer{}
+			explicit constexpr Error(const T& first,const U&...next) noexcept:m_buffer{}
 				{write(m_buffer,m_buffer+1023,first,next...);}
 
 			const char* message() const noexcept
