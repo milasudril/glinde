@@ -9,11 +9,7 @@
 
 namespace Angle
 	{
-	template<class ContextUser>
-	void init(ContextUser&& user)
-		{init(user);}
-
-	struct Version
+	struct VersionRequest
 		{
 		int16_t major;
 		int16_t minor;
@@ -23,17 +19,34 @@ namespace Angle
 		bool forward_compatible;
 		};
 
-	static constexpr Version version_requirements{4,5,Version::Profile::CORE,1};
+	static constexpr VersionRequest gl_version_requirements()
+		{return VersionRequest{4,5,VersionRequest::Profile::CORE,1};}
 
-	template<class ContextUser>
-	void init(ContextUser& user)
+	struct VersionResponse
 		{
-		ContextGuard<ContextUser> guard(user);
+		const char* vendor;
+		const char* renderer;
+		const char* version;
+		const char* glsl_version;
+		};
+
+	VersionResponse init()
+		{
 		glewExperimental=GL_TRUE;
 		auto status=glewInit();
 		if(status!=GLEW_OK)
-			{exceptionRaise(Error("GLEW initialization failed. ",glewGetErrorString(status)));}
+			{
+			exceptionRaise(Error("GLEW initialization failed. "
+				,reinterpret_cast<const char*>(glewGetErrorString(status))));
+			}
+
+		return 
+			{
+			 reinterpret_cast<const char*>(glGetString(GL_VENDOR))
+			,reinterpret_cast<const char*>(glGetString(GL_RENDERER))
+			,reinterpret_cast<const char*>(glGetString(GL_VERSION))
+			,reinterpret_cast<const char*>(glGetString(GL_SHADING_LANGUAGE_VERSION))
+			};
 		}
 	}
-
 #endif

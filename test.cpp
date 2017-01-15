@@ -26,20 +26,20 @@ struct Layout
 
 struct GLFWContext
 	{
-	GLFWContext(const Angle::Version& version)
+	GLFWContext(const Angle::VersionRequest& version)
 		{
 		glfwInit();
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, version.major);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, version.minor);
 		switch(version.profile)
 			{
-			case Angle::Version::Profile::CORE:
+			case Angle::VersionRequest::Profile::CORE:
 				glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 				break;
-			case Angle::Version::Profile::COMPAT:
+			case Angle::VersionRequest::Profile::COMPAT:
 				glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 				break;
-			case Angle::Version::Profile::ANY:
+			case Angle::VersionRequest::Profile::ANY:
 			default:
 				glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
 				break;
@@ -54,8 +54,14 @@ class Window
 	public:
 		typedef GLFWwindow* ContextHandle;
 
-		Window(){}
-		~Window(){}
+		Window(const Window&)=delete;
+		Window& operator=(const Window&)=delete;
+
+		Window()
+			{m_handle=glfwCreateWindow(800,600,"",nullptr,nullptr);}
+
+		~Window()
+			{glfwDestroyWindow(m_handle);}
 
 		auto contextCapture() noexcept
 			{
@@ -67,17 +73,33 @@ class Window
 		static void contextRelease(GLFWwindow* window) noexcept
 			{glfwMakeContextCurrent(window);}
 
+		auto handle() noexcept
+			{return m_handle;}
+
 	private:
 		GLFWwindow* m_handle;
 	};
 
 int main()
 	{
-	GLFWContext glfw(Angle::version_requirements);
+	GLFWContext glfw(Angle::gl_version_requirements());
 	try
 		{
 		Window mainwin;
-		Angle::init(mainwin);
+		Angle::ContextGuard<Window> context(mainwin);
+		auto version=Angle::init();
+		printf("%s, %s, %s, %s\n"
+			,version.vendor
+			,version.renderer
+			,version.version
+			,version.glsl_version);
+
+		while(!glfwWindowShouldClose(mainwin.handle()))
+			{
+			glfwPollEvents();
+			glfwSwapBuffers(mainwin.handle());
+			}
+
 		}
 	catch(const Angle::Error& err)
 		{
