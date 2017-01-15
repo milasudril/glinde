@@ -12,6 +12,8 @@
 #include "program.hpp"
 #include "init.hpp"
 
+#include <GLFW/glfw3.h>
+
 
 struct Layout
 	{
@@ -22,13 +24,23 @@ struct Layout
 		};
 	};
 
+struct GLFWContext
+	{
+	GLFWContext()
+		{glfwInit();}
+	~GLFWContext()
+		{glfwTerminate();}
+	};
 
 int main()
 	{
-	Angle::Program prgm(Angle::Shader("",Angle::ShaderType::FRAGMENT_SHADER)
+	GLFWContext glfw;
+//	Angle::init();
+
+/*	Angle::Program prgm(Angle::Shader("",Angle::ShaderType::FRAGMENT_SHADER)
 		,Angle::Shader("",Angle::ShaderType::VERTEX_SHADER));
 
 	Angle::VertexArray<Layout> vao;
-	decltype(vao)::AttribContextAll context(vao);
+	decltype(vao)::AttribContextAll context(vao);*/
 	return 0;
 	}
