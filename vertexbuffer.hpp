@@ -31,6 +31,7 @@ namespace Angle
 		public:
 			typedef ElementType value_type;
 			static constexpr auto vector_size=sizeof(value_type);
+			static constexpr auto components=1;
 
 			VertexBuffer(size_t n_elems):m_capacity(n_elems)
 				{
@@ -82,7 +83,7 @@ namespace Angle
 				return *this;
 				}
 
-			GLuint handle() noexcept
+			GLuint handle() const noexcept
 				{return m_handle;}
 
 		private:
@@ -99,6 +100,7 @@ namespace Angle
 			typedef float vector_type __attribute__ ((vector_size (16)));
 			static constexpr auto components=4;
 			static constexpr auto vector_size=components*sizeof(float);
+			using typename base::value_type;
 
 			VertexBuffer(size_t n_elems):base(components*n_elems)
 				{}

@@ -15,16 +15,6 @@
 
 #include <GLFW/glfw3.h>
 
-
-struct Layout
-	{
-	static constexpr Angle::VertexArray<Layout>::Attribute attributes[]=
-		{
-		 {3,Angle::ValueType::FLOAT}
-		,{3,Angle::ValueType::FLOAT}
-		};
-	};
-
 struct GLFWContext
 	{
 	GLFWContext(const Angle::VersionRequest& version)
@@ -92,6 +82,15 @@ template<class T>
 static constexpr const GeoSIMD::vec4_t<T>* native_type(const GeoSIMD::Point<T>* point_ptr)
 	{return reinterpret_cast<const GeoSIMD::vec4_t<T>*>(point_ptr);}
 
+struct MyShaderLayout
+	{
+	static constexpr Angle::VertexArrayAttribute attributes[]=
+		{
+			{4,Angle::ConstantGet<float>::value}
+		};
+	};
+
+constexpr Angle::VertexArrayAttribute MyShaderLayout::attributes[];
 
 static void APIENTRY openglCallbackFunction(
   GLenum source,
@@ -130,9 +129,31 @@ int main()
 		Angle::VertexBuffer<GeoSIMD::vec4_t<float>>	vertices(3);
 		vertices.bufferData(native_type(triangle),3);
 
+		Angle::Program prgm(
+			 Angle::Shader(
+R"EOF(#version 450 core
+layout(location=0) in vec4 position;
+void main()
+	{
+	gl_Position=position;
+	}
+)EOF",Angle::ShaderType::VERTEX_SHADER)
+			,Angle::Shader(R"EOF(#version 450 core
+out vec4 color;
+void main()
+	{
+	color=vec4(1.0f,0.5f,0.2f,1.0f);
+	})EOF",Angle::ShaderType::FRAGMENT_SHADER));
+
+		Angle::VertexArray<MyShaderLayout> vertex_array;
+		vertex_array.vertexBuffer<0>(vertices).enableVertexAttrib<0>();
+
 		while(!glfwWindowShouldClose(mainwin.handle()))
 			{
 			glfwPollEvents();
+			vertex_array.bind();
+			prgm.bind();
+			glDrawArrays(GL_TRIANGLES,0,3);
 			glfwSwapBuffers(mainwin.handle());
 			}
 

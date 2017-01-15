@@ -11,6 +11,14 @@
 
 namespace Angle
 	{
+	struct VertexArrayAttribute
+		{
+		GLint elem_count;
+		ValueType type;
+		bool normalized;
+		GLuint offset;
+		};
+
 	template<class BatchLayout>
 	class VertexArray
 		{
@@ -19,14 +27,6 @@ namespace Angle
 			class AttribContextPrev;
 
 		public:
-			struct Attribute
-				{
-				GLint elem_count;
-				ValueType type;
-				bool normalized;
-				GLuint offset;
-				};
-
 			VertexArray(const VertexArray&)=delete;
 
 			VertexArray(VertexArray&& obj) noexcept:m_handle(obj.m_handle)
@@ -57,7 +57,7 @@ namespace Angle
 				{glBindVertexArray(m_handle);}
 
 			template<GLuint attrib>
-			VertexArray& enableVertexAttribArray() noexcept
+			VertexArray& enableVertexAttrib() noexcept
 				{
 				static_assert(attrib>=0 && attrib<size(BatchLayout::attributes),"Attribute index out of bounds");
 				glEnableVertexArrayAttrib(m_handle,attrib);
@@ -65,7 +65,7 @@ namespace Angle
 				}
 
 			template<GLuint attrib>
-			VertexArray& disableVertexAttribArray() noexcept
+			VertexArray& disableVertexAttrib() noexcept
 				{
 				static_assert(attrib>=0 && attrib<size(BatchLayout::attributes),"Attribute index out of bounds");
 				glDisableVertexArrayAttrib(m_handle,attrib);
@@ -78,9 +78,9 @@ namespace Angle
 				public:
 					explicit AttribContext(VertexArray& vao) noexcept:
 						r_vao(vao)
-						{r_vao.enableVertexAttribArray<attrib>();}
+						{r_vao.enableVertexAttrib<attrib>();}
 					~AttribContext() noexcept
-						{r_vao.disableVertexAttribArray<attrib>();}
+						{r_vao.disableVertexAttrib<attrib>();}
 				private:
 					VertexArray& r_vao;
 				};
@@ -97,10 +97,11 @@ namespace Angle
 			VertexArray& vertexBuffer(const VertexBuffer<ElementType>& vbo) noexcept
 				{
 				static_assert(attrib>=0 && attrib<size(BatchLayout::attributes),"Attribute index out of bounds");
-				typedef typename TypeGet<BatchLayout::attributes.type>::type attrib_type;
+				typedef typename TypeGet<BatchLayout::attributes[attrib].type>::type attrib_type;
 				typedef typename VertexBuffer<ElementType>::value_type value_type;
 				static_assert(std::is_same<value_type,attrib_type>::value,"Attribute type mismatch");
-				glVertexArrayVertexBuffer(m_handle,attrib,vbo.get(),VertexBuffer<ElementType>::vector_size);
+				static_assert(VertexBuffer<ElementType>::components==BatchLayout::attributes[attrib].elem_count,"");
+				glVertexArrayVertexBuffer(m_handle,attrib,vbo.handle(),0,VertexBuffer<ElementType>::vector_size);
 				return *this;
 				}
 
@@ -108,11 +109,11 @@ namespace Angle
 			VertexArray& elementBuffer(const VertexBuffer<IndexType>& buffer) noexcept
 				{
 				static_assert(std::is_integral<IndexType>::value,"IndexType must be an intger");
-				glVertexArrayElementBuffer(m_handle,buffer.get());
+				glVertexArrayElementBuffer(m_handle,buffer.handle());
 				return *this;
 				}
 
-			GLuint handle() noexcept
+			GLuint handle() const noexcept
 				{return m_handle;}
 
 		private:
