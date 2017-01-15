@@ -84,14 +84,15 @@ static constexpr const GeoSIMD::vec4_t<T>* native_type(const GeoSIMD::Point<T>* 
 
 struct MyShaderLayout
 	{
-	static constexpr Angle::VertexArrayAttribute attributes[]=
+	static constexpr Angle::VertexAttribute attributes[]=
 		{
 			{4,Angle::ConstantGet<float>::value}
 		};
 	};
 
-constexpr Angle::VertexArrayAttribute MyShaderLayout::attributes[];
+constexpr Angle::VertexAttribute MyShaderLayout::attributes[];
 
+#ifndef NDEBUG
 static void APIENTRY openglCallbackFunction(
   GLenum source,
   GLenum type,
@@ -105,6 +106,7 @@ static void APIENTRY openglCallbackFunction(
   (void)severity; (void)length; (void)userParam;
   fprintf(stderr, "%s\n", message);
 }
+#endif
 
 int main()
 	{
@@ -114,11 +116,12 @@ int main()
 		Window mainwin;
 		Angle::ContextGuard<Window> context(mainwin);
 		auto version=Angle::init();
-
+#ifndef NDEBUG
 		glEnable(GL_DEBUG_OUTPUT);
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 		glDebugMessageCallback(openglCallbackFunction, nullptr);
 		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, true);
+#endif
 
 		printf("%s, %s, %s, %s\n"
 			,version.vendor
@@ -130,20 +133,19 @@ int main()
 		vertices.bufferData(native_type(triangle),3);
 
 		Angle::Program prgm(
-			 Angle::Shader(
 R"EOF(#version 450 core
 layout(location=0) in vec4 position;
 void main()
 	{
 	gl_Position=position;
 	}
-)EOF",Angle::ShaderType::VERTEX_SHADER)
-			,Angle::Shader(R"EOF(#version 450 core
+)EOF"_vert,R"EOF(#version 450 core
 out vec4 color;
 void main()
 	{
 	color=vec4(1.0f,0.5f,0.2f,1.0f);
-	})EOF",Angle::ShaderType::FRAGMENT_SHADER));
+	}
+)EOF"_frag);
 
 		Angle::VertexArray<MyShaderLayout> vertex_array;
 		vertex_array.vertexBuffer<0>(vertices).enableVertexAttrib<0>();
@@ -163,11 +165,5 @@ void main()
 		fprintf(stderr,"Error: %s\n",err.message());
 		return -1;
 		}
-
-/*	Angle::Program prgm(Angle::Shader("",Angle::ShaderType::FRAGMENT_SHADER)
-		,Angle::Shader("",Angle::ShaderType::VERTEX_SHADER));
-
-	Angle::VertexArray<Layout> vao;
-	decltype(vao)::AttribContextAll context(vao);*/
 	return 0;
 	}

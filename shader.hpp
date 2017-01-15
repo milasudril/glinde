@@ -5,7 +5,6 @@
 
 #include "exceptionhandler.hpp"
 
-
 #include <GL/glew.h>
 #include <cassert>
 #include <algorithm>
@@ -59,6 +58,15 @@ namespace Angle
 			Shader(const Shader&)=delete;
 			Shader& operator=(const Shader&)=delete;
 
+			Shader(Shader&& obj) noexcept:m_handle(obj.m_handle)
+				{obj.m_handle=0;}
+
+			Shader& operator=(Shader&& obj) noexcept
+				{
+				std::swap(m_handle,obj.m_handle);
+				return *this;
+				}
+
 			~Shader() noexcept
 				{glDeleteShader(m_handle);}
 
@@ -91,5 +99,23 @@ namespace Angle
 			}
 		}
 	}
+
+Angle::Shader operator "" _comp(const char* source,size_t length)
+	{return Angle::Shader(source,Angle::ShaderType::COMPUTE_SHADER);}
+
+Angle::Shader operator "" _vert(const char* source,size_t length)
+	{return Angle::Shader(source,Angle::ShaderType::VERTEX_SHADER);}
+
+Angle::Shader operator "" _tesc(const char* source,size_t length)
+	{return Angle::Shader(source,Angle::ShaderType::TESS_CONTROL_SHADER);}
+
+Angle::Shader operator "" _tese(const char* source,size_t length)
+	{return Angle::Shader(source,Angle::ShaderType::TESS_EVALUATION_SHADER);}
+
+Angle::Shader operator "" _geom(const char* source,size_t length)
+	{return Angle::Shader(source,Angle::ShaderType::GEOMETRY_SHADER);}
+
+Angle::Shader operator "" _frag(const char* source,size_t length)
+	{return Angle::Shader(source,Angle::ShaderType::FRAGMENT_SHADER);}
 
 #endif
