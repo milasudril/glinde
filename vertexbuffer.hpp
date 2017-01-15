@@ -95,6 +95,7 @@ namespace Angle
 		public VertexBuffer<float,usage_type>
 		{
 		public:
+			using VertexBuffer<float,usage_type>::VertexBuffer;
 			static constexpr auto vector_size=4*sizeof(float);
 		};
 	};
