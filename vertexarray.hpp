@@ -93,19 +93,21 @@ namespace Angle
 						{}
 				};
 
-			template<GLuint attrib,class VBO>
-			VertexArray& vertexBuffer(const VBO& vbo) noexcept
+			template<GLuint attrib,class ElementType>
+			VertexArray& vertexBuffer(const VertexBuffer<ElementType>& vbo) noexcept
 				{
 				static_assert(attrib>=0 && attrib<size(BatchLayout::attributes),"Attribute index out of bounds");
 				typedef typename TypeGet<BatchLayout::attributes.type>::type attrib_type;
-				static_assert(std::is_same<typename VBO::value_type,attrib_type>::value,"Attribute type mismatch");
-				glVertexArrayVertexBuffer(m_handle,attrib,vbo.get(),VBO::vector_size);
+				typedef typename VertexBuffer<ElementType>::value_type value_type;
+				static_assert(std::is_same<value_type,attrib_type>::value,"Attribute type mismatch");
+				glVertexArrayVertexBuffer(m_handle,attrib,vbo.get(),VertexBuffer<ElementType>::vector_size);
 				return *this;
 				}
 
 			template<class IndexType>
 			VertexArray& elementBuffer(const VertexBuffer<IndexType>& buffer) noexcept
 				{
+				static_assert(std::is_integral<IndexType>::value,"IndexType must be an intger");
 				glVertexArrayElementBuffer(m_handle,buffer.get());
 				return *this;
 				}
