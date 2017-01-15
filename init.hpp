@@ -39,7 +39,7 @@ namespace Angle
 			exceptionRaise(Error("GLEW initialization failed. "
 				,reinterpret_cast<const char*>(glewGetErrorString(status))));
 			}
-
+		while(glGetError()!=GL_NO_ERROR);
 		return 
 			{
 			 reinterpret_cast<const char*>(glGetString(GL_VENDOR))

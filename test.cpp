@@ -11,6 +11,7 @@
 #include "vertexarray.hpp"
 #include "program.hpp"
 #include "init.hpp"
+#include <geosimd/point.hpp>
 
 #include <GLFW/glfw3.h>
 
@@ -80,6 +81,32 @@ class Window
 		GLFWwindow* m_handle;
 	};
 
+static constexpr GeoSIMD::Point<float> triangle[]
+	{
+	 GeoSIMD::Point<float>{-0.5f, -0.5f, 0.0f}
+	,GeoSIMD::Point<float>{0.5f, -0.5f, 0.0f}
+	,GeoSIMD::Point<float>{0.0f, 0.5f, 0.0f}
+	};
+
+template<class T>
+static constexpr const GeoSIMD::vec4_t<T>* native_type(const GeoSIMD::Point<T>* point_ptr)
+	{return reinterpret_cast<const GeoSIMD::vec4_t<T>*>(point_ptr);}
+
+
+static void APIENTRY openglCallbackFunction(
+  GLenum source,
+  GLenum type,
+  GLuint id,
+  GLenum severity,
+  GLsizei length,
+  const GLchar* message,
+  const void* userParam
+){
+  (void)source; (void)type; (void)id;
+  (void)severity; (void)length; (void)userParam;
+  fprintf(stderr, "%s\n", message);
+}
+
 int main()
 	{
 	GLFWContext glfw(Angle::gl_version_requirements());
@@ -88,11 +115,20 @@ int main()
 		Window mainwin;
 		Angle::ContextGuard<Window> context(mainwin);
 		auto version=Angle::init();
+
+		glEnable(GL_DEBUG_OUTPUT);
+		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+		glDebugMessageCallback(openglCallbackFunction, nullptr);
+		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, true);
+
 		printf("%s, %s, %s, %s\n"
 			,version.vendor
 			,version.renderer
 			,version.version
 			,version.glsl_version);
+
+		Angle::VertexBuffer<GeoSIMD::vec4_t<float>>	vertices(3);
+		vertices.bufferData(native_type(triangle),3);
 
 		while(!glfwWindowShouldClose(mainwin.handle()))
 			{
