@@ -32,7 +32,7 @@ namespace Angle
 			typedef ElementType value_type;
 			static constexpr auto vector_size=sizeof(value_type);
 
-			VertexBuffer(GLsizei n_elems):m_capacity(n_elems)
+			VertexBuffer(size_t n_elems):m_capacity(n_elems)
 				{
 				glCreateBuffers(1,&m_handle);
 				glNamedBufferData(m_handle,sizeof(ElementType)*n_elems,NULL,native_type(usage_type));
@@ -87,7 +87,7 @@ namespace Angle
 
 		private:
 			GLuint m_handle;
-			GLsizei m_capacity;
+			size_t m_capacity;
 		};
 
 	template<BufferUsage usage_type>
