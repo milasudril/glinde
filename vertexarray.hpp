@@ -5,6 +5,7 @@
 
 #include "arraysize.hpp"
 #include "valuetype.hpp"
+#include "vertexbuffer.hpp"
 #include <utility>
 #include <cassert>
 
@@ -99,6 +100,13 @@ namespace Angle
 				typedef typename TypeGet<BatchLayout::attributes.type>::type attrib_type;
 				static_assert(std::is_same<typename VBO::value_type,attrib_type>::value,"Attribute type mismatch");
 				glVertexArrayVertexBuffer(m_handle,attrib,vbo.get(),VBO::vector_size);
+				return *this;
+				}
+
+			template<class IndexType>
+			VertexArray& elementBuffer(const VertexBuffer<IndexType>& buffer) noexcept
+				{
+				glVertexArrayElementBuffer(m_handle,buffer.get());
 				return *this;
 				}
 

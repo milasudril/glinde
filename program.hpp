@@ -13,15 +13,17 @@ namespace Angle
 			template<class ... T>
 			Program(const Shader& shader,const T&...shaders);
 
-
-			~Program()
+			~Program() noexcept
 				{glDeleteProgram(m_handle);}
 
+			void bind() noexcept
+				{glUseProgram(m_handle);}
+
 		private:
-      		static constexpr void collect(GLuint* handles)
+      		static constexpr void collect(GLuint* handles) noexcept
 				{}
 			template<class ...T>
-			static constexpr void collect(GLuint* handles,const Shader& shader,const T&...shaders)
+			static constexpr void collect(GLuint* handles,const Shader& shader,const T&...shaders) noexcept
 				{
 				handles[0]=shader.handle();
 				collect(handles+1,shaders...);

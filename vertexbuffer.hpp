@@ -90,6 +90,14 @@ namespace Angle
 			GLuint m_handle;
 			GLsizei m_capacity;
 		};
+
+	template<BufferUsage usage_type>
+	class VertexBuffer<float __attribute__ ((vector_size (16))),usage_type>:
+		public VertexBuffer<float,usage_type>
+		{
+		public:
+			static constexpr auto vector_size=4*sizeof(float);
+		};
 	};
 
 #endif
