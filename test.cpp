@@ -44,10 +44,31 @@ struct GLFWContext
 				glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
 				break;
 			}
-		
 		}
 	~GLFWContext()
 		{glfwTerminate();}
+	};
+
+class Window
+	{
+	public:
+		typedef GLFWwindow* ContextHandle;
+
+		Window(){}
+		~Window(){}
+
+		auto contextCapture() noexcept
+			{
+			auto ret=glfwGetCurrentContext();
+			glfwMakeContextCurrent(m_handle);
+			return ret;
+			}
+
+		static void contextRelease(GLFWwindow* window) noexcept
+			{glfwMakeContextCurrent(window);}
+
+	private:
+		GLFWwindow* m_handle;
 	};
 
 int main()
@@ -55,7 +76,8 @@ int main()
 	GLFWContext glfw(Angle::version_requirements);
 	try
 		{
-	//	Angle::init(WindowFactory{});
+		Window mainwin;
+		Angle::init(mainwin);
 		}
 	catch(const Angle::Error& err)
 		{
