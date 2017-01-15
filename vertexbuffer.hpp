@@ -97,8 +97,9 @@ namespace Angle
 		public:
 			typedef VertexBuffer<float,usage_type> base;
 			typedef float vector_type __attribute__ ((vector_size (16)));
-			using VertexBuffer<float,usage_type>::VertexBuffer;
 			static constexpr auto vector_size=4*sizeof(float);
+
+			using base::VertexBuffer;
 
 			VertexBuffer& bufferData(const vector_type* data,size_t n_elems) noexcept
 				{
@@ -112,6 +113,7 @@ namespace Angle
 				return *this;
 				}
 
+			using base::handle;
 		};
 	};
 
