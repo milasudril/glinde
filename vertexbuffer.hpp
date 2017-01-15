@@ -97,19 +97,21 @@ namespace Angle
 		public:
 			typedef VertexBuffer<float,usage_type> base;
 			typedef float vector_type __attribute__ ((vector_size (16)));
-			static constexpr auto vector_size=4*sizeof(float);
+			static constexpr auto components=4;
+			static constexpr auto vector_size=components*sizeof(float);
 
-			using base::VertexBuffer;
+			VertexBuffer(size_t n_elems):base(components*n_elems)
+				{}
 
 			VertexBuffer& bufferData(const vector_type* data,size_t n_elems) noexcept
 				{
-				base::bufferData(reinterpret_cast<const float*>(data),n_elems*sizeof(vector_type));
+				base::bufferData(reinterpret_cast<const float*>(data),components*n_elems);
 				return *this;
 				}
 
 			VertexBuffer& bufferDataResize(const vector_type* data,size_t n_elems) noexcept
 				{
-				base::bufferDataResize(reinterpret_cast<const float*>(data),n_elems*sizeof(vector_type));
+				base::bufferDataResize(reinterpret_cast<const float*>(data),components*n_elems);
 				return *this;
 				}
 
