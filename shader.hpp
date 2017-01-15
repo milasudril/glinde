@@ -56,6 +56,8 @@ namespace Angle
 		{
 		public:
 			explicit Shader(const char* source,ShaderType type);
+			Shader(const Shader&)=delete;
+			Shader& operator=(const Shader&)=delete;
 
 			~Shader() noexcept
 				{glDeleteShader(m_handle);}

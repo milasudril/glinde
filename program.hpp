@@ -13,6 +13,9 @@ namespace Angle
 			template<class ... T>
 			explicit Program(const Shader& shader,const T&...shaders);
 
+			Program(const Program&)=delete;
+			Program& operator=(const Program&)=delete;
+
 			~Program() noexcept
 				{glDeleteProgram(m_handle);}
 
