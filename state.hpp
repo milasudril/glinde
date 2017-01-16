@@ -11,7 +11,10 @@
 
 namespace Angle
 	{
-	void bindElementIndexData(ValueType type,size_t count);
+	template<class U>
+	void bindElementIndexData(ValueType&& type,U count)=delete;
+
+	void bindElementIndexData(const ValueType& type,const size_t& count);
 
 	enum class DrawMode:GLenum
 		{
