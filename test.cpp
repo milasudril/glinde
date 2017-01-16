@@ -3,7 +3,7 @@
 //@		[
 //@			{
 //@			 "name":"test","type":"application"
-//@			,"pkgconfig_libs":["glfw3","glew"]
+//@			,"pkgconfig_libs":["glfw3"]
 //@			}
 //@		]
 //@	}
@@ -35,6 +35,8 @@ struct GLFWContext
 				glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
 				break;
 			}
+		if(version.forward_compatible)
+			{glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);}
 		}
 	~GLFWContext()
 		{glfwTerminate();}
@@ -150,9 +152,11 @@ void main()
 	}
 )EOF"_vert,R"EOF(#version 450 core
 out vec4 color;
+layout(location=0) uniform vec4 color_in;
+
 void main()
 	{
-	color=vec4(0.4f,0.7f,1.0f,1.0f);
+	color=color_in;
 	}
 )EOF"_frag);
 
@@ -165,7 +169,10 @@ void main()
 			glfwPollEvents();
 			vertex_array.bind();
 			prgm.bind();
-			glDrawElements(GL_TRIANGLES,6,native_type(Angle::ConstantGet<uint16_t>::value),0);
+			glUniform4f(0,39.2e-2, 56.1e-2, 95.3e-2,1.0f);
+			Angle::drawElements(Angle::DrawMode::TRIANGLES,0,3);
+			glUniform4f(0,0.0f,0.3f,0.0f,1.0f);
+			Angle::drawElements(Angle::DrawMode::TRIANGLES,3,3);
 			glfwSwapBuffers(mainwin.handle());
 			}
 

@@ -86,6 +86,9 @@ namespace Angle
 			GLuint handle() const noexcept
 				{return m_handle;}
 
+			size_t size() const noexcept
+				{return m_capacity;}
+
 		private:
 			GLuint m_handle;
 			size_t m_capacity;

@@ -20,6 +20,31 @@ namespace Angle
 		,UNSIGNED_INT=GL_UNSIGNED_INT 
 		};
 
+	constexpr size_t size(ValueType type) noexcept
+		{
+		switch(type)
+			{
+			case ValueType::BYTE:
+				return sizeof(GLbyte);
+			case ValueType::SHORT:
+				return sizeof(GLshort);
+			case ValueType::INT:
+				return sizeof(GLint);
+			case ValueType::FLOAT:
+				return sizeof(GLfloat);
+			case ValueType::DOUBLE:
+				return sizeof(GLdouble);
+			case ValueType::UNSIGNED_BYTE:
+				return sizeof(GLbyte);
+			case ValueType::UNSIGNED_SHORT:
+				return sizeof(GLshort);
+			case ValueType::UNSIGNED_INT:
+				return sizeof(GLint);
+			default:
+				return 1;
+			}
+		}
+
 	template<ValueType type>
 	struct TypeGet{};
 

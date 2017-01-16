@@ -6,6 +6,7 @@
 #include "arraysize.hpp"
 #include "valuetype.hpp"
 #include "vertexbuffer.hpp"
+#include "state.hpp"
 #include <utility>
 #include <cassert>
 
@@ -54,7 +55,10 @@ namespace Angle
 				}
 
 			void bind() noexcept
-				{glBindVertexArray(m_handle);}
+				{
+				glBindVertexArray(m_handle);
+				bindElementIndexData(m_index_type,m_index_count);
+				}
 
 			template<GLuint attrib>
 			VertexArray& enableVertexAttrib() noexcept
@@ -110,11 +114,16 @@ namespace Angle
 				{
 				static_assert(std::is_integral<IndexType>::value,"IndexType must be an intger");
 				glVertexArrayElementBuffer(m_handle,buffer.handle());
+				m_index_type=ConstantGet<IndexType>::value;
+				m_index_count=buffer.size();
 				return *this;
 				}
 
 			GLuint handle() const noexcept
 				{return m_handle;}
+
+			ValueType indexTypeGet() const noexcept
+				{return m_index_type;}
 
 		private:
 			template<GLuint k,bool dummy>
@@ -158,6 +167,9 @@ namespace Angle
 				};
 
 			GLuint m_handle;
+		//	Additional data to improve glDrawElements
+			ValueType m_index_type;
+			size_t m_index_count;
 		};
 	}
 
