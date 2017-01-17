@@ -31,7 +31,15 @@ namespace Angle
 		const char* glsl_version;
 		};
 
-	VersionResponse init();
+	VersionResponse init(bool debug);
 
+	inline VersionResponse init()
+		{
+#ifndef NDEBUG
+		return init(1);
+#else
+		return init(0);
+#endif
+		}
 	}
 #endif

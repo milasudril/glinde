@@ -5,10 +5,22 @@
 #include "init.hpp"
 #include "exceptionhandler.hpp"
 #include <GL/glew.h>
+#include <cstdio>
 
 using namespace Angle;
 
-VersionResponse Angle::init()
+#ifndef APIENTRY
+#define APIENTRY
+#endif
+
+void APIENTRY debug_callback(GLenum source,GLenum type
+	,GLuint id,GLenum severity,GLsizei length,const GLchar* message
+	,const void* userParam)
+	{
+	fprintf(stderr, "OpenGL: %s\n", message);
+	}
+
+VersionResponse Angle::init(bool debug)
 	{
 	glewExperimental=GL_TRUE;
 	auto status=glewInit();
@@ -18,6 +30,14 @@ VersionResponse Angle::init()
 			,reinterpret_cast<const char*>(glewGetErrorString(status))));
 		}
 	while(glGetError()!=GL_NO_ERROR);
+	if(debug)
+		{
+		glEnable(GL_DEBUG_OUTPUT);
+		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+		glDebugMessageCallback(debug_callback,NULL);
+		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, true);
+		}
+
 	return 
 		{
 		 reinterpret_cast<const char*>(glGetString(GL_VENDOR))
