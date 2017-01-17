@@ -8,8 +8,6 @@
 //@		]
 //@	}
 
-#define NDEBUG
-
 #include "vertexarray.hpp"
 #include "program.hpp"
 #include "init.hpp"
