@@ -11,6 +11,7 @@
 #include "vertexarray.hpp"
 #include "program.hpp"
 #include "init.hpp"
+#include "contextguard.hpp"
 
 #include <geosimd/point.hpp>
 #include <GLFW/glfw3.h>
@@ -68,6 +69,9 @@ class Window
 
 		auto handle() noexcept
 			{return m_handle;}
+
+		bool shouldClose() const noexcept
+			{return glfwWindowShouldClose(m_handle);}
 
 	private:
 		GLFWwindow* m_handle;
@@ -164,7 +168,7 @@ void main()
 		vertex_array.vertexBuffer<0>(vertbuff).enableVertexAttrib<0>()
 			.elementBuffer(facebuff);
 
-		while(!glfwWindowShouldClose(mainwin.handle()))
+		while(!mainwin.shouldClose())
 			{
 			glfwPollEvents();
 			vertex_array.bind();
