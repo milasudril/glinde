@@ -4,7 +4,6 @@
 #define ANGLE_VERTEXARRAY_HPP
 
 #include "arraysize.hpp"
-#include "valuetype.hpp"
 #include "vertexbuffer.hpp"
 #include "state.hpp"
 #include <utility>
