@@ -40,6 +40,8 @@ namespace Angle
 #ifndef NDEBUG
 	bool elementsRangeCheck(size_t index_last);
 	#define RANGE_CHECK(index_last) assert(elementsRangeCheck(index_last))
+#else
+	#define RANGE_CHECK(index_last)
 #endif
 
 	size_t drawElementsUnchecked(DrawMode mode,size_t index_first,size_t count);
