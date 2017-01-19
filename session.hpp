@@ -23,11 +23,17 @@ namespace GLFWmm
 				glfwInit();
 				}
 
-			~Session()
+			~Session() noexcept
 				{glfwTerminate();}
 
 			const char* versionGet() const noexcept
 				{return glfwGetVersionString();}
+
+			void eventsPoll()
+				{glfwPollEvents();}
+
+			void waitEvents()
+				{glfwWaitEvents();}
  
 			static void error_handler_default(int code,const char* message);
 		};

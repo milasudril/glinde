@@ -14,6 +14,8 @@ namespace GLFWmm
 	class WindowBase
 		{
 		public:
+			typedef GLFWwindow* ContextHandle;
+
 			enum class ClientAPI:int
 				{
 				 OPENGL=GLFW_OPENGL_API
@@ -51,6 +53,17 @@ namespace GLFWmm
 
 			bool shouldClose() const noexcept
 				{return glfwWindowShouldClose(m_handle);}
+
+			GLFWwindow* contextCapture()
+				{
+				auto ret=glfwGetCurrentContext();
+				glfwMakeContextCurrent(m_handle);
+				return ret;
+				}
+
+			static void contextRelease(GLFWwindow* handle)
+				{glfwMakeContextCurrent(handle);}
+
 
 		protected:
 			WindowBase(float width,float height,const char* title,Session&)
