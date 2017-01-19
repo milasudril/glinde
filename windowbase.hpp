@@ -74,6 +74,9 @@ namespace GLFWmm
 				glfwSetWindowUserPointer(m_handle,this);
 				}
 
+			~WindowBase()
+				{glfwDestroyWindow(m_handle);}
+
 			static void* userPointerGet(GLFWwindow* handle) noexcept
 				{return glfwGetWindowUserPointer(handle);}
 			GLFWwindow* m_handle;
