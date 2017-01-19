@@ -1,6 +1,7 @@
-//@	{"targets":[{"name":"test","type":"application","pkgconfig_libs":["glfw3"]}]}
+//@	{"targets":[{"name":"test","type":"application"}]}
 
 #include "window.hpp"
+#include "session.hpp"
 #include <cstdio>
 #include <cstdlib>
 
@@ -53,24 +54,16 @@ struct Hints
 	static constexpr bool clientAPIForwardCompat=1;
 	};
 
-static void error_callback(int code,const char* message)
-	{
-	fprintf(stderr,"%s (%x)\n",message,code);
-	abort();
-	}
-
 int main()
 	{
-	glfwInit();
-	glfwSetErrorCallback(error_callback); 	
+	GLFWmm::Session session;
 	MyCallback cb;
-	GLFWmm::WindowBase::creationHints(Hints{});
+	GLFWmm::WindowBase::creationHints(Hints{},session);
 
-	GLFWmm::Window<MyCallback> test(0.5f,0.5f,"Hello, World",cb);
+	GLFWmm::Window<MyCallback> test(0.5f,0.5f,"Hello, World",cb,session);
 	while(!test.shouldClose())
 		{
 		glfwPollEvents();
 		}
-	glfwTerminate();
 	return 0;
 	}

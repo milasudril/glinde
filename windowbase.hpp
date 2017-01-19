@@ -4,6 +4,7 @@
 #define GLFWMM_WINDOWBASE_HPP
 
 #include "membercheck.hpp"
+#include "session.hpp"
 
 #include <GLFW/glfw3.h>
 #include <type_traits>
@@ -31,11 +32,11 @@ namespace GLFWmm
 				,CORE=GLFW_OPENGL_CORE_PROFILE
 				};
 
-			static void creationHintsDefault() noexcept
+			static void creationHintsDefault(Session&) noexcept
 				{return glfwDefaultWindowHints();}
 
 			template<class CreationHints>
-			static void creationHints(const CreationHints& hints) noexcept
+			static void creationHints(const CreationHints& hints,Session&) noexcept
 				{
 				resizableSet(hints,has_member{});
 				visibleSet(hints,has_member{});
@@ -52,7 +53,7 @@ namespace GLFWmm
 				{return glfwWindowShouldClose(m_handle);}
 
 		protected:
-			WindowBase(float width,float height,const char* title)
+			WindowBase(float width,float height,const char* title,Session&)
 				{
 				auto video_mode=glfwGetVideoMode(glfwGetPrimaryMonitor());
 				m_handle=glfwCreateWindow(width*video_mode->width

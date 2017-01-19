@@ -11,8 +11,8 @@ namespace GLFWmm
 	class Window:public WindowBase
 		{
 		public:
-			Window(float width,float height,const char* title,Callback& cb):
-				WindowBase(width,height,title),r_callback(&cb)
+			Window(float width,float height,const char* title,Callback& cb,Session& session):
+				WindowBase(width,height,title,session),r_callback(&cb)
 					{
 					positionChangedRegister(has_member{});
 					sizeChangedRegister(has_member{});
