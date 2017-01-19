@@ -117,7 +117,7 @@ namespace GLFWmm
 			static void srgbSet(const CreationHints& hints,has_member) noexcept
 				{
 				static_assert(std::is_same<std::decay_t<decltype(CreationHints::srgb)>,bool>::value,"");
-				glfwWindowHint(GLFW_DECORATED,hints.srgb);
+				glfwWindowHint(GLFW_SRGB_CAPABLE,hints.srgb);
 				}
 
 			template<class CreationHints>
@@ -182,7 +182,7 @@ namespace GLFWmm
 			static void clientAPIForwardCompatSet(const CreationHints& hints,has_member) noexcept
 				{
 				static_assert(std::is_same<std::decay_t<decltype(CreationHints::clientAPIForwardCompat)>,bool>::value,"");
-				glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,hints.clientAPIForwardCompat);
+				glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT,hints.clientAPIForwardCompat);
 				};
 
 			template<class CreationHints>
