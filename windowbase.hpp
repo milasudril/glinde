@@ -64,6 +64,9 @@ namespace GLFWmm
 			static void contextRelease(GLFWwindow* handle)
 				{glfwMakeContextCurrent(handle);}
 
+			void buffersSwap() noexcept
+				{glfwSwapBuffers(m_handle);}
+
 
 		protected:
 			WindowBase(float width,float height,const char* title,Session&)
