@@ -4,6 +4,7 @@
 
 #include "session.hpp"
 #include <cstdlib>
+#include <cstdio>
 
 using namespace GLFWmm;
 

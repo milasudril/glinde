@@ -47,8 +47,8 @@ struct Hints
 	{
 	static constexpr bool visible=1;
 	static constexpr bool srgb=1;
-	static constexpr auto clientAPI=GLFWmm::WindowBase::ClientAPI::OPENGL;
-	static constexpr auto clientAPIProfile=GLFWmm::WindowBase::ClientAPIProfile::CORE;
+	static constexpr auto clientAPI=GLFWmm::Session::ClientAPI::OPENGL;
+	static constexpr auto clientAPIProfile=GLFWmm::Session::ClientAPIProfile::CORE;
 	static constexpr int clientAPIVersionMajor=4;
 	static constexpr int clientAPIVersionMinor=5;
 	static constexpr bool clientAPIForwardCompat=1;
@@ -57,9 +57,8 @@ struct Hints
 int main()
 	{
 	GLFWmm::Session session;
+	session.creationHints(Hints{});
 	MyCallback cb;
-	GLFWmm::WindowBase::creationHints(Hints{},session);
-
 	GLFWmm::Window<MyCallback> test(0.5f,0.5f,"Hello, World",cb,session);
 	while(!test.shouldClose())
 		{
