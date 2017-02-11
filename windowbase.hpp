@@ -11,6 +11,28 @@ namespace GLFWmm
 		{
 		public:
 			typedef GLFWwindow* ContextHandle;
+			struct Size
+				{
+				int width;
+				int height;
+				float ratio() const noexcept
+					{return static_cast<float>(width)/static_cast<float>(height);}
+				};
+
+			Size sizeGet() const noexcept
+				{
+				Size ret;
+				glfwGetWindowSize(m_handle,&ret.width,&ret.height);
+				return ret;
+				}
+
+			Size sizeFbGet() const noexcept
+				{
+				Size ret;
+				glfwGetFramebufferSize(m_handle,&ret.width,&ret.height);
+				return ret;
+				}
+
 
 			bool shouldClose() const noexcept
 				{return glfwWindowShouldClose(m_handle);}
