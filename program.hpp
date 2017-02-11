@@ -51,7 +51,7 @@ namespace Angle
 			auto length=static_cast<GLint>(0);
 			glGetProgramiv(m_handle,GL_INFO_LOG_LENGTH,&length);
 			char message[1024];
-			glGetShaderInfoLog(m_handle,std::min(1024,length),NULL,message);
+			glGetProgramInfoLog(m_handle,std::min(1024,length),NULL,message);
 			for(size_t k=0;k<sizeof...(T)+1;++k)
 				{glDetachShader(m_handle,handles[k]);}
 			glDeleteProgram(m_handle);
