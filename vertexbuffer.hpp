@@ -55,7 +55,7 @@ namespace Angle
 
 			VertexBuffer& operator=(const VertexBuffer&)=delete;
 
-			VertexBuffer operator=(VertexBuffer&& obj)
+			VertexBuffer& operator=(VertexBuffer&& obj)
 				{
 				std::swap(obj.m_handle,m_handle);
 				return *this;
