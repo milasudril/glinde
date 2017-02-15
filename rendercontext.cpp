@@ -4,8 +4,7 @@
 
 #include "rendercontext.hpp"
 #include "surface.hpp"
-#include "surfacehandle.hpp"
-#include "cairohandle.hpp"
+#include "cairohandles.hpp"
 
 using namespace PageComposer;
 

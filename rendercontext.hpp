@@ -32,16 +32,15 @@ namespace PageComposer
 			RenderContext(const RenderContext& rc)=delete;
 			RenderContext& operator=(const RenderContext& rc)=delete;
 
-			struct Context{};
 
-			const Handle<Context>& handle() const noexcept
+			const Handle<rc_t>& handle() const noexcept
 				{return m_handle;}
 
-			Handle<Context>& handle() noexcept
+			Handle<rc_t>& handle() noexcept
 				{return m_handle;}
 	
 		private:
-			Handle<Context> m_handle;
+			Handle<rc_t> m_handle;
 		};
 	};
 

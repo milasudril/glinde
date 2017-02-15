@@ -4,7 +4,7 @@
 
 #include "textrenderer.hpp"
 #include "rendercontext.hpp"
-#include "cairohandle.hpp"
+#include "cairohandles.hpp"
 #include <pango/pangocairo.h>
 
 using namespace PageComposer;

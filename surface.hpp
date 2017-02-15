@@ -32,12 +32,11 @@ namespace PageComposer
 			Surface(const Surface& s)=delete;
 			Surface& operator=(const Surface& s)=delete;
 
-			struct SurfaceType{};
 
-			const Handle<SurfaceType>& handle() const noexcept
+			const Handle<surface_t>& handle() const noexcept
 				{return m_handle;}
 
-			Handle<SurfaceType>& handle() noexcept
+			Handle<surface_t>& handle() noexcept
 				{return m_handle;}
 
 			int width() const noexcept;
@@ -51,7 +50,7 @@ namespace PageComposer
 			uint8_t* data() noexcept;
 	
 		private:
-			Handle<SurfaceType> m_handle;
+			Handle<surface_t> m_handle;
 		};
 	};
 

@@ -3,7 +3,7 @@
 //@	}
 
 #include "surface.hpp"
-#include "surfacehandle.hpp"
+#include "cairohandles.hpp"
 
 using namespace PageComposer;
 
