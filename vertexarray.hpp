@@ -34,7 +34,7 @@ namespace Angle
 
 			VertexArray& operator=(const VertexArray&)=delete;
 
-			VertexArray operator=(VertexArray&& obj)
+			VertexArray& operator=(VertexArray&& obj)
 				{
 				std::swap(obj.m_handle,m_handle);
 				return *this;

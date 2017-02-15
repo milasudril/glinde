@@ -12,6 +12,7 @@
 #include "program.hpp"
 #include "init.hpp"
 #include "contextguard.hpp"
+#include "texture2d.hpp"
 
 #include <geosimd/point.hpp>
 #include <GLFW/glfw3.h>
@@ -105,8 +106,39 @@ struct MyShaderLayout
 
 constexpr Angle::VertexAttribute MyShaderLayout::attributes[];
 
+struct RGB
+	{
+	uint8_t B;
+	uint8_t G;
+	uint8_t R;
+	uint8_t A;
+	};
+
+static RGB g_texture[1920][1200];
+
+static void textureFill()
+	{
+	for(size_t k=0;k<1920;++k)
+		{
+		for(size_t l=0;l<1200;++l)
+			{
+			g_texture[k][l].R=uint8_t(255*k/1920.0f);
+			g_texture[k][l].G=uint8_t(255*l/1200.0f);
+			g_texture[k][l].B=0;
+			g_texture[k][l].A=255;
+			}
+		}
+	}
+
+auto gl_format(RGB dummy)
+	{return GL_BGRA;}
+
+auto gl_type(RGB dummy)
+	{return GL_UNSIGNED_INT_8_8_8_8_REV;}
+
 int main()
 	{
+	textureFill();
 	GLFWContext glfw(Angle::gl_version_requirements());
 	try
 		{
@@ -125,38 +157,54 @@ int main()
 		Angle::VertexBuffer<uint16_t> facebuff(6);
 		facebuff.bufferData(faces,6);
 
+		Angle::Texture2D texture(1,Angle::TextureFormat::SRGB8_ALPHA8 ,1200,1920);
+
 		Angle::Program prgm(
 R"EOF(#version 450 core
 layout(location=0) in vec4 position;
+out vec2 tex_coords;
 void main()
 	{
 	gl_Position=position;
+	tex_coords=position.xy + vec2(0.5,0.5);
 	}
 )EOF"_vert,R"EOF(#version 450 core
 out vec4 color;
-layout(location=0) uniform vec4 color_in;
+in vec2 tex_coords;
+layout(location=0) uniform sampler2D texture_data;
 
 void main()
 	{
-	color=color_in;
+//	color=vec4(1,1,1,1);
+	color=texture(texture_data,tex_coords);
 	}
 )EOF"_frag);
 
 		Angle::VertexArray<MyShaderLayout> vertex_array;
 		vertex_array.vertexBuffer<0>(vertbuff).enableVertexAttrib<0>()
 			.elementBuffer(facebuff);
+		
+			{
+			auto t_0=clock();
+			size_t N=10000;
+			for(size_t k=0;k<N;++k)
+				{
+				texture.dataSet(&g_texture[0][0],1200,1920);
+				}
+			auto t=double(clock() - t_0)/(N*CLOCKS_PER_SEC);
+			printf("%.7g (Transfer speed: %.7g B/s)\n",t,1200*1920*sizeof(RGB)/t);
+			}
+	/*	texture.bind(0);
+		glEnable(GL_FRAMEBUFFER_SRGB);
 
 		while(!mainwin.shouldClose())
 			{
 			glfwPollEvents();
 			vertex_array.bind();
 			prgm.bind();
-			glUniform4f(0,39.2e-2, 56.1e-2, 95.3e-2,1.0f);
-			Angle::drawElements(Angle::DrawMode::TRIANGLES,0,3);
-			glUniform4f(0,0.0f,0.3f,0.0f,1.0f);
-			Angle::drawElements(Angle::DrawMode::TRIANGLES,3,3);
+			Angle::drawElements(Angle::DrawMode::TRIANGLES,0,6);
 			glfwSwapBuffers(mainwin.handle());
-			}
+			}*/
 
 		}
 	catch(const Angle::Error& err)
