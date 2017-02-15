@@ -12,7 +12,8 @@ namespace PageComposer
 	class Handle
 		{
 		public:
-			Handle() noexcept{}
+			Handle() noexcept:m_handle(nullptr)
+				{}
 
 			explicit Handle(void* h) noexcept:m_handle(h)
 				{}
@@ -22,6 +23,9 @@ namespace PageComposer
 
 			void* handle() noexcept
 				{return m_handle;}
+
+			void reset() noexcept
+				{m_handle=nullptr;}
 
 		private:
 			void* m_handle;

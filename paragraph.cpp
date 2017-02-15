@@ -6,9 +6,14 @@
 //@	}
 
 #include "paragraph.hpp"
+#include "parastyle.hpp"
+#include "textstyle.hpp"
 #include <pango/pangocairo.h>
 
 using namespace PageComposer;
+
+static const ParaStyle s_para_default;
+static const TextStyle s_text_default;
 
 inline static const PangoFontDescription* font(const Handle<Paragraph::Font>& f)
 	{return reinterpret_cast<const PangoFontDescription*>( f.handle() );}
