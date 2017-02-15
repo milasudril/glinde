@@ -28,6 +28,9 @@ namespace PageComposer
 				return *this;
 				}
 
+			Alignment alignment() const noexcept
+				{return m_alignment;}
+
 			ParaStyle& size(float size_new) noexcept
 				{
 				m_size=size_new;

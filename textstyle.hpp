@@ -15,7 +15,7 @@ namespace PageComposer
 			enum class FontStyle:int{NORMAL,ITALIC,OBLIQUE};
 
 			TextStyle():m_family("serif"),m_style(FontStyle::NORMAL),m_size(16.0)
-				,m_size_base(SizeBase::ABSOLUTE),m_weight(0),m_color{0,0,0,1},m_flags(0)
+				,m_size_base(SizeBase::ABSOLUTE),m_weight(0.3f),m_color{0,0,0,1},m_flags(0)
 				{}
 
 			TextStyle& family(const char* fam)
@@ -44,21 +44,6 @@ namespace PageComposer
 
 			float size() const noexcept
 				{return m_size;}
-
-			TextStyle& sizePageRelative() noexcept
-				{
-				m_flags|=SIZE_PAGE_RELATIVE;
-				return *this;
-				}
-
-			TextStyle& sizeAbsolute() noexcept
-				{
-				m_flags&=~SIZE_PAGE_RELATIVE;
-				return *this;
-				}
-
-			bool sizePageRelative() const noexcept
-				{return m_flags&SIZE_PAGE_RELATIVE;}
 
 			TextStyle& variantSmallcaps() noexcept
 				{
@@ -111,8 +96,7 @@ namespace PageComposer
 			SizeBase m_size_base;
 			float m_weight;
 			Color m_color;
-			static constexpr unsigned int SIZE_PAGE_RELATIVE=0x1;
-			static constexpr unsigned int SMALLCAPS=0x2;
+			static constexpr unsigned int SMALLCAPS=0x1;
 			unsigned int m_flags;
 		};
 	}

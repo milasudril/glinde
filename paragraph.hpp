@@ -15,6 +15,7 @@ namespace PageComposer
 	class ParaStyle;
 	class TextStyle;
 	class TextRenderer;
+	class RenderContext;
 
 	class Paragraph
 		{
@@ -76,6 +77,8 @@ namespace PageComposer
 
 			Handle<font_t> m_font;
 			Handle<layout_t> m_layout;
+
+			void styleApply(const RenderContext& rc) const noexcept;
 		};
 	};
 
