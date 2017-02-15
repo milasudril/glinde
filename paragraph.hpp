@@ -7,6 +7,7 @@
 #define PAGECOMPOSER_PARAGRAPH_HPP
 
 #include "handle.hpp"
+#include "rectangle.hpp"
 #include <utility>
 
 namespace PageComposer
@@ -66,6 +67,8 @@ namespace PageComposer
 				{return *r_t_style;}
 
 			Paragraph& textSet(const char* src);
+
+			Rectangle boundingRectangle() const noexcept;
 		
 		private:
 			const ParaStyle* r_p_style;

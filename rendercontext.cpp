@@ -9,7 +9,8 @@
 using namespace PageComposer;
 
 RenderContext::RenderContext(Surface& surf):
-	m_handle(cairo_create(cairosurface(surf.handle() ) ))
+	 m_handle(cairo_create(cairosurface(surf.handle() ) ))
+	,r_surface(&surf)
 	{}
 
 RenderContext::~RenderContext()

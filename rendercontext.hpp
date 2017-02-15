@@ -20,12 +20,13 @@ namespace PageComposer
 			~RenderContext();
 
 			RenderContext(RenderContext&& rc) noexcept:
-				 m_handle(rc.m_handle)
+				 m_handle(rc.m_handle),r_surface(rc.r_surface)
 				{rc.m_handle.reset();}
 
 			RenderContext& operator=(RenderContext&& rc) noexcept
 				{
 				std::swap(rc.m_handle,m_handle);
+				std::swap(rc.r_surface,r_surface);
 				return *this;
 				}
 
@@ -38,9 +39,13 @@ namespace PageComposer
 
 			Handle<rc_t>& handle() noexcept
 				{return m_handle;}
+
+			const Surface& surface() const noexcept
+				{return *r_surface;}
 	
 		private:
 			Handle<rc_t> m_handle;
+			Surface* r_surface;
 		};
 	};
 

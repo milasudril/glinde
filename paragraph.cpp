@@ -25,3 +25,23 @@ Paragraph::~Paragraph()
 	g_object_unref(m_layout.handle());
 	pango_font_description_free(font(m_font));
 	}
+
+Paragraph& Paragraph::textSet(const char* src)
+	{
+	pango_layout_set_text(layout(m_layout),src,-1);
+	return *this;
+	}
+
+Rectangle Paragraph::boundingRectangle() const noexcept
+	{
+	auto handle=const_cast<PangoLayout*>(layout(m_layout));
+	PangoRectangle ink;
+	pango_layout_get_pixel_extents(handle,&ink,NULL);
+	return Rectangle
+		{
+		 static_cast<float>(ink.x)
+		,static_cast<float>(ink.y)
+		,static_cast<float>(ink.width)
+		,static_cast<float>(ink.height)
+		};
+	}
