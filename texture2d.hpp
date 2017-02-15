@@ -137,7 +137,8 @@ namespace Angle
 					{realloc(width_in,height_in);}
 				glTextureSubImage2D(m_handle,0,0,0,width_in,height_in,gl_format(T{}),gl_type(T{})
 					,data);
-				glGenerateTextureMipmap(m_handle);
+				if(m_levels>1)
+					{glGenerateTextureMipmap(m_handle);}
 				}
 
 			void bind(GLuint unit)
