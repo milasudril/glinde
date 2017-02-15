@@ -114,6 +114,8 @@ static float size_font(const ParaStyle& para,const TextStyle& font,int w,int h)
 		case SizeBase::FONT:
 			return size;
 		case SizeBase::BOX:
+			if(para.sizeBase()==SizeBase::FONT)
+				{ERROR("Inconsistent size constraint");}
 			return size_box(para,font,w,h)*size;
 		case SizeBase::PAGE:
 			return size*h;
@@ -129,6 +131,8 @@ static float size_box(const ParaStyle& para,const TextStyle& font,int w,int h)
 		case SizeBase::ABSOLUTE:
 			return size;
 		case SizeBase::FONT:
+			if(font.sizeBase()==SizeBase::BOX)
+				{ERROR("Inconsistent size constraint");}
 			return size_font(para,font,w,h)*size;
 		case SizeBase::BOX:
 			return size;
