@@ -103,7 +103,7 @@ namespace Angle
 
 			~Texture2D() noexcept
 				{
-				if(m_unit!=static_cast<GLuint>(-1));
+				if(m_unit!=static_cast<GLuint>(-1))
 					{glBindTextureUnit(m_unit,0);}
 				glDeleteTextures(1,&m_handle);
 				}
