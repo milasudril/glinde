@@ -13,11 +13,12 @@ namespace PageComposer
 	{
 	class ParaStyle;
 	class TextStyle;
+	class TextRenderer;
 
 	class Paragraph
 		{
 		public:
-			Paragraph();
+			Paragraph(TextRenderer& rc);
 
 			~Paragraph();
 

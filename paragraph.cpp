@@ -27,3 +27,13 @@ inline static const PangoLayout* layout(const Handle<Paragraph::Layout>& f)
 
 inline static PangoLayout* layout(Handle<Paragraph::Layout>& f)
 	{return reinterpret_cast<PangoLayout*>(f.handle());}
+
+Paragraph::Paragraph(TextRenderer& tr):m_font(pango_font_description_new())
+	,m_layout(pango_layout_new( pangocontext( tr.handle() ) ) )
+	{style(s_para_default).style(s_text_default);}
+
+Paragraph::~Paragraph()
+	{
+	g_object_unref(m_layout.handle());
+	pango_font_description_free(font(m_font));
+	}
