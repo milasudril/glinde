@@ -48,6 +48,10 @@ namespace PageComposer
 			const uint8_t* data() const noexcept;
 
 			uint8_t* data() noexcept;
+
+			void dirtySet() noexcept;
+
+			void save(const char* filename) const;
 	
 		private:
 			Handle<surface_t> m_handle;
