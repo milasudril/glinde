@@ -5,10 +5,8 @@
 #include "textrenderer.hpp"
 #include <pango/pango.h>
 
-using namespace PageComposer;
-
-PangoContext* pangocontext(Handle<TextRenderer::Context>& ctx)
+PangoContext* pangocontext(PageComposer::Handle<PageComposer::TextRenderer::Context>& ctx)
 	{return reinterpret_cast<PangoContext*>(ctx.handle());}
 
-const PangoContext* pangocontext(const Handle<TextRenderer::Context>& ctx)
+const PangoContext* pangocontext(const PageComposer::Handle<PageComposer::TextRenderer::Context>& ctx)
 	{return reinterpret_cast<const PangoContext*>(ctx.handle());}

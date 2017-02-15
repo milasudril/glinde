@@ -30,8 +30,8 @@ namespace PageComposer
 				return *this;
 				}
 
-			TextRenderer(const TextRenderer& p)=delete;
-			TextRenderer& operator=(const TextRenderer& p)=delete;
+			TextRenderer(const TextRenderer& tr)=delete;
+			TextRenderer& operator=(const TextRenderer& tr)=delete;
 
 			struct Context{};
 
