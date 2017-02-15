@@ -22,7 +22,7 @@ namespace PageComposer
 
 			TextRenderer(TextRenderer&& tr) noexcept:
 				 m_handle(tr.m_handle)
-				{m_handle.reset();}
+				{tr.m_handle.reset();}
 
 			TextRenderer& operator=(TextRenderer&& tr) noexcept
 				{

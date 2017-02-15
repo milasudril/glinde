@@ -21,7 +21,7 @@ namespace PageComposer
 
 			RenderContext(RenderContext&& rc) noexcept:
 				 m_handle(rc.m_handle)
-				{m_handle.reset();}
+				{rc.m_handle.reset();}
 
 			RenderContext& operator=(RenderContext&& rc) noexcept
 				{
