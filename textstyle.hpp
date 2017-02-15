@@ -3,6 +3,7 @@
 #ifndef PAGECOMPOSER_TEXTSTYLE_HPP
 #define PAGECOMPOSER_TEXTSTYLE_HPP
 
+#include "color.hpp"
 #include <string>
 
 namespace PageComposer
@@ -15,7 +16,7 @@ namespace PageComposer
 			enum class FontStyle:int{NORMAL,ITALIC,OBLIQUE};
 
 			TextStyle():m_family("serif"),m_style(FontStyle::NORMAL),m_size(16.0)
-				,m_weight(0),m_alignment(Alignment::LEFT),m_flags(0)
+				,m_weight(0),m_color{0,0,0,1},m_alignment(Alignment::LEFT),m_flags(0)
 				{}
 
 			TextStyle& family(const char* fam)
@@ -91,11 +92,22 @@ namespace PageComposer
 				{return m_weight;}
 
 
+			TextStyle& color(Color c) noexcept
+				{
+				m_color=c;
+				return *this;
+				}
+
+			Color color() const noexcept
+				{return m_color;}
+
+
 		private:
 			std::string m_family;
 			FontStyle m_style;
 			float m_size;
 			float m_weight;
+			Color m_color;
 			Alignment m_alignment;
 			static constexpr unsigned int SIZE_PAGE_RELATIVE=0x1;
 			static constexpr unsigned int SMALLCAPS=0x2;
