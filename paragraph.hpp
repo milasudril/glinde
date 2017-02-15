@@ -42,8 +42,6 @@ namespace PageComposer
 			Paragraph(const Paragraph& p)=delete;
 			Paragraph& operator=(const Paragraph& p)=delete;
 
-			struct Layout{};
-			struct Font{};
 
 			Paragraph& style(ParaStyle&& para)=delete;
 
@@ -73,8 +71,8 @@ namespace PageComposer
 			const ParaStyle* r_p_style;
 			const TextStyle* r_t_style;
 
-			Handle<Font> m_font;
-			Handle<Layout> m_layout;
+			Handle<font_t> m_font;
+			Handle<layout_t> m_layout;
 		};
 	};
 

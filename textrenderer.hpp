@@ -33,16 +33,14 @@ namespace PageComposer
 			TextRenderer(const TextRenderer& tr)=delete;
 			TextRenderer& operator=(const TextRenderer& tr)=delete;
 
-			struct Context{};
-
-			const Handle<Context>& handle() const noexcept
+			const Handle<tr_t>& handle() const noexcept
 				{return m_handle;}
 
-			Handle<Context>& handle() noexcept
+			Handle<tr_t>& handle() noexcept
 				{return m_handle;}
 	
 		private:
-			Handle<Context> m_handle;
+			Handle<tr_t> m_handle;
 		};
 	};
 

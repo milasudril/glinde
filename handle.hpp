@@ -30,6 +30,19 @@ namespace PageComposer
 		private:
 			void* m_handle;
 		};
+
+	/**Useful tags
+	*/
+
+	struct font_t{};
+
+	struct layout_t{};
+	
+	struct tr_t{};
+
+	struct rc_t{};
+
+	struct surface_t{};
 	}
 
 #endif
