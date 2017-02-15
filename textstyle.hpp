@@ -11,12 +11,10 @@ namespace PageComposer
 	class TextStyle
 		{
 		public:
-			enum class Alignment:int{LEFT,RIGHT,CENTER};
-
 			enum class FontStyle:int{NORMAL,ITALIC,OBLIQUE};
 
 			TextStyle():m_family("serif"),m_style(FontStyle::NORMAL),m_size(16.0)
-				,m_weight(0),m_color{0,0,0,1},m_alignment(Alignment::LEFT),m_flags(0)
+				,m_weight(0),m_color{0,0,0,1},m_flags(0)
 				{}
 
 			TextStyle& family(const char* fam)
@@ -36,12 +34,6 @@ namespace PageComposer
 
 			FontStyle style() const noexcept
 				{return m_style;}
-
-			TextStyle& alignment(Alignment align) noexcept
-				{
-				m_alignment=align;
-				return *this;
-				}
 
 			TextStyle& size(float size_new) noexcept
 				{
@@ -108,7 +100,6 @@ namespace PageComposer
 			float m_size;
 			float m_weight;
 			Color m_color;
-			Alignment m_alignment;
 			static constexpr unsigned int SIZE_PAGE_RELATIVE=0x1;
 			static constexpr unsigned int SMALLCAPS=0x2;
 			unsigned int m_flags;
