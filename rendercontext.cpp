@@ -3,11 +3,14 @@
 //@	}
 
 #include "rendercontext.hpp"
+#include "surface.hpp"
+#include "surfacehandle.hpp"
 #include "cairohandle.hpp"
 
 using namespace PageComposer;
 
-RenderContext::RenderContext(Surface& surf)
+RenderContext::RenderContext(Surface& surf):
+	m_handle(cairo_create(cairosurface(surf.handle() ) ))
 	{}
 
 RenderContext::~RenderContext()
