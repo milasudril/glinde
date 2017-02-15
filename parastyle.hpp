@@ -12,8 +12,11 @@ namespace PageComposer
 		{
 		public:
 			enum class Alignment:int{LEFT,RIGHT,CENTER};
+			enum class SizeDimension:int{WIDTH,HEIGHT};
 
-			ParaStyle():m_size(16.0),m_color{1,1,1,0.75}
+			ParaStyle():m_size(256.0)
+				,m_size_dimension(SizeDimension::WIDTH)
+				,m_color{1,1,1,0.75}
 				,m_alignment(Alignment::LEFT)
 				{}
 
@@ -32,6 +35,15 @@ namespace PageComposer
 			float size() const noexcept
 				{return m_size;}
 
+			ParaStyle& sizeDimension(SizeDimension dim) noexcept
+				{
+				m_size_dimension=dim;
+				return *this;
+				}
+
+			SizeDimension sizeDimension() const noexcept
+				{return m_size_dimension;}
+
 			ParaStyle& color(Color c) noexcept
 				{
 				m_color=c;
@@ -44,6 +56,7 @@ namespace PageComposer
 
 		private:
 			float m_size;
+			SizeDimension m_size_dimension;
 			Color m_color;
 			Alignment m_alignment;
 		};
