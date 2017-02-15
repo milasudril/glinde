@@ -1,14 +1,16 @@
 //@	{
 //@	 "targets":
 //@		[
-//@			{"name":"paragraph.o","type":"object","pkgconfig_libs":["pangocairo"] }
+//@			{"name":"paragraph.o","type":"object","pkgconfig_libs":["pango"] }
 //@		]
 //@	}
 
 #include "paragraph.hpp"
 #include "parastyle.hpp"
 #include "textstyle.hpp"
-#include <pango/pangocairo.h>
+#include "pangohandle.hpp"
+
+#include <pango/pango.h>
 
 using namespace PageComposer;
 
