@@ -6,12 +6,12 @@
 #ifndef PAGECOMPOSER_PARAGRAPH_HPP
 #define PAGECOMPOSER_PARAGRAPH_HPP
 
-#include "rectangle.hpp"
 #include "parastyle.hpp"
 #include "textstyle.hpp"
 #include "rendercontext.hpp"
 #include "surface.hpp"
-#include "vec2.hpp"
+#include "pageobject.hpp"
+#include "layer.hpp"
 #include <utility>
 
 namespace PageComposer
@@ -20,7 +20,7 @@ namespace PageComposer
 	class TextStyle;
 	class TextRenderer;
 
-	class Paragraph
+	class Paragraph:public PageObject
 		{
 		public:
 			Paragraph(TextRenderer& tr);
@@ -50,6 +50,36 @@ namespace PageComposer
 			Paragraph& operator=(const Paragraph& p)=delete;
 
 
+			Paragraph& positionAbsolute(Vec2 pos) noexcept
+				{
+				m_pos=pos;
+				m_flags|=CONTENT_DIRTY;
+				return *this;
+				}
+
+			Paragraph& positionRelative(Vec2 pos) noexcept
+				{
+				Vec2 size{double(r_rc->surface().width()),double(r_rc->surface().height())};
+				return positionAbsolute( 0.5*hadamard(size,pos + Vec2{1,1}) );
+				}
+
+			Vec2 positionAbsolute() const noexcept
+				{return m_pos;}
+
+			Vec2 positionRelative() const noexcept
+				{return m_pos;}
+
+			Paragraph& anchor(Vec2 a) noexcept
+				{
+				m_anchor=a;
+				m_flags|=CONTENT_DIRTY;
+				return *this;
+				}
+
+			Vec2 anchor() const noexcept
+				{return m_anchor;}
+
+
 			Paragraph& style(const ParaStyle& para) noexcept
 				{
 				m_p_style=para;
@@ -70,36 +100,6 @@ namespace PageComposer
 			const TextStyle& styleText() const noexcept
 				{return m_t_style;}
 
-			Paragraph& positionAbsolute(Vec2 pos) noexcept
-				{
-				m_pos=pos;
-				m_flags|=CONTENT_DIRTY;
-				return *this;
-				}
-
-			Paragraph& positionRelative(Vec2 pos) noexcept
-				{
-				Vec2 size{double(r_rc->surface().width()),double(r_rc->surface().height())};
-				return positionAbsolute( 0.5*hadamard(size,pos + Vec2{1,1}) );
-				}
-
-			Vec2 positionAbsolute() const noexcept
-				{return m_pos;}
-
-			Vec2 positionRelative() const noexcept
-				{return m_pos;}
-
-
-			Paragraph& anchor(Vec2 a) noexcept
-				{
-				m_anchor=a;
-				m_flags|=CONTENT_DIRTY;
-				return *this;
-				}
-
-			Vec2 anchor() const noexcept
-				{return m_anchor;}
-
 
 
 			Paragraph& text(const char* src);
@@ -119,9 +119,10 @@ namespace PageComposer
 			mutable unsigned int m_flags;
 			static constexpr unsigned int STYLE_DIRTY=0x2;
 			static constexpr unsigned int CONTENT_DIRTY=0x1;
-			RenderContext* r_rc;
+
 			Vec2 m_pos;
 			Vec2 m_anchor;
+			RenderContext* r_rc;
 			ParaStyle m_p_style;
 			TextStyle m_t_style;
 			Handle<font_t> m_font;
