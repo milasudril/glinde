@@ -25,17 +25,17 @@ namespace PageComposer
 				{return m_data[1];}
 
 
-			float w() const noexcept
+			float width() const noexcept
 				{return m_data[2];}
 
-			float& w() noexcept
+			float& width() noexcept
 				{return m_data[2];}
 
 
-			float h() const noexcept
+			float height() const noexcept
 				{return m_data[3];}
 
-			float& h() noexcept
+			float& height() noexcept
 				{return m_data[3];}
 
 		private:

@@ -8,6 +8,11 @@
 
 #include "handle.hpp"
 #include "rectangle.hpp"
+#include "parastyle.hpp"
+#include "textstyle.hpp"
+#include "rendercontext.hpp"
+#include "surface.hpp"
+#include "vec2.hpp"
 #include <utility>
 
 namespace PageComposer
@@ -15,17 +20,16 @@ namespace PageComposer
 	class ParaStyle;
 	class TextStyle;
 	class TextRenderer;
-	class RenderContext;
 
 	class Paragraph
 		{
 		public:
-			Paragraph(TextRenderer& rc);
+			Paragraph(TextRenderer& tr);
 
 			~Paragraph();
 
-			Paragraph(Paragraph&& p) noexcept:
-				 r_p_style(p.r_p_style),r_t_style(p.r_t_style)
+			Paragraph(Paragraph&& p) noexcept:m_flags(p.m_flags),r_rc(p.r_rc)
+				,m_p_style(std::move(p.m_p_style)),m_t_style(std::move(p.m_t_style))
 				,m_font(p.m_font),m_layout(p.m_layout)
 				{
 				p.m_font.reset();
@@ -34,8 +38,10 @@ namespace PageComposer
 
 			Paragraph& operator=(Paragraph&& p) noexcept
 				{
-				r_p_style=p.r_p_style;
-				r_t_style=p.r_t_style;
+				m_flags=p.m_flags;
+				r_rc=p.r_rc;
+				std::swap(m_p_style,p.m_p_style);
+				std::swap(m_t_style,p.m_t_style);
 				std::swap(p.m_font,m_font);
 				std::swap(p.m_layout,m_layout);
 				return *this;
@@ -45,40 +51,83 @@ namespace PageComposer
 			Paragraph& operator=(const Paragraph& p)=delete;
 
 
-			Paragraph& style(ParaStyle&& para)=delete;
-
 			Paragraph& style(const ParaStyle& para) noexcept
 				{
-				r_p_style=&para;
+				m_p_style=para;
+				m_flags|=STYLE_DIRTY;
 				return *this;
 				}
 
 			const ParaStyle& styleParagraph() const noexcept
-				{return *r_p_style;}
-
-			Paragraph& style(TextStyle&& t)=delete;
+				{return m_p_style;}
 
 			Paragraph& style(const TextStyle& t) noexcept
 				{
-				r_t_style=&t;
+				m_t_style=t;
+				m_flags|=STYLE_DIRTY;
 				return *this;
 				}
 
 			const TextStyle& styleText() const noexcept
-				{return *r_t_style;}
+				{return m_t_style;}
 
-			Paragraph& textSet(const char* src);
+			Paragraph& positionAbsolute(Vec2 pos) noexcept
+				{
+				m_pos=pos;
+				m_flags|=CONTENT_DIRTY;
+				return *this;
+				}
+
+			Paragraph& positionRelative(Vec2 pos) noexcept
+				{
+				Vec2 size{double(r_rc->surface().width()),double(r_rc->surface().height())};
+				return positionAbsolute( 0.5*hadamard(size,pos + Vec2{1,1}) );
+				}
+
+			Vec2 positionAbsolute() const noexcept
+				{return m_pos;}
+
+			Vec2 positionRelative() const noexcept
+				{return m_pos;}
+
+
+			Paragraph& anchor(Vec2 a) noexcept
+				{
+				m_anchor=a;
+				m_flags|=CONTENT_DIRTY;
+				return *this;
+				}
+
+			Vec2 anchor() const noexcept
+				{return m_anchor;}
+
+
+
+			Paragraph& text(const char* src);
 
 			Rectangle boundingRectangle() const noexcept;
+
+			void render() const noexcept
+				{
+				if( (m_flags&STYLE_DIRTY) || (m_flags&CONTENT_DIRTY) )
+					{render_impl();}
+				}
 		
 		private:
-			const ParaStyle* r_p_style;
-			const TextStyle* r_t_style;
+			void render_impl() const noexcept;
+			void styleApply() const noexcept;
 
+			mutable unsigned int m_flags;
+			static constexpr unsigned int STYLE_DIRTY=0x2;
+			static constexpr unsigned int CONTENT_DIRTY=0x1;
+			RenderContext* r_rc;
+			Vec2 m_pos;
+			Vec2 m_anchor;
+			ParaStyle m_p_style;
+			TextStyle m_t_style;
 			Handle<font_t> m_font;
 			Handle<layout_t> m_layout;
 
-			void styleApply(const RenderContext& rc) const noexcept;
 		};
 	};
 

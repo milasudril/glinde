@@ -1,7 +1,7 @@
 //@	{
 //@	 "targets":
 //@		[
-//@			{"name":"paragraph.o","type":"object","pkgconfig_libs":["pango"] }
+//@			{"name":"paragraph.o","type":"object","pkgconfig_libs":["pangocairo"] }
 //@		]
 //@	}
 
@@ -10,9 +10,9 @@
 #include "textstyle.hpp"
 #include "textrenderer.hpp"
 #include "pangohandles.hpp"
-#include "rendercontext.hpp"
-#include "surface.hpp"
+#include "cairohandles.hpp"
 #include <cassert>
+#include <pango/pangocairo.h>
 
 using namespace PageComposer;
 
@@ -21,7 +21,9 @@ static const TextStyle s_text_default;
 
 #define ERROR(x) abort()
 
-Paragraph::Paragraph(TextRenderer& tr):m_font(pango_font_description_new())
+Paragraph::Paragraph(TextRenderer& tr):m_flags(0xf)
+	,r_rc(&tr.renderContext())
+	,m_font(pango_font_description_new())
 	,m_layout(pango_layout_new( pangocontext( tr.handle() ) ) )
 	{style(s_para_default).style(s_text_default);}
 
@@ -31,14 +33,18 @@ Paragraph::~Paragraph()
 	pango_font_description_free(font(m_font));
 	}
 
-Paragraph& Paragraph::textSet(const char* src)
+Paragraph& Paragraph::text(const char* src)
 	{
 	pango_layout_set_text(layout(m_layout),src,-1);
+	m_flags|=CONTENT_DIRTY;
 	return *this;
 	}
 
 Rectangle Paragraph::boundingRectangle() const noexcept
 	{
+	if(m_flags&STYLE_DIRTY)
+		{styleApply();}
+
 	auto handle=const_cast<PangoLayout*>(layout(m_layout));
 	PangoRectangle ink;
 	pango_layout_get_pixel_extents(handle,&ink,NULL);
@@ -143,27 +149,60 @@ static float size_box(const ParaStyle& para,const TextStyle& font,int w,int h)
 	return size;
 	}
 
-void Paragraph::styleApply(const RenderContext& rc) const noexcept
+void Paragraph::styleApply() const noexcept
 	{
-	auto width=rc.surface().width();
-	auto height=rc.surface().height();
+	auto width=r_rc->surface().width();
+	auto height=r_rc->surface().height();
 
 	auto f=const_cast<PangoFontDescription*>(font(m_font));
-	pango_font_description_set_family(f, r_t_style->family() );
-	pango_font_description_set_weight(f, pango_font_weight(r_t_style->weight()) );
-	pango_font_description_set_style(f, pango_style(r_t_style->style() ) );
+	pango_font_description_set_family(f, m_t_style.family() );
+	pango_font_description_set_weight(f, pango_font_weight(m_t_style.weight()) );
+	pango_font_description_set_style(f, pango_style(m_t_style.style() ) );
 	pango_font_description_set_variant(f
-		,r_t_style->smallcaps()?PANGO_VARIANT_SMALL_CAPS:PANGO_VARIANT_NORMAL);
-	pango_font_description_set_size(f,size_font(*r_p_style,*r_t_style,width,height)*PANGO_SCALE);
+		,m_t_style.smallcaps()?PANGO_VARIANT_SMALL_CAPS:PANGO_VARIANT_NORMAL);
+	pango_font_description_set_size(f,size_font(m_p_style,m_t_style,width,height)*PANGO_SCALE);
 
 
-	auto para_size_dim=r_p_style->sizeDimension();
+	auto para_size_dim=m_p_style.sizeDimension();
 	auto l=const_cast<PangoLayout*>(layout(m_layout));
 	if(para_size_dim==ParaStyle::SizeDimension::HEIGHT)
-		{pango_layout_set_height(l,size_box(*r_p_style,*r_t_style,width,height)*PANGO_SCALE);}
+		{pango_layout_set_height(l,size_box(m_p_style,m_t_style,width,height)*PANGO_SCALE);}
 	else
-		{pango_layout_set_width(l,size_box(*r_p_style,*r_t_style,width,height)*PANGO_SCALE);}
+		{pango_layout_set_width(l,size_box(m_p_style,m_t_style,width,height)*PANGO_SCALE);}
 
 
-	pango_layout_set_alignment(l,pango_alignment(r_p_style->alignment()));
+	pango_layout_set_alignment(l,pango_alignment(m_p_style.alignment()));
+
+	m_flags&=~STYLE_DIRTY;
+	}
+
+void Paragraph::render_impl() const noexcept
+	{
+	auto rc_handle=cairocontext(r_rc->handle());
+	cairo_set_source_rgba( rc_handle
+		,m_p_style.color().red()
+		,m_p_style.color().green()
+		,m_p_style.color().blue()
+		,m_p_style.color().alpha() );
+
+//	boundingRectangle will update styles if needed
+	auto target_rect=boundingRectangle(); 
+	auto size=Vec2{target_rect.width(),target_rect.height()};
+	auto pos_rect=m_pos-0.5*hadamard(size,m_anchor + Vec2{1,1});
+	auto pos_text=pos_rect - Vec2{target_rect.x(),target_rect.y()};
+
+	cairo_rectangle(rc_handle,pos_rect.x(),pos_rect.y()
+		,target_rect.width(),target_rect.height());
+	cairo_fill(rc_handle);
+
+	cairo_move_to(rc_handle,pos_text.x(),pos_text.y());
+	cairo_set_source_rgba( rc_handle
+		,m_t_style.color().red()
+		,m_t_style.color().green()
+		,m_t_style.color().blue()
+		,m_t_style.color().alpha());
+	pango_cairo_show_layout(rc_handle
+		,const_cast<PangoLayout*>(layout(m_layout)));
+
+	m_flags&=~CONTENT_DIRTY;
 	}

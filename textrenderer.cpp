@@ -10,7 +10,7 @@
 using namespace PageComposer;
 
 TextRenderer::TextRenderer(RenderContext& rc):
-	m_handle(pango_cairo_create_context(cairocontext(rc.handle() ) ) )
+	r_rc(&rc),m_handle(pango_cairo_create_context(cairocontext(rc.handle() ) ) )
 	{}
 
 TextRenderer::~TextRenderer()

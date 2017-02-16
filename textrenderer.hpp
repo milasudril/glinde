@@ -38,8 +38,12 @@ namespace PageComposer
 
 			Handle<tr_t>& handle() noexcept
 				{return m_handle;}
+
+			RenderContext& renderContext() noexcept
+				{return *r_rc;}
 	
 		private:
+			RenderContext* r_rc;
 			Handle<tr_t> m_handle;
 		};
 	};
