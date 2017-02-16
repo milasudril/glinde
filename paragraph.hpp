@@ -6,7 +6,6 @@
 #ifndef PAGECOMPOSER_PARAGRAPH_HPP
 #define PAGECOMPOSER_PARAGRAPH_HPP
 
-#include "handle.hpp"
 #include "rectangle.hpp"
 #include "parastyle.hpp"
 #include "textstyle.hpp"

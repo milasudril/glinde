@@ -9,7 +9,7 @@ using namespace PageComposer;
 
 Surface::Surface(int width,int height):
 m_handle( cairo_image_surface_create(CAIRO_FORMAT_ARGB32,width,height) )
-	{}
+	{renderRegionClear();}
 
 Surface::~Surface()
 	{cairo_surface_destroy(cairosurface(m_handle));}

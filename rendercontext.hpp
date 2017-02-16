@@ -42,6 +42,9 @@ namespace PageComposer
 
 			const Surface& surface() const noexcept
 				{return *r_surface;}
+
+			Surface& surface() noexcept
+				{return *r_surface;}
 	
 		private:
 			Handle<rc_t> m_handle;

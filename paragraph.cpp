@@ -165,6 +165,7 @@ void Paragraph::styleApply() const noexcept
 
 	auto para_size_dim=m_p_style.sizeDimension();
 	auto l=const_cast<PangoLayout*>(layout(m_layout));
+	pango_layout_set_font_description(l,f);
 	if(para_size_dim==ParaStyle::SizeDimension::HEIGHT)
 		{pango_layout_set_height(l,size_box(m_p_style,m_t_style,width,height)*PANGO_SCALE);}
 	else
@@ -204,5 +205,6 @@ void Paragraph::render_impl() const noexcept
 	pango_cairo_show_layout(rc_handle
 		,const_cast<PangoLayout*>(layout(m_layout)));
 
+	r_rc->surface().renderRegionAdd(Rectangle{pos_rect,target_rect.size()});
 	m_flags&=~CONTENT_DIRTY;
 	}

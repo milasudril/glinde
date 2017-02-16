@@ -7,8 +7,10 @@
 #define PAGECOMPOSER_SURFACE_HPP
 
 #include "handle.hpp"
+#include "rectangle.hpp"
 #include <utility>
 #include <cstdint>
+#include <algorithm>
 
 namespace PageComposer
 	{
@@ -52,9 +54,25 @@ namespace PageComposer
 			void dirtySet() noexcept;
 
 			void save(const char* filename) const;
+
+			void renderRegionAdd(const Rectangle& rect)
+				{
+				auto size_new=emax(rect.size(),m_dirty_region.size());
+				auto min_new=emin(rect.min(),m_dirty_region.min());
+	
+				m_dirty_region.size()=size_new;	
+				m_dirty_region.min()=min_new;				
+				}
+
+			void renderRegionClear()
+				{
+				m_dirty_region.size()=Vec2{0,0};
+				m_dirty_region.min()=Vec2{double(width()),double(height())};
+				}
 	
 		private:
 			Handle<surface_t> m_handle;
+			Rectangle m_dirty_region;
 		};
 	};
 

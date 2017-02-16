@@ -14,12 +14,19 @@ int main()
 	PageComposer::RenderContext rc(surf);
 	PageComposer::TextRenderer tr(rc);
 
-	PageComposer::ParaStyle style_new;
-	style_new.color(PageComposer::Color{1,0.5,0.5,1})
+	PageComposer::ParaStyle style_para;
+	style_para.color(PageComposer::Color{1,0.5,0.5,1})
 		.alignment(PageComposer::ParaStyle::Alignment::CENTER);
+
+	PageComposer::TextStyle style_text;
+	style_text.size(16).family("Latin Modern Roman")
+		.style(PageComposer::TextStyle::FontStyle::ITALIC)
+		.color(PageComposer::Color{0,0.5,0.2,1});
 	
 	PageComposer::Paragraph foo(tr);
-	foo.style(style_new).text("Flygande bäckasiner söka hwila på mjuka tufvor")
+	foo.style(style_para)
+		.style(style_text)
+		.text("Flygande bäckasiner söka hwila på mjuka tufvor")
 		.positionAbsolute(PageComposer::Vec2{960/2,0})
 		.anchor(PageComposer::Vec2{0,-1})
 		.render();

@@ -8,7 +8,12 @@ namespace PageComposer
 	class Vec2
 		{
 		public:
+			typedef double v2sd __attribute__ ((vector_size (16)));
+
 			Vec2() noexcept:m_data{0,0}
+				{}
+
+			Vec2(v2sd x) noexcept:m_data(x)
 				{}
 
 			Vec2(double x, double y):m_data{x,y}
@@ -51,8 +56,10 @@ namespace PageComposer
 				return *this;
 				}
 
+			v2sd data() const noexcept
+				{return m_data;}
+
 		private:
-			typedef double v2sd __attribute__ ((vector_size (16)));
 			v2sd m_data;
 		};
 
@@ -67,6 +74,13 @@ namespace PageComposer
 
 	inline Vec2 operator*(double c,Vec2 b) noexcept
 		{return b*=c;}
+
+	inline Vec2 emin(Vec2 a,Vec2 b) noexcept
+		{return a.data()<b.data()?a.data():b.data();}
+
+	inline Vec2 emax(Vec2 a,Vec2 b) noexcept
+		{return b.data()<a.data()?a.data():b.data();}
+
 	};
 
 #endif

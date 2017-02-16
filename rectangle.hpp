@@ -3,44 +3,62 @@
 #ifndef PAGECOMPOSER_RECTANGLE_HPP
 #define PAGECOMPOSER_RECTANGLE_HPP
 
+#include "vec2.hpp"
+
 namespace PageComposer
 	{
 	class Rectangle
 		{
 		public:
-			Rectangle(float x, float y, float w, float h):m_data{x,y,w,h}
+			Rectangle(){}
+
+			Rectangle(Vec2 min,Vec2 size):m_min(min),m_size(size)
 				{}
 
-			float x() const noexcept
-				{return m_data[0];}
+			Rectangle(double x, double y, double w, double h):m_min{x,y},m_size{w,h}
+				{}
 
-			float& x() noexcept
-				{return m_data[0];}
+			double x() const noexcept
+				{return m_min.x();}
+
+			double& x() noexcept
+				{return m_min.x();}
+
+			double y() const noexcept
+				{return m_min.y();}
+
+			double& y() noexcept
+				{return m_min.y();}
+
+			Vec2 min() const noexcept
+				{return m_min;}
+
+			Vec2& min() noexcept
+				{return m_min;}
 
 
-			float y() const noexcept
-				{return m_data[1];}
 
-			float& y() noexcept
-				{return m_data[1];}
+			double width() const noexcept
+				{return m_size.x();}
 
+			double& width() noexcept
+				{return m_size.x();}
 
-			float width() const noexcept
-				{return m_data[2];}
+			double height() const noexcept
+				{return m_size.y();}
 
-			float& width() noexcept
-				{return m_data[2];}
+			double& height() noexcept
+				{return m_size.y();}
 
+			Vec2 size() const noexcept
+				{return m_size;}
 
-			float height() const noexcept
-				{return m_data[3];}
-
-			float& height() noexcept
-				{return m_data[3];}
+			Vec2& size() noexcept
+				{return m_size;}
 
 		private:
-			typedef float v4sf __attribute__ ((vector_size (16)));
-			v4sf m_data;
+			Vec2 m_min;
+			Vec2 m_size;
 		};
 	};
 
