@@ -4,7 +4,7 @@
 #define PAGECOMPOSER_PARASTYLE_HPP
 
 #include "color.hpp"
-#include "sizebase.hpp"
+#include "textsizemode.hpp"
 #include <string>
 
 namespace PageComposer
@@ -17,7 +17,7 @@ namespace PageComposer
 
 			ParaStyle() noexcept:m_size(256.0)
 				,m_size_dimension(SizeDimension::WIDTH)
-				,m_size_base(SizeBase::ABSOLUTE)
+				,m_size_mode(TextSizeMode::ABSOLUTE)
 				,m_color{1,1,1,0.75}
 				,m_alignment(Alignment::LEFT)
 				{}
@@ -60,19 +60,19 @@ namespace PageComposer
 
 
 
-			ParaStyle& sizeBase(SizeBase s) noexcept
+			ParaStyle& textSizeMode(TextSizeMode s) noexcept
 				{
-				m_size_base=s;
+				m_size_mode=s;
 				return *this;
 				}
 
-			SizeBase sizeBase() const noexcept
-				{return m_size_base;}
+			TextSizeMode textSizeMode() const noexcept
+				{return m_size_mode;}
 
 		private:
 			float m_size;
 			SizeDimension m_size_dimension;
-			SizeBase m_size_base;
+			TextSizeMode m_size_mode;
 			Color m_color;
 			Alignment m_alignment;
 		};

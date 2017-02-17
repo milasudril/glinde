@@ -30,7 +30,7 @@ int main()
 	foo.style(style_para)
 		.style(style_shadow)
 		.text("Flygande bäckasiner söka hwila på mjuka tufvor")
-		.positionAbsolute(PageComposer::Vec2{960/2+4,4})
+		.positionAbsolute(PageComposer::Vec2{960/2+2,2})
 		.anchor(PageComposer::Vec2{0,-1});
 	
 	PageComposer::Paragraph bar(tr);

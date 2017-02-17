@@ -113,17 +113,17 @@ static float size_box(const ParaStyle& para,const TextStyle& font,int w,int h);
 static float size_font(const ParaStyle& para,const TextStyle& font,int w,int h)
 	{
 	auto size=font.size();
-	switch(font.sizeBase())
+	switch(font.textSizeMode())
 		{
-		case SizeBase::ABSOLUTE:
+		case TextSizeMode::ABSOLUTE:
 			return size;
-		case SizeBase::FONT:
+		case TextSizeMode::FONT:
 			return size;
-		case SizeBase::BOX:
-			if(para.sizeBase()==SizeBase::FONT)
+		case TextSizeMode::BOX:
+			if(para.textSizeMode()==TextSizeMode::FONT)
 				{ERROR("Inconsistent size constraint");}
 			return size_box(para,font,w,h)*size;
-		case SizeBase::PAGE:
+		case TextSizeMode::PAGE:
 			return size*h;
 		}
 	return size;
@@ -132,17 +132,17 @@ static float size_font(const ParaStyle& para,const TextStyle& font,int w,int h)
 static float size_box(const ParaStyle& para,const TextStyle& font,int w,int h)
 	{
 	auto size=para.size();
-	switch(para.sizeBase())
+	switch(para.textSizeMode())
 		{
-		case SizeBase::ABSOLUTE:
+		case TextSizeMode::ABSOLUTE:
 			return size;
-		case SizeBase::FONT:
-			if(font.sizeBase()==SizeBase::BOX)
+		case TextSizeMode::FONT:
+			if(font.textSizeMode()==TextSizeMode::BOX)
 				{ERROR("Inconsistent size constraint");}
 			return size_font(para,font,w,h)*size;
-		case SizeBase::BOX:
+		case TextSizeMode::BOX:
 			return size;
-		case SizeBase::PAGE:
+		case TextSizeMode::PAGE:
 			return para.sizeDimension()==ParaStyle::SizeDimension::HEIGHT?
 				size*h:size*w;
 		}
