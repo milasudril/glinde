@@ -31,21 +31,10 @@ int main()
 		.anchor(PageComposer::Vec2{0,-1})
 		.render();
 
-	for(size_t k_max=1;k_max<65536;k_max*=2)
-		{
-		auto t_0=clock();
-		for(size_t k=0;k<k_max;++k)
-			{
-			foo
-			//	.text("This is a test that should increase the running time")
-				.positionAbsolute(PageComposer::Vec2{0,0})
-				.anchor(PageComposer::Vec2{-1,-1})
-				.render();
-			}
-		auto t=double(clock() - t_0)/k_max;
-		printf("%.7g\n",t/CLOCKS_PER_SEC);
-		}
-
+	foo.positionAbsolute(PageComposer::Vec2{0,0})
+		.anchor(PageComposer::Vec2{-1,-1})
+		.render();
+	
 	foo.positionRelative(PageComposer::Vec2{0,0})
 		.anchor(PageComposer::Vec2{0,0})
 		.render();

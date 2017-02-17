@@ -25,12 +25,6 @@ namespace PageComposer
 				return *this;
 				}
 
-			const Layer& layer() const noexcept
-				{return *r_layer;}
-
-			Layer& layer() noexcept
-				{return *r_layer;}
-
 			virtual PageObject& positionAbsolute(Vec2 pos) noexcept=0;
 
 			virtual PageObject& positionRelative(Vec2 pos) noexcept=0;
@@ -46,6 +40,10 @@ namespace PageComposer
 			virtual Rectangle boundingRectangle() const noexcept=0;
 
 			virtual void render() const noexcept=0;
+
+		protected:
+			Layer* layer() const noexcept
+				{return r_layer;}
 
 		private:
 			Layer* r_layer;

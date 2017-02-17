@@ -21,8 +21,8 @@ static const TextStyle s_text_default;
 
 #define ERROR(x) abort()
 
-Paragraph::Paragraph(TextRenderer& tr):m_flags(0xf)
-	,r_rc(&tr.renderContext())
+Paragraph::Paragraph(TextRenderer& tr):PageObjectBase(tr.renderContext())
+	,m_flags(0xf)
 	,m_font(pango_font_description_new())
 	,m_layout(pango_layout_new( pangocontext( tr.handle() ) ) )
 	{style(s_para_default).style(s_text_default);}
@@ -36,7 +36,7 @@ Paragraph::~Paragraph()
 Paragraph& Paragraph::text(const char* src)
 	{
 	pango_layout_set_text(layout(m_layout),src,-1);
-	m_flags|=CONTENT_DIRTY;
+	dirty_set();
 	return *this;
 	}
 
@@ -151,8 +151,8 @@ static float size_box(const ParaStyle& para,const TextStyle& font,int w,int h)
 
 void Paragraph::styleApply() const noexcept
 	{
-	auto width=r_rc->surface().width();
-	auto height=r_rc->surface().height();
+	auto width=render_context().surface().width();
+	auto height=render_context().surface().height();
 
 	auto f=const_cast<PangoFontDescription*>(font(m_font));
 	pango_font_description_set_family(f, m_t_style.family() );
@@ -179,7 +179,7 @@ void Paragraph::styleApply() const noexcept
 
 void Paragraph::render_impl() const noexcept
 	{
-	auto rc_handle=cairocontext(r_rc->handle());
+	auto rc_handle=cairocontext(render_context().handle());
 	cairo_set_source_rgba( rc_handle
 		,m_p_style.color().red()
 		,m_p_style.color().green()
@@ -189,7 +189,7 @@ void Paragraph::render_impl() const noexcept
 //	boundingRectangle will update styles if needed
 	auto target_rect=boundingRectangle(); 
 	auto size=Vec2{target_rect.width(),target_rect.height()};
-	auto pos_rect=m_pos-0.5*hadamard(size,m_anchor + Vec2{1,1});
+	auto pos_rect=positionAbsolute()-0.5*hadamard(size,anchor() + Vec2{1,1});
 	auto pos_text=pos_rect - Vec2{target_rect.x(),target_rect.y()};
 
 	cairo_rectangle(rc_handle,pos_rect.x(),pos_rect.y()
@@ -205,6 +205,5 @@ void Paragraph::render_impl() const noexcept
 	pango_cairo_show_layout(rc_handle
 		,const_cast<PangoLayout*>(layout(m_layout)));
 
-	r_rc->surface().renderRegionAdd(Rectangle{pos_rect,target_rect.size()});
-	m_flags&=~CONTENT_DIRTY;
+	render_context().surface().renderRegionAdd(Rectangle{pos_rect,target_rect.size()});
 	}

@@ -10,7 +10,7 @@
 #include "textstyle.hpp"
 #include "rendercontext.hpp"
 #include "surface.hpp"
-#include "pageobject.hpp"
+#include "pageobjectbase.hpp"
 #include "layer.hpp"
 #include <utility>
 
@@ -20,14 +20,15 @@ namespace PageComposer
 	class TextStyle;
 	class TextRenderer;
 
-	class Paragraph:public PageObject
+	class Paragraph:public PageObjectBase
 		{
 		public:
-			Paragraph(TextRenderer& tr);
+			explicit Paragraph(TextRenderer& tr);
 
 			~Paragraph();
 
-			Paragraph(Paragraph&& p) noexcept:m_flags(p.m_flags),r_rc(p.r_rc)
+			Paragraph(Paragraph&& p) noexcept:PageObjectBase(std::move(p))	
+				,m_flags(p.m_flags)
 				,m_p_style(std::move(p.m_p_style)),m_t_style(std::move(p.m_t_style))
 				,m_font(p.m_font),m_layout(p.m_layout)
 				{
@@ -38,7 +39,6 @@ namespace PageComposer
 			Paragraph& operator=(Paragraph&& p) noexcept
 				{
 				m_flags=p.m_flags;
-				r_rc=p.r_rc;
 				std::swap(m_p_style,p.m_p_style);
 				std::swap(m_t_style,p.m_t_style);
 				std::swap(p.m_font,m_font);
@@ -49,41 +49,11 @@ namespace PageComposer
 			Paragraph(const Paragraph& p)=delete;
 			Paragraph& operator=(const Paragraph& p)=delete;
 
-
-			Paragraph& positionAbsolute(Vec2 pos) noexcept
-				{
-				m_pos=pos;
-				m_flags|=CONTENT_DIRTY;
-				return *this;
-				}
-
-			Paragraph& positionRelative(Vec2 pos) noexcept
-				{
-				Vec2 size{double(r_rc->surface().width()),double(r_rc->surface().height())};
-				return positionAbsolute( 0.5*hadamard(size,pos + Vec2{1,1}) );
-				}
-
-			Vec2 positionAbsolute() const noexcept
-				{return m_pos;}
-
-			Vec2 positionRelative() const noexcept
-				{return m_pos;}
-
-			Paragraph& anchor(Vec2 a) noexcept
-				{
-				m_anchor=a;
-				m_flags|=CONTENT_DIRTY;
-				return *this;
-				}
-
-			Vec2 anchor() const noexcept
-				{return m_anchor;}
-
-
 			Paragraph& style(const ParaStyle& para) noexcept
 				{
 				m_p_style=para;
 				m_flags|=STYLE_DIRTY;
+				dirty_set();
 				return *this;
 				}
 
@@ -94,6 +64,7 @@ namespace PageComposer
 				{
 				m_t_style=t;
 				m_flags|=STYLE_DIRTY;
+				dirty_set();
 				return *this;
 				}
 
@@ -108,8 +79,8 @@ namespace PageComposer
 
 			void render() const noexcept
 				{
-				if( (m_flags&STYLE_DIRTY) || (m_flags&CONTENT_DIRTY) )
-					{render_impl();}
+				render_impl();
+				dirty_clear();
 				}
 		
 		private:
@@ -118,11 +89,7 @@ namespace PageComposer
 
 			mutable unsigned int m_flags;
 			static constexpr unsigned int STYLE_DIRTY=0x2;
-			static constexpr unsigned int CONTENT_DIRTY=0x1;
 
-			Vec2 m_pos;
-			Vec2 m_anchor;
-			RenderContext* r_rc;
 			ParaStyle m_p_style;
 			TextStyle m_t_style;
 			Handle<font_t> m_font;

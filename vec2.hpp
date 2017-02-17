@@ -50,6 +50,12 @@ namespace PageComposer
 				return *this;
 				}
 
+			Vec2& hadadiv(Vec2 b) noexcept
+				{
+				m_data/=b.m_data;
+				return *this;
+				}
+
 			Vec2& operator*=(double c) noexcept
 				{
 				m_data*=c;
@@ -71,6 +77,9 @@ namespace PageComposer
 
 	inline Vec2 hadamard(Vec2 a,Vec2 b) noexcept
 		{return a.hadamard(b);}
+
+	inline Vec2 hadadiv(Vec2 a,Vec2 b) noexcept
+		{return a.hadadiv(b);}
 
 	inline Vec2 operator*(double c,Vec2 b) noexcept
 		{return b*=c;}
