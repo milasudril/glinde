@@ -16,7 +16,7 @@ int main()
 	PageComposer::TextRenderer tr(rc);
 
 	PageComposer::ParaStyle style_para;
-	style_para.color(PageComposer::Color{1,1,1,0.5})
+	style_para.color(PageComposer::Color{1,0.75,0.85,1})
 		.alignment(PageComposer::ParaStyle::Alignment::CENTER);
 
 	PageComposer::TextStyle style_text;
@@ -32,13 +32,15 @@ int main()
 		.text("Flygande bäckasiner söka hwila på mjuka tufvor")
 		.positionAbsolute(PageComposer::Vec2{960/2+2,2})
 		.anchor(PageComposer::Vec2{0,-1});
+
+	auto next=foo.boundingRectangle();
 	
 	PageComposer::Paragraph bar(tr);
 	bar.style(style_para)
 		.style(style_text)
-		.text("Flygande bäckasiner söka hwila på mjuka tufvor")
-		.positionAbsolute(PageComposer::Vec2{960/2,0})
-		.anchor(PageComposer::Vec2{0,-1});
+		.text("0123456789")
+		.positionAbsolute(next.min() + next.size())
+		.anchor(PageComposer::Vec2{-1,-1});
 
 	PageComposer::LayerStack layers;
 	layers.push(PageComposer::Layer(foo))
