@@ -2,6 +2,7 @@
 
 if [ "$#" -ne 1 ]; then
     echo "Usage: makegame.sh directory"
+	exit
 fi
 
 pushd .

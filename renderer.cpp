@@ -49,14 +49,14 @@ static const char* g_frag_shader="#version 330 core\n"
 	"void main()"
 	"	{"
 	"	vec3 light_color=vec3(1,0.875,0.75);"
-	"	float power=1.0f;"
+	"	float power=0.8f;"
 	"	float d=length(lightpos_worldspace - pos_worldspace);"
 	"	vec3 n=normalize(normal_cameraspace);"
 	"	vec3 l=normalize(light_dir_cameraspace);"
 	"	float dotprod=clamp(dot(n,l),0,1);"
 /*	"	vec3 e=normalize(eye_dir_cameraspace);"
 	"	vec3 r=reflect(-l,n);"*/
-	"	color=tosRGB(texture(texture_diffuse, UV).rgb*light_color*dotprod/(d*d));"
+	"	color=tosRGB(texture(texture_diffuse, UV).rgb* (vec3(0.1,0.1,0.1) + power*light_color*dotprod)/(d*d));"
 //	"	color=tosRGB(texture(texture_diffuse, UV).rgb);"
 	"	}";
 
