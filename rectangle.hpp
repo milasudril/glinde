@@ -12,7 +12,7 @@ namespace PageComposer
 		public:
 			Rectangle(){}
 
-			Rectangle(Vec2 min,Vec2 size):m_min(min),m_size(size)
+			explicit Rectangle(Vec2 min,Vec2 size):m_min(min),m_size(size)
 				{}
 
 			Rectangle(double x, double y, double w, double h):m_min{x,y},m_size{w,h}

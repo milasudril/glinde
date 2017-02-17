@@ -8,7 +8,7 @@ namespace PageComposer
 	class Color
 		{
 		public:
-			Color(float r, float g, float b, float a):m_data{b,g,r,a}
+			explicit Color(float r, float g, float b, float a):m_data{b,g,r,a}
 				{}
 
 			float red() const noexcept

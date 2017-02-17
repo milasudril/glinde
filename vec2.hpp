@@ -13,10 +13,10 @@ namespace PageComposer
 			Vec2() noexcept:m_data{0,0}
 				{}
 
-			Vec2(v2sd x) noexcept:m_data(x)
+			explicit Vec2(v2sd x) noexcept:m_data(x)
 				{}
 
-			Vec2(double x, double y):m_data{x,y}
+			explicit Vec2(double x, double y):m_data{x,y}
 				{}
 
 			double x() const noexcept
@@ -85,10 +85,10 @@ namespace PageComposer
 		{return b*=c;}
 
 	inline Vec2 emin(Vec2 a,Vec2 b) noexcept
-		{return a.data()<b.data()?a.data():b.data();}
+		{return Vec2(a.data()<b.data()?a.data():b.data());}
 
 	inline Vec2 emax(Vec2 a,Vec2 b) noexcept
-		{return b.data()<a.data()?a.data():b.data();}
+		{return Vec2(b.data()<a.data()?a.data():b.data());}
 
 	};
 

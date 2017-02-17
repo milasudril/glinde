@@ -11,7 +11,7 @@ namespace PageComposer
 	class Layer
 		{
 		public:
-			Layer(PageObject& object) noexcept:
+			explicit Layer(PageObject& object) noexcept:
 				m_dirty(0),r_object(&object)
 				{object.layer(*this);}
 

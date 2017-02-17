@@ -15,7 +15,7 @@ namespace PageComposer
 	class RenderContext
 		{
 		public:
-			RenderContext(Surface& surf);
+			explicit RenderContext(Surface& surf);
 
 			~RenderContext();
 

@@ -17,7 +17,7 @@ namespace PageComposer
 	class Surface
 		{
 		public:
-			Surface(int width,int height);
+			explicit Surface(int width,int height);
 
 			~Surface();
 

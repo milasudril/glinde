@@ -16,7 +16,7 @@ namespace PageComposer
 	class TextRenderer
 		{
 		public:
-			TextRenderer(RenderContext& rc);
+			explicit TextRenderer(RenderContext& rc);
 
 			~TextRenderer();
 
