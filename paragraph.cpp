@@ -186,11 +186,10 @@ void Paragraph::render_impl() const noexcept
 		,m_p_style.color().blue()
 		,m_p_style.color().alpha() );
 
-//	boundingRectangle will update styles if needed
-	auto target_rect=bounding_rectangle_raw(); 
-	auto size=Vec2{target_rect.width(),target_rect.height()};
-	auto pos_rect=positionAbsolute()-0.5*hadamard(size,anchor() + Vec2{1,1});
-	auto pos_text=pos_rect - Vec2{target_rect.x(),target_rect.y()};
+//	bounding_rectangle_raw will update styles if needed
+	auto target_rect=bounding_rectangle_raw();
+	auto pos_rect=positionAbsolute()-0.5*hadamard(target_rect.size(),anchor() + Vec2{1,1});
+	auto pos_text=pos_rect - target_rect.min();
 
 	cairo_rectangle(rc_handle,pos_rect.x(),pos_rect.y()
 		,target_rect.width(),target_rect.height());

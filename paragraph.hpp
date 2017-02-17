@@ -11,7 +11,6 @@
 #include "rendercontext.hpp"
 #include "surface.hpp"
 #include "pageobjectbase.hpp"
-#include "layer.hpp"
 #include <utility>
 
 namespace PageComposer
@@ -78,8 +77,7 @@ namespace PageComposer
 			Rectangle boundingRectangle() const noexcept
 				{
 				auto target_rect=bounding_rectangle_raw(); 
-				auto size=Vec2{target_rect.width(),target_rect.height()};
-				auto pos_rect=positionAbsolute()-0.5*hadamard(size,anchor() + Vec2{1,1});
+				auto pos_rect=positionAbsolute()-0.5*hadamard(target_rect.size(),anchor() + Vec2{1,1});
 				return Rectangle{pos_rect,target_rect.size()};
 				}
 
