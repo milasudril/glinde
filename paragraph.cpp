@@ -40,10 +40,10 @@ Paragraph& Paragraph::text(const char* src)
 	return *this;
 	}
 
-Rectangle Paragraph::boundingRectangle() const noexcept
+Rectangle Paragraph::bounding_rectangle_raw() const noexcept
 	{
 	if(m_flags&STYLE_DIRTY)
-		{styleApply();}
+		{style_apply();}
 
 	auto handle=const_cast<PangoLayout*>(layout(m_layout));
 	PangoRectangle ink;
@@ -149,7 +149,7 @@ static float size_box(const ParaStyle& para,const TextStyle& font,int w,int h)
 	return size;
 	}
 
-void Paragraph::styleApply() const noexcept
+void Paragraph::style_apply() const noexcept
 	{
 	auto width=render_context().surface().width();
 	auto height=render_context().surface().height();
@@ -187,7 +187,7 @@ void Paragraph::render_impl() const noexcept
 		,m_p_style.color().alpha() );
 
 //	boundingRectangle will update styles if needed
-	auto target_rect=boundingRectangle(); 
+	auto target_rect=bounding_rectangle_raw(); 
 	auto size=Vec2{target_rect.width(),target_rect.height()};
 	auto pos_rect=positionAbsolute()-0.5*hadamard(size,anchor() + Vec2{1,1});
 	auto pos_text=pos_rect - Vec2{target_rect.x(),target_rect.y()};

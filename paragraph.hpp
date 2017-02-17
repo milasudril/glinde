@@ -75,7 +75,13 @@ namespace PageComposer
 
 			Paragraph& text(const char* src);
 
-			Rectangle boundingRectangle() const noexcept;
+			Rectangle boundingRectangle() const noexcept
+				{
+				auto target_rect=bounding_rectangle_raw(); 
+				auto size=Vec2{target_rect.width(),target_rect.height()};
+				auto pos_rect=positionAbsolute()-0.5*hadamard(size,anchor() + Vec2{1,1});
+				return Rectangle{pos_rect,target_rect.size()};
+				}
 
 			void render() const noexcept
 				{
@@ -84,8 +90,10 @@ namespace PageComposer
 				}
 		
 		private:
+			Rectangle bounding_rectangle_raw() const noexcept;
+
 			void render_impl() const noexcept;
-			void styleApply() const noexcept;
+			void style_apply() const noexcept;
 
 			mutable unsigned int m_flags;
 			static constexpr unsigned int STYLE_DIRTY=0x2;
