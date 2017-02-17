@@ -4,6 +4,7 @@
 #define PAGECOMPOSER_RECTANGLE_HPP
 
 #include "vec2.hpp"
+#include <cstddef>
 
 namespace PageComposer
 	{
@@ -12,23 +13,9 @@ namespace PageComposer
 		public:
 			Rectangle(){}
 
-			explicit Rectangle(Vec2 min,Vec2 size):m_min(min),m_size(size)
+			explicit Rectangle(Vec2 min,Vec2 max):m_min(min),m_max(max)
 				{}
 
-			Rectangle(double x, double y, double w, double h):m_min{x,y},m_size{w,h}
-				{}
-
-			double x() const noexcept
-				{return m_min.x();}
-
-			double& x() noexcept
-				{return m_min.x();}
-
-			double y() const noexcept
-				{return m_min.y();}
-
-			double& y() noexcept
-				{return m_min.y();}
 
 			Vec2 min() const noexcept
 				{return m_min;}
@@ -36,29 +23,24 @@ namespace PageComposer
 			Vec2& min() noexcept
 				{return m_min;}
 
+			Vec2 max() const noexcept
+				{return m_max;}
 
-
-			double width() const noexcept
-				{return m_size.x();}
-
-			double& width() noexcept
-				{return m_size.x();}
-
-			double height() const noexcept
-				{return m_size.y();}
-
-			double& height() noexcept
-				{return m_size.y();}
+			Vec2& max() noexcept
+				{return m_max;}
 
 			Vec2 size() const noexcept
-				{return m_size;}
+				{return max() - min();}
 
-			Vec2& size() noexcept
-				{return m_size;}
+			double area() const noexcept
+				{
+				auto s=size();
+				return s.x()*s.y();
+				}
 
 		private:
 			Vec2 m_min;
-			Vec2 m_size;
+			Vec2 m_max;
 		};
 	};
 

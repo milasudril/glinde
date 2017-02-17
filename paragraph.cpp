@@ -48,13 +48,9 @@ Rectangle Paragraph::bounding_rectangle_raw() const noexcept
 	auto handle=const_cast<PangoLayout*>(layout(m_layout));
 	PangoRectangle ink;
 	pango_layout_get_pixel_extents(handle,&ink,NULL);
-	return Rectangle
-		{
-		 static_cast<float>(ink.x)
-		,static_cast<float>(ink.y)
-		,static_cast<float>(ink.width)
-		,static_cast<float>(ink.height)
-		};
+	Vec2 min{double(ink.x),double(ink.y)};
+	auto max=min+Vec2{double(ink.width),double(ink.height)};
+	return Rectangle{min,max};
 	}
 
 
@@ -162,7 +158,6 @@ void Paragraph::style_apply() const noexcept
 		,m_t_style.smallcaps()?PANGO_VARIANT_SMALL_CAPS:PANGO_VARIANT_NORMAL);
 	pango_font_description_set_size(f,size_font(m_p_style,m_t_style,width,height)*PANGO_SCALE);
 
-
 	auto para_size_dim=m_p_style.sizeDimension();
 	auto l=const_cast<PangoLayout*>(layout(m_layout));
 	pango_layout_set_font_description(l,f);
@@ -170,8 +165,6 @@ void Paragraph::style_apply() const noexcept
 		{pango_layout_set_height(l,size_box(m_p_style,m_t_style,width,height)*PANGO_SCALE);}
 	else
 		{pango_layout_set_width(l,size_box(m_p_style,m_t_style,width,height)*PANGO_SCALE);}
-
-
 	pango_layout_set_alignment(l,pango_alignment(m_p_style.alignment()));
 
 	m_flags&=~STYLE_DIRTY;
@@ -188,11 +181,12 @@ void Paragraph::render_impl() const noexcept
 
 //	bounding_rectangle_raw will update styles if needed
 	auto target_rect=bounding_rectangle_raw();
-	auto pos_rect=positionAbsolute()-0.5*hadamard(target_rect.size(),anchor() + Vec2{1,1});
+	auto size=target_rect.size();
+	auto pos_rect=positionAbsolute()-0.5*hadamard(size,anchor() + Vec2{1,1});
 	auto pos_text=pos_rect - target_rect.min();
 
 	cairo_rectangle(rc_handle,pos_rect.x(),pos_rect.y()
-		,target_rect.width(),target_rect.height());
+		,size.x(),size.y());
 	cairo_fill(rc_handle);
 
 	cairo_move_to(rc_handle,pos_text.x(),pos_text.y());
@@ -204,5 +198,5 @@ void Paragraph::render_impl() const noexcept
 	pango_cairo_show_layout(rc_handle
 		,const_cast<PangoLayout*>(layout(m_layout)));
 
-	render_context().surface().renderRegionAdd(Rectangle{pos_rect,target_rect.size()});
+	render_context().surface().renderRegionAdd(Rectangle{pos_rect,pos_rect + size});
 	}

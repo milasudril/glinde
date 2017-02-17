@@ -77,8 +77,9 @@ namespace PageComposer
 			Rectangle boundingRectangle() const noexcept
 				{
 				auto target_rect=bounding_rectangle_raw(); 
-				auto pos_rect=positionAbsolute()-0.5*hadamard(target_rect.size(),anchor() + Vec2{1,1});
-				return Rectangle{pos_rect,target_rect.size()};
+				auto size=target_rect.size();
+				auto pos_rect=positionAbsolute()-0.5*hadamard(size,anchor() + Vec2{1,1});
+				return Rectangle{pos_rect,size + pos_rect};
 				}
 
 			void render() const noexcept

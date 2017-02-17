@@ -7,6 +7,7 @@
 #include "rendercontext.hpp"
 #include "surface.hpp"
 #include "layerstack.hpp"
+#include <cstring>
 
 
 int main()
@@ -22,31 +23,27 @@ int main()
 	PageComposer::TextStyle style_text;
 	style_text.size(16).family("Latin Modern Roman")
 		.color(PageComposer::Color{0,0.5,0.2,1});
-
-	auto style_shadow=style_text;
-	style_shadow.color(PageComposer::Color{0.25,0.25,0.25,0.75});
 	
 	PageComposer::Paragraph foo(tr);
 	foo.style(style_para)
-		.style(style_shadow)
-		.text("Flygande bäckasiner söka hwila på mjuka tufvor")
-		.positionAbsolute(PageComposer::Vec2{960/2+2,2})
-		.anchor(PageComposer::Vec2{0,-1});
-
-	auto next=foo.boundingRectangle();
-	
-	PageComposer::Paragraph bar(tr);
-	bar.style(style_para)
 		.style(style_text)
-		.text("0123456789")
-		.positionAbsolute(next.min() + next.size())
-		.anchor(PageComposer::Vec2{-1,-1});
-
-	PageComposer::LayerStack layers;
-	layers.push(PageComposer::Layer(foo))
-		.push(PageComposer::Layer(bar))
+		.text("Flygande bäckasiner söka hwila på mjuka tufvor")
+		.positionRelative(PageComposer::Vec2{0,0})
+		.anchor(PageComposer::Vec2{0,0})
 		.render();
 
+	auto rect=foo.boundingRectangle();
+
+	foo.positionAbsolute(rect.min())
+		.anchor(PageComposer::Vec2{1,1})
+		.render();
 
 	surf.save("test.png");
+
+/*	auto rendered_data=surf.dataDirty();
+	auto region_dirty=surf.regionDirty();
+	PageComposer::Surface surf2(region_dirty.widthInt(),region_dirty.heightInt());
+	memcpy(surf2.data(),rendered_data,sizeof(PageComposer::Surface::Pixel)*region_dirty.areaInt());
+	surf2.dirtySet().save("test2.png");*/
+
 	}
