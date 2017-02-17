@@ -6,6 +6,7 @@
 #include "textrenderer.hpp"
 #include "rendercontext.hpp"
 #include "surface.hpp"
+#include "layerstack.hpp"
 
 
 int main()
@@ -15,33 +16,35 @@ int main()
 	PageComposer::TextRenderer tr(rc);
 
 	PageComposer::ParaStyle style_para;
-	style_para.color(PageComposer::Color{1,0.5,0.5,1})
+	style_para.color(PageComposer::Color{1,1,1,0.5})
 		.alignment(PageComposer::ParaStyle::Alignment::CENTER);
 
 	PageComposer::TextStyle style_text;
 	style_text.size(16).family("Latin Modern Roman")
-		.style(PageComposer::TextStyle::FontStyle::ITALIC)
 		.color(PageComposer::Color{0,0.5,0.2,1});
+
+	auto style_shadow=style_text;
+	style_shadow.color(PageComposer::Color{0.25,0.25,0.25,0.75});
 	
 	PageComposer::Paragraph foo(tr);
 	foo.style(style_para)
+		.style(style_shadow)
+		.text("Flygande bäckasiner söka hwila på mjuka tufvor")
+		.positionAbsolute(PageComposer::Vec2{960/2+4,4})
+		.anchor(PageComposer::Vec2{0,-1});
+	
+	PageComposer::Paragraph bar(tr);
+	bar.style(style_para)
 		.style(style_text)
 		.text("Flygande bäckasiner söka hwila på mjuka tufvor")
 		.positionAbsolute(PageComposer::Vec2{960/2,0})
-		.anchor(PageComposer::Vec2{0,-1})
+		.anchor(PageComposer::Vec2{0,-1});
+
+	PageComposer::LayerStack layers;
+	layers.push(PageComposer::Layer(foo))
+		.push(PageComposer::Layer(bar))
 		.render();
 
-	foo.positionAbsolute(PageComposer::Vec2{0,0})
-		.anchor(PageComposer::Vec2{-1,-1})
-		.render();
-	
-	foo.positionRelative(PageComposer::Vec2{0,0})
-		.anchor(PageComposer::Vec2{0,0})
-		.render();
-
-	foo.positionRelative(PageComposer::Vec2{0,1})
-		.anchor(PageComposer::Vec2{0,1})
-		.render();
 
 	surf.save("test.png");
 	}
