@@ -74,14 +74,15 @@ void Surface::region_clamp() noexcept
 
 void Surface::dirty_fetch() const noexcept
 	{
-/*	auto data_new=data();
+	auto data_new=data();
 	auto l_0=static_cast<int>(m_dirty_region.min().x());
 	auto k_0=static_cast<int>(m_dirty_region.min().y());
-	auto L=m_dirty_region.widthInt();
-	auto K=m_dirty_region.heightInt();
+	auto size=m_dirty_region.size() + Vec2{0.5,0.5};
+	auto L=static_cast<int>(size.x());
+	auto K=static_cast<int>(size.y());
 	auto w=width();
 	assert(stride()==int(sizeof(Pixel)*w));
 	for(int k=0;k<K;++k)
-		{memcpy(m_dirty_data + k*L,data_new + (k_0 + k)*w + l_0,L*sizeof(Pixel));}*/
+		{memcpy(m_dirty_data + k*L,data_new + (k_0 + k)*w + l_0,L*sizeof(Pixel));}
 	m_dirty_fetched=1;
 	}

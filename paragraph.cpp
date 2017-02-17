@@ -48,8 +48,8 @@ Rectangle Paragraph::bounding_rectangle_raw() const noexcept
 	auto handle=const_cast<PangoLayout*>(layout(m_layout));
 	PangoRectangle ink;
 	pango_layout_get_pixel_extents(handle,&ink,NULL);
-	Vec2 min{double(ink.x),double(ink.y)};
-	auto max=min+Vec2{double(ink.width),double(ink.height)};
+	Vec2 min(ink.x,ink.y);
+	auto max=min+Vec2(ink.width,ink.height);
 	return Rectangle{min,max};
 	}
 

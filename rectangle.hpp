@@ -38,6 +38,18 @@ namespace PageComposer
 				return s.x()*s.y();
 				}
 
+			size_t areaInt() const noexcept
+				{
+				auto s=sizeInt();
+				return s.x()*s.y();
+				}
+
+			Vec2 sizeInt() const noexcept
+				{
+				auto s=size()+Vec2{0.5,0.5};
+				return Vec2( static_cast<int>(s.x()),static_cast<int>(s.y()) );
+				}
+
 		private:
 			Vec2 m_min;
 			Vec2 m_max;

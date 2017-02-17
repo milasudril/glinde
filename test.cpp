@@ -28,22 +28,17 @@ int main()
 	foo.style(style_para)
 		.style(style_text)
 		.text("Flygande bäckasiner söka hwila på mjuka tufvor")
-		.positionRelative(PageComposer::Vec2{0,0})
+		.positionRelative(PageComposer::Vec2{-1,-1})
 		.anchor(PageComposer::Vec2{0,0})
-		.render();
-
-	auto rect=foo.boundingRectangle();
-
-	foo.positionAbsolute(rect.min())
-		.anchor(PageComposer::Vec2{1,1})
 		.render();
 
 	surf.save("test.png");
 
-/*	auto rendered_data=surf.dataDirty();
+	auto rendered_data=surf.dataDirty();
 	auto region_dirty=surf.regionDirty();
-	PageComposer::Surface surf2(region_dirty.widthInt(),region_dirty.heightInt());
+	auto si=region_dirty.sizeInt();
+	PageComposer::Surface surf2(si.x(),si.y());
 	memcpy(surf2.data(),rendered_data,sizeof(PageComposer::Surface::Pixel)*region_dirty.areaInt());
-	surf2.dirtySet().save("test2.png");*/
+	surf2.dirtySet().save("test2.png");
 
 	}
