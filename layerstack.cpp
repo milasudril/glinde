@@ -28,7 +28,9 @@ void LayerStack::render() const noexcept
 
 	auto rc=cairocontext(r_rc.handle());
 	cairo_set_source_rgba(rc,0,0,0,0);
-	cairo_rectangle(rc,0,0,w,h);
+	auto size=dirty_rect.size();
+	cairo_rectangle(rc,dirty_rect.min().x(),dirty_rect.max().y()
+		,size.x(),size.y());
 	cairo_fill(rc);
 
 	std::for_each(m_layers.begin(),m_layers.end()
@@ -38,6 +40,4 @@ void LayerStack::render() const noexcept
 				{l.object().render();}
 			}
 		);
-
-
 	}

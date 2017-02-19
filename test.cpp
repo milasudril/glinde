@@ -28,7 +28,7 @@ int main()
 	foo.style(style_para)
 		.style(style_text)
 		.text("Flygande bäckasiner söka hwila på mjuka tufvor")
-		.positionRelative(PageComposer::Vec2{-1,-1})
+		.positionRelative(PageComposer::Vec2{1,1})
 		.anchor(PageComposer::Vec2{0,0})
 		.render();
 
