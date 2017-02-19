@@ -41,9 +41,14 @@ namespace PageComposer
 
 			virtual void render() const noexcept=0;
 
+			Rectangle boundingRectOld() const noexcept
+				{return m_bounding_rect_old;}
+
 		protected:
 			Layer* layer() const noexcept
 				{return r_layer;}
+
+			Rectangle m_bounding_rect_old;
 
 		private:
 			Layer* r_layer;

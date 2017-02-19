@@ -15,12 +15,6 @@ namespace PageComposer
 				m_dirty(1),r_object(&object)
 				{object.layer(*this);}
 
-			void render() const noexcept
-				{
-				if(m_dirty)
-					{r_object->render();}
-				}
-
 			Layer& dirty(bool d) noexcept
 				{
 				m_dirty=d;
@@ -29,6 +23,12 @@ namespace PageComposer
 
 			bool dirty() const noexcept
 				{return m_dirty;}
+
+			PageObject& object() noexcept
+				{return *r_object;}
+
+			const PageObject& object() const noexcept
+				{return *r_object;}
 
 		private:
 			bool m_dirty;

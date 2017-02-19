@@ -35,8 +35,8 @@ Paragraph::~Paragraph()
 
 Paragraph& Paragraph::text(const char* src)
 	{
-	pango_layout_set_text(layout(m_layout),src,-1);
 	dirty_set();
+	pango_layout_set_text(layout(m_layout),src,-1);
 	return *this;
 	}
 
@@ -197,6 +197,4 @@ void Paragraph::render_impl() const noexcept
 		,m_t_style.color().alpha());
 	pango_cairo_show_layout(rc_handle
 		,const_cast<PangoLayout*>(layout(m_layout)));
-
-	render_context().surface().renderRegionAdd(Rectangle{pos_rect,pos_rect + size});
 	}

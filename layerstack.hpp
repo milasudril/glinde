@@ -1,24 +1,26 @@
 //@	{
 //@	 "targets":[{"name":"layerstack.hpp","type":"include"}]
+//@	,"dependencies_extra":[{"ref":"layerstack.o","rel":"implementation"}]
 //@	}
 
 #ifndef PAGECOMPOSER_LAYERSTACK_HPP
 #define PAGECOMPOSER_LAYERSTACK_HPP
 
+#include "layer.hpp"
 #include <vector>
+#include <cstddef>
 
 namespace PageComposer
 	{
+	class RenderContext;
+
 	class LayerStack
 		{
 		public:
-			void render() const noexcept
-				{
-				std::for_each(m_layers.begin(),m_layers.end()
-					,[](const Layer& l)
-						{l.render();}
-					);
-				}
+			LayerStack(RenderContext& rc) noexcept:r_rc(rc)
+				{}
+
+			void render() const noexcept;
 
 			LayerStack& push(Layer&& layer)
 				{
@@ -33,6 +35,7 @@ namespace PageComposer
 				{std::swap(m_layers[a],m_layers[b]);}
 
 		private:
+			RenderContext& r_rc;
 			std::vector<Layer> m_layers;
 		};
 	}

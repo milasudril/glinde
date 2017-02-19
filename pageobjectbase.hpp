@@ -6,17 +6,21 @@
 #define PAGECOMPOSER_PAGEOBJECTBASE_HPP
 
 #include "pageobject.hpp"
+#include "rendercontext.hpp"
+#include "surface.hpp"
 #include "layer.hpp"
 
 namespace PageComposer
 	{
-	class Layer;
-
 	class PageObjectBase:public PageObject
 		{
 		public:
 			explicit PageObjectBase(RenderContext& rc) noexcept:r_rc(&rc)
-				{}
+				{
+				Vec2 size(r_rc->surface().width(),r_rc->surface().height());
+				m_bounding_rect_old.min()=size;
+				m_bounding_rect_old.max()=Vec2(0,0);
+				}
 
 			PageObjectBase(PageObjectBase&&)=default;
 
@@ -24,14 +28,14 @@ namespace PageComposer
 
 			PageObjectBase& positionAbsolute(Vec2 pos) noexcept final
 				{
-				m_pos=pos;
 				dirty_set();
+				m_pos=pos;
 				return *this;
 				}
 
 			PageObjectBase& positionRelative(Vec2 pos) noexcept final
 				{
-				Vec2 size{double(r_rc->surface().width()),double(r_rc->surface().height())};
+				Vec2 size(r_rc->surface().width(),r_rc->surface().height());
 				return positionAbsolute( 0.5*hadamard(size,pos + Vec2{1,1}) );
 				}
 
@@ -40,7 +44,7 @@ namespace PageComposer
 
 			Vec2 positionRelative() const noexcept final
 				{
-				Vec2 size{double(r_rc->surface().width()),double(r_rc->surface().height())};
+				Vec2 size(r_rc->surface().width(),r_rc->surface().height());
 				return hadadiv(2.0*m_pos,size) - Vec2{1,1};
 				}
 
@@ -57,6 +61,7 @@ namespace PageComposer
 		protected:
 			void dirty_set() noexcept
 				{
+				m_bounding_rect_old=boundingRectangle();
 				if(layer()!=nullptr)
 					{layer()->dirty(true);}
 				}

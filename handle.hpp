@@ -43,6 +43,8 @@ namespace PageComposer
 	struct rc_t{};
 
 	struct surface_t{};
+
+	struct pattern_t{};
 	}
 
 #endif

@@ -46,7 +46,7 @@ namespace PageComposer
 
 			Vec2 sizeInt() const noexcept
 				{
-				auto s=size()+Vec2{0.5,0.5};
+				auto s=size()+Vec2(0.5,0.5);
 				return Vec2( static_cast<int>(s.x()),static_cast<int>(s.y()) );
 				}
 
@@ -54,6 +54,19 @@ namespace PageComposer
 			Vec2 m_min;
 			Vec2 m_max;
 		};
+
+	inline Rectangle boundingRectangle(const Rectangle& a,const Rectangle& b)
+		{
+		return Rectangle( emin(a.min(),b.min()), emax(a.max(),b.max()) );		
+		}
+
+	inline bool overlap(const Rectangle& a,const Rectangle& b)
+		{
+		return a.min().x() <= b.max().x()
+			&& b.min().x() <= a.max().x()
+			&& a.min().y() <= b.max().y()
+			&& b.min().y() <= b.max().y();
+		}
 	};
 
 #endif

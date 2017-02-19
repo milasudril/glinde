@@ -30,19 +30,13 @@ namespace PageComposer
 			~Surface();
 
 			Surface(Surface&& s) noexcept:
-				 m_handle(s.m_handle),m_dirty_region(s.m_dirty_region)
-				,m_dirty_data(s.m_dirty_data),m_dirty_fetched(s.m_dirty_fetched)
-				{
-				s.m_handle.reset();
-				s.m_dirty_data=nullptr;
-				}
+				 m_handle(s.m_handle),m_dirty_rect(s.m_dirty_rect)
+				{s.m_handle.reset();}
 
 			Surface& operator=(Surface&& s) noexcept
 				{
 				std::swap(s.m_handle,m_handle);
-				std::swap(s.m_dirty_region,m_dirty_region);
-				std::swap(s.m_dirty_data,m_dirty_data);
-				std::swap(s.m_dirty_fetched,m_dirty_fetched);
+				std::swap(s.m_dirty_rect,m_dirty_rect);
 				return *this;
 				}
 
@@ -64,53 +58,40 @@ namespace PageComposer
 
 			const Pixel* data() const noexcept;
 
-			Pixel* data() noexcept;
-
-			Surface& dirtySet() noexcept;
+			template<class Callback>
+			Surface& contentModify(Callback&& cb)
+				{
+				cb(data_nc(),width(),height());
+				return dirtySet();
+				}
 
 			void save(const char* filename) const;
 
-			Surface& renderRegionAdd(const Rectangle& rect)
+			Surface& dirtyRectangleAdd(const Rectangle& rect)
 				{
-				m_dirty_region.max()=emax(rect.max(),m_dirty_region.max());
-				m_dirty_region.min()=emin(rect.min(),m_dirty_region.min());
-				region_clamp();
-				m_dirty_fetched=0;
+				m_dirty_rect=boundingRectangle(m_dirty_rect,rect);
+				rect_clamp();
 				return *this;
 				}
 
-			Surface& renderRegionClear()
+			Surface& dirtyRectangleClear()
 				{
-				m_dirty_region.max()=Vec2{0,0};
-				m_dirty_region.min()=Vec2{double(width()),double(height())};
-				m_dirty_fetched=0;
+				m_dirty_rect.max()=Vec2(0,0);
+				m_dirty_rect.min()=Vec2(width(),height());
 				return *this;
 				}
 
-			const Pixel* dataDirty() const noexcept
-				{
-				if(!m_dirty_fetched)
-					{dirty_fetch();}
-				return m_dirty_data;
-				}
+			Rectangle dirtyRectangle() const noexcept
+				{return m_dirty_rect;}
 
-			Rectangle regionDirty() const noexcept
-				{return m_dirty_region;}
+			void rectangleGet(const Rectangle& rect,Pixel* dest) const noexcept;
 
-			Pixel* dataDirty() noexcept
-				{
-				if(!m_dirty_fetched)
-					{dirty_fetch();}
-				return m_dirty_data;
-				}
-	
 		private:
-			void dirty_fetch() const noexcept;
-			void region_clamp() noexcept;
+			Pixel* data_nc() noexcept;
+			Surface& dirtySet() noexcept;
+			void rect_clamp() noexcept;
 			Handle<surface_t> m_handle;
-			Rectangle m_dirty_region;
-			Pixel* m_dirty_data;
-			mutable bool m_dirty_fetched;
+			Rectangle m_dirty_rect;
 		};
 	};
 

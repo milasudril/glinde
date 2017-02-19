@@ -12,14 +12,11 @@ using namespace PageComposer;
 Surface::Surface(int width,int height):
 m_handle( cairo_image_surface_create(CAIRO_FORMAT_ARGB32,width,height) )
 	{
-	m_dirty_data=static_cast<Pixel*>(malloc(sizeof(Pixel)*width*height));
-	memset(m_dirty_data,0,sizeof(Pixel)*width*height);
-	renderRegionClear();
+	dirtyRectangleClear();
 	}
 
 Surface::~Surface()
 	{
-	free(m_dirty_data);
 	cairo_surface_destroy(cairosurface(m_handle));
 	}
 
@@ -48,7 +45,7 @@ const Surface::Pixel* Surface::data() const noexcept
 	return reinterpret_cast<const Pixel*>(cairo_image_surface_get_data(handle));
 	}
 
-Surface::Pixel* Surface::data() noexcept
+Surface::Pixel* Surface::data_nc() noexcept
 	{
 	cairo_surface_flush(cairosurface(m_handle));
 	return reinterpret_cast<Pixel*>(cairo_image_surface_get_data(cairosurface(m_handle)));
@@ -66,23 +63,22 @@ void Surface::save(const char* filename) const
 	cairo_surface_write_to_png(handle,filename);
 	}
 
-void Surface::region_clamp() noexcept
+void Surface::rect_clamp() noexcept
 	{
-	m_dirty_region.min()=emax(Vec2{0,0},m_dirty_region.min());
-	m_dirty_region.max()=emin(Vec2{double(width()),double(height())},m_dirty_region.max() );
+	m_dirty_rect.min()=emax(Vec2{0,0},m_dirty_rect.min());
+	m_dirty_rect.max()=emin(Vec2(width(),height()),m_dirty_rect.max() );
 	}
 
-void Surface::dirty_fetch() const noexcept
+void Surface::rectangleGet(const Rectangle& rect,Pixel* dest) const noexcept
 	{
 	auto data_new=data();
-	auto l_0=static_cast<int>(m_dirty_region.min().x());
-	auto k_0=static_cast<int>(m_dirty_region.min().y());
-	auto size=m_dirty_region.size() + Vec2{0.5,0.5};
+	auto l_0=static_cast<int>(rect.min().x());
+	auto k_0=static_cast<int>(rect.min().y());
+	auto size=rect.size() + Vec2{0.5,0.5};
 	auto L=static_cast<int>(size.x());
 	auto K=static_cast<int>(size.y());
 	auto w=width();
 	assert(stride()==int(sizeof(Pixel)*w));
 	for(int k=0;k<K;++k)
-		{memcpy(m_dirty_data + k*L,data_new + (k_0 + k)*w + l_0,L*sizeof(Pixel));}
-	m_dirty_fetched=1;
+		{memcpy(dest + k*L,data_new + (k_0 + k)*w + l_0,L*sizeof(Pixel));}
 	}

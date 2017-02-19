@@ -32,13 +32,19 @@ int main()
 		.anchor(PageComposer::Vec2{0,0})
 		.render();
 
+
+	PageComposer::LayerStack layers(rc);
+	layers.push(PageComposer::Layer(foo))
+		.render();
+
 	surf.save("test.png");
 
-	auto rendered_data=surf.dataDirty();
-	auto region_dirty=surf.regionDirty();
-	auto si=region_dirty.sizeInt();
-	PageComposer::Surface surf2(si.x(),si.y());
-	memcpy(surf2.data(),rendered_data,sizeof(PageComposer::Surface::Pixel)*region_dirty.areaInt());
-	surf2.dirtySet().save("test2.png");
 
+	auto rect=surf.dirtyRectangle();
+	auto si=rect.sizeInt();
+	PageComposer::Surface surf2(si.x(),si.y());
+	surf2.contentModify([&surf,si](PageComposer::Surface::Pixel* pixels,int width,int height)
+		{
+		surf.rectangleGet(surf.dirtyRectangle(),pixels);
+		}).save("test2.png");
 	}
