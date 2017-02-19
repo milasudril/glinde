@@ -8,7 +8,7 @@
 #include "pageobject.hpp"
 #include "rendercontext.hpp"
 #include "surface.hpp"
-#include "layer.hpp"
+#include "layerstack.hpp"
 
 namespace PageComposer
 	{
@@ -62,14 +62,16 @@ namespace PageComposer
 			void dirty_set() noexcept
 				{
 				m_bounding_rect_old=boundingRectangle();
-				if(layer()!=nullptr)
-					{layer()->dirty(true);}
+				auto l=layers();
+				if(l!=nullptr)
+					{(*l)[layerIndex()].dirty(true);}
 				}
 
 			void dirty_clear() const noexcept
 				{
-				if(layer()!=nullptr)
-					{layer()->dirty(false);}
+				auto l=layers();
+				if(l!=nullptr)
+					{(*l)[layerIndex()].dirty(false);}
 				}
 
 			RenderContext& render_context() const noexcept

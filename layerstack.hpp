@@ -22,20 +22,25 @@ namespace PageComposer
 
 			void render() const noexcept;
 
-			LayerStack& push(Layer&& l)=delete;
-
-			template <class... Args>
-			LayerStack& push(Args&&... args)
+			LayerStack& push(Layer&& l)
 				{
-				m_layers.emplace_back(args...);
+				l.object().layerStack(*this,m_layers.size());
+				m_layers.push_back(std::move(l));
 				return *this;
 				}
+
 
 			size_t size() const noexcept
 				{return m_layers.size();}
 
 			void layersSwap(size_t a,size_t b) noexcept
 				{std::swap(m_layers[a],m_layers[b]);}
+
+			Layer& operator[](size_t k) noexcept
+				{return m_layers[k];}
+
+			const Layer& operator[](size_t k) const noexcept
+				{return m_layers[k];}
 
 		private:
 			RenderContext& r_rc;

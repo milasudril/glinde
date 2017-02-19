@@ -71,10 +71,18 @@ void Surface::rect_clamp() noexcept
 
 void Surface::rectangleGet(const Rectangle& rect,Pixel* dest) const noexcept
 	{
+	auto size=rect.size();
+	if(size.x() < 0)
+		{
+	//	Size is negative => NO data to fetch
+		return;
+		}
+
+	size+=Vec2(0.5,0.5);
+
 	auto data_new=data();
 	auto l_0=static_cast<int>(rect.min().x());
 	auto k_0=static_cast<int>(rect.min().y());
-	auto size=rect.size() + Vec2{0.5,0.5};
 	auto L=static_cast<int>(size.x());
 	auto K=static_cast<int>(size.y());
 	auto w=width();

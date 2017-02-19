@@ -13,7 +13,7 @@ namespace PageComposer
 		public:
 			explicit Layer(PageObject& object) noexcept:
 				m_dirty(1),r_object(&object)
-				{object.layer(*this);}
+				{}
 
 			Layer& dirty(bool d) noexcept
 				{

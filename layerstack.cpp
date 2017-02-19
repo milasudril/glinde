@@ -24,6 +24,12 @@ void LayerStack::render() const noexcept
 				}
 			}
 		);
+	if(dirty_rect.size().x()<0)
+		{
+	//	rectangle size has at least one negative component => No rectangle to update
+		return;
+		}
+
 	r_rc.surface().dirtyRectangleAdd(dirty_rect);
 
 	auto rc=cairocontext(r_rc.handle());
@@ -33,14 +39,11 @@ void LayerStack::render() const noexcept
 		,size.x(),size.y());
 	cairo_fill(rc);
 
-	printf("%p\n",m_layers.data());
 	std::for_each(m_layers.begin(),m_layers.end()
 		,[&dirty_rect](const Layer& l)
 			{
-			printf("%p\n",&l);
 			if(l.dirty() || overlap(dirty_rect,l.object().boundingRectangle()))
 				{l.object().render();}
-			printf("%p\n",&l);
 			}
 		);
 	}

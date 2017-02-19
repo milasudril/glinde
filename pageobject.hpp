@@ -6,22 +6,24 @@
 #define PAGECOMPOSER_PAGEOBJECT_HPP
 
 #include "rectangle.hpp"
+#include <cstddef>
 
 namespace PageComposer
 	{
-	class Layer;
+	class LayerStack;
 
 	class PageObject
 		{
 		public:
-			PageObject():r_layer(nullptr)
+			PageObject():r_stack(nullptr),m_index(0)
 				{}
 
 			virtual ~PageObject()=default;
 
-			PageObject& layer(Layer& layer) noexcept
+			PageObject& layerStack(LayerStack& stack,size_t index) noexcept
 				{
-				r_layer=&layer;
+				r_stack=&stack;
+				m_index=index;
 				return *this;
 				}
 
@@ -45,13 +47,17 @@ namespace PageComposer
 				{return m_bounding_rect_old;}
 
 		protected:
-			Layer* layer() const noexcept
-				{return r_layer;}
+			LayerStack* layers() const noexcept
+				{return r_stack;}
+
+			size_t layerIndex() const noexcept
+				{return m_index;}
 
 			Rectangle m_bounding_rect_old;
 
 		private:
-			Layer* r_layer;
+			LayerStack* r_stack;
+			size_t m_index;
 		};
 	}
 
