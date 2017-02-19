@@ -22,9 +22,12 @@ namespace PageComposer
 
 			void render() const noexcept;
 
-			LayerStack& push(Layer&& layer)
+			LayerStack& push(Layer&& l)=delete;
+
+			template <class... Args>
+			LayerStack& push(Args&&... args)
 				{
-				m_layers.push_back(std::move(layer));
+				m_layers.emplace_back(args...);
 				return *this;
 				}
 

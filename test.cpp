@@ -29,13 +29,13 @@ int main()
 		.style(style_text)
 		.text("Flygande bäckasiner söka hwila på mjuka tufvor")
 		.positionRelative(PageComposer::Vec2{1,1})
-		.anchor(PageComposer::Vec2{0,0})
-		.render();
-
+		.anchor(PageComposer::Vec2{0,0});
 
 	PageComposer::LayerStack layers(rc);
-	layers.push(PageComposer::Layer(foo))
+	layers.push(foo)
 		.render();
+
+	layers.render();
 
 	surf.save("test.png");
 
