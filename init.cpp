@@ -46,3 +46,4 @@ VersionResponse Angle::init(bool debug)
 		,reinterpret_cast<const char*>(glGetString(GL_SHADING_LANGUAGE_VERSION))
 		};
 	}
+
