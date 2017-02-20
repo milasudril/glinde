@@ -17,16 +17,34 @@ namespace Angle
 			Framebuffer()
 				{glCreateFramebuffers(1,&m_handle);}
 
+			static Framebuffer framebufferDefault() noexcept
+				{return Framebuffer(0);}
+
 			~Framebuffer()
 				{
-				glBindFramebuffer(GL_FRAMEBUFFER,0);
-				glDeleteFramebuffers(1,&m_handle);
+				if(m_handle!=0)
+					{
+					glBindFramebuffer(GL_FRAMEBUFFER,0);
+					glDeleteFramebuffers(1,&m_handle);
+					}
+				}
+
+			Framebuffer(const Framebuffer&)=delete;
+			Framebuffer& operator=(const Framebuffer&)=delete;
+			
+			Framebuffer(Framebuffer&& obj) noexcept:m_handle(obj.m_handle)
+				{obj.m_handle=0;}
+
+			Framebuffer& operator=(Framebuffer&& obj)
+				{
+				std::swap(obj.m_handle,m_handle);
+				return *this;
 				}
 
 			template<int N>
 			Framebuffer& attachColorBuffer(Texture2D& texture,GLint level=0) noexcept
 				{
-			//	API defect?: Limited compile-time range, but the spec is unlimited...
+			//	API defect?: Limited compile-time range, but the spec sais unlimited...
 				static_assert(N>=0,"");
 				static_assert((N<32 && GL_COLOR_ATTACHMENT0 + 32==GL_DEPTH_ATTACHMENT)
 					|| (GL_COLOR_ATTACHMENT0 + 32!=GL_DEPTH_ATTACHMENT),"");
@@ -64,6 +82,8 @@ namespace Angle
 				{glBindFramebuffer(native_type(t),m_handle);}
 
 		private:
+			Framebuffer(GLuint id):m_handle(id){}
+
 			static constexpr GLenum native_type(Target t) noexcept
 				{return static_cast<GLenum>(t);}
 			GLuint m_handle;
