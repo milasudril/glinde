@@ -15,17 +15,33 @@ namespace GLFWmm
 	class Session
 		{
 		public:
+			Session(const Session&)=delete;
+			Session& operator=(const Session&)=delete;
+
+			Session(Session&& a) noexcept:m_dead(0)
+				{a.m_dead=1;}
+
+			Session& operator=(Session&& a) noexcept
+				{
+				m_dead=0;
+				a.m_dead=1;
+				return *this;
+				}
+
 			Session():Session(error_handler_default)
 				{}
 
-			explicit Session(GLFWerrorfun error_handler)
+			explicit Session(GLFWerrorfun error_handler):m_dead(0)
 				{
 				glfwSetErrorCallback(error_handler);
 				glfwInit();
 				}
 
 			~Session() noexcept
-				{glfwTerminate();}
+				{
+				if(!m_dead)
+					{glfwTerminate();}
+				}
 
 			const char* versionGet() const noexcept
 				{return glfwGetVersionString();}
@@ -74,6 +90,9 @@ namespace GLFWmm
 				}
 
 		private:
+			bool m_dead;
+
+
 			template<class CreationHints,typename member_test<decltype(CreationHints::resizable)>::type=0>
 			static void resizableSet(const CreationHints& hints,has_member) noexcept
 				{
