@@ -13,6 +13,7 @@
 #include "init.hpp"
 #include "contextguard.hpp"
 #include "texture2d.hpp"
+#include "framebuffer.hpp"
 
 #include <geosimd/point.hpp>
 #include <GLFW/glfw3.h>
@@ -142,6 +143,8 @@ int main()
 	GLFWContext glfw(Angle::gl_version_requirements());
 	try
 		{
+		static_assert(GL_COLOR_ATTACHMENT0 + 32==GL_DEPTH_ATTACHMENT,"");
+
 		Window mainwin;
 		Angle::ContextGuard<Window> context(mainwin);
 		auto version=Angle::init();
