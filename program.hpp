@@ -16,6 +16,15 @@ namespace Angle
 			Program(const Program&)=delete;
 			Program& operator=(const Program&)=delete;
 
+			Program(Program&& obj) noexcept:m_handle(obj.m_handle)
+				{obj.m_handle=0;}
+
+			Program& operator=(Program&& obj)
+				{
+				std::swap(obj.m_handle,m_handle);
+				return *this;
+				}
+
 			~Program() noexcept
 				{glDeleteProgram(m_handle);}
 
