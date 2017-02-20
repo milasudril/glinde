@@ -183,18 +183,10 @@ void main()
 		Angle::VertexArray<MyShaderLayout> vertex_array;
 		vertex_array.vertexBuffer<0>(vertbuff).enableVertexAttrib<0>()
 			.elementBuffer(facebuff);
-		
-			{
-			auto t_0=clock();
-			size_t N=10000;
-			for(size_t k=0;k<N;++k)
-				{
-				texture.dataSet(&g_texture[0][0],1200,1920);
-				}
-			auto t=double(clock() - t_0)/(N*CLOCKS_PER_SEC);
-			printf("%.7g (Transfer speed: %.7g B/s)\n",t,1200*1920*sizeof(RGB)/t);
-			}
-	/*	texture.bind(0);
+
+		texture.dataSet(&g_texture[0][0],1200,1920);
+
+		texture.bind(1);
 		glEnable(GL_FRAMEBUFFER_SRGB);
 
 		while(!mainwin.shouldClose())
@@ -202,9 +194,11 @@ void main()
 			glfwPollEvents();
 			vertex_array.bind();
 			prgm.bind();
+			glUniform1i(0,1);
+		//	glBindSampler(1,0);
 			Angle::drawElements(Angle::DrawMode::TRIANGLES,0,6);
 			glfwSwapBuffers(mainwin.handle());
-			}*/
+			}
 
 		}
 	catch(const Angle::Error& err)

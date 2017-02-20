@@ -104,7 +104,7 @@ namespace Angle
 				typedef typename VertexBuffer<ElementType>::value_type value_type;
 				static_assert(std::is_same<value_type,attrib_type>::value,"Attribute type mismatch");
 				static_assert(VertexBuffer<ElementType>::components==BatchLayout::attributes[attrib].components,"Component count mismatch");
-				glVertexArrayVertexBuffer(m_handle,attrib,vbo.handle(),0,VertexBuffer<ElementType>::vector_size);
+				glVertexArrayVertexBuffer(m_handle,attrib,vbo.handle(),BatchLayout::attributes[attrib].offset,VertexBuffer<ElementType>::vector_size);
 				return *this;
 				}
 
