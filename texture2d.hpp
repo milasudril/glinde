@@ -147,6 +147,9 @@ namespace Angle
 				m_unit=unit;
 				}
 
+			GLuint handle() noexcept
+				{return m_handle;}
+
 		private:
 			void realloc(GLsizei width_in,GLsizei height_in);
 			GLuint m_handle;

@@ -13,6 +13,7 @@
 #include "init.hpp"
 #include "contextguard.hpp"
 #include "texture2d.hpp"
+#include "framebuffer.hpp"
 
 #include <geosimd/point.hpp>
 #include <GLFW/glfw3.h>
