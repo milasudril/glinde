@@ -24,7 +24,8 @@ out vec2 tex_coords;
 void main()
 	{
 	gl_Position=position;
-	tex_coords=position.xy + vec2(0.5,0.5);
+	tex_coords=position.xy*vec2(1,-1);
+	tex_coords=0.5*(tex_coords + vec2(1,1));
 	}
 )EOF"_vert,R"EOF(#version 450 core
 out vec4 color;
