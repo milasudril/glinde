@@ -16,6 +16,8 @@
 #include "pagecomposer/surface.hpp"
 #include "pagecomposer/layerstack.hpp"
 
+#include <memory>
+
 namespace Glinde
 	{
 	class Display;
@@ -24,14 +26,15 @@ namespace Glinde
 		{
 		public:
 		//SRGB8_ALPHA8?
-			Scene():m_hud_texture(1,Angle::TextureFormat::RGBA8,1,1)
-				,m_hud_surface(1,1),m_hud_context(m_hud_surface)
+			Scene():m_hud_texture(1,Angle::TextureFormat::SRGB8_ALPHA8,1,1)
+				,m_hud_surface(1,1),m_hud_texbuff(new PageComposer::Surface::Pixel[1])
+				,m_hud_context(m_hud_surface)
 				,m_hud_text(m_hud_context),m_hud_pos_display(m_hud_text)
 				,m_hud_layers(m_hud_context)
 				{
 				m_hud_bodytext.color(PageComposer::Color(1,1,1,1));
 				m_hud_pos_display.style(m_hud_bodytext);
-				m_hud_para.color(PageComposer::Color(0.1,0.1,0.1,0.75));
+				m_hud_para.color(PageComposer::Color(0.25,0.25,0.25,0.75));
 				auto pos_style=m_hud_para;
 				pos_style.alignment(PageComposer::ParaStyle::Alignment::RIGHT);
 				m_hud_pos_display.style(pos_style).positionRelative(PageComposer::Vec2(1,-1))
@@ -45,6 +48,7 @@ namespace Glinde
 		//HUD stuff. Move to other class
 			Angle::Texture2D m_hud_texture;
 			PageComposer::Surface m_hud_surface;
+			std::unique_ptr<PageComposer::Surface::Pixel[]> m_hud_texbuff;
 			PageComposer::RenderContext m_hud_context;
 			PageComposer::TextRenderer m_hud_text;
 			PageComposer::ParaStyle m_hud_para;
