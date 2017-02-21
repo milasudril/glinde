@@ -7,6 +7,8 @@
 #define GLINDE_ENGINE_HPP
 
 #define GLFWMM_NO_MEMBER_ADVERTISMENT
+
+#include "imagerenderer.hpp"
 #include "glfwmm/window.hpp"
 
 namespace Glinde
@@ -25,6 +27,7 @@ namespace Glinde
 			GLFWmm::Session m_session;
 			GLFWmm::Window<UICallback> m_mainwin;
 			UICallback m_cb;
+			ImageRenderer m_imgrenderer;
 		};
 	}
 
