@@ -6,10 +6,7 @@
 #ifndef GLINDE_ENGINE_HPP
 #define GLINDE_ENGINE_HPP
 
-#define GLFWMM_NO_MEMBER_ADVERTISMENT
-
-#include "imagerenderer.hpp"
-#include "glfwmm/window.hpp"
+#include "display.hpp"
 
 namespace Glinde
 	{
@@ -20,14 +17,9 @@ namespace Glinde
 			void run();
 			
 		private:
-			class UICallback
-				{
-				};
-
 			GLFWmm::Session m_session;
-			GLFWmm::Window<UICallback> m_mainwin;
-			UICallback m_cb;
-			ImageRenderer m_imgrenderer;
+			UICallback m_cb; 
+			Display m_mainwin;
 		};
 	}
 

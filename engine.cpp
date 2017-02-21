@@ -4,6 +4,7 @@
 
 #include "engine.hpp"
 #include "angle/init.hpp"
+
 #include <utility>
 
 #include <cstdio>
@@ -53,12 +54,8 @@ namespace
 	}
 
 Engine::Engine():m_session(sessionCreate())
-	,m_mainwin(0.5f,0.5f,"Glinde",m_cb,m_session)
-	{
-	m_mainwin.contextCapture();
-	auto version=Angle::init();
-	fprintf(stderr,"%s %s %s %s\n",version.vendor,version.renderer,version.version,version.glsl_version);
-	}
+	,m_mainwin(m_cb,m_session)
+	{}
 
 void Engine::run()
 	{
