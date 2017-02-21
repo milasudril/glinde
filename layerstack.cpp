@@ -35,10 +35,11 @@ void LayerStack::render() const noexcept
 	auto rc=cairocontext(r_rc.handle());
 	cairo_set_source_rgba(rc,0,0,0,0);
 	auto size=dirty_rect.size();
-	cairo_rectangle(rc,dirty_rect.min().x(),dirty_rect.max().y()
+	cairo_set_operator(rc,CAIRO_OPERATOR_SOURCE);
+	cairo_rectangle(rc,dirty_rect.min().x(),dirty_rect.min().y()
 		,size.x(),size.y());
 	cairo_fill(rc);
-
+	cairo_set_operator(rc,CAIRO_OPERATOR_OVER);
 	std::for_each(m_layers.begin(),m_layers.end()
 		,[&dirty_rect](const Layer& l)
 			{

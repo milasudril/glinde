@@ -15,7 +15,7 @@ namespace PageComposer
 	class PageObjectBase:public PageObject
 		{
 		public:
-			explicit PageObjectBase(RenderContext& rc) noexcept:r_rc(&rc)
+			explicit PageObjectBase(RenderContext& rc) noexcept:m_pos_relative(0),r_rc(&rc)
 				{
 				Vec2 size(r_rc->surface().width(),r_rc->surface().height());
 				m_bounding_rect_old.min()=size;
@@ -30,20 +30,32 @@ namespace PageComposer
 				{
 				dirty_set();
 				m_pos=pos;
+				m_pos_relative=0;
 				return *this;
 				}
 
 			PageObjectBase& positionRelative(Vec2 pos) noexcept final
 				{
-				Vec2 size(r_rc->surface().width(),r_rc->surface().height());
-				return positionAbsolute( 0.5*hadamard(size,pos + Vec2{1,1}) );
+				dirty_set();
+				m_pos=pos;
+				m_pos_relative=1;
+				return *this;
 				}
 
 			Vec2 positionAbsolute() const noexcept final
-				{return m_pos;}
+				{
+				if(m_pos_relative)
+					{
+					Vec2 size(r_rc->surface().width(),r_rc->surface().height());
+					return 0.5*hadamard(size,m_pos + Vec2{1,1});
+					}
+				return m_pos;
+				}
 
 			Vec2 positionRelative() const noexcept final
 				{
+				if(m_pos_relative)
+					{return m_pos;}
 				Vec2 size(r_rc->surface().width(),r_rc->surface().height());
 				return hadadiv(2.0*m_pos,size) - Vec2{1,1};
 				}
@@ -79,7 +91,8 @@ namespace PageComposer
 
 		private:
 			Vec2 m_pos;
-			Vec2 m_anchor;			
+			Vec2 m_anchor;
+			bool m_pos_relative;
 			RenderContext* r_rc;
 		};
 	}

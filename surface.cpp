@@ -60,6 +60,7 @@ Surface& Surface::dirtySet() noexcept
 void Surface::save(const char* filename) const
 	{
 	auto handle=const_cast<cairo_surface_t*>(cairosurface(m_handle));
+	cairo_surface_flush(handle);
 	cairo_surface_write_to_png(handle,filename);
 	}
 
