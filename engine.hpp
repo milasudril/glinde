@@ -7,6 +7,7 @@
 #define GLINDE_ENGINE_HPP
 
 #include "display.hpp"
+#include "scene.hpp"
 
 namespace Glinde
 	{
@@ -20,6 +21,7 @@ namespace Glinde
 			GLFWmm::Session m_session;
 			UICallback m_cb; 
 			Display m_mainwin;
+			Scene m_scene;
 		};
 	}
 

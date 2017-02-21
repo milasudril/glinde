@@ -62,5 +62,7 @@ void Engine::run()
 	while(!m_mainwin.shouldClose())
 		{
 		m_session.eventsPoll();
+		m_scene.render(m_mainwin);
+		m_mainwin.buffersSwap();
 		}
 	}

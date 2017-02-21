@@ -43,6 +43,16 @@ void main()
 
 			void render(const Angle::Texture2D& texture,Angle::Framebuffer& fb) noexcept
 				{
+			//	TODO: bind fb
+				m_vao.bind();
+				texture.bind(0);
+				m_program.bind();
+				glUniform1i(0,0);
+				glDrawArrays(GL_TRIANGLES,0,6);
+				}
+
+			void render(const Angle::Texture2D& texture) noexcept
+				{
 				m_vao.bind();
 				texture.bind(0);
 				m_program.bind();

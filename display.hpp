@@ -16,6 +16,8 @@
 
 namespace Glinde
 	{
+	class Scene;
+
 	class Display:public GLFWmm::Window<UICallback>
 		{
 		public:
@@ -23,6 +25,9 @@ namespace Glinde
 				GLFWmm::Window<UICallback>(0.5,0.5,"Glinde",cb,session)
 				,m_context(*this)
 				{}
+
+			void draw(const Angle::Texture2D& texture)
+				{m_imgrenderer.render(texture);}
 
 		private:
 			struct APIInitializer
