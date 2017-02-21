@@ -141,7 +141,7 @@ namespace Angle
 					{glGenerateTextureMipmap(m_handle);}
 				}
 
-			void bind(GLuint unit)
+			void bind(GLuint unit) const
 				{
 				glBindTextureUnit(unit,m_handle);
 				m_unit=unit;
@@ -153,7 +153,7 @@ namespace Angle
 		private:
 			void realloc(GLsizei width_in,GLsizei height_in);
 			GLuint m_handle;
-			GLuint m_unit;
+			mutable GLuint m_unit;
 			GLsizei m_width;
 			GLsizei m_height;
 			TextureFormat m_format;

@@ -143,8 +143,6 @@ int main()
 	GLFWContext glfw(Angle::gl_version_requirements());
 	try
 		{
-		static_assert(GL_COLOR_ATTACHMENT0 + 32==GL_DEPTH_ATTACHMENT,"");
-
 		Window mainwin;
 		Angle::ContextGuard<Window> context(mainwin);
 		auto version=Angle::init();
