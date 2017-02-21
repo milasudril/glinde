@@ -4,6 +4,7 @@
 #define GLFWMM_WINDOWBASE_HPP
 
 #include "session.hpp"
+#include "size.hpp"
 
 namespace GLFWmm
 	{
@@ -11,13 +12,6 @@ namespace GLFWmm
 		{
 		public:
 			typedef GLFWwindow* ContextHandle;
-			struct Size
-				{
-				int width;
-				int height;
-				float ratio() const noexcept
-					{return static_cast<float>(width)/static_cast<float>(height);}
-				};
 
 			Size sizeGet() const noexcept
 				{
