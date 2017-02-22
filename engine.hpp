@@ -7,7 +7,6 @@
 #define GLINDE_ENGINE_HPP
 
 #include "display.hpp"
-#include "scene.hpp"
 #include "uicallback.hpp"
 
 namespace Glinde

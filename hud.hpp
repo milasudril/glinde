@@ -8,12 +8,8 @@
 
 #include "angle/texture2d.hpp"
 #include "glfwmm/size.hpp"
-#include "pagecomposer/textstyle.hpp"
-#include "pagecomposer/parastyle.hpp"
 #include "pagecomposer/paragraph.hpp"
 #include "pagecomposer/textrenderer.hpp"
-#include "pagecomposer/rendercontext.hpp"
-#include "pagecomposer/surface.hpp"
 #include "pagecomposer/layerstack.hpp"
 
 #include <memory>
