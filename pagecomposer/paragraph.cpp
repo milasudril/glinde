@@ -29,7 +29,8 @@ Paragraph::Paragraph(TextRenderer& tr):PageObjectBase(tr.renderContext())
 
 Paragraph::~Paragraph()
 	{
-	g_object_unref(m_layout.handle());
+	if(m_layout.handle()!=nullptr)
+		{g_object_unref(m_layout.handle());}
 	pango_font_description_free(font(m_font));
 	}
 

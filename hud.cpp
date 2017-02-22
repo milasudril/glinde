@@ -21,10 +21,10 @@ using namespace Glinde;
 Hud::Hud():m_texture(1,Angle::TextureFormat::SRGB8_ALPHA8,1,1)
 	,m_surface(1,1),m_texbuff(new PageComposer::Surface::Pixel[1])
 	,m_context(m_surface)
-	,m_text(m_context),m_pos_display(m_text)
+	,m_text(m_context)
 	,m_layers(m_context)
 	{
-	m_bodytext.color(PageComposer::Color(1,1,1,1));
+/*	m_bodytext.color(PageComposer::Color(1,1,1,1));
 	m_pos_display.style(m_bodytext);
 	m_para.color(PageComposer::Color(0.25,0.25,0.25,0.75));
 	auto pos_style=m_para;
@@ -34,7 +34,7 @@ Hud::Hud():m_texture(1,Angle::TextureFormat::SRGB8_ALPHA8,1,1)
 	m_layers.push(PageComposer::Layer(m_pos_display));
 
 
-	m_pos_display.text("Hello, World\nA longer piece of text");
+	m_pos_display.text("Hello, World\nA longer piece of text");*/
 	}
 
 void Hud::fbResize(int width,int height)

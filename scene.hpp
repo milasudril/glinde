@@ -19,6 +19,9 @@ namespace Glinde
 			void fbResize(int width,int height);
 			void render(Display& disp) const noexcept;
 
+			Hud& hud() noexcept
+				{return m_hud;}
+
 		private:
 			Hud m_hud;
 		};

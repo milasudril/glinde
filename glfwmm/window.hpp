@@ -21,6 +21,8 @@ namespace GLFWmm
 					focusChangedRegister(has_member{});
 					iconifiedRegister(has_member{});
 					framebufferSizeChangedRegister(has_member{});
+					
+					mouseMoveRegister(has_member{});
 					}
 
 		private:
@@ -122,6 +124,20 @@ namespace GLFWmm
 				{glfwSetFramebufferSizeCallback(m_handle,framebufferSizeChanged);}
 
 			ADVERTISE_MEMBER("framebufferSizeChanged") void framebufferSizeChangedRegister(has_not_member){}
+
+
+			static void mouseMove(GLFWwindow* handle,double x,double y)
+				{
+				auto self=reinterpret_cast<Window*>(userPointerGet(handle));
+				self->r_callback->mouseMove(*self,x,y);
+				}
+
+			template<class S=Callback, typename member_test<decltype(&S::mouseMove)>::type=0>
+			void mouseMoveRegister(has_member)
+				{glfwSetCursorPosCallback(m_handle,mouseMove);}
+
+			ADVERTISE_MEMBER("mouseMove") void mouseMoveRegister(has_not_member){}
+
 		};
 	}
 
