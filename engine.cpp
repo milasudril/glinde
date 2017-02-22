@@ -54,8 +54,11 @@ namespace
 	}
 
 Engine::Engine():m_session(sessionCreate())
-	,m_mainwin(m_cb,m_session)
-	{}
+	,m_cb(m_scene),m_mainwin(m_cb,m_session)
+	{
+	auto size_fb=m_mainwin.sizeFbGet();
+	m_cb.framebufferSizeChanged(m_mainwin,size_fb.width,size_fb.height);
+	}
 
 void Engine::run()
 	{

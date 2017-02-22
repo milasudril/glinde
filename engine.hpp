@@ -8,6 +8,7 @@
 
 #include "display.hpp"
 #include "scene.hpp"
+#include "uicallback.hpp"
 
 namespace Glinde
 	{

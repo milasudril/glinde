@@ -10,13 +10,14 @@
 #define GLFWMM_NO_MEMBER_ADVERTISMENT
 
 #include "glfwmm/window.hpp"
-#include "uicallback.hpp"
+//#include "uicallback.hpp"
 #include "angle/contextguard.hpp"
 #include "angle/init.hpp"
 
 namespace Glinde
 	{
 	class Scene;
+	class UICallback;
 
 	class Display:public GLFWmm::Window<UICallback>
 		{
