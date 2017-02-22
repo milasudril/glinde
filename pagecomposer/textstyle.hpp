@@ -5,7 +5,9 @@
 
 #include "color.hpp"
 #include "textsizemode.hpp"
-#include <string>
+#include <cstdlib>
+#include <cstring>
+#include <utility>
 
 namespace PageComposer
 	{
@@ -14,18 +16,75 @@ namespace PageComposer
 		public:
 			enum class FontStyle:int{NORMAL,ITALIC,OBLIQUE};
 
-			TextStyle():m_family("serif"),m_style(FontStyle::NORMAL),m_size(16.0)
+			TextStyle():m_family_size(0),m_style(FontStyle::NORMAL),m_size(16.0)
 				,m_size_mode(TextSizeMode::ABSOLUTE),m_weight(0.3f),m_color{0,0,0,1},m_flags(0)
-				{}
+				{
+				family("Serif");
+				}
+
+			~TextStyle() noexcept
+				{free(m_family);}
+
+			TextStyle(TextStyle&& obj) noexcept:m_family(obj.m_family)
+				,m_family_size(obj.m_family_size)
+				,m_style(obj.m_style)
+				,m_size(obj.m_size)
+				,m_size_mode(obj.m_size_mode)
+				,m_weight(obj.m_weight)
+				,m_color(obj.m_color)
+				,m_flags(obj.m_flags)
+				{
+				obj.m_family=nullptr;
+				obj.m_family_size=0;
+				}
+
+			TextStyle& operator=(TextStyle&& obj) noexcept
+				{
+				std::swap(obj.m_family,m_family);
+				std::swap(obj.m_family_size,obj.m_family_size);
+				m_style=obj.m_style;
+				m_size=obj.m_size;
+				m_size_mode=obj.m_size_mode;
+				m_weight=obj.m_weight;
+				m_color=obj.m_color;
+				m_flags=obj.m_flags;
+				return *this;
+				}
+
+			TextStyle(const TextStyle& obj):
+				 m_family_size(0)
+				,m_style(obj.m_style)
+				,m_size(obj.m_size)
+				,m_size_mode(obj.m_size_mode)
+				,m_weight(obj.m_weight)
+				,m_color(obj.m_color)
+				,m_flags(obj.m_flags)
+				{family(obj.family());}
+
+			TextStyle& operator=(const TextStyle& obj)
+				{
+				TextStyle temp(obj);
+				*this=std::move(temp);
+				return *this;
+				}
 
 			TextStyle& family(const char* fam)
 				{
-				m_family=fam;
+				auto l=strlen(fam) + 1;
+				if(l>m_family_size)
+					{
+					auto ptr=static_cast<char*>(malloc(l*sizeof(char)));
+					if(ptr==nullptr)
+						{throw "Out of memory";}
+					m_family=ptr;
+					m_family_size=l;
+					}
+				memcpy(m_family,fam,m_family_size);
 				return *this;
 				}
 
 			const char* family() const noexcept
-				{return m_family.c_str();}
+				{return m_family;}
 
 			TextStyle& style(FontStyle style_new) noexcept
 				{
@@ -90,7 +149,8 @@ namespace PageComposer
 
 
 		private:
-			std::string m_family;
+			char* m_family;
+			size_t m_family_size;
 			FontStyle m_style;
 			float m_size;
 			TextSizeMode m_size_mode;
