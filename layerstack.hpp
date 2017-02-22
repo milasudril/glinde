@@ -20,7 +20,13 @@ namespace PageComposer
 			LayerStack(RenderContext& rc) noexcept:r_rc(rc)
 				{}
 
-			void render() const noexcept;
+			void render() const noexcept
+				{
+				if(m_forced)
+					{render_forced();}
+				else
+					{render_normal();}
+				}
 
 			LayerStack& push(Layer&& l)
 				{
@@ -42,9 +48,16 @@ namespace PageComposer
 			const Layer& operator[](size_t k) const noexcept
 				{return m_layers[k];}
 
+			void forcedRender() noexcept	
+				{m_forced=1;}
+
 		private:
 			RenderContext& r_rc;
 			std::vector<Layer> m_layers;
+			mutable bool m_forced;
+
+			void render_forced() const noexcept;
+			void render_normal() const noexcept;
 		};
 	}
 
