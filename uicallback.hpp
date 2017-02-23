@@ -35,7 +35,6 @@ namespace Glinde
 					sprintf(buffer,"(%.3g, %.3g)",pos.first,pos.second);
 					p.text(buffer)
 						.anchor(PageComposer::Vec2(-1,-1));
-					asm volatile("nop");
 					}
 				}
 
