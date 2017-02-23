@@ -67,7 +67,7 @@ namespace GLFWmm
 				return ret;
 				}
 
-			std::pair<double,double> cursorPos() const noexcept
+			std::pair<double,double> cursorPosition() const noexcept
 				{
 				std::pair<double,double> ret;
 				glfwGetCursorPos(m_handle,&ret.first,&ret.second);
