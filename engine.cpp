@@ -62,6 +62,8 @@ Engine::Engine():m_session(sessionCreate())
 
 void Engine::run()
 	{
+	m_mainwin.inputMode(GLFWmm::WindowBase::MouseButtonMode::STICKY)
+		.inputMode(GLFWmm::WindowBase::KeyMode::STICKY);
 	while(!m_mainwin.shouldClose())
 		{
 		m_session.eventsPoll();

@@ -21,12 +21,21 @@ namespace Glinde
 				r_scene->fbResize(x,y);
 				}
 
-			void mouseMove(Window& win,double x,double y)
+			void cursorPos(Window& win,double x,double y)
 				{
 				auto& p=r_scene->hud().paragraph(Stringkey("position"));
 				char buffer[20];
 				sprintf(buffer,"(%.3g, %.3g)",x,y);
 				p.text(buffer).anchor(PageComposer::Vec2(-1,-1));
+				}
+
+			void mouseButton(Window& win,int button,Window::Action action
+				,unsigned int modifiers)
+				{
+				if(action==Window::Action::RELEASE)
+					{
+					printf("Hello, World\n");
+					}
 				}
 
 		private:

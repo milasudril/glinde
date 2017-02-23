@@ -21,8 +21,15 @@ namespace GLFWmm
 					focusChangedRegister(has_member{});
 					iconifiedRegister(has_member{});
 					framebufferSizeChangedRegister(has_member{});
-					
-					mouseMoveRegister(has_member{});
+
+					mouseButtonRegister(has_member{});
+					cursorEnterRegister(has_member{});
+					cursorPosRegister(has_member{});
+					dropRegister(has_member{});
+					scrollRegister(has_member{});
+
+					keyRegister(has_member{});
+					codepointRegister(has_member{});
 					}
 
 		private:
@@ -126,18 +133,108 @@ namespace GLFWmm
 			ADVERTISE_MEMBER("framebufferSizeChanged") void framebufferSizeChangedRegister(has_not_member){}
 
 
-			static void mouseMove(GLFWwindow* handle,double x,double y)
+
+			static void mouseButton(GLFWwindow* handle,int button,int action,int mods)
 				{
 				auto self=reinterpret_cast<Window*>(userPointerGet(handle));
-				self->r_callback->mouseMove(*self,x,y);
+				self->r_callback->mouseButton(*self,button,static_cast<Action>(action)
+					,static_cast<unsigned int>(mods));
 				}
 
-			template<class S=Callback, typename member_test<decltype(&S::mouseMove)>::type=0>
-			void mouseMoveRegister(has_member)
-				{glfwSetCursorPosCallback(m_handle,mouseMove);}
+			template<class S=Callback, typename member_test<decltype(&S::mouseButton)>::type=0>
+			void mouseButtonRegister(has_member)
+				{glfwSetMouseButtonCallback(m_handle,mouseButton);}
 
-			ADVERTISE_MEMBER("mouseMove") void mouseMoveRegister(has_not_member){}
+			ADVERTISE_MEMBER("mouseButton") void mouseButtonRegister(has_not_member){}
 
+
+			
+			static void cursorEnter(GLFWwindow* handle,int direction)
+				{
+				auto self=reinterpret_cast<Window*>(userPointerGet(handle));
+				self->r_callback->cursorEnter(*self,static_cast<CursorDirection>(direction));
+				}
+
+			template<class S=Callback, typename member_test<decltype(&S::cursorEnter)>::type=0>
+			void cursorEnterRegister(has_member)
+				{glfwSetCursorEnterCallback(m_handle,cursorEnter);}
+
+			ADVERTISE_MEMBER("cursorEnter") void cursorEnterRegister(has_not_member){}
+
+
+
+			static void cursorPos(GLFWwindow* handle,double x,double y)
+				{
+				auto self=reinterpret_cast<Window*>(userPointerGet(handle));
+				self->r_callback->cursorPos(*self,x,y);
+				}
+
+			template<class S=Callback, typename member_test<decltype(&S::cursorPos)>::type=0>
+			void cursorPosRegister(has_member)
+				{glfwSetCursorPosCallback(m_handle,cursorPos);}
+
+			ADVERTISE_MEMBER("cursorPos") void cursorPosRegister(has_not_member){}
+
+
+
+			static void drop(GLFWwindow* handle,int count,const char** files)
+				{
+				auto self=reinterpret_cast<Window*>(userPointerGet(handle));
+				self->r_callback->drop(*self,count,files);
+				}
+
+			template<class S=Callback, typename member_test<decltype(&S::drop)>::type=0>
+			void dropRegister(has_member)
+				{glfwSetDropCallback(m_handle,drop);}
+
+			ADVERTISE_MEMBER("drop") void dropRegister(has_not_member){}
+
+
+
+			static void scroll(GLFWwindow* handle,double x,double y)
+				{
+				auto self=reinterpret_cast<Window*>(userPointerGet(handle));
+				self->r_callback->scroll(*self,x,y);
+				}
+
+			template<class S=Callback, typename member_test<decltype(&S::scroll)>::type=0>
+			void scrollRegister(has_member)
+				{glfwSetScrollCallback(m_handle,scroll);}
+
+			ADVERTISE_MEMBER("scroll") void scrollRegister(has_not_member){}
+
+
+
+			static void key(GLFWwindow* handle,int key,int scancode,int action,int modifiers)
+				{
+				auto self=reinterpret_cast<Window*>(userPointerGet(handle));
+				self->r_callback->key(*self,scancode,static_cast<Action>(action)
+					,static_cast<unsigned int>(modifiers));
+				}
+
+			template<class S=Callback, typename member_test<decltype(&S::key)>::type=0>
+			void keyRegister(has_member)
+				{
+				glfwSetKeyCallback(m_handle,key);
+				}
+
+			ADVERTISE_MEMBER("key") void keyRegister(has_not_member){}
+			
+
+
+			static void codepoint(GLFWwindow* handle,unsigned int cp)
+				{
+				auto self=reinterpret_cast<Window*>(userPointerGet(handle));
+				self->r_callback->codepoint(*self,static_cast<uint32_t>(cp));
+				}
+
+			template<class S=Callback, typename member_test<decltype(&S::codepoint)>::type=0>
+			void codepointRegister(has_member)
+				{
+				glfwSetCharCallback(m_handle,codepoint);
+				}
+
+			ADVERTISE_MEMBER("codepoint") void codepointRegister(has_not_member){}
 		};
 	}
 
