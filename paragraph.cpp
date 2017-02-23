@@ -197,4 +197,6 @@ void Paragraph::render_impl() const noexcept
 		,m_t_style.color().alpha());
 	pango_cairo_show_layout(rc_handle
 		,const_cast<PangoLayout*>(layout(m_layout)));
+
+	m_bounding_rect_old=boundingRectangle();
 	}

@@ -73,7 +73,6 @@ namespace PageComposer
 		protected:
 			void dirty_set() noexcept
 				{
-				m_bounding_rect_old=boundingRectangle();
 				auto l=layers();
 				if(l!=nullptr)
 					{(*l)[layerIndex()].dirty(true);}
