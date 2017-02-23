@@ -33,8 +33,9 @@ namespace Glinde
 					auto& p=r_scene->hud().paragraph(Stringkey("position"));
 					char buffer[20];
 					sprintf(buffer,"(%.3g, %.3g)",pos.first,pos.second);
-					p.anchor(PageComposer::Vec2(-1,-1));
-					p.text(buffer);
+					p.text(buffer)
+						.anchor(PageComposer::Vec2(-1,-1));
+					asm volatile("nop");
 					}
 				}
 
