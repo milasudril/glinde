@@ -56,7 +56,7 @@ namespace
 Engine::Engine():m_session(sessionCreate())
 	,m_cb(m_scene),m_mainwin(m_cb,m_session)
 	{
-	auto size_fb=m_mainwin.sizeFbGet();
+	auto size_fb=m_mainwin.sizeFb();
 	m_cb.framebufferSizeChanged(m_mainwin,size_fb.width,size_fb.height);
 	}
 
