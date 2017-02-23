@@ -53,7 +53,7 @@ namespace PageComposer
 			size_t layerIndex() const noexcept
 				{return m_index;}
 
-			Rectangle m_bounding_rect_old;
+			mutable Rectangle m_bounding_rect_old;
 
 		private:
 			LayerStack* r_stack;
