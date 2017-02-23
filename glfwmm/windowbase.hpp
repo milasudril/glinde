@@ -5,6 +5,7 @@
 
 #include "session.hpp"
 #include "size.hpp"
+#include <utility>
 
 namespace GLFWmm
 	{
@@ -50,20 +51,26 @@ namespace GLFWmm
 
 			typedef GLFWwindow* ContextHandle;
 
-			Size sizeGet() const noexcept
+			Size size() const noexcept
 				{
 				Size ret;
 				glfwGetWindowSize(m_handle,&ret.width,&ret.height);
 				return ret;
 				}
 
-			Size sizeFbGet() const noexcept
+			Size sizeFb() const noexcept
 				{
 				Size ret;
 				glfwGetFramebufferSize(m_handle,&ret.width,&ret.height);
 				return ret;
 				}
 
+			std::pair<double,double> cursorPos() const noexcept
+				{
+				std::pair<double,double> ret;
+				glfwGetCursorPos(m_handle,&ret.first,&ret.second);
+				return ret;
+				}
 
 			bool shouldClose() const noexcept
 				{return glfwWindowShouldClose(m_handle);}
