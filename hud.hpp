@@ -32,9 +32,11 @@ namespace Glinde
 
 			PageComposer::Paragraph& paragraph(Stringkey key) noexcept
 				{
+				auto i=m_paragraphs.find(key);
+				if(i!=m_paragraphs.end())
+					{return i->second;}
 				auto ip=m_paragraphs.insert(std::pair<Stringkey,PageComposer::Paragraph>{key,PageComposer::Paragraph(m_text)});
-				if(ip.second)
-					{m_layers.push(PageComposer::Layer(ip.first->second));}
+				m_layers.push(PageComposer::Layer(ip.first->second));
 				return ip.first->second;
 				}
 

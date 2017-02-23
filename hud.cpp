@@ -24,17 +24,6 @@ Hud::Hud():m_texture(1,Angle::TextureFormat::SRGB8_ALPHA8,1,1)
 	,m_text(m_context)
 	,m_layers(m_context)
 	{
-/*	m_bodytext.color(PageComposer::Color(1,1,1,1));
-	m_pos_display.style(m_bodytext);
-	m_para.color(PageComposer::Color(0.25,0.25,0.25,0.75));
-	auto pos_style=m_para;
-	pos_style.alignment(PageComposer::ParaStyle::Alignment::RIGHT);
-	m_pos_display.style(pos_style).positionRelative(PageComposer::Vec2(1,-1))
-		.anchor(PageComposer::Vec2(1,-1));
-	m_layers.push(PageComposer::Layer(m_pos_display));
-
-
-	m_pos_display.text("Hello, World\nA longer piece of text");*/
 	}
 
 void Hud::fbResize(int width,int height)
