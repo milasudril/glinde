@@ -41,6 +41,49 @@ struct MyCallback
 		{
 		printf("Fb Size changed: %d %d\n",w,h);
 		}
+
+	void mouseButton(GLFWmm::WindowBase& src,int button,GLFWmm::WindowBase::Action action
+		,unsigned int modifiers)
+		{
+		printf("Click: %d %d %x\n",button,static_cast<int>(action),modifiers);
+		}
+	
+	void cursorEnter(GLFWmm::WindowBase& src,GLFWmm::WindowBase::CursorDirection dir)
+		{
+		printf("Cursor enter: %d\n",static_cast<int>(dir));
+		}
+
+	void cursorPos(GLFWmm::WindowBase& src,double x,double y)
+		{
+		printf("Cursor position: %.7g,%.7g\n",x,y);
+		}
+
+	void drop(GLFWmm::WindowBase& src,int n,const char* const* files)
+		{
+		printf("Drop:\n");
+		while(n!=0)
+			{
+			printf("   %s\n",*files);
+			++files;
+			--n;
+			}
+		}
+
+	void scroll(GLFWmm::WindowBase& src,double x,double y)
+		{
+		printf("Scroll: %.7g,%.7g\n",x,y);
+		}
+
+	void key(GLFWmm::WindowBase& src,int scancode,GLFWmm::WindowBase::Action action
+		,unsigned int modifiers)
+		{
+		printf("Key: %d %d %x\n",scancode,static_cast<int>(action),modifiers);
+		}
+
+	void codepoint(GLFWmm::WindowBase& src,uint32_t cp)
+		{
+		printf("Codepoint: %x\n",cp);
+		}
 	};
 
 struct Hints
@@ -52,6 +95,8 @@ struct Hints
 	static constexpr int clientAPIVersionMajor=4;
 	static constexpr int clientAPIVersionMinor=5;
 	static constexpr bool clientAPIForwardCompat=1;
+	static constexpr bool resizable=1;
+	static constexpr bool decorated=1;
 	};
 
 int main()
@@ -63,6 +108,7 @@ int main()
 	while(!test.shouldClose())
 		{
 		session.eventsPoll();
+		test.buffersSwap();
 		}
 	return 0;
 	}

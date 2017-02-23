@@ -11,6 +11,45 @@ namespace GLFWmm
 	class WindowBase
 		{
 		public:
+			enum class Action:int
+				{
+				 PRESS=GLFW_PRESS
+				,RELEASE=GLFW_RELEASE
+				,REPEAT=GLFW_REPEAT
+				};
+
+			static constexpr unsigned int MOD_SHIFT=GLFW_MOD_SHIFT;
+			static constexpr unsigned int MOD_CONTROL=GLFW_MOD_CONTROL;
+			static constexpr unsigned int MOD_ALT=GLFW_MOD_ALT;
+			static constexpr unsigned int MOD_SUPER=GLFW_MOD_SUPER;
+
+			enum class CursorMode:int
+				{
+				 CURSOR_NORMAL=GLFW_CURSOR_NORMAL
+				,CURSOR_HIDDEN=GLFW_CURSOR_HIDDEN
+				,CURSOR_DISABLED=GLFW_CURSOR_DISABLED
+				};
+
+			enum class KeyMode:int
+				{
+				 NORMAL=0
+				,STICKY=1
+				};
+
+			enum class MouseButtonMode:int
+				{
+				 NORMAL=0
+				,STICKY=1
+				};
+
+			enum class CursorDirection:int
+				{
+				 OUT=0
+				,IN=1
+				};
+
+
+
 			typedef GLFWwindow* ContextHandle;
 
 			Size sizeGet() const noexcept
@@ -43,6 +82,26 @@ namespace GLFWmm
 
 			void buffersSwap() noexcept
 				{glfwSwapBuffers(m_handle);}
+
+			WindowBase& inputMode(CursorMode mode) noexcept
+				{
+				glfwSetInputMode(m_handle,GLFW_CURSOR,static_cast<int>(mode));
+				return *this;
+				}
+
+			WindowBase& inputMode(MouseButtonMode mode) noexcept
+				{
+				glfwSetInputMode(m_handle,GLFW_STICKY_MOUSE_BUTTONS,static_cast<int>(mode));
+				return *this;
+				}
+
+			WindowBase& inputMode(KeyMode mode) noexcept
+				{
+				glfwSetInputMode(m_handle,GLFW_STICKY_KEYS,static_cast<int>(mode));
+				return *this;
+				}
+
+			
 
 
 		protected:
