@@ -29,7 +29,8 @@ Paragraph::Paragraph(TextRenderer& tr):PageObjectBase(tr.renderContext())
 
 Paragraph::~Paragraph()
 	{
-	g_object_unref(m_layout.handle());
+	if(m_layout.handle()!=nullptr)
+		{g_object_unref(m_layout.handle());}
 	pango_font_description_free(font(m_font));
 	}
 
@@ -197,6 +198,4 @@ void Paragraph::render_impl() const noexcept
 		,m_t_style.color().alpha());
 	pango_cairo_show_layout(rc_handle
 		,const_cast<PangoLayout*>(layout(m_layout)));
-
-	m_bounding_rect_old=boundingRectangle();
 	}
