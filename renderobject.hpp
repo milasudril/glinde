@@ -13,7 +13,7 @@ namespace Glinde
 		{
 		public:
 			virtual void framebufferResize(int width,int height)=0;
-			virtual void render(Display& disp)=0;
+			virtual void render(Display& disp) const noexcept=0;
 		};
 	}
 

@@ -7,7 +7,7 @@
 #define GLINDE_HUD_HPP
 
 #include "stringkey.hpp"
-
+#include "renderobject.hpp"
 #include "angle/texture2d.hpp"
 #include "glfwmm/size.hpp"
 #include "pagecomposer/paragraph.hpp"
@@ -19,16 +19,14 @@
 
 namespace Glinde
 	{
-	class Display;
-
-	class Hud
+	class Hud:public RenderObject
 		{
 		public:
 			Hud();
 
-			void fbResize(int width,int height);
+			void framebufferResize(int width,int height);
 
-			void render(Display& disp) const;
+			void render(Display& disp) const noexcept;
 
 			PageComposer::Paragraph& paragraph(Stringkey key) noexcept
 				{

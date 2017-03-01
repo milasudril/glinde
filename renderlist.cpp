@@ -39,5 +39,8 @@ void RenderList::render(Display& disp) const noexcept
 		}
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	std::for_each(r_objects.begin(),r_objects.end(),[&disp](auto& x)
-		{x.r_obj->render(disp);});
+		{
+		if(x.active)
+			{x.r_obj->render(disp);}
+		});
 	}

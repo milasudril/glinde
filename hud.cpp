@@ -26,7 +26,7 @@ Hud::Hud():m_texture(1,Angle::TextureFormat::SRGB8_ALPHA8,1,1)
 	{
 	}
 
-void Hud::fbResize(int width,int height)
+void Hud::framebufferResize(int width,int height)
 	{
 	m_texture.realloc(width,height);
 	m_surface=PageComposer::Surface(width,height);
@@ -36,7 +36,7 @@ void Hud::fbResize(int width,int height)
 	m_layers.forcedRender();
 	}
 
-void Hud::render(Display& disp) const
+void Hud::render(Display& disp) const noexcept
 	{
 	m_layers.render();
 	auto rect=m_surface.dirtyRectangle();
