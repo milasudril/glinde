@@ -22,19 +22,22 @@ namespace Glinde
 				}
 
 			void cursorPos(Window& win,double x,double y)
-				{}
+				{
+				auto pos=win.cursorPosition();
+				auto& p=r_scene->hud().paragraph(Stringkey("position"));
+				char buffer[20];
+				sprintf(buffer,"(%.4g, %.4g)",pos.first,pos.second);
+				p.text(buffer)
+					.anchor(PageComposer::Vec2(0,0))
+					.positionRelative(PageComposer::Vec2(0,0));
+				}
 
 			void mouseButton(Window& win,int button,Window::Action action
 				,unsigned int modifiers)
 				{
 				if(action==Window::Action::PRESS)
 					{
-					auto pos=win.cursorPosition();
-					auto& p=r_scene->hud().paragraph(Stringkey("position"));
-					char buffer[20];
-					sprintf(buffer,"(%.3g, %.3g)",pos.first,pos.second);
-					p.text(buffer)
-						.anchor(PageComposer::Vec2(-1,-1));
+
 					}
 				}
 
