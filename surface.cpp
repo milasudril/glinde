@@ -4,6 +4,7 @@
 
 #include "surface.hpp"
 #include "cairohandles.hpp"
+#include "exceptionhandler.hpp"
 #include <cstring>
 #include <cassert>
 
@@ -12,6 +13,9 @@ using namespace PageComposer;
 Surface::Surface(int width,int height):
 m_handle( cairo_image_surface_create(CAIRO_FORMAT_ARGB32,width,height) )
 	{
+	auto status=cairo_surface_status(cairosurface(m_handle));
+	if(status!=CAIRO_STATUS_SUCCESS)
+		{exceptionRaise(Error("Failed to create a Cairo surface: ",cairo_status_to_string(status)));}
 	dirtyRectangleClear();
 	}
 
