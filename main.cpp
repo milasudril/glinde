@@ -13,6 +13,7 @@ int main()
 	catch(const Glinde::ErrorMessage& msg)
 		{
 		fprintf(stderr,"%s\n",msg.messageGet());
+		return -1;
 		}
 
 	return 0;

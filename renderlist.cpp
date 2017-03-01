@@ -4,6 +4,8 @@
 
 #include "renderlist.hpp"
 #include "display.hpp"
+#include "renderobject.hpp"
+#include <algorithm>
 
 using namespace Glinde;
 
@@ -20,9 +22,22 @@ RenderList::RenderList()
 void RenderList::framebufferResize(int width,int height)
 	{
 	glViewport(0,0,width,height);
+	std::for_each(r_objects.begin(),r_objects.end(),[width,height](auto& x)
+		{x.r_obj->framebufferResize(width,height);});
 	}
 
 void RenderList::render(Display& disp) const noexcept
 	{
+	if(m_dirty)
+		{
+		std::sort(r_objects.begin(),r_objects.end(),[](const auto& a,const auto& b)
+			{return a.index<b.index;});
+	//	Re-assign object indices
+		std::for_each(r_objects.begin(),r_objects.end(),[this](const auto& obj)
+			{m_id_to_obj_index[obj.id]=&obj - r_objects.begin();});
+		m_dirty=0;
+		}
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+	std::for_each(r_objects.begin(),r_objects.end(),[&disp](auto& x)
+		{x.r_obj->render(disp);});
 	}
