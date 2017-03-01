@@ -1,5 +1,5 @@
 //@	{
-//@	"targets":[{"name":"rednerlist.hpp","type":"include"}]
+//@	"targets":[{"name":"renderlist.hpp","type":"include"}]
 //@	,"dependencies_extra":[{"ref":"renderlist.o","rel":"implementation"}]
 //@	}
 

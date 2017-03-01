@@ -1,12 +1,19 @@
 //@	{"targets":[{"name":"glinde","type":"application"}]}
 
 #include "engine.hpp"
+#include "errormessage.hpp"
 
 int main()
 	{
-	Glinde::Engine engine;
-
-	engine.run();
+	try
+		{
+		Glinde::Engine engine;
+		engine.run();
+		}
+	catch(const Glinde::ErrorMessage& msg)
+		{
+		fprintf(stderr,"%s\n",msg.messageGet());
+		}
 
 	return 0;
 	}

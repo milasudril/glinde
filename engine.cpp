@@ -45,9 +45,14 @@ namespace
 		static constexpr bool srgb=1;
 		};
 
-	static GLFWmm::Session sessionCreate()
+	void glfwmm_error(int code,const char* message)
 		{
-		GLFWmm::Session ret;
+		throw ErrorMessage("Failed to initialize the session. #0;.",{message});
+		}
+
+	GLFWmm::Session sessionCreate()
+		{
+		GLFWmm::Session ret(glfwmm_error);
 		ret.creationHints(GLFWCreationHints(Angle::gl_version_requirements()));
 		return std::move(ret);
 		}
