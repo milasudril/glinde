@@ -54,7 +54,7 @@ namespace
 	}
 
 Engine::Engine():m_session(sessionCreate())
-	,m_cb(m_scene),m_mainwin(m_cb,m_session)
+	,m_cb(m_renderlist),m_mainwin(m_cb,m_session)
 	{
 	auto size_fb=m_mainwin.sizeFb();
 	m_cb.framebufferSizeChanged(m_mainwin,size_fb.width,size_fb.height);
@@ -67,7 +67,7 @@ void Engine::run()
 	while(!m_mainwin.shouldClose())
 		{
 		m_session.eventsPoll();
-		m_scene.render(m_mainwin);
+		m_renderlist.render(m_mainwin);
 		m_mainwin.buffersSwap();
 		}
 	}

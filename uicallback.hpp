@@ -3,7 +3,7 @@
 #ifndef GLINDE_UICALLBACK_HPP
 #define GLINDE_UICALLBACK_HPP
 
-#include "scene.hpp"
+#include "renderlist.hpp"
 #include "glfwmm/window.hpp"
 
 namespace Glinde
@@ -13,23 +13,17 @@ namespace Glinde
 		public:
 			using Window=GLFWmm::Window<UICallback>;
 
-			UICallback(Scene& scene):r_scene(&scene)
+			UICallback(RenderList& renderlist):r_renderlist(&renderlist)
 				{}
 
 			void framebufferSizeChanged(Window& win,int x,int y)
 				{
-				r_scene->fbResize(x,y);
+				r_renderlist->framebufferResize(x,y);
 				}
 
 			void cursorPos(Window& win,double x,double y)
 				{
-				auto pos=win.cursorPosition();
-				auto& p=r_scene->hud().paragraph(Stringkey("position"));
-				char buffer[20];
-				sprintf(buffer,"(%.4g, %.4g)",pos.first,pos.second);
-				p.text(buffer)
-					.anchor(PageComposer::Vec2(0,0))
-					.positionRelative(PageComposer::Vec2(0,0));
+
 				}
 
 			void mouseButton(Window& win,int button,Window::Action action
@@ -42,7 +36,7 @@ namespace Glinde
 				}
 
 		private:
-			Scene* r_scene;
+			RenderList* r_renderlist;
 		};
 	}
 

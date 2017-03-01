@@ -21,7 +21,7 @@ namespace Glinde
 			GLFWmm::Session m_session;
 			UICallback m_cb; 
 			Display m_mainwin;
-			Scene m_scene;
+			RenderList m_renderlist;
 		};
 	}
 
