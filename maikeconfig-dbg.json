@@ -26,6 +26,7 @@
                         "{includedir}",
                         "-DMAIKE_TARGET_DIRECTORY={target_directory}",
                         "-DMAIKE_CURRENT_DIRECTORY={current_directory}",
+						"-march=native",
                         "-o",
                         "{target}",
                         "{source}",
@@ -49,6 +50,7 @@
                         "{includedir}",
                         "-DMAIKE_TARGET_DIRECTORY={target_directory}",
                         "-DMAIKE_CURRENT_DIRECTORY={current_directory}",
+						"-march=native",
                         "-shared",
                         "-o",
                         "{target}",
@@ -89,6 +91,7 @@
                         "{includedir}",
                         "-DMAIKE_TARGET_DIRECTORY={target_directory}",
                         "-DMAIKE_CURRENT_DIRECTORY={current_directory}",
+						"-march=native",
                         "-o",
                         "{target}",
                         "{source}"

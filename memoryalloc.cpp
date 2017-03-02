@@ -15,9 +15,15 @@
 
 using namespace Glinde;
 
+#ifdef __AVX__
+static constexpr size_t ALIGNMENT=32;
+#else
+static constexpr size_t ALIGNMENT=16;
+#endif
+
 void* Glinde::memoryAllocate(size_t N)
 	{
-	void* ret=mallocx(N,MALLOCX_ALIGN(64));
+	void* ret=mallocx(N,MALLOCX_ALIGN(ALIGNMENT));
 	if(ret==nullptr)
 		{
 		throw ErrorMessage("It was not possible to allocate #0; bytes of memory"
@@ -32,7 +38,7 @@ void Glinde::memoryFree(void* buffer)
 	if(buffer!=nullptr)
 		{
 		GLINDE_DEBUG_PRINT("DeAllocating #0;",buffer);
-		dallocx(buffer,MALLOCX_ALIGN(64));
+		dallocx(buffer,MALLOCX_ALIGN(ALIGNMENT));
 		}
 	}
 
@@ -40,7 +46,7 @@ void* Glinde::memoryRealloc(void* buffer,size_t N)
 	{
 	if(buffer==nullptr)
 		{return memoryAllocate(N);}
-	void* ret=rallocx(buffer,N,MALLOCX_ALIGN(64));
+	void* ret=rallocx(buffer,N,MALLOCX_ALIGN(ALIGNMENT));
 	if(ret==nullptr)
 		{
 		throw ErrorMessage("It was not possible to resize the block at #0; to #1; bytes"
