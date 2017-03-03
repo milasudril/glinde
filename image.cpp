@@ -3,7 +3,7 @@
 //@		[{
 //@		 "dependencies":[{"ref":"Half","rel":"external"}]
 //@		,"name":"image.o","type":"object"
-//@		,"pkgconfig-libs":["png"]		
+//@		,"pkgconfig_libs":["libpng"]		
 //@		}]
 //@	}
 

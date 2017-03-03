@@ -4,6 +4,7 @@
 
 #include "engine.hpp"
 #include "blob.hpp"
+#include "memoryreader.hpp"
 #include "angle/init.hpp"
 
 #include <maike/targetinclude.hpp>
@@ -61,8 +62,10 @@ namespace
 
 GLINDE_BLOB(charmap,"charmap.png");
 
-Engine::Engine():m_session(sessionCreate())
-	,m_cb(m_renderlist),m_mainwin(m_cb,m_session),m_console(25,80)
+Engine::Engine():m_console(25,80)
+	,m_charmap(MemoryReader(charmap_begin,charmap_end),0)
+	,m_session(sessionCreate())
+	,m_cb(m_renderlist),m_mainwin(m_cb,m_session)
 	{
 	auto size_fb=m_mainwin.sizeFb();
 	m_cb.framebufferSizeChanged(m_mainwin,size_fb.width,size_fb.height);

@@ -9,6 +9,7 @@
 #include "display.hpp"
 #include "uicallback.hpp"
 #include "console.hpp"
+#include "image.hpp"
 
 namespace Glinde
 	{
@@ -19,11 +20,13 @@ namespace Glinde
 			void run();
 			
 		private:
+			Console m_console;
+			Image m_charmap;
+
 			GLFWmm::Session m_session;
 			UICallback m_cb; 
 			Display m_mainwin;
 			RenderList m_renderlist;
-			Console m_console;
 		};
 	}
 
