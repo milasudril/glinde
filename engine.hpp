@@ -8,7 +8,7 @@
 
 #include "display.hpp"
 #include "uicallback.hpp"
-#include "hud.hpp"
+#include "console.hpp"
 
 namespace Glinde
 	{
@@ -23,7 +23,7 @@ namespace Glinde
 			UICallback m_cb; 
 			Display m_mainwin;
 			RenderList m_renderlist;
-			Hud m_hud;
+			Console m_console;
 		};
 	}
 

@@ -3,10 +3,11 @@
 //@	}
 
 #include "engine.hpp"
+#include "blob.hpp"
 #include "angle/init.hpp"
 
+#include <maike/targetinclude.hpp>
 #include <utility>
-
 #include <cstdio>
 
 using namespace Glinde;
@@ -58,12 +59,12 @@ namespace
 		}
 	}
 
+GLINDE_BLOB(charmap,"charmap.png");
+
 Engine::Engine():m_session(sessionCreate())
-	,m_cb(m_renderlist),m_mainwin(m_cb,m_session)
+	,m_cb(m_renderlist),m_mainwin(m_cb,m_session),m_console(25,80)
 	{
 	auto size_fb=m_mainwin.sizeFb();
-	auto id=m_renderlist.append(m_hud,1);
-	m_renderlist.activate(id);
 	m_cb.framebufferSizeChanged(m_mainwin,size_fb.width,size_fb.height);
 	}
 
