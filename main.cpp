@@ -18,8 +18,8 @@ int main()
 	try
 		{
 		Glinde::Engine engine;
-		auto timer=timerCreate(30.0);
-		engine.run(timer);
+	//	auto timer=timerCreate(30.0);
+		engine.run(timerCreate(30.0));
 		}
 	catch(const Glinde::ErrorMessage& msg)
 		{

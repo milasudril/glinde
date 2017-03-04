@@ -18,6 +18,10 @@ namespace Glinde
 		{
 		public:
 			Engine();
+
+			void run(Timer&& timer)
+				{run(timer);}
+
 			void run(Timer& timer);
 			
 		private:
