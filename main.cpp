@@ -2,13 +2,24 @@
 
 #include "engine.hpp"
 #include "errormessage.hpp"
+#include "timerdummy.hpp"
+#include "timerreal.hpp"
+
+#ifdef PROFILE
+inline Glinde::TimerDummy timerCreate(double rate)
+	{return std::move(Glinde::TimerDummy(rate));}
+#else
+inline Glinde::TimerReal timerCreate(double rate)
+	{return std::move(Glinde::TimerReal(rate));}
+#endif
 
 int main()
 	{
 	try
 		{
 		Glinde::Engine engine;
-		engine.run();
+		auto timer=timerCreate(30.0);
+		engine.run(timer);
 		}
 	catch(const Glinde::ErrorMessage& msg)
 		{

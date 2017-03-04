@@ -10,7 +10,7 @@
 #define GLINDE_TIMERREAL_HPP
 
 #include "timer.hpp"
-
+#include <utility>
 
 namespace Glinde
 	{
@@ -45,6 +45,15 @@ namespace Glinde
 			 * This function returns the number of seconds between two frames.
 			*/
 			double delay() const noexcept;
+
+			TimerReal(TimerReal&& obj) noexcept:m_impl(obj.m_impl)
+				{obj.m_impl=nullptr;}
+
+			TimerReal& operator=(TimerReal&& obj) noexcept
+				{
+				std::swap(obj.m_impl,m_impl);
+				return *this;
+				}
 
 
 		private:

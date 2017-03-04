@@ -4,6 +4,7 @@
 
 #include "engine.hpp"
 #include "blob.hpp"
+#include "timer.hpp"
 #include "memoryreader.hpp"
 #include "angle/init.hpp"
 
@@ -67,11 +68,12 @@ Engine::Engine():m_console(25,80)
 	,m_session(sessionCreate())
 	,m_cb(m_renderlist),m_mainwin(m_cb,m_session)
 	{
+	glfwSwapInterval(0);
 	auto size_fb=m_mainwin.sizeFb();
 	m_cb.framebufferSizeChanged(m_mainwin,size_fb.width,size_fb.height);
 	}
 
-void Engine::run()
+void Engine::run(Timer& timer)
 	{
 	m_mainwin.inputMode(GLFWmm::WindowBase::MouseButtonMode::STICKY)
 		.inputMode(GLFWmm::WindowBase::KeyMode::STICKY);
@@ -80,5 +82,6 @@ void Engine::run()
 		m_session.eventsPoll();
 		m_renderlist.render(m_mainwin);
 		m_mainwin.buffersSwap();
+		timer.wait();
 		}
 	}

@@ -13,11 +13,12 @@
 
 namespace Glinde
 	{
+	class Timer;
 	class Engine
 		{
 		public:
 			Engine();
-			void run();
+			void run(Timer& timer);
 			
 		private:
 			Console m_console;
