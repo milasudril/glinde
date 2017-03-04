@@ -240,13 +240,16 @@ Console& Console::write(uint32_t codepoint)
 		{ch=static_cast<uint16_t>(codepoint-64);}
 	else
 	if(codepoint>=0x2018 && codepoint<0x2020) // Quotation marks
-		{ch=static_cast<uint16_t>(codepoint-0x2018 + 192);}
+		{ch=(codepoint-0x2018) + static_cast<uint16_t>(192);}
 	else
 	if(codepoint==0x2022) //Bullet
 		{ch=static_cast<uint16_t>(200);}
 	else
-	if(codepoint==0x203c) //Double exclamation mark
-		{ch=static_cast<uint16_t>(201);}
+	if(codepoint>=0x2591 && codepoint<=0x2593) //Block characters
+		{ch=(codepoint - 0x2591) + static_cast<uint16_t>(201);}
+	else
+	if(codepoint==0x2588) //Full block
+		{ch=static_cast<uint16_t>(204);}
 	else
 		{fprintf(stderr,"Codepoint %x missing\n",codepoint);}
 
