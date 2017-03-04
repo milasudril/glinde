@@ -38,13 +38,13 @@ namespace Glinde
 			 * a tick.
 			 *
 			*/
-			void wait() const noexcept;
+			void wait() noexcept;
 
 			/**\brief Gets the time interval in seconds between two frames.
 			 *
 			 * This function returns the number of seconds between two frames.
 			*/
-			double delayGet() const noexcept;
+			double delay() const noexcept;
 
 
 		private:

@@ -1,15 +1,7 @@
-//@	{
-//@	    "dependencies_extra":[],
-//@	    "targets":[
-//@	        {
-//@	            "dependencies":[],
-//@	            "name":"blob.h",
-//@	            "type":"include"
-//@	        }
-//@	    ]
-//@	}
-#ifndef GLINDE_BLOB_H
-#define GLINDE_BLOB_H
+//@	{"targets":[{"name":"blob.hpp","type":"include"}]}
+
+#ifndef GLINDE_BLOB_HPP
+#define GLINDE_BLOB_HPP
 
 #include <cstdint>
 extern "C"

@@ -21,7 +21,7 @@ namespace Glinde
 			 * \note This kind of Timer only simulates the behaviour of a real
 			 * timer, without any actual blocking.
 			*/
-			void wait() const noexcept
+			void wait() noexcept
 				{}
 
 			/**\brief Gets the time interval in seconds between two frames.

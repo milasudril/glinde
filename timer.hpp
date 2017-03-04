@@ -11,7 +11,7 @@ namespace Glinde
 		{
 		public:
 			virtual ~Timer()=default;
-			virtual void wait() const noexcept=0;
+			virtual void wait() noexcept=0;
 			virtual double delay() const noexcept=0;
 		};
 	}

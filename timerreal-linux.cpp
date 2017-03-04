@@ -69,10 +69,10 @@ struct TimerReal::Impl
 		sem_destroy(&m_trig);
 		}
 
-	void wait() const noexcept
+	void wait() noexcept
 		{sem_wait(&m_trig);}
 
-	mutable sem_t m_trig;
+	sem_t m_trig;
 	timer_t m_id;
 
 	static void sig_handler(int signal,siginfo_t* si,void* uc)
@@ -80,7 +80,7 @@ struct TimerReal::Impl
 		sem_post( reinterpret_cast<sem_t*>(uc) );
 		}
 
-	double delayGet() const noexcept
+	double delay() const noexcept
 		{
 		itimerspec t;
 		timer_gettime(m_id,&t);
@@ -100,8 +100,8 @@ TimerReal::~TimerReal()
 	delete m_impl;
 	}
 
-void TimerReal::wait() const noexcept
+void TimerReal::wait() noexcept
 	{m_impl->wait();}
 
-double TimerReal::delayGet() const noexcept
-	{return m_impl->delayGet();}
+double TimerReal::delay() const noexcept
+	{return m_impl->delay();}
