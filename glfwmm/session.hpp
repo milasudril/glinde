@@ -19,12 +19,18 @@ namespace GLFWmm
 			Session& operator=(const Session&)=delete;
 
 			Session(Session&& a) noexcept:m_dead(0)
-				{a.m_dead=1;}
+				{
+				a.m_dead=1;
+				m_gl_ver_major_max=a.m_gl_ver_major_max;
+				m_gl_ver_minor_max=a.m_gl_ver_minor_max;
+				}
 
 			Session& operator=(Session&& a) noexcept
 				{
 				m_dead=0;
 				a.m_dead=1;
+				m_gl_ver_major_max=a.m_gl_ver_major_max;
+				m_gl_ver_minor_max=a.m_gl_ver_minor_max;
 				return *this;
 				}
 
@@ -35,6 +41,9 @@ namespace GLFWmm
 				{
 				glfwSetErrorCallback(error_handler);
 				glfwInit();
+				glfwSetErrorCallback(NULL);
+				gl_version_maximize();
+				glfwSetErrorCallback(error_handler);
 				}
 
 			~Session() noexcept
@@ -90,6 +99,10 @@ namespace GLFWmm
 				}
 
 		private:
+			void gl_version_maximize();
+
+			int m_gl_ver_major_max;
+			int m_gl_ver_minor_max;
 			bool m_dead;
 
 
