@@ -18,33 +18,6 @@ namespace
 	{
 	struct GLFWCreationHints
 		{
-		explicit constexpr GLFWCreationHints(const Angle::VersionRequest& req):
-			 clientAPI(GLFWmm::Session::ClientAPI::OPENGL)
-			,clientAPIVersionMajor(req.major)
-			,clientAPIVersionMinor(req.minor)
-			,clientAPIForwardCompat(req.forward_compatible)
-			,clientAPIProfile(GLFWmm::Session::ClientAPIProfile::ANY)
-			{
-			switch(req.profile)
-				{
-				case Angle::VersionRequest::Profile::CORE:
-					clientAPIProfile=GLFWmm::Session::ClientAPIProfile::CORE;
-					break;
-				case Angle::VersionRequest::Profile::COMPAT:
-					clientAPIProfile=GLFWmm::Session::ClientAPIProfile::COMPAT;
-					break;
-				case Angle::VersionRequest::Profile::ANY:
-				default:
-					clientAPIProfile=GLFWmm::Session::ClientAPIProfile::ANY;
-					break;
-				}
-			}
-
-		GLFWmm::Session::ClientAPI clientAPI;
-		int clientAPIVersionMajor;
-		int clientAPIVersionMinor;
-		bool clientAPIForwardCompat;
-		GLFWmm::Session::ClientAPIProfile clientAPIProfile;
 		static constexpr bool srgb=1;
 		};
 
@@ -56,7 +29,7 @@ namespace
 	GLFWmm::Session sessionCreate()
 		{
 		GLFWmm::Session ret(glfwmm_error);
-		ret.creationHints(GLFWCreationHints(Angle::gl_version_requirements()));
+		ret.creationHints(GLFWCreationHints{});
 		return std::move(ret);
 		}
 	}
