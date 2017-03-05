@@ -1,4 +1,4 @@
-//@	{"targets":[{"name":"test","type":"application"}]}
+//@	{"targets":[{"name":"test","type":"application","pkgconfig_libs":["glew"]}]}
 
 #include "window.hpp"
 #include "session.hpp"
@@ -90,13 +90,17 @@ struct Hints
 	{
 	static constexpr bool visible=1;
 	static constexpr bool srgb=1;
+
+	static constexpr bool resizable=1;
+	static constexpr bool decorated=1;
+
+#ifdef SPECIFIC_REQUIREMENTS
 	static constexpr auto clientAPI=GLFWmm::Session::ClientAPI::OPENGL;
 	static constexpr auto clientAPIProfile=GLFWmm::Session::ClientAPIProfile::CORE;
 	static constexpr int clientAPIVersionMajor=4;
 	static constexpr int clientAPIVersionMinor=5;
 	static constexpr bool clientAPIForwardCompat=1;
-	static constexpr bool resizable=1;
-	static constexpr bool decorated=1;
+#endif
 	};
 
 int main()
@@ -105,6 +109,8 @@ int main()
 	session.creationHints(Hints{});
 	MyCallback cb;
 	GLFWmm::Window<MyCallback> test(0.5f,0.5f,"Hello, World",cb,session);
+	test.contextCapture();
+	printf("Version: %s\n",glGetString(GL_VERSION));
 	while(!test.shouldClose())
 		{
 		session.eventsPoll();
