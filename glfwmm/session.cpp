@@ -169,7 +169,7 @@ void Session::gl_version_maximize()
 		glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT,1);
 		}
-	m_gl_ver_major_max=version_major;
-	m_gl_ver_minor_max=version_minor;
+	m_gl_ver_max_major=version_major;
+	m_gl_ver_max_minor=version_minor;
 	glfwWindowHint(GLFW_VISIBLE,1);
 	}

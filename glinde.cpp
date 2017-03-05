@@ -4,6 +4,7 @@
 #include "errormessage.hpp"
 #include "timerdummy.hpp"
 #include "timerreal.hpp"
+#include "logwriter.hpp"
 
 #ifdef PROFILE
 inline Glinde::TimerDummy timerCreate(double rate)
@@ -15,6 +16,7 @@ inline Glinde::TimerReal timerCreate(double rate)
 
 int main()
 	{
+	Glinde::logWrite(Glinde::Log::MessageType::INFORMATION,"Glinde is starting up",{});
 	try
 		{
 		Glinde::Engine engine;

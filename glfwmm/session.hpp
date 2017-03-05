@@ -21,16 +21,16 @@ namespace GLFWmm
 			Session(Session&& a) noexcept:m_dead(0)
 				{
 				a.m_dead=1;
-				m_gl_ver_major_max=a.m_gl_ver_major_max;
-				m_gl_ver_minor_max=a.m_gl_ver_minor_max;
+				m_gl_ver_max_major=a.m_gl_ver_max_major;
+				m_gl_ver_max_minor=a.m_gl_ver_max_minor;
 				}
 
 			Session& operator=(Session&& a) noexcept
 				{
 				m_dead=0;
 				a.m_dead=1;
-				m_gl_ver_major_max=a.m_gl_ver_major_max;
-				m_gl_ver_minor_max=a.m_gl_ver_minor_max;
+				m_gl_ver_max_major=a.m_gl_ver_max_major;
+				m_gl_ver_max_minor=a.m_gl_ver_max_minor;
 				return *this;
 				}
 
@@ -52,8 +52,20 @@ namespace GLFWmm
 					{glfwTerminate();}
 				}
 
-			const char* versionGet() const noexcept
+			int glVersionMaxMajor() const noexcept
+				{return  m_gl_ver_max_major;}
+			
+			int glVersionMaxMinor() const noexcept
+				{return  m_gl_ver_max_minor;}
+
+			static const char* versionGet() noexcept
 				{return glfwGetVersionString();}
+
+			Session& swapInterval(int time) noexcept
+				{
+				glfwSwapInterval(time);
+				return *this;
+				}
 
 			void eventsPoll()
 				{glfwPollEvents();}
@@ -101,8 +113,8 @@ namespace GLFWmm
 		private:
 			void gl_version_maximize();
 
-			int m_gl_ver_major_max;
-			int m_gl_ver_minor_max;
+			int m_gl_ver_max_major;
+			int m_gl_ver_max_minor;
 			bool m_dead;
 
 

@@ -6,6 +6,7 @@
 #include "blob.hpp"
 #include "timer.hpp"
 #include "memoryreader.hpp"
+#include "logwriter.hpp"
 #include "angle/init.hpp"
 
 #include <maike/targetinclude.hpp>
@@ -28,7 +29,12 @@ namespace
 
 	GLFWmm::Session sessionCreate()
 		{
+		Glinde::logWrite(Glinde::Log::MessageType::INFORMATION,"Initializing GLFW version #0;",
+			{GLFWmm::Session::versionGet()});
 		GLFWmm::Session ret(glfwmm_error);
+		Glinde::logWrite(Glinde::Log::MessageType::INFORMATION
+			,"GLFW claims that the system supports OpenGL® versions ≤ #0;.#1;"
+			,{ret.glVersionMaxMajor(),ret.glVersionMaxMinor()});
 		ret.creationHints(GLFWCreationHints{});
 		return std::move(ret);
 		}

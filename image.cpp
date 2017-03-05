@@ -315,7 +315,7 @@ static ColorConverter converterGet(PNGReader::ColorType color_type)
 
 Image::Image(DataSource& source,uint32_t id)
 	{
-	logWrite(Log::MessageType::INFORMATION,"Reading image #0;"
+	logWrite(Log::MessageType::INFORMATION,"Loading image from #0;"
 		,{source.nameGet()});
 		{
 		uint8_t magic[8]="xxxxxxx";
