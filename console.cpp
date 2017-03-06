@@ -12,6 +12,7 @@
 #include "arrayfixed.hpp"
 #include <cstdint>
 #include <xmmintrin.h>
+#include <limits>
 
 using namespace Glinde;
 
@@ -118,12 +119,8 @@ namespace
 		return ret;
 		}
 
-
-template<class T>
-using vec4_t __attribute__ ((vector_size(4*sizeof(T))))=vector_type(T);
-
 	#ifdef __AVX2__
-	vec4_t<float> colorGet(uint8_t color_mask)
+	Color colorGet(uint8_t color_mask)
 		{
 		vec4_t<float> color;
 		auto intensity=0.3333f*static_cast<float>( (color_mask & 8)/8 );
@@ -136,10 +133,10 @@ using vec4_t __attribute__ ((vector_size(4*sizeof(T))))=vector_type(T);
 		color=(color_mask==6)?color*vec4_t<float>{1.0f,0.5,1.0f,1.0f}:color;
 		// make it opaque 
 		color[3]=1.0f;
-		return color;
+		return Color::fromSRGB(color);
 		}
 	#else
-	vec4_t<float> colorGet(uint8_t color_mask)
+	Color colorGet(uint8_t color_mask)
 		{
 		vec4_t<float> color;
 		auto intensity=0.3333f*static_cast<float>( (color_mask & 8)/8 );
@@ -151,15 +148,15 @@ using vec4_t __attribute__ ((vector_size(4*sizeof(T))))=vector_type(T);
 		color=(color_mask==6)?color*vec4_t<float>{1.0f,0.5,1.0f,1.0f}:color;
 		// make it opaque 
 		color[3]=1.0f;
-		return color;
+		return Color::fromSRGB(color);
 		}
 	#endif
 	}
 
 Console::Console(uint32_t n_rows,uint32_t n_cols):
 	 m_vertices(new GeoSIMD::Point<float>[n_rows*n_cols*4])
-	,m_colors_fg(new vec4_t<float>[n_rows*n_cols*4])
-	,m_colors_bg(new vec4_t<float>[n_rows*n_cols*4])
+	,m_colors_fg(new Color[n_rows*n_cols*4])
+	,m_colors_bg(new Color[n_rows*n_cols*4])
 	,m_uvs(new vec2_t<float>[n_rows*n_cols*4])
 	,m_faces(new FaceIndirect[2*n_rows*n_cols])
 	,m_n_cols(n_cols),m_position(0),m_line_current(0)
@@ -227,30 +224,123 @@ Console& Console::writeUTF8(const char* string)
 	return *this;
 	}
 
+static constexpr auto CONTROLCODE=std::numeric_limits<uint16_t>::max() - 31;
+
+static constexpr uint16_t charmap_misc(uint32_t codepoint)
+	{
+	switch(codepoint)
+		{
+		case '\0': return 0;
+		case u'☺': return 1;
+		case u'☻': return 2;
+		case u'♥': return 3;
+		case u'♦': return 4;
+		case u'♣': return 5;
+		case u'♠': return 6;
+		case u'•': return 7;
+		case u'◘': return 8;
+		case u'○': return 9;
+		case u'◙': return 10;
+		case u'♂': return 11;
+		case u'♀': return 12;
+		case U'𝅘𝅥𝅯': return 13;
+		case u'♬': return 14;
+		case u'☼': return 15;
+		case u'►': return 16;
+		case u'◄': return 17;
+		case u'↕': return 18;
+		case u'‼': return 19;
+		case u'§': return u'§'; //§ exists in latin-1
+		case u'¶': return u'¶'; //¶ exists in latin-1
+		case u'▬': return 22;
+		case u'↨': return 23;
+		case u'↑': return 24;
+		case u'↓': return 25;
+		case u'→': return 26;
+		case u'←': return 27;
+		case u'∟': return 28;
+		case u'↔': return 29;
+		case u'▲': return 30;
+		case u'▼': return 31;
+		case u'⌂': return 127;
+		case u'░': return 403;
+		case u'▒': return 404;
+		case u'▓': return 405;
+		case u'│': return 406;
+		case u'┤': return 407;
+		case u'╡': return 408;
+		case u'╢': return 409;
+		case u'╖': return 410;
+		case u'╕': return 411;
+		case u'╣': return 412;
+		case u'║': return 413;
+		case u'╗': return 414;
+		case u'╝': return 415;
+		case u'╜': return 416;
+		case u'╛': return 417;
+		case u'┐': return 418;
+		case u'└': return 419;
+		case u'┴': return 420;
+		case u'┬': return 421;
+		case u'├': return 422;
+		case u'─': return 423;
+		case u'┼': return 424;
+		case u'╞': return 425;
+		case u'╟': return 426;
+		case u'╚': return 427;
+		case u'╔': return 428;
+		case u'╩': return 429;
+		case u'╦': return 430;
+		case u'╠': return 431;
+		case u'═': return 432;
+		case u'╬': return 433;
+		case u'╧': return 434;
+		case u'╨': return 435;
+		case u'╤': return 436;
+		case u'╥': return 437;
+		case u'╙': return 438;
+		case u'╘': return 439;
+		case u'╒': return 440;
+		case u'╓': return 441;
+		case u'╫': return 442;
+		case u'╪': return 443;
+		case u'┘': return 444;
+		case u'┌': return 445;
+		case u'█': return 446;
+		}
+	return 447;
+	}
+
+static constexpr uint16_t charmap(uint32_t codepoint)
+	{
+	if(codepoint==0x2264) //leq
+		{return 20;}
+
+	if(codepoint==0x2265) //geq
+		{return 21;}
+
+	if(codepoint<32) //Control characters
+		{return static_cast<uint16_t>(codepoint) + CONTROLCODE;}
+
+	if(codepoint>=32 && codepoint<128) //ASCII characters
+		{return static_cast<uint16_t>(codepoint);}
+	
+	if(codepoint>=160 && codepoint<256) //Latin-1 characters
+		{return static_cast<uint16_t>(codepoint - 32);}
+
+	if(codepoint>=0x384 && codepoint<0x3ce) //Greek characters
+		{return static_cast<uint16_t>(codepoint - 0x384) + 224;}
+
+	if(codepoint>=0x2018 && codepoint<0x2020) // Quotation marks
+		{return static_cast<uint16_t>(codepoint-0x2018) + 395;}
+
+	return charmap_misc(codepoint);
+	}
+
 Console& Console::write(uint32_t codepoint)
 	{
-	uint16_t ch=447;
-	if(codepoint==10)
-		{ch=65535;}
-	else
-	if(codepoint>=32 && codepoint<127) // Basic ASCII characters
-		{ch=static_cast<uint16_t>(codepoint-32);}
-	else
-	if(codepoint>=160 && codepoint<256) // Latin-1 continuation
-		{ch=static_cast<uint16_t>(codepoint-64);}
-	else
-	if(codepoint>=0x2018 && codepoint<0x2020) // Quotation marks
-		{ch=(codepoint-0x2018) + static_cast<uint16_t>(192);}
-	else
-	if(codepoint==0x2022) //Bullet
-		{ch=static_cast<uint16_t>(200);}
-	else
-	if(codepoint>=0x2591 && codepoint<=0x2593) //Block characters
-		{ch=(codepoint - 0x2591) + static_cast<uint16_t>(201);}
-	else
-	if(codepoint==0x2588) //Full block
-		{ch=static_cast<uint16_t>(204);}
-	else
+	auto ch=charmap(codepoint);
+	if(ch==447)
 		{fprintf(stderr,"Codepoint %x missing\n",codepoint);}
 
 	auto N=m_n_cols*m_n_rows;
@@ -262,7 +352,7 @@ Console& Console::write(uint32_t codepoint)
 
 	switch(ch)
 		{
-		case 65535:
+		case CONTROLCODE + 10:
 			m_position=std::max(m_position
 				,m_n_cols*(m_position/m_n_cols) + static_cast<size_t>(1));
 			while((m_position%m_n_cols)!=0)

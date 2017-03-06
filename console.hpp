@@ -8,6 +8,7 @@
 #include "faceindirect.hpp"
 #include "vectortype.hpp"
 #include "new.hpp"
+#include "color.hpp"
 #include <geosimd/point.hpp>
 #include <memory>
 
@@ -44,7 +45,7 @@ namespace Glinde
 
 
 			auto colorsFg() const noexcept
-				{return Range<const vec4_t<float>>{m_colors_fg.get(),m_n_cols*m_n_rows*4};}
+				{return Range<Color>{m_colors_fg.get(),m_n_cols*m_n_rows*4};}
 
 			auto colorsFg(size_t k) const noexcept
 				{return row(m_colors_fg.get(),k,4);}
@@ -52,7 +53,7 @@ namespace Glinde
 
 
 			auto colorsBg() const noexcept
-				{return Range<const vec4_t<float>>{m_colors_bg.get(),m_n_cols*m_n_rows*4};}
+				{return Range<Color>{m_colors_bg.get(),m_n_cols*m_n_rows*4};}
 
 			auto colorsBg(size_t k) const noexcept
 				{return row(m_colors_bg.get(),k,4);}
@@ -84,16 +85,16 @@ namespace Glinde
 
 		private:
 			std::unique_ptr<GeoSIMD::Point<float>[]> m_vertices;
-			std::unique_ptr<vec4_t<float>[]> m_colors_fg;
-			std::unique_ptr<vec4_t<float>[]> m_colors_bg;
+			std::unique_ptr<Color[]> m_colors_fg;
+			std::unique_ptr<Color[]> m_colors_bg;
 			std::unique_ptr<vec2_t<float>[]> m_uvs;
 			std::unique_ptr<FaceIndirect[]> m_faces;
 
 			uint32_t m_n_cols;
 			uint32_t m_n_rows;
 
-			vec4_t<float> m_color_fg;
-			vec4_t<float> m_color_bg;
+			Color m_color_fg;
+			Color m_color_bg;
 			size_t m_position;
 			size_t m_line_current;
 			uint32_t m_utf8_state;

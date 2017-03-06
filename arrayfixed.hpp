@@ -26,7 +26,8 @@ namespace Glinde
 
 			/**\brief Default constructor
 			 */
-			constexpr ArrayFixed(){}
+			constexpr ArrayFixed() noexcept:data{}
+				{}
 
 			/**\brief Element initialize constructor
 			 *
@@ -48,7 +49,7 @@ namespace Glinde
 			 * returned by length()
 			 *
 			 */
-			constexpr const T& operator[](size_t k) const
+			constexpr const T& operator[](size_t k) const noexcept
 				{return data[k];}
 
 			/**\brief Element access
@@ -59,35 +60,35 @@ namespace Glinde
 			 * returned by length()
 			 *
 			 */
-			T& operator[](size_t k)
+			constexpr T& operator[](size_t k) noexcept
 				{return data[k];}
 
 			/**\brief Returns a pointer to the beginning of the array
 			 *
 			 * This function returns a pointer to the beginning of the array.
 			*/
-			constexpr const T* begin() const
+			constexpr const T* begin() const noexcept
 				{return data;}
 
 			/**\brief Returns a pointer to the element past the last element
 			 *
 			 * This function returns a pointer to the element past the last element.
 			*/
-			constexpr const T* end() const
+			constexpr const T* end() const noexcept
 				{return data+N;}
 
 			/**\brief Returns a pointer to the beginning of the array
 			 *
 			 * This function returns a pointer to the beginning of the array.
 			*/
-			T* begin()
+			T* begin() noexcept
 				{return data;}
 
 			/**\brief Returns a pointer to the element past the last element
 			 *
 			 * This function returns a pointer to the element past the last element.
 			 */
-			T* end()
+			T* end() noexcept
 				{return data+N;}
 
 			/**\brief Returns the length of the array
@@ -95,7 +96,7 @@ namespace Glinde
 			 * This function returns the length of the array.
 			 *
 			*/
-			static constexpr size_t length()
+			static constexpr size_t length() noexcept
 				{return N;}
 
 			/**\brief Array range
