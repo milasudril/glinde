@@ -334,7 +334,8 @@ static constexpr uint16_t charmap(uint32_t codepoint)
 	if(codepoint>=0x2018 && codepoint<0x2020) // Quotation marks
 		{return static_cast<uint16_t>(codepoint-0x2018) + 395;}
 
-	return charmap_misc(codepoint);
+	//Misc dingbats, box drawing, and blocks
+	return charmap_misc(codepoint); 
 	}
 
 Console& Console::write(uint32_t codepoint)
@@ -342,6 +343,8 @@ Console& Console::write(uint32_t codepoint)
 	auto ch=charmap(codepoint);
 	if(ch==447)
 		{fprintf(stderr,"Codepoint %x missing\n",codepoint);}
+	if(ch>=CONTROLCODE + 16)
+		{return colorMask(ch - (CONTROLCODE+16));}
 
 	auto N=m_n_cols*m_n_rows;
 	auto position=m_position;
@@ -357,6 +360,10 @@ Console& Console::write(uint32_t codepoint)
 				,m_n_cols*(m_position/m_n_cols) + static_cast<size_t>(1));
 			while((m_position%m_n_cols)!=0)
 				{write(' ');}
+			break;
+
+		case CONTROLCODE + 13:
+			m_position=m_position/m_n_cols;
 			break;
 
 		default:
