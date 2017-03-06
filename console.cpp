@@ -224,7 +224,7 @@ Console& Console::writeUTF8(const char* string)
 	return *this;
 	}
 
-static constexpr auto CONTROLCODE=std::numeric_limits<uint16_t>::max() - 31;
+static constexpr auto CONTROLCODE=std::numeric_limits<uint16_t>::max() - 63;
 
 static constexpr uint16_t charmap_misc(uint32_t codepoint)
 	{
@@ -319,11 +319,14 @@ static constexpr uint16_t charmap(uint32_t codepoint)
 	if(codepoint==0x2265) //geq
 		{return 21;}
 
-	if(codepoint<32) //Control characters
+	if(codepoint<32) //Control codes
 		{return static_cast<uint16_t>(codepoint) + CONTROLCODE;}
 
 	if(codepoint>=32 && codepoint<128) //ASCII characters
 		{return static_cast<uint16_t>(codepoint);}
+
+	if(codepoint>=128 && codepoint<160) //Other control codes
+		{return static_cast<uint16_t>(codepoint-128) + CONTROLCODE;}
 	
 	if(codepoint>=160 && codepoint<256) //Latin-1 characters
 		{return static_cast<uint16_t>(codepoint - 32);}
@@ -343,8 +346,23 @@ Console& Console::write(uint32_t codepoint)
 	auto ch=charmap(codepoint);
 	if(ch==447)
 		{fprintf(stderr,"Codepoint %x missing\n",codepoint);}
-	if(ch>=CONTROLCODE + 16)
-		{return colorMask(ch - (CONTROLCODE+16));}
+	if(ch>=CONTROLCODE)
+		{
+		if(ch>=CONTROLCODE+32 && ch<CONTROLCODE+48)
+			{m_color_fg=colorGet(ch - (CONTROLCODE + 32));}
+		if(ch>=CONTROLCODE + 48)
+			{m_color_bg=colorGet(ch - (CONTROLCODE + 48));}
+		if(ch==CONTROLCODE + 10)
+			{
+			m_position=std::max(m_position
+				,m_n_cols*(m_position/m_n_cols) + static_cast<size_t>(1));
+			while((m_position%m_n_cols)!=0)
+				{write(' ');}
+			}
+		if(ch==CONTROLCODE + 13)
+			{m_position=m_position/m_n_cols;}
+		return *this;
+		}
 
 	auto N=m_n_cols*m_n_rows;
 	auto position=m_position;
@@ -353,43 +371,27 @@ Console& Console::write(uint32_t codepoint)
 	auto color_fg=m_color_fg;
 	auto color_bg=m_color_bg;
 
-	switch(ch)
-		{
-		case CONTROLCODE + 10:
-			m_position=std::max(m_position
-				,m_n_cols*(m_position/m_n_cols) + static_cast<size_t>(1));
-			while((m_position%m_n_cols)!=0)
-				{write(' ');}
-			break;
+	m_uvs[4*position + 0]=vec2_t<float>{uvs[0],uvs[1]};
+	m_uvs[4*position + 1]=vec2_t<float>{uvs[2],uvs[3]};
+	m_uvs[4*position + 2]=vec2_t<float>{uvs[4],uvs[5]};
+	m_uvs[4*position + 3]=vec2_t<float>{uvs[6],uvs[7]};
 
-		case CONTROLCODE + 13:
-			m_position=m_position/m_n_cols;
-			break;
+	m_colors_fg[4*position + 0]=color_fg;
+	m_colors_fg[4*position + 1]=color_fg;
+	m_colors_fg[4*position + 2]=color_fg;
+	m_colors_fg[4*position + 3]=color_fg;
 
-		default:
-			m_uvs[4*position + 0]=vec2_t<float>{uvs[0],uvs[1]};
-			m_uvs[4*position + 1]=vec2_t<float>{uvs[2],uvs[3]};
-			m_uvs[4*position + 2]=vec2_t<float>{uvs[4],uvs[5]};
-			m_uvs[4*position + 3]=vec2_t<float>{uvs[6],uvs[7]};
+	m_colors_bg[4*position + 0]=color_bg;
+	m_colors_bg[4*position + 1]=color_bg;
+	m_colors_bg[4*position + 2]=color_bg;
+	m_colors_bg[4*position + 3]=color_bg;
 
-			m_colors_fg[4*position + 0]=color_fg;
-			m_colors_fg[4*position + 1]=color_fg;
-			m_colors_fg[4*position + 2]=color_fg;
-			m_colors_fg[4*position + 3]=color_fg;
+	position=(position + 1)%N;
 
-			m_colors_bg[4*position + 0]=color_bg;
-			m_colors_bg[4*position + 1]=color_bg;
-			m_colors_bg[4*position + 2]=color_bg;
-			m_colors_bg[4*position + 3]=color_bg;
+	if(position%m_n_cols==0)
+		{++m_line_current;}
 
-			position=(position + 1)%N;
-
-			if(position%m_n_cols==0)
-				{++m_line_current;}
-
-			m_position=position;
-			break;
-		}
+	m_position=position;
 	return *this;
 	}
 
