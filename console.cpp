@@ -344,8 +344,6 @@ static constexpr uint16_t charmap(uint32_t codepoint)
 Console& Console::write(uint32_t codepoint)
 	{
 	auto ch=charmap(codepoint);
-	if(ch==447)
-		{fprintf(stderr,"Codepoint %x missing\n",codepoint);}
 	if(ch>=CONTROLCODE)
 		{
 		if(ch>=CONTROLCODE+32 && ch<CONTROLCODE+48)
@@ -363,6 +361,9 @@ Console& Console::write(uint32_t codepoint)
 			{m_position=m_position/m_n_cols;}
 		return *this;
 		}
+
+	if(ch==447)
+		{fprintf(stderr,"Codepoint %x missing\n",codepoint);}
 
 	auto N=m_n_cols*m_n_rows;
 	auto position=m_position;
