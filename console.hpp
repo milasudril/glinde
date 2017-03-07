@@ -74,6 +74,9 @@ namespace Glinde
 			float lineOffset(size_t k) const noexcept
 				{return -static_cast<float>(2*k)/static_cast<float>(m_n_rows);}
 
+			size_t size() const noexcept
+				{return colsCount()*rowsCount();}
+
 		private:
 			std::unique_ptr<GeoSIMD::Point<float>[]> m_vertices;
 			std::unique_ptr<Color[]> m_colors_fg;

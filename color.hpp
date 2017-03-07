@@ -97,5 +97,8 @@ namespace Glinde
 			vec4_t<float> m_data;
 			static const ArrayFixed<float,256> srgb_lut;
 		};
+
+	inline const vec4_t<float>* native_type(const Color* c) noexcept
+		{return reinterpret_cast<const vec4_t<float>*>(c);}
 	}
 #endif

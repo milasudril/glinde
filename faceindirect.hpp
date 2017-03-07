@@ -12,6 +12,9 @@ namespace Glinde
 		{
 		using ArrayFixed<uint16_t,3>::ArrayFixed;
 		};
+
+	inline const uint16_t* native_type(const FaceIndirect* x) noexcept
+		{return reinterpret_cast<const uint16_t*>(x);}
 	}
 
 

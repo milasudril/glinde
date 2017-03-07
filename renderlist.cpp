@@ -16,7 +16,7 @@ RenderList::RenderList()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-	glClearColor(0.5,0.5,0.5,1.0);
+	glClearColor(0.25,0.25,0.25,1.0);
 	}
 
 void RenderList::framebufferResize(int width,int height)

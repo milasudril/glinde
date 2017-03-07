@@ -32,7 +32,7 @@ namespace Glinde
 			MessageQueue m_queue;
 			Handle<unsigned int,-1,decltype(&logQueueDetach)> m_queue_guard;
 			Console m_console;
-			LogWriterConsole m_con_writer;
+			LogWriterConsole m_con_writer;			
 			Image m_charmap;
 
 			Message m_msg;

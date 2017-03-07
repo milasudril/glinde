@@ -180,6 +180,8 @@ Console::Console(uint32_t n_rows,uint32_t n_cols):
 			m_faces[2*cell + 1][2]=4*cell + 0;
 			}
 		}
+	m_n_rows=n_rows;
+	m_n_cols=n_cols;
 	colorMask(0x07);
 	}
 

@@ -20,7 +20,10 @@ namespace Glinde
 			void framebufferResize(int width,int height);
 			void render(Display& disp) const noexcept;
 
-			uint32_t append(RenderObject& obj,unsigned int z_index)
+			uint32_t insertOnTop(RenderObject& obj)
+				{return insert(obj,std::numeric_limits<unsigned int>::max());}
+
+			uint32_t insert(RenderObject& obj,unsigned int z_index)
 				{
 				auto id=r_objects.length(); //Assume we never removes objects
 				auto obj_index=r_objects.length(); //The new object will be stored last in the array
