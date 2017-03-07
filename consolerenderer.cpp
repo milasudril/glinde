@@ -74,7 +74,7 @@ constexpr Angle::VertexAttribute ConsoleRenderer::ShaderDescriptor::attributes[]
 void ConsoleRenderer::render(Display& disp) const noexcept
 	{
 
-	glDisable(GL_CULL_FACE);
+//	glDisable(GL_CULL_FACE);
 //	glViewport(0,0,720*2,800);
 
 		{
