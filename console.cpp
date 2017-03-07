@@ -82,7 +82,7 @@ namespace
 	using floatpack __attribute__ ((vector_size(8*sizeof(float))))=vector_type(float);
 
 	inline ArrayFixed<GeoSIMD::Vector<float>,4>
-	getCoords(uint32_t l,uint32_t n_rows,uint32_t n_cols)
+	coords(uint32_t l,uint32_t n_rows,uint32_t n_cols)
 		{
 	//TODO: vectorize more if possible
 		auto dx=1.0f/static_cast<float>(n_cols);
@@ -101,7 +101,7 @@ namespace
 			return coords;
 		}
 
-	inline floatpack uvcoordsGet(uint16_t ch)
+	inline floatpack uvcoords(uint16_t ch)
 		{
 		auto n_cols=28;  //Character textuture must have 28 columns
 		auto k=ch/n_cols;
@@ -109,9 +109,7 @@ namespace
 		auto kf=static_cast<float>(k);
 		auto lf=static_cast<float>(l);
 
-		auto w=static_cast<float>(Console::CHARCELL_WIDTH);
-		auto h=static_cast<float>(Console::CHARCELL_HEIGHT);
-		floatpack size_chars {0,0,w,0,w,h,0,h};
+		floatpack size_chars{0,0,1,0,1,1,0,1};
 		auto dxdy=size_chars; //Postpone normalization to shader program
 
 		auto ret=floatpack{lf,kf,lf,kf,lf,kf,lf,kf};
@@ -120,7 +118,7 @@ namespace
 		}
 
 	#ifdef __AVX2__
-	Color colorGet(uint8_t color_mask)
+	Color color(uint8_t color_mask)
 		{
 		vec4_t<float> color;
 		auto intensity=0.3333f*static_cast<float>( (color_mask & 8)/8 );
@@ -136,7 +134,7 @@ namespace
 		return Color::fromSRGB(color);
 		}
 	#else
-	Color colorGet(uint8_t color_mask)
+	Color color(uint8_t color_mask)
 		{
 		vec4_t<float> color;
 		auto intensity=0.3333f*static_cast<float>( (color_mask & 8)/8 );
@@ -167,7 +165,7 @@ Console::Console(uint32_t n_rows,uint32_t n_cols):
 		{
 		for(uint32_t l=0;l<n_cols;++l)
 			{
-			auto verts=getCoords(l,n_rows,n_cols);
+			auto verts=coords(l,n_rows,n_cols);
 			auto cell=l + n_cols*k;
 			m_vertices[4*cell + 0]=O + verts[0];
 			m_vertices[4*cell + 1]=O + verts[1];
@@ -187,8 +185,8 @@ Console::Console(uint32_t n_rows,uint32_t n_cols):
 
 Console& Console::colorMask(uint8_t color_mask)
 	{
-	m_color_fg=colorGet(color_mask&0x0f);
-	m_color_bg=colorGet(static_cast<uint8_t>(color_mask>>4));
+	m_color_fg=color(color_mask&0x0f);
+	m_color_bg=color(static_cast<uint8_t>(color_mask>>4));
 	return *this;
 	}
 
@@ -347,9 +345,9 @@ Console& Console::write(uint32_t codepoint)
 	if(ch>=CONTROLCODE)
 		{
 		if(ch>=CONTROLCODE+32 && ch<CONTROLCODE+48)
-			{m_color_fg=colorGet(ch - (CONTROLCODE + 32));}
+			{m_color_fg=color(ch - (CONTROLCODE + 32));}
 		if(ch>=CONTROLCODE + 48)
-			{m_color_bg=colorGet(ch - (CONTROLCODE + 48));}
+			{m_color_bg=color(ch - (CONTROLCODE + 48));}
 		if(ch==CONTROLCODE + 10)
 			{
 			m_position=std::max(m_position
@@ -368,7 +366,7 @@ Console& Console::write(uint32_t codepoint)
 	auto N=m_n_cols*m_n_rows;
 	auto position=m_position;
 
-	auto uvs=uvcoordsGet(ch);
+	auto uvs=uvcoords(ch);
 	auto color_fg=m_color_fg;
 	auto color_bg=m_color_bg;
 

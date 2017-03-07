@@ -17,9 +17,6 @@ namespace Glinde
 	class Console
 		{
 		public:
-			static constexpr int CHARCELL_WIDTH=9;
-			static constexpr int CHARCELL_HEIGHT=16;
-
 			Console(uint32_t n_rows,uint32_t n_cols);
 
 			Console& colorMask(uint8_t color_mask);
@@ -76,12 +73,6 @@ namespace Glinde
 
 			float lineOffset(size_t k) const noexcept
 				{return -static_cast<float>(2*k)/static_cast<float>(m_n_rows);}
-
-			size_t windowWidth() const noexcept
-				{return CHARCELL_WIDTH*colsCount();}
-
-			size_t windowHeight() const noexcept
-				{return CHARCELL_HEIGHT*rowsCount();}
 
 		private:
 			std::unique_ptr<GeoSIMD::Point<float>[]> m_vertices;
