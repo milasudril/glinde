@@ -24,22 +24,22 @@ namespace Glinde
 			explicit Image(uint32_t width,uint32_t height,uint32_t n_channels
 				,uint32_t id);
 
-			SampleType* pixelsGet() noexcept
+			SampleType* pixels() noexcept
 				{return m_pixels.begin();}
 
-			const SampleType* pixelsGet() const noexcept
+			const SampleType* pixels() const noexcept
 				{return m_pixels.begin();}
 
-			uint32_t widthGet() const noexcept
+			uint32_t width() const noexcept
 				{return m_properties.data.width;}
 
-			uint32_t heightGet() const noexcept
+			uint32_t height() const noexcept
 				{return m_properties.data.height;}
 
-			uint32_t channelCountGet() const noexcept
+			uint32_t channelCount() const noexcept
 				{return m_properties.data.n_channels;}
 
-			uint32_t idGet() const noexcept
+			uint32_t id() const noexcept
 				{return m_properties.data.id;}
 
 		private:

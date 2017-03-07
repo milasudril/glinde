@@ -13,6 +13,7 @@
 #include "messagequeue.hpp"
 #include "handle.hpp"
 #include "logwriterconsole.hpp"
+#include "consolerenderer.hpp"
 
 namespace Glinde
 	{
@@ -39,6 +40,7 @@ namespace Glinde
 			GLFWmm::Session m_session;
 			UICallback m_cb; 
 			Display m_mainwin;
+			ConsoleRenderer m_con_renderer;
 			RenderList m_renderlist;
 		};
 	}

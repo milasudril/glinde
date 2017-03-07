@@ -110,14 +110,18 @@ namespace Angle
 
 			Texture2D(const Texture2D&)=delete;
 
-			Texture2D(Texture2D&& obj) noexcept:m_handle(obj.m_handle)
-				{obj.m_handle=0;}
+			Texture2D(Texture2D&& obj) noexcept:m_handle(obj.m_handle),m_unit(obj.m_unit)
+				{
+				obj.m_handle=0;
+				obj.m_unit=static_cast<GLuint>(-1);
+				}
 
 			Texture2D& operator=(const Texture2D&)=delete;
 
 			Texture2D& operator=(Texture2D&& obj)
 				{
 				std::swap(obj.m_handle,m_handle);
+				std::swap(obj.m_handle,obj.m_unit);
 				return *this;
 				}
 
@@ -135,7 +139,7 @@ namespace Angle
 				{
 				if(m_width!=width_in || m_height!=height_in)
 					{realloc(width_in,height_in);}
-				glTextureSubImage2D(m_handle,0,0,0,width_in,height_in,gl_format(T{}),gl_type(T{})
+				glTextureSubImage2D(m_handle,0,0,0,width_in,height_in,gl_format(T{}),gl_type(*data)
 					,data);
 				if(m_levels>1)
 					{glGenerateTextureMipmap(m_handle);}

@@ -49,7 +49,9 @@ Engine::Engine():
 	,m_charmap(MemoryReader(charmap_begin,charmap_end),0)
 	,m_frame_current(0)
 	,m_session(sessionCreate())
-	,m_cb(m_renderlist),m_mainwin(m_cb,m_session)
+	,m_cb(m_renderlist)
+	,m_mainwin(m_cb,m_session)
+	,m_con_renderer(m_charmap)
 	{
 	glfwSwapInterval(0);
 	auto size_fb=m_mainwin.sizeFb();

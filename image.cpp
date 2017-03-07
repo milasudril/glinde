@@ -30,13 +30,13 @@ namespace
 			inline PNGReader(DataSource& source);
 			inline ~PNGReader();
 
-			uint32_t widthGet() const noexcept
+			uint32_t width() const noexcept
 				{return m_width;}
 
-			uint32_t heightGet() const noexcept
+			uint32_t height() const noexcept
 				{return m_height;}
 
-			uint32_t channelCountGet() const noexcept
+			uint32_t channelCount() const noexcept
 				{return m_n_channels;}
 
 			enum class ColorType:unsigned int
@@ -47,13 +47,13 @@ namespace
 				,GAMMACORRECTED
 				};
 
-			inline ColorType colorTypeGet() const noexcept
+			inline ColorType colorType() const noexcept
 				{return m_color_type;}
 
-			inline float gammaGet() const noexcept
+			inline float gamma() const noexcept
 				{return static_cast<float>( m_gamma );}
 
-			uint32_t sampleSizeGet() const noexcept
+			uint32_t sampleSize() const noexcept
 				{return m_sample_size;}
 
 			inline void headerRead();
@@ -272,9 +272,9 @@ static float fromSRGB(float x)
 
 static void fromSRGB(Image& image)
 	{
-	auto ptr=image.pixelsGet();
-	auto n_ch=image.channelCountGet();
-	auto N=image.widthGet() * image.heightGet() * n_ch;
+	auto ptr=image.pixels();
+	auto n_ch=image.channelCount();
+	auto N=image.width() * image.height() * n_ch;
 
 	while(N!=0)
 		{
@@ -336,22 +336,22 @@ Image::Image(DataSource& source,uint32_t id)
 	reader.headerRead();
 
 	m_properties.x=vec4_t<uint32_t>
-		{reader.widthGet(),reader.heightGet(),reader.channelCountGet(),id};
+		{reader.width(),reader.height(),reader.channelCount(),id};
 
-	m_pixels=ArraySimple<SampleType>(reader.widthGet()*reader.heightGet()
-		*reader.channelCountGet());
+	m_pixels=ArraySimple<SampleType>(reader.width()*reader.height()
+		*reader.channelCount());
 
 	reader.pixelsRead(m_pixels.begin());
 
 
 
-	auto converter=converterGet(reader.colorTypeGet());
+	auto converter=converterGet(reader.colorType());
 	if(converter!=nullptr)
 		{
 		converter(*this);
 		}
 
-	GLINDE_DEBUG_PRINT("Loaded an image of size #0; x #1;",widthGet(),heightGet());
+	GLINDE_DEBUG_PRINT("Loaded an image of size #0; x #1;",width(),height());
 	}
 
 Image::Image(uint32_t width,uint32_t height,uint32_t n_channels,uint32_t id):

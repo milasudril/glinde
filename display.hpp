@@ -11,9 +11,12 @@
 
 #define GLFWMM_NO_MEMBER_ADVERTISMENT
 
+#include "errormessage.hpp"
+#include "variant.hpp"
 #include "glfwmm/window.hpp"
 #include "angle/contextguard.hpp"
 #include "angle/init.hpp"
+#include "angle/exceptionhandler.hpp"
 
 namespace Glinde
 	{
@@ -32,10 +35,12 @@ namespace Glinde
 				{m_imgrenderer.render(texture);}
 
 		private:
-			struct APIInitializer
+			struct APIInitializer:public Angle::ExceptionHandler
 				{
 				APIInitializer()
 					{
+					r_eh_old=&Angle::exceptionHandlerSet(this);
+
 					Glinde::logWrite(Glinde::Log::MessageType::INFORMATION
 						,"Initializing GLEW version #0;.#1;"
 						,{GLEW_VERSION_MAJOR,GLEW_VERSION_MINOR});
@@ -49,6 +54,13 @@ namespace Glinde
 						"    Shader language: #3;\n"
 						,{response.vendor,response.renderer,response.version,response.glsl_version});
 					}
+				~APIInitializer()
+					{Angle::exceptionHandlerSet(r_eh_old);}
+
+				void raise(const Angle::Error& err) override
+					{throw ErrorMessage("An error occured during a call to the graphics backend. #0;",{err.message()});}
+
+				Angle::ExceptionHandler* r_eh_old;
 				};
 
 			Angle::ContextGuard<Display> m_context;
