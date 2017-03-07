@@ -10,6 +10,9 @@
 #include "uicallback.hpp"
 #include "console.hpp"
 #include "image.hpp"
+#include "messagequeue.hpp"
+#include "handle.hpp"
+#include "logwriterconsole.hpp"
 
 namespace Glinde
 	{
@@ -25,9 +28,14 @@ namespace Glinde
 			void run(Timer& timer);
 			
 		private:
+			MessageQueue m_queue;
+			Handle<unsigned int,-1,decltype(&logQueueDetach)> m_queue_guard;
 			Console m_console;
+			LogWriterConsole m_con_writer;
 			Image m_charmap;
 
+			Message m_msg;
+			uint64_t m_frame_current;
 			GLFWmm::Session m_session;
 			UICallback m_cb; 
 			Display m_mainwin;

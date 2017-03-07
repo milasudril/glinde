@@ -6,7 +6,7 @@
 #ifndef GLINDE_IMAGE_HPP
 #define GLINDE_IMAGE_HPP
 
-#include "arraysimple.h"
+#include "arraysimple.hpp"
 #include <cstdint>
 #include <OpenEXR/half.h>
 

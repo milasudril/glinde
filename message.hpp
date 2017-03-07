@@ -32,19 +32,19 @@ namespace Glinde
 					explicit Time(uint64_t frame) noexcept:m_val(frame<<16)
 						{}
 
-					uint64_t timeGet() const noexcept
+					uint64_t time() const noexcept
 						{return m_val>>16;}
 					
-					Time& seqSet(uint16_t seq) noexcept
+					Time& seq(uint16_t seq) noexcept
 						{
-						m_val=((timeGet()<<16)|seq);
+						m_val=((time()<<16)|seq);
 						return *this;
 						}
 
 					bool operator>(Time t) const noexcept
 						{return m_val>t.m_val;}
 
-					uint16_t seqGet() const noexcept
+					uint16_t seq() const noexcept
 						{return m_val&0xffff;}
 				private:
 					uint64_t m_val;
@@ -82,7 +82,7 @@ namespace Glinde
 						{
 					//	GLINDE_DEBUG_PRINT("m_process [#1;]: #0;",&m_process,__PRETTY_FUNCTION__);
 						auto obj=msg.dataRelease<T>();
-						m_process(msg.timeGet(),obj);
+						m_process(msg.time(),obj);
 						}
 					Callback m_process;
 				};
@@ -125,15 +125,15 @@ namespace Glinde
 					{(*m_content.msg.receiver)(std::move(*this));}
 				}
 
-			uint64_t timeGet() const noexcept
-				{return m_content.msg.seq.timeGet();}
+			uint64_t time() const noexcept
+				{return m_content.msg.seq.time();}
 
-			uint16_t seqGet() const noexcept
-				{return m_content.msg.seq.seqGet();}
+			uint16_t seq() const noexcept
+				{return m_content.msg.seq.seq();}
 
-			Message& seqSet(uint16_t seq) noexcept
+			Message& seq(uint16_t seq) noexcept
 				{
-				m_content.msg.seq.seqSet(seq);
+				m_content.msg.seq.seq(seq);
 				return *this;
 				}
 

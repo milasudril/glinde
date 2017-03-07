@@ -20,7 +20,7 @@ namespace Glinde
 			void post(Message&& message)
 				{
 				Mutex::LockGuard guard(m_mutex);
-				message.seqSet( m_seq_next );
+				message.seq( m_seq_next );
 				++m_seq_next;
 				m_queue.push(std::move(message));
 				}

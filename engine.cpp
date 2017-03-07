@@ -42,8 +42,12 @@ namespace
 
 GLINDE_BLOB(charmap,"charmap.png");
 
-Engine::Engine():m_console(25,80)
+Engine::Engine():
+	 m_queue_guard(logQueueAttach(m_queue),&logQueueDetach)
+	,m_console(25,80)
+	,m_con_writer(m_console)
 	,m_charmap(MemoryReader(charmap_begin,charmap_end),0)
+	,m_frame_current(0)
 	,m_session(sessionCreate())
 	,m_cb(m_renderlist),m_mainwin(m_cb,m_session)
 	{
@@ -56,11 +60,30 @@ void Engine::run(Timer& timer)
 	{
 	m_mainwin.inputMode(GLFWmm::WindowBase::MouseButtonMode::STICKY)
 		.inputMode(GLFWmm::WindowBase::KeyMode::STICKY);
-	while(!m_mainwin.shouldClose())
+	auto dt=timer.delay();
+	auto tau=m_frame_current;
+	auto msg=std::move(m_msg);
+	do
 		{
+		if(msg.time() <= tau)
+			{
+			msg.process();
+			msg.clear();
+			while(m_queue.get(msg))
+				{
+				if(msg.time() > tau)
+					{break;}
+				msg.process();
+				msg.clear();
+				}
+			}
 		m_session.eventsPoll();
 		m_renderlist.render(m_mainwin);
 		m_mainwin.buffersSwap();
 		timer.wait();
+		++tau;
 		}
+	while(!m_mainwin.shouldClose());
+	m_msg=std::move(msg);
+	m_frame_current=tau;
 	}
