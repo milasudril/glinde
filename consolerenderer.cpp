@@ -64,7 +64,8 @@ void main()
 	m_program.bind();
 	glUniform2f(5,charmap.width(),charmap.height());
 	glUniform2f(6,CHARCELL_WIDTH,CHARCELL_HEIGHT);
-	glUniform1f(7,1-1.0f/16.0f);
+//	glUniform1f(7,1-1.0f/16.0f);
+	glUniform1f(7,1);
 	m_program.unbind();
 	}
 

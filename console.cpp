@@ -10,6 +10,7 @@
 //@	}
 #include "console.hpp"
 #include "arrayfixed.hpp"
+#include "vgacell.hpp"
 #include <cstdint>
 #include <xmmintrin.h>
 #include <limits>
@@ -82,7 +83,7 @@ namespace
 	using floatpack __attribute__ ((vector_size(8*sizeof(float))))=vector_type(float);
 
 	inline ArrayFixed<GeoSIMD::Vector<float>,4>
-	coords(uint32_t l,uint32_t n_rows,uint32_t n_cols)
+	coords(uint32_t l,uint32_t n_rows,uint32_t n_cols) noexcept
 		{
 	//TODO: vectorize more if possible
 		auto dx=1.0f/static_cast<float>(n_cols);
@@ -101,7 +102,7 @@ namespace
 			return coords;
 		}
 
-	inline floatpack uvcoords(uint16_t ch)
+	inline floatpack uvcoords(uint16_t ch) noexcept
 		{
 		auto n_cols=28;  //Character textuture must have 28 columns
 		auto k=ch/n_cols;
@@ -118,7 +119,7 @@ namespace
 		}
 
 	#ifdef __AVX2__
-	Color color(uint8_t color_mask)
+	Color color(uint8_t color_mask) noexcept
 		{
 		vec4_t<float> color;
 		auto intensity=0.3333f*static_cast<float>( (color_mask & 8)/8 );
@@ -134,7 +135,7 @@ namespace
 		return Color::fromSRGB(color);
 		}
 	#else
-	Color color(uint8_t color_mask)
+	Color color(uint8_t color_mask) noexcept
 		{
 		vec4_t<float> color;
 		auto intensity=0.3333f*static_cast<float>( (color_mask & 8)/8 );
@@ -185,14 +186,14 @@ Console::Console(uint32_t n_rows,uint32_t n_cols):
 	colorMask(0x07);
 	}
 
-Console& Console::colorMask(uint8_t color_mask)
+Console& Console::colorMask(uint8_t color_mask) noexcept
 	{
 	m_color_fg=color(color_mask&0x0f);
 	m_color_bg=color(static_cast<uint8_t>(color_mask>>4));
 	return *this;
 	}
 
-Console& Console::writeRaw(const char* string)
+Console& Console::writeRaw(const char* string) noexcept
 	{
 	while(*string!='\0')
 		{
@@ -202,7 +203,7 @@ Console& Console::writeRaw(const char* string)
 	return *this;
 	}
 
-Console& Console::writeUTF8(const char* string)
+Console& Console::writeUTF8(const char* string) noexcept
 	{
 	if(string==nullptr)
 		{
@@ -311,7 +312,7 @@ static constexpr uint16_t charmap_misc(uint32_t codepoint)
 	return 447;
 	}
 
-static constexpr uint16_t charmap(uint32_t codepoint)
+static constexpr uint16_t charmap(uint32_t codepoint) noexcept
 	{
 	if(codepoint==0x2264) //leq
 		{return 20;}
@@ -341,7 +342,7 @@ static constexpr uint16_t charmap(uint32_t codepoint)
 	return charmap_misc(codepoint); 
 	}
 
-Console& Console::write(uint32_t codepoint)
+Console& Console::write(uint32_t codepoint) noexcept
 	{
 	auto ch=charmap(codepoint);
 	if(ch>=CONTROLCODE)
@@ -395,7 +396,26 @@ Console& Console::write(uint32_t codepoint)
 	return *this;
 	}
 
-Console& Console::write(char ch)
+Console& Console::write(char ch) noexcept
 	{
 	return write(static_cast<uint32_t>( static_cast<uint8_t>(ch) ));
 	}
+
+Console& Console::writeVGADump(Range<const VGACell> dump) noexcept
+	{
+	auto ptr=dump.begin();
+	uint8_t mask_prev=0;
+	while(ptr!=dump.end())
+		{
+		auto mask=ptr->colorMask();
+		if(mask!=mask_prev)
+			{
+			mask_prev=mask;
+			colorMask(mask);
+			}
+		write(ptr->codepoint());
+		++ptr;
+		}
+	return *this;
+	}
+

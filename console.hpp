@@ -14,16 +14,18 @@
 
 namespace Glinde
 	{
+	struct VGACell;
 	class Console
 		{
 		public:
 			Console(uint32_t n_rows,uint32_t n_cols);
 
-			Console& colorMask(uint8_t color_mask);
-			Console& writeRaw(const char* string);
-			Console& writeUTF8(const char* string);
-			Console& write(char ch);
-			Console& write(uint32_t codepoint);
+			Console& colorMask(uint8_t color_mask) noexcept;
+			Console& writeRaw(const char* string) noexcept;
+			Console& writeUTF8(const char* string) noexcept;
+			Console& write(char ch) noexcept;
+			Console& write(uint32_t codepoint) noexcept;
+			Console& writeVGADump(Range<const VGACell> dump) noexcept;
 
 			uint32_t colsCount() const noexcept
 				{return m_n_cols;}
