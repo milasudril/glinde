@@ -29,6 +29,7 @@ void main()
 	}
 )EOF"_vert,R"EOF(#version 450 core
 layout(location=0) uniform sampler2D charmap;
+layout(location=7) uniform float bg_opacity;
 
 in vec2 uv;
 in vec4 frag_color_fg;
@@ -38,7 +39,7 @@ layout(location=0) out vec4 color;
 void main()
 	{
 	float fg=float(texture(charmap,uv));
-	color=frag_color_fg*fg + frag_color_bg*(1.0 - fg);
+	color=frag_color_fg*fg + frag_color_bg*(1.0 - fg)*bg_opacity;
 	}
 )EOF"_frag),m_charmap(texture2d(charmap,1))
 ,m_charcells(4*con.size()),m_fg(4*con.size()),m_bg(4*con.size()),m_uvs(4*con.size())
@@ -63,6 +64,7 @@ void main()
 	m_program.bind();
 	glUniform2f(5,charmap.width(),charmap.height());
 	glUniform2f(6,CHARCELL_WIDTH,CHARCELL_HEIGHT);
+	glUniform1f(7,1-1.0f/16.0f);
 	m_program.unbind();
 	}
 
@@ -96,6 +98,7 @@ void ConsoleRenderer::render(Angle::Texture2D& texture) const noexcept
 	glViewport(0,0,textureWidth(),textureHeight());
 	glDisable(GL_DEPTH_TEST);
 
+	glDisable(GL_BLEND);
 	n_cols*=6; //3*2 vertices per faces
 	for(decltype(n_rows) k=0;k<n_rows;++k)
 		{
@@ -105,4 +108,5 @@ void ConsoleRenderer::render(Angle::Texture2D& texture) const noexcept
 	texture.mipmapsGenerate()
 		.filter(Angle::MagFilter::LINEAR)
 		.filter(Angle::MinFilter::LINEAR_MIPMAP_LINEAR);
+	glEnable(GL_BLEND);
 	}
