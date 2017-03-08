@@ -197,7 +197,7 @@ namespace Angle
 
 			Texture2D& filter(MinFilter filter) noexcept
 				{
-				glTextureParameteri(m_handle,GL_TEXTURE_MAG_FILTER,native_type(filter));
+				glTextureParameteri(m_handle,GL_TEXTURE_MIN_FILTER,native_type(filter));
 				return *this;
 				}
 

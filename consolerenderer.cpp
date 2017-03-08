@@ -82,6 +82,8 @@ void ConsoleRenderer::render(Angle::Texture2D& texture) const noexcept
 		m_uvs.bufferData(v.begin(),v.length());
 		}
 
+	texture.filter(Angle::MagFilter::NEAREST)
+		.filter(Angle::MinFilter::NEAREST);
 	m_vao.bind();
 	m_charmap.bind(0);
 	m_program.bind();
@@ -100,5 +102,7 @@ void ConsoleRenderer::render(Angle::Texture2D& texture) const noexcept
 		glUniform4f(4,0.0f,r_con->lineOffset(k),0.0f,0.0f);
 		Angle::drawElements(Angle::DrawMode::TRIANGLES,k*n_cols,n_cols);
 		}
-	texture.mipmapsGenerate();
+	texture.mipmapsGenerate()
+		.filter(Angle::MagFilter::LINEAR)
+		.filter(Angle::MinFilter::LINEAR_MIPMAP_LINEAR);
 	}

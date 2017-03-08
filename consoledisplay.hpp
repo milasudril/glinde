@@ -17,18 +17,18 @@ namespace Glinde
 				,m_con_texture(10,Angle::TextureFormat::RGBA16F
 					,m_con_renderer.textureWidth()
 					,m_con_renderer.textureHeight())
-				{
-				m_con_texture.filter(Angle::MagFilter::NEAREST)
-					.filter(Angle::MinFilter::NEAREST);
-				}
+				{}
 
-			void framebufferResize(int width,int height){}
+			void framebufferResize(int width,int height)
+				{}
 
 			void render(Display& disp) const noexcept
 				{
 				m_con_renderer.render(m_con_texture);
 				Angle::Framebuffer::framebufferDefault()
 					.bind(Angle::Framebuffer::Target::READDRAW);
+				auto s=disp.sizeFb();
+				glViewport(0,0,s.width,s.height);
 				m_img_renderer.render(m_con_texture);
 				}
 
