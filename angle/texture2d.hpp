@@ -201,6 +201,13 @@ namespace Angle
 				return *this;
 				}
 
+			Texture2D& mipmapsGenerate() noexcept
+				{
+				if(m_levels>1)
+					{glGenerateTextureMipmap(m_handle);}
+				return *this;
+				}
+
 		private:
 			GLuint m_handle;
 			mutable GLuint m_unit;

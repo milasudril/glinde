@@ -6,9 +6,6 @@
 
 using namespace Glinde;
 
-static constexpr auto CHARCELL_WIDTH=9.0f;
-static constexpr auto CHARCELL_HEIGHT=16.0f;
-
 ConsoleRenderer::ConsoleRenderer(const Image& charmap,const Console& con):r_con(&con)
 ,m_program(R"EOF(#version 450 core
 layout(location=0) in vec4 vertex_pos;
@@ -36,14 +33,14 @@ layout(location=0) uniform sampler2D charmap;
 in vec2 uv;
 in vec4 frag_color_fg;
 in vec4 frag_color_bg;
-out vec4 color;
+layout(location=0) out vec4 color;
 
 void main()
 	{
 	float fg=float(texture(charmap,uv));
 	color=frag_color_fg*fg + frag_color_bg*(1.0 - fg);
 	}
-)EOF"_frag),m_charmap(texture2d(charmap,9))
+)EOF"_frag),m_charmap(texture2d(charmap,1))
 ,m_charcells(4*con.size()),m_fg(4*con.size()),m_bg(4*con.size()),m_uvs(4*con.size())
 ,m_faces(3*2*con.size())
 	{
@@ -71,12 +68,8 @@ void main()
 
 constexpr Angle::VertexAttribute ConsoleRenderer::ShaderDescriptor::attributes[];
 
-void ConsoleRenderer::render(Display& disp) const noexcept
+void ConsoleRenderer::render(Angle::Texture2D& texture) const noexcept
 	{
-
-//	glDisable(GL_CULL_FACE);
-//	glViewport(0,0,720*2,800);
-
 		{
 		auto v=r_con->colorsBg();
 		m_bg.bufferData(native_type(v.begin()),v.length());
@@ -92,12 +85,20 @@ void ConsoleRenderer::render(Display& disp) const noexcept
 	m_vao.bind();
 	m_charmap.bind(0);
 	m_program.bind();
-
 	auto n_rows=r_con->rowsCount();
-	auto n_cols=6*r_con->colsCount();
+	auto n_cols=r_con->colsCount();
+
+	m_fb.attachColorBuffer<0>(texture,0)
+		.colorBuffersOutputActivate(0u);
+	m_fb.bind(Angle::Framebuffer::Target::DRAW);
+	glViewport(0,0,textureWidth(),textureHeight());
+	glDisable(GL_DEPTH_TEST);
+
+	n_cols*=6; //3*2 vertices per faces
 	for(decltype(n_rows) k=0;k<n_rows;++k)
 		{
 		glUniform4f(4,0.0f,r_con->lineOffset(k),0.0f,0.0f);
 		Angle::drawElements(Angle::DrawMode::TRIANGLES,k*n_cols,n_cols);
 		}
+	texture.mipmapsGenerate();
 	}

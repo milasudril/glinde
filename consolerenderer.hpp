@@ -8,26 +8,32 @@
 
 #include "vectortype.hpp"
 #include "faceindirect.hpp"
-#include "renderobject.hpp"
+#include "console.hpp"
 #include "angle/texture2d.hpp"
 #include "angle/program.hpp"
 #include "angle/vertexbuffer.hpp"
 #include "angle/vertexarray.hpp"
+#include "angle/framebuffer.hpp"
 
 namespace Glinde
 	{
-	class Console;
 	class Image;
-	class ConsoleRenderer final:public RenderObject
+	class ConsoleRenderer
 		{
 		public:
+			static constexpr auto CHARCELL_WIDTH=9.0f;
+			static constexpr auto CHARCELL_HEIGHT=16.0f;
+
 			ConsoleRenderer(const Image& charmap,Console&&)=delete;
 			ConsoleRenderer(const Image& charmap,const Console& con);
 
-			void render(Display& disp) const noexcept;
+			void render(Angle::Texture2D& tex) const noexcept;
 
-			void framebufferResize(int width,int height)
-				{}
+			int textureWidth() const noexcept
+				{return r_con->colsCount()*CHARCELL_WIDTH;}
+
+			int textureHeight() const noexcept
+				{return r_con->rowsCount()*CHARCELL_HEIGHT;}
 
 		private:
 			const Console* r_con;
@@ -39,6 +45,8 @@ namespace Glinde
 			mutable Angle::VertexBuffer<vec4_t<float>,Angle::BufferUsage::DYNAMIC_DRAW> m_bg;
 			mutable Angle::VertexBuffer<vec2_t<float>,Angle::BufferUsage::DYNAMIC_DRAW> m_uvs;
 			Angle::VertexBuffer<uint16_t> m_faces;
+
+			mutable Angle::Framebuffer m_fb;
 
 			struct ShaderDescriptor
 				{

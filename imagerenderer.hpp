@@ -42,7 +42,7 @@ void main()
 				m_vao.vertexBuffer<0>(m_vertices).enableVertexAttrib<0>();
 				}
 
-			void render(const Angle::Texture2D& texture,Angle::Framebuffer& fb) noexcept
+			void render(const Angle::Texture2D& texture,Angle::Framebuffer& fb) const noexcept
 				{
 			//	TODO: bind fb
 				m_vao.bind();
@@ -52,7 +52,7 @@ void main()
 				glDrawArrays(GL_TRIANGLES,0,6);
 				}
 
-			void render(const Angle::Texture2D& texture) noexcept
+			void render(const Angle::Texture2D& texture) const noexcept
 				{
 				m_vao.bind();
 				texture.bind(0);

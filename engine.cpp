@@ -51,12 +51,12 @@ Engine::Engine():
 	,m_session(sessionCreate())
 	,m_cb(m_renderlist)
 	,m_mainwin(m_cb,m_session)
-	,m_con_renderer(m_charmap,m_console)
+	,m_con_display(m_charmap,m_console)
 	{
 	glfwSwapInterval(0);
 	auto size_fb=m_mainwin.sizeFb();
 	m_cb.framebufferSizeChanged(m_mainwin,size_fb.width,size_fb.height);
-	auto con_id=m_renderlist.insertOnTop(m_con_renderer);
+	auto con_id=m_renderlist.insertOnTop(m_con_display);
 	m_renderlist.activate(con_id);
 	logWriterAttach(m_con_writer);
 	}
