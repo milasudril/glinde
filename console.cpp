@@ -224,7 +224,7 @@ Console& Console::writeUTF8(const char* string)
 	return *this;
 	}
 
-static constexpr auto CONTROLCODE=std::numeric_limits<uint16_t>::max() - 63;
+static constexpr auto CONTROLCODE=std::numeric_limits<uint16_t>::max() - 511;
 
 static constexpr uint16_t charmap_misc(uint32_t codepoint)
 	{
@@ -325,8 +325,8 @@ static constexpr uint16_t charmap(uint32_t codepoint)
 	if(codepoint>=32 && codepoint<128) //ASCII characters
 		{return static_cast<uint16_t>(codepoint);}
 
-	if(codepoint>=128 && codepoint<160) //Other control codes
-		{return static_cast<uint16_t>(codepoint-128) + CONTROLCODE;}
+	if(codepoint>=0xe000 && codepoint<0xe100) //First 256 elements of private area (used for attribute change)
+		{return static_cast<uint16_t>(codepoint-0xe000) + CONTROLCODE + 256;}
 	
 	if(codepoint>=160 && codepoint<256) //Latin-1 characters
 		{return static_cast<uint16_t>(codepoint - 32);}
@@ -346,10 +346,9 @@ Console& Console::write(uint32_t codepoint)
 	auto ch=charmap(codepoint);
 	if(ch>=CONTROLCODE)
 		{
-		if(ch>=CONTROLCODE+32 && ch<CONTROLCODE+48)
-			{m_color_fg=color(ch - (CONTROLCODE + 32));}
-		if(ch>=CONTROLCODE + 48)
-			{m_color_bg=color(ch - (CONTROLCODE + 48));}
+		if(ch>=CONTROLCODE+256)
+			{colorMask(ch - (CONTROLCODE+256));}
+		
 		if(ch==CONTROLCODE + 10)
 			{
 			m_position=std::max(m_position
