@@ -23,7 +23,7 @@ namespace Glinde
 				switch(scancode)
 					{
 					case 36:
-						if(action==GLFWmm::WindowBase::Action::PRESS)
+						if(action!=GLFWmm::WindowBase::Action::RELEASE)
 							{
 							r_con->write('\n');
 							if(modifiers==0)

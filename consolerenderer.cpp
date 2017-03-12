@@ -101,10 +101,12 @@ void ConsoleRenderer::render(Angle::Texture2D& texture) const noexcept
 
 	glDisable(GL_BLEND);
 	n_cols*=6; //3*2 vertices per faces
+	auto line_current=r_con->lineCurrent()+1;
+
 	for(decltype(n_rows) k=0;k<n_rows;++k)
 		{
 		glUniform4f(4,0.0f,r_con->lineOffset(k),0.0f,0.0f);
-		Angle::drawElements(Angle::DrawMode::TRIANGLES,k*n_cols,n_cols);
+		Angle::drawElements(Angle::DrawMode::TRIANGLES,((k + line_current)%n_rows) * n_cols,n_cols);
 		}
 	texture.mipmapsGenerate()
 		.filter(Angle::MagFilter::LINEAR)

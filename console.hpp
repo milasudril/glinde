@@ -80,6 +80,9 @@ namespace Glinde
 			size_t size() const noexcept
 				{return colsCount()*rowsCount();}
 
+			size_t lineCurrent() const noexcept
+				{return m_line_current;}
+
 		private:
 			std::unique_ptr<GeoSIMD::Point<float>[]> m_vertices;
 			std::unique_ptr<Color[]> m_colors_fg;
