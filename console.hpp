@@ -86,10 +86,8 @@ namespace Glinde
 
 			void erase() noexcept
 				{
-				go_back();
-				write('_');
+				go_back();	
 				write(' ');
-				go_back();
 				go_back();
 				}
 

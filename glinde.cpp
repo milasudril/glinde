@@ -21,8 +21,8 @@ int main()
 	{
 	try
 		{
-		setlocale(LC_ALL,"");
-		printf("%.15g\n",3.14);
+	//	setlocale(LC_ALL,"");
+
 		Glinde::Engine engine;
 		engine.run(timerCreate(30.0));
 
