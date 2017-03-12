@@ -87,14 +87,16 @@ namespace Glinde
 			void erase() noexcept
 				{
 				go_back();
+				write('_');
 				write(' ');
+				go_back();
 				go_back();
 				}
 
 			void eraseLinefeed(intptr_t l) noexcept
 				{
 				scroll_up();
-				m_position=(m_line_current*m_n_cols + l)%size();
+				m_position=(m_line_current*m_n_cols + l%m_n_cols)%size();
 				}
 
 		private:

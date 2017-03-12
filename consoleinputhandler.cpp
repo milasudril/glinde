@@ -32,7 +32,6 @@ void ConsoleInputHandler::key(int scancode,GLFWmm::WindowBase::Action action
 					{
 					auto l=line_length(m_input_buffer.begin(),m_input_buffer.end());
 					r_con->eraseLinefeed(l);
-					fprintf(stderr,"%ls\n",(char32_t*)m_input_buffer.begin());
 					}
 				else
 					{r_con->erase();}

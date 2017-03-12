@@ -346,7 +346,8 @@ Console& Console::write(uint32_t codepoint) noexcept
 	{
 	auto ch=charmap(codepoint);
 	auto N=m_n_cols*m_n_rows;
-	fprintf(stderr,"Write: (%zu,%zu)\n",m_line_current,m_position%m_n_cols);	if(ch>=CONTROLCODE)
+
+	if(ch>=CONTROLCODE)
 		{
 		if(ch>=CONTROLCODE+256)
 			{colorMask(ch - (CONTROLCODE+256));}

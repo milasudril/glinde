@@ -6,6 +6,8 @@
 #include "timerreal.hpp"
 #include "logwriter.hpp"
 
+#include <clocale>
+
 #ifdef PROFILE
 inline Glinde::TimerDummy timerCreate(double rate)
 	{return std::move(Glinde::TimerDummy(rate));}
@@ -19,6 +21,8 @@ int main()
 	{
 	try
 		{
+		setlocale(LC_ALL,"");
+		printf("%.15g\n",3.14);
 		Glinde::Engine engine;
 		engine.run(timerCreate(30.0));
 
