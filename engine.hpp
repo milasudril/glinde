@@ -14,6 +14,7 @@
 #include "handle.hpp"
 #include "logwriterconsole.hpp"
 #include "consoledisplay.hpp"
+#include "consoleinputhandler.hpp"
 
 namespace Glinde
 	{
@@ -32,6 +33,7 @@ namespace Glinde
 			MessageQueue m_queue;
 			Handle<unsigned int,-1,decltype(&logQueueDetach)> m_queue_guard;
 			Console m_console;
+			ConsoleInputHandler m_con_input;
 			LogWriterConsole m_con_writer;			
 			Image m_charmap;
 

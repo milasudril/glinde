@@ -4,6 +4,7 @@
 #define GLINDE_UICALLBACK_HPP
 
 #include "renderlist.hpp"
+#include "inputhandler.hpp"
 #include "glfwmm/window.hpp"
 
 namespace Glinde
@@ -13,7 +14,8 @@ namespace Glinde
 		public:
 			using Window=GLFWmm::Window<UICallback>;
 
-			UICallback(RenderList& renderlist):r_renderlist(&renderlist)
+			UICallback(RenderList& renderlist,InputHandler& input_handler):
+				r_renderlist(&renderlist),r_input_handler(&input_handler)
 				{}
 
 			void framebufferSizeChanged(Window& win,int x,int y)
@@ -35,8 +37,21 @@ namespace Glinde
 					}
 				}
 
+			void codepoint(Window& win,uint32_t cp)
+				{r_input_handler->codepoint(cp);}
+
+			void key(Window& win,int scancode,GLFWmm::WindowBase::Action action
+					,unsigned int modifiers)
+				{
+				if(scancode==9 && modifiers==0)
+					{fprintf(stderr,"Return to previous state...\n");}
+				else
+					{r_input_handler->key(scancode,action,modifiers);}
+				}
+
 		private:
 			RenderList* r_renderlist;
+			InputHandler* r_input_handler;
 		};
 	}
 

@@ -15,6 +15,7 @@
 namespace Glinde
 	{
 	struct VGACell;
+
 	class Console
 		{
 		public:
