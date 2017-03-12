@@ -11,6 +11,7 @@
 #include "color.hpp"
 #include <geosimd/point.hpp>
 #include <memory>
+#include <algorithm>
 
 namespace Glinde
 	{
@@ -83,7 +84,33 @@ namespace Glinde
 			size_t lineCurrent() const noexcept
 				{return m_line_current;}
 
+			void erase() noexcept
+				{
+				go_back();
+				write(' ');
+				go_back();
+				}
+
+			void eraseLinefeed(intptr_t l) noexcept
+				{
+				scroll_up();
+				m_position=(m_line_current*m_n_cols + l)%size();
+				}
+
 		private:
+			void go_back() noexcept
+				{m_position=m_position>=0? m_position - 1:size() - 1;}
+
+			void scroll_up() noexcept
+				{
+				m_line_current=m_line_current>=0? m_line_current - 1 : m_n_rows - 1;
+				}
+
+			void scroll_down() noexcept
+				{
+				m_line_current=m_line_current<m_n_rows-1? m_line_current + 1 : 0;
+				}
+
 			std::unique_ptr<GeoSIMD::Point<float>[]> m_vertices;
 			std::unique_ptr<Color[]> m_colors_fg;
 			std::unique_ptr<Color[]> m_colors_bg;
