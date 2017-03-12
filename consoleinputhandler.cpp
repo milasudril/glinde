@@ -53,6 +53,7 @@ void ConsoleInputHandler::key(int scancode,GLFWmm::WindowBase::Action action
 			break;
 
 		default:
-			fprintf(stderr,"%d\n",scancode);
+			break;
+		//	fprintf(stderr,"%d\n",scancode);
 		}
 	}
