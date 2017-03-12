@@ -23,9 +23,12 @@ namespace Glinde
 				switch(scancode)
 					{
 					case 36:
-						r_con->write('\n');
-						if(modifiers==0)
-							{fprintf(stderr,"Invoke command\n");}
+						if(action==GLFWmm::WindowBase::Action::PRESS)
+							{
+							r_con->write('\n');
+							if(modifiers==0)
+								{fprintf(stderr,"Invoke command\n");}
+							}
 						break;
 					default:
 						fprintf(stderr,"%d\n",scancode);

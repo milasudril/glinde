@@ -345,6 +345,8 @@ static constexpr uint16_t charmap(uint32_t codepoint) noexcept
 Console& Console::write(uint32_t codepoint) noexcept
 	{
 	auto ch=charmap(codepoint);
+	auto N=m_n_cols*m_n_rows;
+	printf("(%d,%d)\n",m_position,m_line_current);
 	if(ch>=CONTROLCODE)
 		{
 		if(ch>=CONTROLCODE+256)
@@ -352,20 +354,17 @@ Console& Console::write(uint32_t codepoint) noexcept
 		
 		if(ch==CONTROLCODE + 10)
 			{
-			m_position=std::max(m_position
-				,m_n_cols*(m_position/m_n_cols) + static_cast<size_t>(1));
-			while((m_position%m_n_cols)!=0)
-				{write(' ');}
+			++m_line_current;
+			m_position=(m_line_current*m_n_cols)%N;
 			}
 		if(ch==CONTROLCODE + 13)
-			{m_position=m_position/m_n_cols;}
+			{m_position=(m_line_current*m_n_cols)%N;}
 		return *this;
 		}
 
 	if(ch==447)
 		{fprintf(stderr,"Codepoint %x missing\n",codepoint);}
 
-	auto N=m_n_cols*m_n_rows;
 	auto position=m_position;
 
 	auto uvs=uvcoords(ch);
