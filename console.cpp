@@ -153,11 +153,11 @@ namespace
 	}
 
 Console::Console(uint32_t n_rows,uint32_t n_cols):
-	 m_vertices(new GeoSIMD::Point<float>[n_rows*n_cols*4])
-	,m_colors_fg(new Color[n_rows*n_cols*4])
-	,m_colors_bg(new Color[n_rows*n_cols*4])
-	,m_uvs(new vec2_t<float>[n_rows*n_cols*4])
-	,m_faces(new FaceIndirect[2*n_rows*n_cols])
+	 m_vertices(new GeoSIMD::Point<float>[(n_rows*n_cols + 1)*4])
+	,m_colors_fg(new Color[(n_rows*n_cols + 1)*4])
+	,m_colors_bg(new Color[(n_rows*n_cols + 1)*4])
+	,m_uvs(new vec2_t<float>[(n_rows*n_cols + 1)*4])
+	,m_faces(new FaceIndirect[2*(n_rows*n_cols + 1)])
 	,m_n_cols(n_cols),m_position(0),m_line_current(0)
 	,m_utf8_state(0),m_codepoint(0),m_full(0),m_scroll_pending(0)
 	{
@@ -181,9 +181,26 @@ Console::Console(uint32_t n_rows,uint32_t n_cols):
 			m_faces[2*cell + 1][0]=4*cell + 0;
 			}
 		}
+		{
+		auto verts=coords(0,n_rows,n_cols);
+		auto cell=n_rows*n_cols;
+		m_vertices[4*cell + 0]=O + verts[0];
+		m_vertices[4*cell + 1]=O + verts[1];
+		m_vertices[4*cell + 2]=O + verts[2];
+		m_vertices[4*cell + 3]=O + verts[3];
+		m_faces[2*cell + 0][2]=4*cell + 0;
+		m_faces[2*cell + 0][1]=4*cell + 1;
+		m_faces[2*cell + 0][0]=4*cell + 2;
+		m_faces[2*cell + 1][2]=4*cell + 2;
+		m_faces[2*cell + 1][1]=4*cell + 3;
+		m_faces[2*cell + 1][0]=4*cell + 0;
+		}
+
 	m_n_rows=n_rows;
 	m_n_cols=n_cols;
 	colorMask(0x07);
+	
+	character_render('\0',size());
 	}
 
 Console& Console::colorMask(uint8_t color_mask) noexcept

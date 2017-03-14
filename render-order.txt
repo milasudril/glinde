@@ -1,0 +1,5 @@
+for each type of geometry in {solid, transparent, blend, ...}
+for each shader, set shader
+for each model
+for each texture change, set object textures
+for each object, set object uniforms ( various matrices, uniform parameters, ... )

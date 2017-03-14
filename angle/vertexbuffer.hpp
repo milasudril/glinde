@@ -63,8 +63,14 @@ namespace Angle
 
 			VertexBuffer& bufferData(const ElementType* data,size_t n_elems) noexcept
 				{
-				assert(m_capacity==n_elems);
-				glNamedBufferSubData(m_handle,0,sizeof(ElementType)*n_elems,data);
+				assert(m_capacity==n_elems); 
+				return bufferData(data,0,n_elems);
+				}
+
+			VertexBuffer& bufferData(const ElementType* data,size_t offset,size_t n_elems) noexcept
+				{
+				assert(m_capacity>=n_elems + offset); 
+				glNamedBufferSubData(m_handle,offset,sizeof(ElementType)*n_elems,data);
 				return *this;
 				}
 
@@ -114,6 +120,12 @@ namespace Angle
 				return *this;
 				}
 
+			VertexBuffer& bufferData(const vector_type* data,size_t offset,size_t n_elems) noexcept
+				{
+				base::bufferData(reinterpret_cast<const float*>(data),offset,components*n_elems);
+				return *this;
+				}
+
 			VertexBuffer& bufferDataResize(const vector_type* data,size_t n_elems) noexcept
 				{
 				base::bufferDataResize(reinterpret_cast<const float*>(data),components*n_elems);
@@ -140,6 +152,12 @@ namespace Angle
 			VertexBuffer& bufferData(const vector_type* data,size_t n_elems) noexcept
 				{
 				base::bufferData(reinterpret_cast<const float*>(data),components*n_elems);
+				return *this;
+				}
+
+			VertexBuffer& bufferData(const vector_type* data,size_t offset,size_t n_elems) noexcept
+				{
+				base::bufferData(reinterpret_cast<const float*>(data),offset,components*n_elems);
 				return *this;
 				}
 

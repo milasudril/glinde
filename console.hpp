@@ -38,15 +38,21 @@ namespace Glinde
 
 
 			auto vertices() const noexcept
-				{return Range<const GeoSIMD::Point<float>>{m_vertices.get(),m_n_cols*m_n_rows*4};}
+				{return Range<const GeoSIMD::Point<float>>{m_vertices.get(),size()*4};}
 
 			auto vertices(size_t k) const noexcept
 				{return row(m_vertices.get(),k,4);}
 
+			auto verticesFull() const noexcept
+				{return Range<const GeoSIMD::Point<float>>{m_vertices.get(),sizeFull()*4};}
+
 
 
 			auto colorsFg() const noexcept
-				{return Range<Color>{m_colors_fg.get(),m_n_cols*m_n_rows*4};}
+				{return Range<Color>{m_colors_fg.get(),size()*4};}
+
+			auto colorsFgFull() const noexcept
+				{return Range<Color>{m_colors_fg.get(),sizeFull()*4};}
 
 			auto colorsFg(size_t k) const noexcept
 				{return row(m_colors_fg.get(),k,4);}
@@ -54,7 +60,10 @@ namespace Glinde
 
 
 			auto colorsBg() const noexcept
-				{return Range<Color>{m_colors_bg.get(),m_n_cols*m_n_rows*4};}
+				{return Range<Color>{m_colors_bg.get(),size()*4};}
+
+			auto colorsBgFull() const noexcept
+				{return Range<Color>{m_colors_bg.get(),sizeFull()*4};}
 
 			auto colorsBg(size_t k) const noexcept
 				{return row(m_colors_bg.get(),k,4);}
@@ -62,7 +71,10 @@ namespace Glinde
 
 
 			auto uvs() const noexcept
-				{return Range<const vec2_t<float>>{m_uvs.get(),m_n_cols*m_n_rows*4};}
+				{return Range<const vec2_t<float>>{m_uvs.get(),size()*4};}
+
+			auto uvsFull() const noexcept
+				{return Range<const vec2_t<float>>{m_uvs.get(),sizeFull()*4};}
 
 			auto uvs(size_t k) const noexcept
 				{return row(m_uvs.get(),k,4);}
@@ -70,10 +82,15 @@ namespace Glinde
 
 
 			auto faces() const noexcept
-				{return Range<const FaceIndirect>{m_faces.get(),m_n_cols*m_n_rows*2};}
+				{return Range<const FaceIndirect>{m_faces.get(),size()*2};}
+
+			auto facesFull() const noexcept
+				{return Range<const FaceIndirect>{m_faces.get(),sizeFull()*2};}
 
 			Range<const FaceIndirect> faces(size_t k) const noexcept
 				{return row(m_faces.get(),k,2);}
+
+
 
 			float lineOffset(size_t k) const noexcept
 				{return -static_cast<float>(2*k)/static_cast<float>(m_n_rows);}
@@ -87,8 +104,7 @@ namespace Glinde
 			void erase() noexcept
 				{
 				go_back();	
-				write(' ');
-				go_back();
+				character_render(' ',m_position);
 				}
 
 			void eraseLinefeed(intptr_t l) noexcept
@@ -96,6 +112,20 @@ namespace Glinde
 				scroll_up();
 				m_position=(m_line_current*m_n_cols + l%m_n_cols)%size();
 				}
+
+			vec2_t<float> cursorPosition() const noexcept
+				{
+				auto row=m_position/m_n_cols;
+				auto col=m_position%m_n_cols;
+				return vec2_t<float>
+					{
+					 static_cast<float>(2*col)/m_n_cols
+					,-static_cast<float>(2*row)/m_n_rows
+					};
+				}
+
+			size_t sizeFull() const noexcept
+				{return size() + 1;}
 
 		private:
 			void go_back() noexcept

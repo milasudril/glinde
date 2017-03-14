@@ -42,15 +42,19 @@ void main()
 	color=frag_color_fg*fg + frag_color_bg*(1.0 - fg)*bg_opacity;
 	}
 )EOF"_frag),m_charmap(texture2d(charmap,1))
-,m_charcells(4*con.size()),m_fg(4*con.size()),m_bg(4*con.size()),m_uvs(4*con.size())
-,m_faces(3*2*con.size())
+,m_charcells(4*con.sizeFull()),m_fg(4*con.sizeFull()),m_bg(4*con.sizeFull()),m_uvs(4*con.sizeFull())
+,m_faces(3*2*con.sizeFull())
 	{
 	m_charmap.filter(Angle::MagFilter::NEAREST)
 		.filter(Angle::MinFilter::NEAREST);
-	auto v=con.vertices();
+	auto v=con.verticesFull();
 	m_charcells.bufferData(native_type(v.begin()),v.length());
-	auto f=con.faces();
+	auto f=con.facesFull();
 	m_faces.bufferData(native_type(f.begin()),3*f.length());
+
+	auto uvs=con.uvsFull();
+	m_uvs.bufferData(uvs.begin(),uvs.length());
+
 	m_vao.vertexBuffer<0>(m_charcells)
 		.vertexBuffer<1>(m_fg)
 		.vertexBuffer<2>(m_bg)
@@ -74,15 +78,15 @@ constexpr Angle::VertexAttribute ConsoleRenderer::ShaderDescriptor::attributes[]
 void ConsoleRenderer::render(Angle::Texture2D& texture) const noexcept
 	{
 		{
-		auto v=r_con->colorsBg();
-		m_bg.bufferData(native_type(v.begin()),v.length());
+		auto v=r_con->colorsBgFull();
+		m_bg.bufferData(native_type(v.begin()),size_t(0),v.length());
 
-		v=r_con->colorsFg();
-		m_fg.bufferData(native_type(v.begin()),v.length());
+		v=r_con->colorsFgFull();
+		m_fg.bufferData(native_type(v.begin()),size_t(0),v.length());
 		}
 		{
 		auto v=r_con->uvs();
-		m_uvs.bufferData(v.begin(),v.length());
+		m_uvs.bufferData(v.begin(),size_t(0),v.length());
 		}
 
 	texture.filter(Angle::MagFilter::NEAREST)
@@ -102,14 +106,20 @@ void ConsoleRenderer::render(Angle::Texture2D& texture) const noexcept
 	glDisable(GL_BLEND);
 	n_cols*=6; //3*2 vertices per faces
 	auto line_current=r_con->lineCurrent();
-
+	glClearColor(0,0,0,0);
+	glClear(GL_COLOR_BUFFER_BIT);
 	for(decltype(n_rows) k=0;k<n_rows;++k)
 		{
 		glUniform4f(4,0.0f,r_con->lineOffset(k),0.0f,0.0f);
 		Angle::drawElements(Angle::DrawMode::TRIANGLES,((k + line_current)%n_rows) * n_cols,n_cols);
 		}
+	auto pos=r_con->cursorPosition();
+	glUniform4f(4,pos[0],pos[1],0.0f,0.0f);
+	Angle::drawElements(Angle::DrawMode::TRIANGLES,n_cols*n_rows,6);
+	glEnable(GL_BLEND);
+	
+
 	texture.mipmapsGenerate()
 		.filter(Angle::MagFilter::LINEAR)
 		.filter(Angle::MinFilter::LINEAR_MIPMAP_LINEAR);
-	glEnable(GL_BLEND);
 	}
