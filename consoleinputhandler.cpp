@@ -6,16 +6,16 @@
 
 using namespace Glinde;
 
-static intptr_t line_length(const uint32_t* begin,const uint32_t* end)
+static std::pair<intptr_t,int> line_length(const uint32_t* begin,const uint32_t* end)
 	{
 	auto ptr=end;
 	while(ptr!=begin)
 		{	
 		--ptr;
 		if(*ptr=='\n')
-			{return end-(ptr+1);}
+			{return {end-(ptr+1),0};}
 		}
-	return end-ptr;
+	return {end-ptr,1};
 	}
 
 void ConsoleInputHandler::key(int scancode,GLFWmm::WindowBase::Action action
@@ -31,7 +31,7 @@ void ConsoleInputHandler::key(int scancode,GLFWmm::WindowBase::Action action
 				if(ch=='\n')
 					{
 					auto l=line_length(m_input_buffer.begin(),m_input_buffer.end());
-					r_con->eraseLinefeed(l);
+					r_con->eraseLinefeed(l.first + l.second);
 					}
 				else
 					{r_con->erase();}
@@ -46,7 +46,7 @@ void ConsoleInputHandler::key(int scancode,GLFWmm::WindowBase::Action action
 					{
 					fprintf(stderr,"Invoke command\n");
 					m_input_buffer.clear();
-				//	r_con->writeUTF8("»");
+					r_con->writeUTF8("»");
 					}
 				else
 					{m_input_buffer.append('\n');}
