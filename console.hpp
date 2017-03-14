@@ -116,7 +116,7 @@ namespace Glinde
 				if(position==0)
 					{m_full=1;}
 				m_position=position;
-				if(m_full && position%m_n_cols==0)
+				if(m_full && m_position%m_n_cols==0)
 					{scroll_down();}
 				}
 
