@@ -392,6 +392,16 @@ void Console::character_render(uint16_t ch,size_t position)
 	m_colors_bg[4*position + 3]=color_bg;
 	}
 
+void Console::scroll_down() noexcept
+	{
+	auto pos=m_position;
+	auto n_cols=m_n_cols;
+	for(decltype(n_cols) k=0;k<n_cols;++k)
+		{character_render(32,k + pos);}
+
+	m_line_current=m_line_current<m_n_rows-1? m_line_current + 1 : 0;
+	}
+
 Console& Console::write(char ch) noexcept
 	{
 	return write(static_cast<uint32_t>( static_cast<uint8_t>(ch) ));

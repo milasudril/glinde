@@ -106,10 +106,7 @@ namespace Glinde
 				m_line_current=m_line_current>=0? m_line_current - 1 : m_n_rows - 1;
 				}
 
-			void scroll_down() noexcept
-				{
-				m_line_current=m_line_current<m_n_rows-1? m_line_current + 1 : 0;
-				}
+			void scroll_down() noexcept;
 
 			void character_render(uint16_t ch,size_t position);
 
@@ -118,20 +115,21 @@ namespace Glinde
 				auto position=(m_position+1)%size();
 				if(position==0)
 					{m_full=1;}
+				m_position=position;
 				if(m_full && position%m_n_cols==0)
 					{scroll_down();}
-				m_position=position;
 				}
 
 			void position_advance_newline() noexcept
 				{
-				auto line_current=m_position/m_n_cols;
-				auto position=((line_current + 1)*m_n_cols)%size();
+				auto n_cols=m_n_cols;
+				auto line_current=m_position/n_cols;
+				auto position=((line_current + 1)*n_cols)%size();
 				if(position==0)
 					{m_full=1;}
-				if(m_full && position%m_n_cols==0)
-					{scroll_down();}
 				m_position=position;
+				if(m_full && position%n_cols==0)
+					{scroll_down();}
 				}
 
 
