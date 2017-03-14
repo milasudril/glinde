@@ -117,7 +117,8 @@ namespace Glinde
 				if(m_full)
 					{scroll_up();}
 				auto line_current=m_position/m_n_cols;
-				m_position=((line_current-1)*m_n_cols + l%m_n_cols)%size();
+				line_current=line_current!=0?line_current-1:m_n_rows-1;
+				m_position=(line_current*m_n_cols + l%m_n_cols)%size();
 				}
 
 			vec2_t<float> cursorPosition() const noexcept
