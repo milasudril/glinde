@@ -113,6 +113,29 @@ namespace Glinde
 
 			void character_render(uint16_t ch,size_t position);
 
+			void position_advance() noexcept
+				{
+				auto position=(m_position+1)%size();
+				if(position==0)
+					{m_full=1;}
+				if(m_full && position%m_n_cols==0)
+					{scroll_down();}
+				m_position=position;
+				}
+
+			void position_advance_newline() noexcept
+				{
+				auto line_current=m_position/m_n_cols;
+				auto position=((line_current + 1)*m_n_cols)%size();
+				if(position==0)
+					{m_full=1;}
+				if(m_full && position%m_n_cols==0)
+					{scroll_down();}
+				m_position=position;
+				}
+
+
+
 			std::unique_ptr<GeoSIMD::Point<float>[]> m_vertices;
 			std::unique_ptr<Color[]> m_colors_fg;
 			std::unique_ptr<Color[]> m_colors_bg;
@@ -128,6 +151,7 @@ namespace Glinde
 			size_t m_line_current;
 			uint32_t m_utf8_state;
 			uint32_t m_codepoint;
+			bool m_full;
 
 			template<class T>
 			Range<const T> row(const T* what,size_t k,size_t count) const noexcept

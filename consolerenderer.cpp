@@ -101,7 +101,7 @@ void ConsoleRenderer::render(Angle::Texture2D& texture) const noexcept
 
 	glDisable(GL_BLEND);
 	n_cols*=6; //3*2 vertices per faces
-	auto line_current=r_con->lineCurrent()+1;
+	auto line_current=r_con->lineCurrent();
 
 	for(decltype(n_rows) k=0;k<n_rows;++k)
 		{

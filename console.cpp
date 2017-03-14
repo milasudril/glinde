@@ -159,7 +159,7 @@ Console::Console(uint32_t n_rows,uint32_t n_cols):
 	,m_uvs(new vec2_t<float>[n_rows*n_cols*4])
 	,m_faces(new FaceIndirect[2*n_rows*n_cols])
 	,m_n_cols(n_cols),m_position(0),m_line_current(0)
-	,m_utf8_state(0),m_codepoint(0)
+	,m_utf8_state(0),m_codepoint(0),m_full(0)
 	{
 	auto O=GeoSIMD::origin<float>();
 	for(uint32_t k=0;k<n_rows;++k)
@@ -353,27 +353,21 @@ Console& Console::write(uint32_t codepoint) noexcept
 			{colorMask(ch - (CONTROLCODE+256));}
 		
 		if(ch==CONTROLCODE + 10)
-			{
-			++m_line_current;
-			m_position=(m_line_current*m_n_cols)%N;
-			}
+			{position_advance_newline();}
+
 		if(ch==CONTROLCODE + 13)
-			{m_position=(m_line_current*m_n_cols)%N;}
+			{
+			auto line_current=m_position/m_n_cols;
+			m_position=(line_current*m_n_cols)%N;
+			}
 		return *this;
 		}
 
 	if(ch==447)
 		{fprintf(stderr,"Codepoint %x missing\n",codepoint);}
 
-	auto position=m_position;
-	character_render(ch,position);
-	
-	position=(position + 1)%N;
-
-	if(position%m_n_cols==0)
-		{scroll_down();}
-
-	m_position=position;
+	character_render(ch,m_position);
+	position_advance();
 	return *this;
 	}
 
