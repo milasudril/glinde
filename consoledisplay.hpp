@@ -22,9 +22,9 @@ namespace Glinde
 			void framebufferResize(int width,int height)
 				{}
 
-			void render(Display& disp) const noexcept
+			void render(Display& disp,uint64_t tau) const noexcept
 				{
-				m_con_renderer.render(m_con_texture);
+				m_con_renderer.render(m_con_texture,tau);
 				Angle::Framebuffer::framebufferDefault()
 					.bind(Angle::Framebuffer::Target::READDRAW);
 				auto s=disp.sizeFb();

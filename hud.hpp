@@ -26,7 +26,7 @@ namespace Glinde
 
 			void framebufferResize(int width,int height);
 
-			void render(Display& disp) const noexcept;
+			void render(Display& disp,uint64_t tau) const noexcept;
 
 			PageComposer::Paragraph& paragraph(Stringkey key) noexcept
 				{

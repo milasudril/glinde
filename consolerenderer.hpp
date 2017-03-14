@@ -27,7 +27,7 @@ namespace Glinde
 			ConsoleRenderer(const Image& charmap,Console&&)=delete;
 			ConsoleRenderer(const Image& charmap,const Console& con);
 
-			void render(Angle::Texture2D& tex) const noexcept;
+			void render(Angle::Texture2D& tex,uint64_t tau) const noexcept;
 
 			int textureWidth() const noexcept
 				{return r_con->colsCount()*CHARCELL_WIDTH;}
@@ -47,6 +47,7 @@ namespace Glinde
 			Angle::VertexBuffer<uint16_t> m_faces;
 
 			mutable Angle::Framebuffer m_fb;
+			mutable bool m_cursor_shown;
 
 			struct ShaderDescriptor
 				{

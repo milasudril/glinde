@@ -36,7 +36,7 @@ void Hud::framebufferResize(int width,int height)
 	m_layers.forcedRender();
 	}
 
-void Hud::render(Display& disp) const noexcept
+void Hud::render(Display& disp,uint64_t tau) const noexcept
 	{
 	m_layers.render();
 	auto rect=m_surface.dirtyRectangle();

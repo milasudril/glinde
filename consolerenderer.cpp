@@ -43,7 +43,7 @@ void main()
 	}
 )EOF"_frag),m_charmap(texture2d(charmap,1))
 ,m_charcells(4*con.sizeFull()),m_fg(4*con.sizeFull()),m_bg(4*con.sizeFull()),m_uvs(4*con.sizeFull())
-,m_faces(3*2*con.sizeFull())
+,m_faces(3*2*con.sizeFull()),m_cursor_shown(0)
 	{
 	m_charmap.filter(Angle::MagFilter::NEAREST)
 		.filter(Angle::MinFilter::NEAREST);
@@ -75,7 +75,7 @@ void main()
 
 constexpr Angle::VertexAttribute ConsoleRenderer::ShaderDescriptor::attributes[];
 
-void ConsoleRenderer::render(Angle::Texture2D& texture) const noexcept
+void ConsoleRenderer::render(Angle::Texture2D& texture,uint64_t tau) const noexcept
 	{
 		{
 		auto v=r_con->colorsBgFull();
@@ -113,9 +113,14 @@ void ConsoleRenderer::render(Angle::Texture2D& texture) const noexcept
 		glUniform4f(4,0.0f,r_con->lineOffset(k),0.0f,0.0f);
 		Angle::drawElements(Angle::DrawMode::TRIANGLES,((k + line_current)%n_rows) * n_cols,n_cols);
 		}
-	auto pos=r_con->cursorPosition();
-	glUniform4f(4,pos[0],pos[1],0.0f,0.0f);
-	Angle::drawElements(Angle::DrawMode::TRIANGLES,n_cols*n_rows,6);
+	if(tau%8==0)
+		{m_cursor_shown=!m_cursor_shown;}
+	if(m_cursor_shown)
+		{
+		auto pos=r_con->cursorPosition();
+		glUniform4f(4,pos[0],pos[1],0.0f,0.0f);
+		Angle::drawElements(Angle::DrawMode::TRIANGLES,n_cols*n_rows,6);
+		}
 	
 	glEnable(GL_BLEND);
 	

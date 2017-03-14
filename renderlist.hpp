@@ -18,7 +18,7 @@ namespace Glinde
 		public:
 			RenderList();
 			void framebufferResize(int width,int height);
-			void render(Display& disp) const noexcept;
+			void render(Display& disp,uint64_t tau) const noexcept;
 
 			uint32_t insertOnTop(RenderObject& obj)
 				{return insert(obj,std::numeric_limits<unsigned int>::max());}
