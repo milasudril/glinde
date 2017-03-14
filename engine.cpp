@@ -61,7 +61,7 @@ Engine::Engine():
 	m_cb.framebufferSizeChanged(m_mainwin,size_fb.width,size_fb.height);
 	auto con_id=m_renderlist.insertOnTop(m_con_display);
 	m_renderlist.activate(con_id);
-	logWriterAttach(m_con_writer);
+//	logWriterAttach(m_con_writer);
 /*	m_console.writeVGADump(Range<const VGACell>
 		{reinterpret_cast<const VGACell*>(consoletest_begin),80*25});*/
 	}

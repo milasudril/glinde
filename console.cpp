@@ -366,11 +366,22 @@ Console& Console::write(uint32_t codepoint) noexcept
 		{fprintf(stderr,"Codepoint %x missing\n",codepoint);}
 
 	auto position=m_position;
+	character_render(ch,position);
+	
+	position=(position + 1)%N;
 
+	if(position%m_n_cols==0)
+		{scroll_down();}
+
+	m_position=position;
+	return *this;
+	}
+
+void Console::character_render(uint16_t ch,size_t position)
+	{
 	auto uvs=uvcoords(ch);
 	auto color_fg=m_color_fg;
 	auto color_bg=m_color_bg;
-
 	m_uvs[4*position + 0]=vec2_t<float>{uvs[0],uvs[1]};
 	m_uvs[4*position + 1]=vec2_t<float>{uvs[2],uvs[3]};
 	m_uvs[4*position + 2]=vec2_t<float>{uvs[4],uvs[5]};
@@ -385,14 +396,6 @@ Console& Console::write(uint32_t codepoint) noexcept
 	m_colors_bg[4*position + 1]=color_bg;
 	m_colors_bg[4*position + 2]=color_bg;
 	m_colors_bg[4*position + 3]=color_bg;
-
-	position=(position + 1)%N;
-
-	if(position%m_n_cols==0)
-		{scroll_down();}
-
-	m_position=position;
-	return *this;
 	}
 
 Console& Console::write(char ch) noexcept

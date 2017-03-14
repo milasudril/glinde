@@ -111,6 +111,8 @@ namespace Glinde
 				m_line_current=m_line_current<m_n_rows-1? m_line_current + 1 : 0;
 				}
 
+			void character_render(uint16_t ch,size_t position);
+
 			std::unique_ptr<GeoSIMD::Point<float>[]> m_vertices;
 			std::unique_ptr<Color[]> m_colors_fg;
 			std::unique_ptr<Color[]> m_colors_bg;
