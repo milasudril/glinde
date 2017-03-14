@@ -46,7 +46,7 @@ void ConsoleInputHandler::key(int scancode,GLFWmm::WindowBase::Action action
 					{
 					fprintf(stderr,"Invoke command\n");
 					m_input_buffer.clear();
-					r_con->writeUTF8("»");
+				//	r_con->writeUTF8("»");
 					}
 				else
 					{m_input_buffer.append('\n');}

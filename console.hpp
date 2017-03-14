@@ -136,10 +136,10 @@ namespace Glinde
 
 		private:
 			void go_back() noexcept
-				{m_position=m_position>=0? m_position - 1:size() - 1;}
+				{m_position=m_position!=0? m_position - 1:size() - 1;}
 
 			void scroll_up() noexcept
-				{m_line_current=m_line_current>=0? m_line_current - 1 : m_n_rows - 1;}
+				{m_line_current=m_line_current!=0? m_line_current - 1 : m_n_rows - 1;}
 
 			void scroll_down() noexcept;
 
