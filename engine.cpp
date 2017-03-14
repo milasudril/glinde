@@ -63,7 +63,7 @@ Engine::Engine():
 	m_renderlist.activate(con_id);
 //	logWriterAttach(m_con_writer);
 	m_console.writeVGADump(Range<const VGACell>
-		{reinterpret_cast<const VGACell*>(consoletest_begin),80*25 -1});
+		{reinterpret_cast<const VGACell*>(consoletest_begin),80*25});
 	}
 
 void Engine::run(Timer& timer)

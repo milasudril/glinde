@@ -150,6 +150,7 @@ namespace Glinde
 			uint32_t m_utf8_state;
 			uint32_t m_codepoint;
 			bool m_full;
+			bool m_scroll_pending;
 
 			template<class T>
 			Range<const T> row(const T* what,size_t k,size_t count) const noexcept

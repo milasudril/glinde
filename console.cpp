@@ -159,7 +159,7 @@ Console::Console(uint32_t n_rows,uint32_t n_cols):
 	,m_uvs(new vec2_t<float>[n_rows*n_cols*4])
 	,m_faces(new FaceIndirect[2*n_rows*n_cols])
 	,m_n_cols(n_cols),m_position(0),m_line_current(0)
-	,m_utf8_state(0),m_codepoint(0),m_full(0)
+	,m_utf8_state(0),m_codepoint(0),m_full(0),m_scroll_pending(0)
 	{
 	auto O=GeoSIMD::origin<float>();
 	for(uint32_t k=0;k<n_rows;++k)
@@ -353,7 +353,12 @@ Console& Console::write(uint32_t codepoint) noexcept
 			{colorMask(ch - (CONTROLCODE+256));}
 		
 		if(ch==CONTROLCODE + 10)
-			{position_advance_newline();}
+			{
+			if(m_scroll_pending)
+				{scroll_down();}
+			else
+				{position_advance_newline();}
+			}
 
 		if(ch==CONTROLCODE + 13)
 			{
@@ -365,6 +370,9 @@ Console& Console::write(uint32_t codepoint) noexcept
 
 	if(ch==447)
 		{fprintf(stderr,"Codepoint %x missing\n",codepoint);}
+
+	if(m_scroll_pending)
+		{scroll_down();}
 
 	character_render(ch,m_position);
 	position_advance();
@@ -400,6 +408,7 @@ void Console::scroll_down() noexcept
 		{character_render(32,k + pos);}
 
 	m_line_current=m_line_current<m_n_rows-1? m_line_current + 1 : 0;
+	m_scroll_pending=0;
 	}
 
 Console& Console::write(char ch) noexcept
@@ -411,7 +420,9 @@ Console& Console::writeVGADump(Range<const VGACell> dump) noexcept
 	{
 	auto ptr=dump.begin();
 	uint8_t mask_prev=0;
-	while(ptr!=dump.end())
+	size_t position=0;
+	auto N=size();
+	while(ptr!=dump.end() && position!=N)
 		{
 		auto mask=ptr->colorMask();
 		if(mask!=mask_prev)
@@ -419,9 +430,21 @@ Console& Console::writeVGADump(Range<const VGACell> dump) noexcept
 			mask_prev=mask;
 			colorMask(mask);
 			}
-		write(ptr->codepoint());
+		auto ch=charmap(ptr->codepoint());
+		if(ch<CONTROLCODE) // Render control codes would be confusing
+			{
+			character_render(ch,position);
+			++position;
+			}
 		++ptr;
 		}
+	if(position==N)
+		{
+		m_full=1;
+		m_scroll_pending=1;
+		position=0;
+		}
+	m_position=position;
+	m_line_current=0;
 	return *this;
 	}
-
