@@ -116,9 +116,9 @@ void ConsoleRenderer::render(Angle::Texture2D& texture) const noexcept
 	auto pos=r_con->cursorPosition();
 	glUniform4f(4,pos[0],pos[1],0.0f,0.0f);
 	Angle::drawElements(Angle::DrawMode::TRIANGLES,n_cols*n_rows,6);
+	
 	glEnable(GL_BLEND);
 	
-
 	texture.mipmapsGenerate()
 		.filter(Angle::MagFilter::LINEAR)
 		.filter(Angle::MinFilter::LINEAR_MIPMAP_LINEAR);

@@ -103,14 +103,21 @@ namespace Glinde
 
 			void erase() noexcept
 				{
+				if(m_full)
+					{
+					if(m_position%m_n_cols==0)
+						{scroll_up();}
+					}
 				go_back();	
 				character_render(' ',m_position);
 				}
 
 			void eraseLinefeed(intptr_t l) noexcept
 				{
-				scroll_up();
-				m_position=(m_line_current*m_n_cols + l%m_n_cols)%size();
+				if(m_full)
+					{scroll_up();}
+				auto line_current=m_position/m_n_cols;
+				m_position=((line_current-1)*m_n_cols + l%m_n_cols)%size();
 				}
 
 			vec2_t<float> cursorPosition() const noexcept
@@ -120,7 +127,7 @@ namespace Glinde
 				return vec2_t<float>
 					{
 					 static_cast<float>(2*col)/m_n_cols
-					,-static_cast<float>(2*row)/m_n_rows
+					,m_full?-2.0f*(m_n_rows - 1.0f)/m_n_rows:-static_cast<float>(2*row)/m_n_rows
 					};
 				}
 
@@ -132,9 +139,7 @@ namespace Glinde
 				{m_position=m_position>=0? m_position - 1:size() - 1;}
 
 			void scroll_up() noexcept
-				{
-				m_line_current=m_line_current>=0? m_line_current - 1 : m_n_rows - 1;
-				}
+				{m_line_current=m_line_current>=0? m_line_current - 1 : m_n_rows - 1;}
 
 			void scroll_down() noexcept;
 
