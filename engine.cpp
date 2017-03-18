@@ -4,8 +4,8 @@
 
 #include "engine.hpp"
 #include "blob.hpp"
-#include "timer.hpp"
 #include "vgacell.hpp"
+#include "timer/timer.hpp"
 #include "io/memoryreader.hpp"
 #include "angle/init.hpp"
 #include "log/logwriter.hpp"

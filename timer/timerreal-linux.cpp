@@ -7,8 +7,8 @@
 //@	}
 
 #include "timerreal.hpp"
-#include "errormessage.hpp"
-#include "variant.hpp"
+#include "../errormessage.hpp"
+#include "../variant.hpp"
 #include <signal.h>
 #include <time.h>
 #include <semaphore.h>

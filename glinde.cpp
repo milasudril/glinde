@@ -2,11 +2,9 @@
 
 #include "engine.hpp"
 #include "errormessage.hpp"
-#include "timerdummy.hpp"
-#include "timerreal.hpp"
+#include "timer/timerdummy.hpp"
+#include "timer/timerreal.hpp"
 #include "log/logwriter.hpp"
-
-#include <clocale>
 
 #ifdef PROFILE
 inline Glinde::TimerDummy timerCreate(double rate)
