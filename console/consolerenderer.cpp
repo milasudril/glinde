@@ -2,7 +2,7 @@
 
 #include "consolerenderer.hpp"
 #include "console.hpp"
-#include "texture_upload.hpp"
+#include "../texture_upload.hpp"
 
 using namespace Glinde;
 

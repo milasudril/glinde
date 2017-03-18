@@ -8,13 +8,13 @@
 
 #include "display.hpp"
 #include "uicallback.hpp"
-#include "console.hpp"
 #include "image.hpp"
 #include "messagequeue.hpp"
 #include "handle.hpp"
-#include "logwriterconsole.hpp"
-#include "consoledisplay.hpp"
-#include "consoleinputhandler.hpp"
+#include "console/logwriterconsole.hpp"
+#include "console/console.hpp"
+#include "console/consoledisplay.hpp"
+#include "console/consoleinputhandler.hpp"
 
 namespace Glinde
 	{

@@ -6,7 +6,7 @@
 #ifndef GLINDE_LOGWRITERCONSOLE_HPP
 #define GLINDE_LOGWRITERCONSOLE_HPP
 
-#include "log.hpp"
+#include "../log.hpp"
 
 namespace Glinde
 	{

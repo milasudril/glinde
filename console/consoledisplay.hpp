@@ -3,8 +3,8 @@
 #ifndef GLINDE_CONSOLEDISPLAY_HPP
 #define GLINDE_CONSOLEDISPLAY_HPP
 
-#include "renderobject.hpp"
-#include "imagerenderer.hpp"
+#include "../renderobject.hpp"
+#include "../imagerenderer.hpp"
 #include "consolerenderer.hpp"
 
 namespace Glinde

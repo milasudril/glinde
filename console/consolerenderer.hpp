@@ -6,14 +6,12 @@
 #ifndef GLINDE_CONSOLERENDERER_HPP
 #define GLINDE_CONSOLERENDERER_HPP
 
-#include "vectortype.hpp"
-#include "faceindirect.hpp"
 #include "console.hpp"
-#include "angle/texture2d.hpp"
-#include "angle/program.hpp"
-#include "angle/vertexbuffer.hpp"
-#include "angle/vertexarray.hpp"
-#include "angle/framebuffer.hpp"
+#include "../angle/texture2d.hpp"
+#include "../angle/program.hpp"
+#include "../angle/vertexbuffer.hpp"
+#include "../angle/vertexarray.hpp"
+#include "../angle/framebuffer.hpp"
 
 namespace Glinde
 	{

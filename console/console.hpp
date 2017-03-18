@@ -5,10 +5,10 @@
 #ifndef GLINDE_CONSOLE_HPP
 #define GLINDE_CONSOLE_HPP
 
-#include "faceindirect.hpp"
-#include "vectortype.hpp"
-#include "new.hpp"
-#include "color.hpp"
+#include "../faceindirect.hpp"
+#include "../vectortype.hpp"
+#include "../new.hpp"
+#include "../color.hpp"
 #include <geosimd/point.hpp>
 #include <memory>
 #include <algorithm>

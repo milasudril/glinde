@@ -6,9 +6,9 @@
 #ifndef GLINDE_CONSOLEINPUTHANDLER_HPP
 #define GLINDE_CONSOLEINPUTHANDLER_HPP
 
-#include "inputhandler.hpp"
+#include "../inputhandler.hpp"
 #include "console.hpp"
-#include "arraydynamic.hpp"
+#include "../arraydynamic.hpp"
 
 namespace Glinde
 	{
