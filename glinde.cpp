@@ -4,7 +4,7 @@
 #include "errormessage.hpp"
 #include "timerdummy.hpp"
 #include "timerreal.hpp"
-#include "logwriter.hpp"
+#include "log/logwriter.hpp"
 
 #include <clocale>
 

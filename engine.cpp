@@ -7,8 +7,8 @@
 #include "timer.hpp"
 #include "memoryreader.hpp"
 #include "vgacell.hpp"
-#include "logwriter.hpp"
 #include "angle/init.hpp"
+#include "log/logwriter.hpp"
 
 #include <maike/targetinclude.hpp>
 #include <utility>

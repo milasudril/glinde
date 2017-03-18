@@ -2,7 +2,7 @@
 
 #include "logwriter.hpp"
 #include "logdefault.hpp"
-#include "stringformat.hpp"
+#include "../stringformat.hpp"
 
 using namespace Glinde;
 

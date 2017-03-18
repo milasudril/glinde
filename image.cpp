@@ -10,11 +10,11 @@
 #include "image.hpp"
 #include "datasource.hpp"
 #include "errormessage.hpp"
-#include "logwriter.hpp"
 #include "cpuinfo.hpp"
 #include "debug.hpp"
 #include "narrow_cast.hpp"
 #include "variant.hpp"
+#include "log/logwriter.hpp"
 
 #include <png.h>
 #include <cmath>

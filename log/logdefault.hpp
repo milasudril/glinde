@@ -3,9 +3,9 @@
 //@	,"targets":[{"name":"logdefault.hpp","type":"include"}]
 //@	}
 #include "log.hpp"
-#include "arrayfixed.hpp"
-#include "message.hpp"
-#include "string.hpp"
+#include "../arrayfixed.hpp"
+#include "../message.hpp"
+#include "../string.hpp"
 
 #ifndef GLINDE_LOGDEFAULT_HPP
 #define GLINDE_LOGDEFAULT_HPP

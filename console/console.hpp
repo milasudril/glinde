@@ -7,8 +7,8 @@
 
 #include "../faceindirect.hpp"
 #include "../vectortype.hpp"
-#include "../new.hpp"
 #include "../color.hpp"
+#include "../memory/new.hpp"
 #include <geosimd/point.hpp>
 #include <memory>
 #include <algorithm>

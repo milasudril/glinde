@@ -9,8 +9,8 @@
 #include "vectortype.hpp"
 #include "debug.hpp"
 #include "arrayinit.hpp"
-#include "memoryalloc.hpp"
 #include "range.hpp"
+#include "memory/memoryalloc.hpp"
 
 #include <utility>
 #include <cstdint>

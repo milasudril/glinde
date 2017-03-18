@@ -6,13 +6,13 @@
 #ifndef GLINDE_ARRAYDYNAMIC_HPP
 #define GLINDE_ARRAYDYNAMIC_HPP
 
-#include "memoryalloc.hpp"
 #include "vectortype.hpp"
 #include "arrayinit.hpp"
 #include "debug.hpp"
 #include "errormessage.hpp"
 #include "range.hpp"
 #include "variant.hpp"
+#include "memory/memoryalloc.hpp"
 
 #include <limits>
 #include <cstdint>

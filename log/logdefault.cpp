@@ -6,9 +6,9 @@
 #endif
 
 #include "logdefault.hpp"
-#include "stringformat.hpp"
-#include "variant.hpp"
-#include "messagequeue.hpp"
+#include "../stringformat.hpp"
+#include "../variant.hpp"
+#include "../messagequeue.hpp"
 #include <cstdio>
 #include <cstdarg>
 #include <cstring>

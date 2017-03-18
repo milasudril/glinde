@@ -6,7 +6,7 @@
 #define GLINDE_DISPLAY_HPP
 
 #include "imagerenderer.hpp" //Must go first since window includes GLFW, which includes GL.
-#include "logwriter.hpp"
+#include "log/logwriter.hpp"
 #include "variant.hpp"
 
 #define GLFWMM_NO_MEMBER_ADVERTISMENT

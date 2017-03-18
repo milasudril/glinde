@@ -3,14 +3,13 @@
 //@		[{
 //@		 "dependencies":[{"ref":"jemalloc","rel":"external"}]
 //@		,"name":"memoryalloc.o","type":"object"
-//		,"cxxoptions":{"cflags_extra":["DNDEBUG"]}
 //@		}]
 //@	}
 
 #include "memoryalloc.hpp"
-#include "errormessage.hpp"
-#include "debug.hpp"
-#include "variant.hpp"
+#include "../debug.hpp"
+#include "../variant.hpp"
+#include "../errormessage.hpp"
 #include <jemalloc/jemalloc.h>
 #include <cstdlib>
 
