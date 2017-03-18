@@ -121,12 +121,16 @@ LogDefault::MessageData::MessageData(MessageType type,const char* text):m_type(t
 	auto l=strlen(text)+1;
 	m_message=reinterpret_cast<char*>(memoryAllocate(l*sizeof(char)));
 	memcpy(m_message,text,l);
+//	fprintf(stderr,"Allocated buffer %p\n",m_message);
 	}
 
 LogDefault::MessageData::~MessageData() noexcept
 	{
 	if(m_message!=nullptr)
-		{memoryFree(m_message);}
+		{
+	//	fprintf(stderr,"Freeing buffer %p\n",m_message);
+		memoryFree(m_message);
+		}
 	}
 
 

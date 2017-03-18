@@ -23,6 +23,8 @@ namespace Glinde
 		{
 		public:
 			Engine();
+			~Engine()
+				{glFinish();}
 
 			void run(Timer&& timer)
 				{run(timer);}

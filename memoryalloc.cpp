@@ -3,7 +3,7 @@
 //@		[{
 //@		 "dependencies":[{"ref":"jemalloc","rel":"external"}]
 //@		,"name":"memoryalloc.o","type":"object"
-//@		,"cxxoptions":{"cflags_extra":["DNDEBUG"]}
+//		,"cxxoptions":{"cflags_extra":["DNDEBUG"]}
 //@		}]
 //@	}
 
@@ -12,6 +12,7 @@
 #include "debug.hpp"
 #include "variant.hpp"
 #include <jemalloc/jemalloc.h>
+#include <cstdlib>
 
 using namespace Glinde;
 
@@ -21,15 +22,47 @@ static constexpr size_t ALIGNMENT=32;
 static constexpr size_t ALIGNMENT=16;
 #endif
 
+#ifndef NDEBUG
+static size_t malloc_count=0;
+#define GLINDE_REGISTER_MALLOC_DTOR []() \
+	{ \
+	if(malloc_count==0) \
+		{ \
+		atexit([]() \
+			{ \
+			if( malloc_count!=0 ) \
+				{ \
+				GLINDE_DEBUG_PRINT("Leak detected: #0; objects are left on the heap.",{malloc_count}); \
+				abort(); \
+				} \
+			}); \
+		} \
+	}
+
+#define GLINDE_MALLOC_INCREMENT [](){++malloc_count;}
+#define GLINDE_MALLOC_DECREMENT []()\
+	{\
+	if(malloc_count==0) \
+		{ \
+		GLINDE_DEBUG_PRINT("Double free detected");\
+		abort(); \
+		} \
+	--malloc_count; \
+	}
+#else
+#define GLINDE_REGISTER_MALLOC_DTOR 
+#endif
+
 void* Glinde::memoryAllocate(size_t N)
 	{
+	GLINDE_REGISTER_MALLOC_DTOR();
 	void* ret=mallocx(N,MALLOCX_ALIGN(ALIGNMENT));
 	if(ret==nullptr)
 		{
 		throw ErrorMessage("It was not possible to allocate #0; bytes of memory"
 			,{N});
 		}
-	GLINDE_DEBUG_PRINT("Allocated #0; bytes at #1;",N,ret);
+	GLINDE_MALLOC_INCREMENT();
 	return ret;
 	}
 
@@ -37,7 +70,7 @@ void Glinde::memoryFree(void* buffer)
 	{
 	if(buffer!=nullptr)
 		{
-		GLINDE_DEBUG_PRINT("DeAllocating #0;",buffer);
+		GLINDE_MALLOC_DECREMENT();
 		dallocx(buffer,MALLOCX_ALIGN(ALIGNMENT));
 		}
 	}

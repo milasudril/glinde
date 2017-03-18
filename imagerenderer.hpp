@@ -18,6 +18,11 @@ namespace Glinde
 		{
 		public:
 			ImageRenderer();
+			~ImageRenderer()
+				{
+				m_vao.disableVertexAttrib<0>()
+					.unbind();
+				}
 
 			void render(const Angle::Texture2D& texture) const noexcept
 				{

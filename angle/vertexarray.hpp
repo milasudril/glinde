@@ -59,6 +59,12 @@ namespace Angle
 				bindElementIndexData(m_index_type,m_index_count);
 				}
 
+			void unbind() const noexcept
+				{
+				glBindVertexArray(0);
+				bindElementIndexData(m_index_type,0);
+				}
+
 			template<GLuint attrib>
 			VertexArray& enableVertexAttrib() noexcept
 				{
