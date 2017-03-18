@@ -49,7 +49,9 @@ static size_t malloc_count=0;
 	--malloc_count; \
 	}
 #else
-#define GLINDE_REGISTER_MALLOC_DTOR 
+#define GLINDE_REGISTER_MALLOC_DTOR
+#define GLINDE_MALLOC_INCREMENT
+#define GLINDE_MALLOC_DECREMENT
 #endif
 
 void* Glinde::memoryAllocate(size_t N)
