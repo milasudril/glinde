@@ -55,15 +55,6 @@ void LogWriterStderr::write(Log::MessageType type,const char* message) noexcept
 
 static LogWriterStderr s_writer_stderr;
 
-//void LogDefault::operator()(const MessageData& logmessage) noexcept
-
-
-/*void LogDefault::MessageCallback::operator()(const MessageData& logmessage)
-	{
-	r_log->
-	}*/
-
-
 LogDefault::LogDefault() noexcept:r_queue(nullptr)
 	{
 	memset(m_writers.begin(),0,sizeof(m_writers));

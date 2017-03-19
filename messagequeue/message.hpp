@@ -9,6 +9,8 @@
 
 namespace Glinde
 	{
+	class Timeinfo;
+
 	class Message
 		{
 		private:
@@ -17,7 +19,7 @@ namespace Glinde
 			typedef ArrayFixed<uint64_t,DATA_SIZE/3> Data;
 
 			typedef void (*DataDestructor)(Data&);
-			typedef void (*Processor)(void*,const Data&);
+			typedef void (*Processor)(void*,const Timeinfo&,const Data&);
 
 		public:
 			Message()
@@ -34,11 +36,11 @@ namespace Glinde
 				new(m_data.begin())T(std::move(data));
 				DataDestructor dtor=[](Data& d)
 					{reinterpret_cast<T*>(d.begin())->~T();};
-				Processor proc=[](void* callback,const Data& d)
+				Processor proc=[](void* callback,const Timeinfo& ti,const Data& d)
 					{
 					auto& cb=*reinterpret_cast<Callback*>(callback);
 					const auto& data=*reinterpret_cast<const T*>(d.begin());
-					cb(data);
+					cb(ti,data);
 					};
 				m_callback_data=&msgproc;
 				m_callbacks.vec=vec2_t<uintptr_t>
@@ -63,11 +65,10 @@ namespace Glinde
 				msg.m_callbacks.vec=vec2_t<size_t>{0,0};
 				}
 			
-			void process() const
+			void process(const Timeinfo& ti) const
 				{
 				assert(m_callbacks.pointers.r_proc!=nullptr);
-			//	if(m_callbacks.pointers.r_proc!=nullptr)
-					{m_callbacks.pointers.r_proc(m_callback_data,m_data);}
+				m_callbacks.pointers.r_proc(m_callback_data,ti,m_data);
 				}
 
 			~Message() noexcept

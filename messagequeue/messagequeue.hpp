@@ -43,7 +43,7 @@ namespace Glinde
 				m_msg_id.release(msg_id);
 				header.invalidate();
 				auto msg=std::move( m_messages[msg_id] );
-				msg.process();
+				msg.process(ti);
 				}
 
 		private:

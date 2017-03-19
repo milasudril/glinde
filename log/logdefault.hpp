@@ -6,6 +6,7 @@
 #include "../arrayfixed.hpp"
 #include "../string.hpp"
 #include "../messagequeue/message.hpp"
+#include "../timeinfo.hpp"
 
 #ifndef GLINDE_LOGDEFAULT_HPP
 #define GLINDE_LOGDEFAULT_HPP
@@ -60,7 +61,7 @@ namespace Glinde
 			void queueDetach(unsigned int index) noexcept
 				{r_queue=nullptr;}
 
-			void operator()(const MessageData& logmessage) noexcept
+			void operator()(const Timeinfo& ti,const MessageData& logmessage) noexcept
 				{write(logmessage.type(),logmessage.text());}
 
 		private:
