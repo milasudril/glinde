@@ -9,8 +9,8 @@
 #include "display.hpp"
 #include "uicallback.hpp"
 #include "image.hpp"
-#include "messagequeue.hpp"
 #include "handle.hpp"
+#include "messagequeue/messagequeue.hpp"
 #include "console/logwriterconsole.hpp"
 #include "console/console.hpp"
 #include "console/consoledisplay.hpp"
@@ -39,7 +39,7 @@ namespace Glinde
 			LogWriterConsole m_con_writer;			
 			Image m_charmap;
 
-			Message m_msg;
+			MessageHeader m_msg_header;
 			uint64_t m_frame_current;
 			GLFWmm::Session m_session;
 			UICallback m_cb; 

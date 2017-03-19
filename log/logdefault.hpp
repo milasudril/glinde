@@ -4,8 +4,8 @@
 //@	}
 #include "log.hpp"
 #include "../arrayfixed.hpp"
-#include "../message.hpp"
 #include "../string.hpp"
+#include "../messagequeue/message.hpp"
 
 #ifndef GLINDE_LOGDEFAULT_HPP
 #define GLINDE_LOGDEFAULT_HPP
@@ -94,7 +94,7 @@ namespace Glinde
 					MessageCallback(LogDefault& log):r_log(&log)
 						{}
 
-					void operator()(uint64_t time,const MessageData& logmessage);
+					void operator()(const MessageData& logmessage);
 
 				private:
 					LogDefault* r_log;

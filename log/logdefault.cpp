@@ -8,7 +8,7 @@
 #include "logdefault.hpp"
 #include "../stringformat.hpp"
 #include "../variant.hpp"
-#include "../messagequeue.hpp"
+#include "../messagequeue/messagequeue.hpp"
 #include <cstdio>
 #include <cstdarg>
 #include <cstring>
@@ -55,11 +55,8 @@ void LogWriterStderr::write(Log::MessageType type,const char* message) noexcept
 
 static LogWriterStderr s_writer_stderr;
 
-void LogDefault::MessageCallback::operator()(uint64_t time
-	,const MessageData& logmessage)
+void LogDefault::MessageCallback::operator()(const MessageData& logmessage)
 	{
-//	auto data=message.dataGet<char>();
-//	auto type=static_cast<MessageType>( message.paramsGet<uint32_t>()[1] );
 	r_log->write(logmessage.typeGet(),logmessage.textGet());
 	}
 
@@ -91,7 +88,7 @@ void LogDefault::write(Log::MessageType type,const char* format_string
 		{write(type,msgbuff);}
 	else
 		{
-		r_queue->post(Message{Message::Time(0),m_msg_proc,MessageData(type,msgbuff)});
+		r_queue->post(0,Message{m_msg_proc,MessageData(type,msgbuff)});
 		}
 	}
 

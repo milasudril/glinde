@@ -72,19 +72,19 @@ void Engine::run(Timer& timer)
 		.inputMode(GLFWmm::WindowBase::KeyMode::STICKY);
 	auto dt=timer.delay();
 	auto tau=m_frame_current;
-	auto msg=std::move(m_msg);
+	auto msg_header=m_msg_header;
 	do
 		{
-		if(msg.time() <= tau)
+		auto now=tau*dt; // + t_0;
+		if(msg_header.arrivalTime()<=now)
 			{
-			msg.process();
-			msg.clear();
-			while(m_queue.get(msg))
+			if(msg_header.valid())
+				{m_queue.process(msg_header);}
+			while(m_queue.get(msg_header))
 				{
-				if(msg.time() > tau)
+				if(msg_header.arrivalTime() > now)
 					{break;}
-				msg.process();
-				msg.clear();
+				m_queue.process(msg_header);
 				}
 			}
 		m_session.eventsPoll();
@@ -94,6 +94,6 @@ void Engine::run(Timer& timer)
 		++tau;
 		}
 	while(!m_mainwin.shouldClose());
-	m_msg=std::move(msg);
+	m_msg_header=msg_header;
 	m_frame_current=tau;
 	}

@@ -13,7 +13,7 @@ namespace Glinde
 		public:
 			IdGenerator() noexcept:m_id_next(-1){}
 
-			IdType idGet() noexcept
+			IdType get() noexcept
 				{
 				if(m_freelist.length()==0)
 					{
@@ -25,7 +25,7 @@ namespace Glinde
 				return ret;
 				}
 
-			IdGenerator& idRelease(const IdType& id)
+			IdGenerator& release(const IdType& id)
 				{
 				m_freelist.append(id);
 				return *this;

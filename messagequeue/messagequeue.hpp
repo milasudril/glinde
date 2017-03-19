@@ -1,7 +1,5 @@
-//@	{
-//@	 "dependencies_extra":[{"ref":"messagequeue.o","rel":"implementation"}]
-//@	,"targets":[{"name":"messagequeue.hpp","type":"include"}]
-//@	}
+//@	{"targets":[{"name":"messagequeue.hpp","type":"include"}]}
+
 #ifndef GLINDE_MESSAGEQUEUE_HPP
 #define GLINDE_MESSAGEQUEUE_HPP
 
@@ -9,6 +7,7 @@
 #include "../mutex.hpp"
 #include "../idgenerator.hpp"
 #include "message.hpp"
+#include "messageheader.hpp"
 #include <queue>
 
 namespace Glinde
@@ -19,15 +18,15 @@ namespace Glinde
 			void post(double time_arrival,Message&& message)
 				{
 				Mutex::LockGuard guard(m_mutex);
-				auto id=m_msg_id.idGet();
+				auto id=m_msg_id.get();
 				m_queue.push(MessageHeader(time_arrival,id));
-				if(id>=m_messages.size())
+				if(id>=m_messages.length())
 					{m_messages.append(std::move(message));}
 				else
 					{m_messages[id]=std::move(message);}
 				}
 
-			bool pop(MessageHeader& header) noexcept
+			bool get(MessageHeader& header) noexcept
 				{
 				if(m_queue.size()==0)
 					{return 0;}
@@ -36,12 +35,14 @@ namespace Glinde
 				return 1;
 				}
 
-			void process(uint32_t msg_id) noexcept
-				{	
-				assert(msg_id<m_messages.size());
+			void process(MessageHeader& header) noexcept
+				{
+				auto msg_id=header.id();
+				assert(msg_id<m_messages.length());
+				m_msg_id.release(msg_id);
+				header.invalidate();
 				auto msg=std::move( m_messages[msg_id] );
 				msg.process();
-				m_msg_id.release(msg_id);
 				}
 
 		private:
