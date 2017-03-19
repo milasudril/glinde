@@ -55,13 +55,16 @@ void LogWriterStderr::write(Log::MessageType type,const char* message) noexcept
 
 static LogWriterStderr s_writer_stderr;
 
-void LogDefault::MessageCallback::operator()(const MessageData& logmessage)
+//void LogDefault::operator()(const MessageData& logmessage) noexcept
+
+
+/*void LogDefault::MessageCallback::operator()(const MessageData& logmessage)
 	{
-	r_log->write(logmessage.typeGet(),logmessage.textGet());
-	}
+	r_log->
+	}*/
 
 
-LogDefault::LogDefault() noexcept:m_msg_proc(MessageCallback(*this)),r_queue(nullptr)
+LogDefault::LogDefault() noexcept:r_queue(nullptr)
 	{
 	memset(m_writers.begin(),0,sizeof(m_writers));
 	writerAttach(s_writer_stderr);
@@ -87,9 +90,7 @@ void LogDefault::write(Log::MessageType type,const char* format_string
 	if(r_queue==nullptr)
 		{write(type,msgbuff);}
 	else
-		{
-		r_queue->post(0,Message{m_msg_proc,MessageData(type,msgbuff)});
-		}
+		{r_queue->post(0,Message{*this,MessageData(type,msgbuff)});}
 	}
 
 unsigned int LogDefault::writerAttach(Log::Writer& writer) noexcept

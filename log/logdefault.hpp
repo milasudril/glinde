@@ -15,6 +15,8 @@ namespace Glinde
 	class MessageQueue;
 	class LogDefault:public Log
 		{
+		private:
+			class MessageData;
 		public:
 			LogDefault() noexcept;
 
@@ -58,6 +60,9 @@ namespace Glinde
 			void queueDetach(unsigned int index) noexcept
 				{r_queue=nullptr;}
 
+			void operator()(const MessageData& logmessage) noexcept
+				{write(logmessage.type(),logmessage.text());}
+
 		private:
 			class MessageData
 				{
@@ -77,30 +82,16 @@ namespace Glinde
 						return *this;
 						}
 
-					const char* textGet() const noexcept
+					const char* text() const noexcept
 						{return m_message;}
 
-					MessageType typeGet() const noexcept
+					MessageType type() const noexcept
 						{return m_type;}
 
 				private:
 					char* m_message;
 					MessageType m_type;
 				};
-
-			class MessageCallback
-				{
-				public:
-					MessageCallback(LogDefault& log):r_log(&log)
-						{}
-
-					void operator()(const MessageData& logmessage);
-
-				private:
-					LogDefault* r_log;
-				};
-
-			Message::Processor<MessageData,MessageCallback> m_msg_proc;
 
 			ArrayFixed<Writer*,4> m_writers;
 			MessageQueue* r_queue;
