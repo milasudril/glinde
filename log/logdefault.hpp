@@ -5,7 +5,6 @@
 #include "log.hpp"
 #include "../arrayfixed.hpp"
 #include "../string.hpp"
-#include "../messagequeue/message.hpp"
 #include "../timeinfo.hpp"
 
 #ifndef GLINDE_LOGDEFAULT_HPP

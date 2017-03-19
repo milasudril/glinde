@@ -20,7 +20,7 @@ int main()
 	try
 		{
 		Glinde::Engine engine;
-		engine.run(timerCreate(30.0));
+		engine.run(timerCreate(30));
 
 	//TODO:
 	//	check argv
