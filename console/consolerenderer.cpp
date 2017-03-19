@@ -2,6 +2,7 @@
 
 #include "consolerenderer.hpp"
 #include "console.hpp"
+#include "../timeinfo.hpp"
 #include "../texture_upload.hpp"
 
 using namespace Glinde;
@@ -43,7 +44,7 @@ void main()
 	}
 )EOF"_frag),m_charmap(texture2d(charmap,1))
 ,m_charcells(4*con.sizeFull()),m_fg(4*con.sizeFull()),m_bg(4*con.sizeFull()),m_uvs(4*con.sizeFull())
-,m_faces(3*2*con.sizeFull()),m_cursor_shown(0)
+,m_faces(3*2*con.sizeFull()),m_t_toggle(0),m_cursor_shown(0)
 	{
 	m_charmap.filter(Angle::MagFilter::NEAREST)
 		.filter(Angle::MinFilter::NEAREST);
@@ -75,7 +76,7 @@ void main()
 
 constexpr Angle::VertexAttribute ConsoleRenderer::ShaderDescriptor::attributes[];
 
-void ConsoleRenderer::render(Angle::Texture2D& texture,uint64_t tau) const noexcept
+void ConsoleRenderer::render(Angle::Texture2D& texture,const Timeinfo& ti) const noexcept
 	{
 		{
 		auto v=r_con->colorsBgFull();
@@ -113,8 +114,12 @@ void ConsoleRenderer::render(Angle::Texture2D& texture,uint64_t tau) const noexc
 		glUniform4f(4,0.0f,r_con->lineOffset(k),0.0f,0.0f);
 		Angle::drawElements(Angle::DrawMode::TRIANGLES,((k + line_current)%n_rows) * n_cols,n_cols);
 		}
-	if(tau%8==0)
-		{m_cursor_shown=!m_cursor_shown;}
+	if(ti.t() - m_t_toggle >= 8.0/60.0 ) //Standard VGA blink rate
+		{
+		m_cursor_shown=!m_cursor_shown;
+		m_t_toggle=ti.t();
+		}
+
 	if(m_cursor_shown)
 		{
 		auto pos=r_con->cursorPosition();

@@ -23,8 +23,7 @@ namespace Glinde
 		{
 		public:
 			Engine();
-			~Engine()
-				{glFinish();}
+			~Engine();
 
 			void run(Timer&& timer)
 				{run(timer);}
@@ -40,12 +39,14 @@ namespace Glinde
 			Image m_charmap;
 
 			MessageHeader m_msg_header;
-			uint64_t m_frame_current;
+			double m_t_0;
 			GLFWmm::Session m_session;
 			UICallback m_cb; 
 			Display m_mainwin;
 			ConsoleDisplay m_con_display;
 			RenderList m_renderlist;
+
+			unsigned int m_con_index;
 		};
 	}
 

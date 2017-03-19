@@ -8,12 +8,13 @@
 namespace Glinde
 	{
 	class Display;
+	class Timeinfo;
 
 	class RenderObject
 		{
 		public:
 			virtual void framebufferResize(int width,int height)=0;
-			virtual void render(Display& disp,uint64_t tau) const noexcept=0;
+			virtual void render(Display& disp,const Timeinfo& ti) const noexcept=0;
 		};
 	}
 

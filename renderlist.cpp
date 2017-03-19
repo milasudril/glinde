@@ -5,6 +5,7 @@
 #include "renderlist.hpp"
 #include "display.hpp"
 #include "renderobject.hpp"
+#include "timeinfo.hpp"
 #include <algorithm>
 
 using namespace Glinde;
@@ -26,7 +27,7 @@ void RenderList::framebufferResize(int width,int height)
 		{x.r_obj->framebufferResize(width,height);});
 	}
 
-void RenderList::render(Display& disp,uint64_t tau) const noexcept
+void RenderList::render(Display& disp,const Timeinfo& ti) const noexcept
 	{
 	if(m_dirty)
 		{
@@ -38,9 +39,9 @@ void RenderList::render(Display& disp,uint64_t tau) const noexcept
 		m_dirty=0;
 		}
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-	std::for_each(r_objects.begin(),r_objects.end(),[&disp,tau](auto& x)
+	std::for_each(r_objects.begin(),r_objects.end(),[&disp,ti](auto& x)
 		{
 		if(x.active)
-			{x.r_obj->render(disp,tau);}
+			{x.r_obj->render(disp,ti);}
 		});
 	}
