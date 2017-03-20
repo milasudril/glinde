@@ -34,6 +34,8 @@ namespace Glinde
 
 			void stop()
 				{m_stop=1;}
+
+			void consoletest();
 			
 		private:
 			MessageQueue m_queue;

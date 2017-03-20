@@ -66,12 +66,18 @@ Engine::Engine():
 	m_renderlist.activate(con_id);
 	m_con_index=logWriterAttach(m_con_writer);
 	m_queue.post(0,Message{m_con_input,Status::READY});
-/*	m_console.writeVGADump(Range<const VGACell>
-		{reinterpret_cast<const VGACell*>(consoletest_begin),80*25});*/
+/*	*/
 	}
 
 Engine::~Engine()
 	{logWriterDetach(m_con_index);}
+
+void Engine::consoletest()
+	{
+	m_console.writeVGADump(Range<const VGACell>
+		{reinterpret_cast<const VGACell*>(consoletest_begin),80*25});
+	m_queue.post(0,Message{m_con_input,Status::READY_AFTER_KEY});
+	}
 
 void Engine::run(Timer& timer)
 	{

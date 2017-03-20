@@ -19,15 +19,19 @@ namespace Glinde
 		{
 		public:
 			explicit ConsoleInputHandler(Console& con,CommandProcessor& cmdproc):
-				r_con(&con),r_cmdproc(&cmdproc),m_ready(0)
+				r_con(&con),r_cmdproc(&cmdproc),m_status(Status::WAITING)
 				{}
 
 			void codepoint(uint32_t cp) noexcept
 				{
-				if(m_ready)
+				switch(m_status)
 					{
-					r_con->write(cp);
-					m_input_buffer.append(cp);
+					case Status::READY:
+						r_con->write(cp);
+						m_input_buffer.append(cp);
+						break;
+					default:
+						break;
 					}
 				}
 
@@ -41,21 +45,23 @@ namespace Glinde
 
 			void status(Status s)
 				{
-				if(s==Status::READY)
+				m_status=s;
+				switch(s)
 					{
-					m_ready=1;
-					m_input_buffer.clear();
-					r_con->writeUTF8("»");
+					case Status::READY:
+						m_input_buffer.clear();
+						r_con->writeUTF8("»");
+						break;
+					default:
+						break;
 					}
-				else
-					{m_ready=0;}
 				}
 
 		private:
 			Console* r_con;
 			CommandProcessor* r_cmdproc;
 			ArrayDynamic<uint32_t> m_input_buffer;
-			bool m_ready;
+			Status m_status;
 		};
 	}
 

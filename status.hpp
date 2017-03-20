@@ -5,7 +5,7 @@
 
 namespace Glinde
 	{
-	enum class Status:unsigned int{READY};
+	enum class Status:unsigned int{WAITING,READY,READY_AFTER_KEY};
 	}
 
 #endif

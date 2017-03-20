@@ -22,42 +22,50 @@ static std::pair<intptr_t,int> line_length(const uint32_t* begin,const uint32_t*
 void ConsoleInputHandler::key(int scancode,GLFWmm::WindowBase::Action action
 	,unsigned int modifiers)
 	{
-	if(m_ready)
+	switch(m_status)
 		{
-		switch(scancode)
-			{
-			case 22:
-				if(m_input_buffer.length()!=0 && action!=GLFWmm::WindowBase::Action::RELEASE)
-					{
-					auto ch=*(m_input_buffer.end() - 1);
-					m_input_buffer.truncate();
-					if(ch=='\n')
+		case Status::READY:
+			switch(scancode)
+				{
+				case 22:
+					if(m_input_buffer.length()!=0 && action!=GLFWmm::WindowBase::Action::RELEASE)
 						{
-						auto l=line_length(m_input_buffer.begin(),m_input_buffer.end());
-						r_con->eraseLinefeed(l.first + l.second);
+						auto ch=*(m_input_buffer.end() - 1);
+						m_input_buffer.truncate();
+						if(ch=='\n')
+							{
+							auto l=line_length(m_input_buffer.begin(),m_input_buffer.end());
+							r_con->eraseLinefeed(l.first + l.second);
+							}
+						else
+							{r_con->erase();}
 						}
-					else
-						{r_con->erase();}
-					}
-				break;
+					break;
 
-			case 36:
-				if(action!=GLFWmm::WindowBase::Action::RELEASE)
-					{
-					r_con->write('\n');
-					if(modifiers==0)
+				case 36:
+					if(action!=GLFWmm::WindowBase::Action::RELEASE)
 						{
-						m_ready=0;
-						r_cmdproc->process(*this,m_input_buffer);
+						r_con->write('\n');
+						if(modifiers==0)
+							{
+							m_status=Status::WAITING;
+							r_cmdproc->process(*this,m_input_buffer);
+							}
+						else
+							{m_input_buffer.append('\n');}
 						}
-					else
-						{m_input_buffer.append('\n');}
-					}
-				break;
+					break;
 
-			default:
-				break;
-			//	fprintf(stderr,"%d\n",scancode);
-			}
+				default:
+					break;
+				//	fprintf(stderr,"%d\n",scancode);
+				}
+			break;
+		case Status::READY_AFTER_KEY:
+			if(action!=GLFWmm::WindowBase::Action::RELEASE)
+				{status(Status::READY);}
+			break;
+		default:
+			break;
 		}
 	}

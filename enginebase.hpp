@@ -12,6 +12,7 @@ namespace Glinde
 			virtual ~EngineBase()=default;
 			virtual void stop()=0;
 			virtual void run(Timer& timer)=0;
+			virtual void consoletest()=0;
 		};
 	}
 

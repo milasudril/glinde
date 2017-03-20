@@ -108,6 +108,9 @@ void CmdProcMain::process(ConsoleInputHandler& coninput
 		if(equals(cmd[0],U"exit"))
 			{r_engine->stop();}
 		else
+		if(equals(cmd[0],U"consoletest"))
+			{r_engine->consoletest();}
+		else
 			{throw ErrorMessage("Bad command",{});}
 		}
 	}
