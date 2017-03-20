@@ -51,7 +51,9 @@ namespace Glinde
 			std::priority_queue< Message,ArrayDynamicSTL<MessageHeader>
 				,std::greater<MessageHeader> > m_queue;
 		
-			IdGenerator<uint32_t> m_msg_id;
+			IdGenerator<uint32_t
+				,std::priority_queue<uint32_t,ArrayDynamicSTL<uint32_t>,std::greater<uint32_t>  >
+				> m_msg_id;
 			ArrayDynamic<Message> m_messages;
 		};
 	};

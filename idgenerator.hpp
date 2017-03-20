@@ -3,11 +3,12 @@
 #ifndef GLINDE_IDGENERATOR_HPP
 #define GLINDE_IDGENERATOR_HPP
 
-#include "arraydynamic.hpp"
+#include "arraydynamicstl.hpp"
+#include <stack>
 
 namespace Glinde
 	{
-	template<class IdType>
+	template<class IdType,class Freelist=std::stack<IdType,ArrayDynamicSTL<IdType> > >
 	class IdGenerator
 		{
 		public:
@@ -15,19 +16,19 @@ namespace Glinde
 
 			IdType get() noexcept
 				{
-				if(m_freelist.length()==0)
+				if(m_freelist.size()==0)
 					{
 					++m_id_next;
 					return m_id_next;
 					}
-				auto ret=std::move( *(m_freelist.end() - 1) );
-				m_freelist.truncate();
+				auto ret=m_freelist.top();
+				m_freelist.pop();
 				return ret;
 				}
 
 			IdGenerator& release(const IdType& id)
 				{
-				m_freelist.append(id);
+				m_freelist.push(id);
 				return *this;
 				}
 
@@ -39,7 +40,7 @@ namespace Glinde
 				}
 
 		private:
-			ArrayDynamic<IdType> m_freelist;
+			Freelist m_freelist;
 			IdType m_id_next;
 		};
 	}
