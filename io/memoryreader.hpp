@@ -16,7 +16,7 @@ namespace Glinde
 	class MemoryReader:public DataSource
 		{
 		public:
-			MemoryReader(const uint8_t* begin,const uint8_t* end)
+			explicit MemoryReader(const uint8_t* begin,const uint8_t* end)
 				{m_content.fields={begin,static_cast<size_t>(end-begin)};}
 
 			~MemoryReader()=default;
@@ -27,14 +27,9 @@ namespace Glinde
 			size_t read(void* buffer,size_t N);
 
 		private:
-#if (__amd64 || __x86_64 || __x86_64__ || __amd64__)
-			typedef vec2_t<int64_t> TwoPointers;
-#else
-			typedef vec2_t<int32_t> TwoPointers;
-#endif
 			union
 				{
-				TwoPointers x;
+				vec2_t<intptr_t> x;
 				struct
 					{
 					const uint8_t* data;

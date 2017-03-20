@@ -24,7 +24,7 @@ namespace Glinde
 			static constexpr auto CHARCELL_HEIGHT=16.0f;
 
 			ConsoleRenderer(const Image& charmap,Console&&)=delete;
-			ConsoleRenderer(const Image& charmap,const Console& con);
+			explicit ConsoleRenderer(const Image& charmap,const Console& con);
 
 			void render(Angle::Texture2D& tex,const Timeinfo& ti) const noexcept;
 

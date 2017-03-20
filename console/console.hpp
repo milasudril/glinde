@@ -20,7 +20,7 @@ namespace Glinde
 	class Console
 		{
 		public:
-			Console(uint32_t n_rows,uint32_t n_cols);
+			explicit Console(uint32_t n_rows,uint32_t n_cols);
 
 			Console& colorMask(uint8_t color_mask) noexcept;
 			Console& writeRaw(const char* string) noexcept;

@@ -17,7 +17,7 @@ namespace PageComposer
 	class LayerStack
 		{
 		public:
-			LayerStack(RenderContext& rc) noexcept:r_rc(rc)
+			explicit LayerStack(RenderContext& rc) noexcept:r_rc(rc)
 				{}
 
 			void render() const noexcept

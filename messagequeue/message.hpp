@@ -29,7 +29,7 @@ namespace Glinde
 			Message& operator=(const Message&)=delete;
 
 			template<class Callback,class T>
-			Message(Callback& msgproc,T&& data) noexcept
+			explicit Message(Callback& msgproc,T&& data) noexcept
 				{
 				static_assert(sizeof(T)<=DATA_SIZE,"Objects of type T does not fit in the message");
 				static_assert(alignof(T)<=DATA_ALIGNMENT,"Objects of type T requires to large alignment");

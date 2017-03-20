@@ -3,6 +3,7 @@
 //@	}
 
 #include "consoleinputhandler.hpp"
+#include "../commandprocessor.hpp"
 
 using namespace Glinde;
 
@@ -46,9 +47,9 @@ void ConsoleInputHandler::key(int scancode,GLFWmm::WindowBase::Action action
 					r_con->write('\n');
 					if(modifiers==0)
 						{
-						fprintf(stderr,"Invoke command\n");
+						m_ready=0;
+						r_cmdproc->process(*this,m_input_buffer);
 						m_input_buffer.clear();
-						r_con->writeUTF8("»");
 						}
 					else
 						{m_input_buffer.append('\n');}

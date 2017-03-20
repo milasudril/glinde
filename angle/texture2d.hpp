@@ -106,7 +106,7 @@ namespace Angle
 	class Texture2D
 		{
 		public:
-			Texture2D(GLsizei levels,TextureFormat format,GLsizei width,GLsizei height)
+			explicit Texture2D(GLsizei levels,TextureFormat format,GLsizei width,GLsizei height)
 				{
 				glCreateTextures(GL_TEXTURE_2D,1,&m_handle);
 				glTextureStorage2D(m_handle,levels,native_type(format),width,height);

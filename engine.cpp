@@ -49,7 +49,8 @@ GLINDE_BLOB(consoletest,"consoletest.bin");
 Engine::Engine():
 	 m_queue_guard(logQueueAttach(m_queue),&logQueueDetach)
 	,m_console(25,80)
-	,m_con_input(m_console)
+	,m_cmdproc(*this)
+	,m_con_input(m_console,m_cmdproc)
 	,m_con_writer(m_console)
 	,m_charmap(MemoryReader(charmap_begin,charmap_end),0)
 	,m_t_0(0)

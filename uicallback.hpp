@@ -14,7 +14,7 @@ namespace Glinde
 		public:
 			using Window=GLFWmm::Window<UICallback>;
 
-			UICallback(RenderList& renderlist,InputHandler& input_handler):
+			explicit UICallback(RenderList& renderlist,InputHandler& input_handler):
 				r_renderlist(&renderlist),r_input_handler(&input_handler)
 				{}
 

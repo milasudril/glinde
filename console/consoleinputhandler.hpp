@@ -14,10 +14,12 @@
 namespace Glinde
 	{
 	class Timeinfo;
+	class CommandProcessor;
 	class ConsoleInputHandler:public InputHandler
 		{
 		public:
-			ConsoleInputHandler(Console& con):r_con(&con),m_ready(0)
+			explicit ConsoleInputHandler(Console& con,CommandProcessor& cmdproc):
+				r_con(&con),r_cmdproc(&cmdproc),m_ready(0)
 				{}
 
 			void codepoint(uint32_t cp) noexcept
@@ -32,9 +34,14 @@ namespace Glinde
 			void key(int scancode,GLFWmm::WindowBase::Action action
 				,unsigned int modifiers);
 
-			void operator()(const Timeinfo& ti,Status status) noexcept
+			void operator()(const Timeinfo& ti,Status s) noexcept
 				{
-				if(status==Status::READY)
+				status(s);
+				}
+
+			void status(Status s)
+				{
+				if(s==Status::READY)
 					{
 					m_ready=1;
 					r_con->writeUTF8("»");
@@ -43,9 +50,9 @@ namespace Glinde
 					{m_ready=0;}
 				}
 
-
 		private:
 			Console* r_con;
+			CommandProcessor* r_cmdproc;
 			ArrayDynamic<uint32_t> m_input_buffer;
 			bool m_ready;
 		};

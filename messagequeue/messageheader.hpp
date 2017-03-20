@@ -16,7 +16,7 @@ namespace Glinde
 				MessageHeader(0,std::numeric_limits<uint64_t>::max())
 				{}
 
-			MessageHeader(double arrival_time,uint64_t id) noexcept
+			explicit MessageHeader(double arrival_time,uint64_t id) noexcept
 				{
 				m_data.content.arrival_time=arrival_time;
 				m_data.content.id=id;

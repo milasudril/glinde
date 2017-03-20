@@ -26,7 +26,7 @@ namespace Glinde
 	class Display:public GLFWmm::Window<UICallback>
 		{
 		public:
-			Display(UICallback& cb,GLFWmm::Session& session):
+			explicit Display(UICallback& cb,GLFWmm::Session& session):
 				GLFWmm::Window<UICallback>(0.5,0.5,"Glinde",cb,session)
 				,m_context(*this)
 				{}

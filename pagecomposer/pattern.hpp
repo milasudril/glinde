@@ -17,7 +17,7 @@ namespace PageComposer
 			Pattern& operator=(const Pattern&)=delete;
 
 			Pattern(Surface&& surface)=delete;
-			Pattern(RenderContext& rc,const Surface& surface);
+			explicit Pattern(RenderContext& rc,const Surface& surface);
 			~Pattern();
 			
 			const Handle<pattern_t>& handle() const noexcept

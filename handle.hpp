@@ -17,13 +17,13 @@ namespace Glinde
 
 			Handle():m_handle(null_value){}
 
-			Handle(T handle,const Deleter& deleter
+			explicit Handle(T handle,const Deleter& deleter
 				,typename std::enable_if< !std::is_reference<Deleter>::value >::type* dummy=nullptr)
 				noexcept:
 				m_handle(handle),m_d(deleter)
 				{}
 
-			Handle(T handle,Deleter&& deleter
+			explicit Handle(T handle,Deleter&& deleter
 				,typename std::enable_if< !std::is_reference<Deleter>::value >::type* dummy=nullptr)
 				noexcept:
 				m_handle(handle),m_d(std::move(deleter))

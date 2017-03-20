@@ -15,7 +15,7 @@ namespace Glinde
 	class LogWriterConsole:public Log::Writer
 		{
 		public:
-			LogWriterConsole(Console& con):r_con(con){}
+			explicit LogWriterConsole(Console& con):r_con(con){}
 			void write(Log::MessageType type,const char* message) noexcept;
 
 		private:

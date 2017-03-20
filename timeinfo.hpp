@@ -11,7 +11,7 @@ namespace Glinde
 	class Timeinfo
 		{
 		public:
-			Timeinfo(double t,double dt,int64_t wallclock) noexcept:
+			explicit Timeinfo(double t,double dt,int64_t wallclock) noexcept:
 				m_t{t,dt},m_wc{wallclock,0}
 				{}
 

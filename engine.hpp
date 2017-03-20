@@ -10,6 +10,8 @@
 #include "uicallback.hpp"
 #include "image.hpp"
 #include "handle.hpp"
+#include "cmdprocmain.hpp"
+
 #include "messagequeue/messagequeue.hpp"
 #include "console/logwriterconsole.hpp"
 #include "console/console.hpp"
@@ -19,7 +21,7 @@
 namespace Glinde
 	{
 	class Timer;
-	class Engine
+	class Engine:public EngineBase
 		{
 		public:
 			Engine();
@@ -34,6 +36,7 @@ namespace Glinde
 			MessageQueue m_queue;
 			Handle<unsigned int,-1,decltype(&logQueueDetach)> m_queue_guard;
 			Console m_console;
+			CmdProcMain m_cmdproc;
 			ConsoleInputHandler m_con_input;
 			LogWriterConsole m_con_writer;			
 			Image m_charmap;
