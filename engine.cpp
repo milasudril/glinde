@@ -84,6 +84,7 @@ void Engine::run(Timer& timer)
 
 	do
 		{
+		m_session.eventsPoll();
 		Timeinfo now(t,dt,time(NULL));
 		if(msg_header.arrivalTime()<=t)
 			{
@@ -96,7 +97,6 @@ void Engine::run(Timer& timer)
 				m_queue.process(msg_header,now);
 				}
 			}
-		m_session.eventsPoll();
 		m_renderlist.render(m_mainwin,now);
 		m_mainwin.buffersSwap();
 		timer.wait();
