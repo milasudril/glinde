@@ -5,6 +5,7 @@
 
 #include "renderlist.hpp"
 #include "inputhandler.hpp"
+#include "enginebase.hpp"
 #include "glfwmm/window.hpp"
 
 namespace Glinde
@@ -14,8 +15,9 @@ namespace Glinde
 		public:
 			using Window=GLFWmm::Window<UICallback>;
 
-			explicit UICallback(RenderList& renderlist,InputHandler& input_handler):
-				r_renderlist(&renderlist),r_input_handler(&input_handler)
+			explicit UICallback(RenderList& renderlist,InputHandler& input_handler
+				,EngineBase& engine):
+				r_renderlist(&renderlist),r_input_handler(&input_handler),r_engine(&engine)
 				{}
 
 			void framebufferSizeChanged(Window& win,int x,int y)
@@ -49,9 +51,16 @@ namespace Glinde
 					{r_input_handler->key(scancode,action,modifiers);}
 				}
 
+			void closing(Window& win)
+				{
+				win.shouldClose(0);
+				r_engine->stop();
+				}
+
 		private:
 			RenderList* r_renderlist;
 			InputHandler* r_input_handler;
+			EngineBase* r_engine;
 		};
 	}
 

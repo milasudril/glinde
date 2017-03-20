@@ -3,7 +3,8 @@
 #ifndef GLINDE_COMMANDPROCESSOR_HPP
 #define GLINDE_COMMANDPROCESSOR_HPP
 
-#include "arraydynamic.hpp"
+#include "range.hpp"
+#include <cstdint>
 
 namespace Glinde
 	{
@@ -14,7 +15,7 @@ namespace Glinde
 		public:
 			virtual ~CommandProcessor()=default;
 			virtual void process(ConsoleInputHandler& coninput
-				,const ArrayDynamic<uint32_t>& cmdbuff)=0;
+				,Range<const uint32_t> cmdbuff)=0;
 		};
 	}
 

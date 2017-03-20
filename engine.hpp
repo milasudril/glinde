@@ -31,6 +31,9 @@ namespace Glinde
 				{run(timer);}
 
 			void run(Timer& timer);
+
+			void stop()
+				{m_stop=1;}
 			
 		private:
 			MessageQueue m_queue;
@@ -50,6 +53,7 @@ namespace Glinde
 			RenderList m_renderlist;
 
 			unsigned int m_con_index;
+			volatile bool m_stop;
 		};
 	}
 

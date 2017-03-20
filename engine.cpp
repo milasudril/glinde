@@ -55,7 +55,7 @@ Engine::Engine():
 	,m_charmap(MemoryReader(charmap_begin,charmap_end),0)
 	,m_t_0(0)
 	,m_session(sessionCreate())
-	,m_cb(m_renderlist,m_con_input)
+	,m_cb(m_renderlist,m_con_input,*this)
 	,m_mainwin(m_cb,m_session)
 	,m_con_display(m_charmap,m_console)
 	{
@@ -80,6 +80,8 @@ void Engine::run(Timer& timer)
 	auto dt=timer.delay();
 	auto t=m_t_0;
 	auto msg_header=m_msg_header;
+	m_stop=0;
+
 	do
 		{
 		Timeinfo now(t,dt,time(NULL));
@@ -100,7 +102,7 @@ void Engine::run(Timer& timer)
 		timer.wait();
 		t+=dt;
 		}
-	while(!m_mainwin.shouldClose());
+	while(!m_stop);
 	m_msg_header=msg_header;
 	m_t_0=t;
 	}

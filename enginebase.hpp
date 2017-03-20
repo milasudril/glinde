@@ -5,10 +5,13 @@
 
 namespace Glinde
 	{
+	class Timer;
 	class EngineBase
 		{
 		public:
 			virtual ~EngineBase()=default;
+			virtual void stop()=0;
+			virtual void run(Timer& timer)=0;
 		};
 	}
 

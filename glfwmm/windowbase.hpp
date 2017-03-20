@@ -75,6 +75,9 @@ namespace GLFWmm
 			bool shouldClose() const noexcept
 				{return glfwWindowShouldClose(m_handle);}
 
+			void shouldClose(bool value) noexcept
+				{glfwSetWindowShouldClose(m_handle,value);}
+
 			GLFWwindow* contextCapture()
 				{
 				auto ret=glfwGetCurrentContext();

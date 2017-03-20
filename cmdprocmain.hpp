@@ -1,4 +1,7 @@
-//@	{"targets":[{"name":"cmdprocmain.hpp","type":"include"}]}
+//@	{
+//@	 "targets":[{"name":"cmdprocmain.hpp","type":"include"}]
+//@	,"dependencies_extra":[{"ref":"cmdprocmain.o","rel":"implementation"}]
+//@	}
 
 #ifndef GLINDE_CMDPROCMAIN_HPP
 #define GLINDE_CMDPROCMAIN_HPP
@@ -16,11 +19,8 @@ namespace Glinde
 				{}
 
 			void process(ConsoleInputHandler& coninput
-				,const ArrayDynamic<uint32_t>& cmdbuff)
-				{
-				fprintf(stderr,"Invoke command\n");
-				coninput.status(Status::READY);
-				}
+				,Range<const uint32_t> cmdbuff);
+
 		private:
 			EngineBase* r_engine;
 		};
