@@ -44,6 +44,7 @@ namespace Glinde
 				if(s==Status::READY)
 					{
 					m_ready=1;
+					m_input_buffer.clear();
 					r_con->writeUTF8("»");
 					}
 				else

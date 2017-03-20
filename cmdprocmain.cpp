@@ -3,6 +3,8 @@
 //@	}
 
 #include "cmdprocmain.hpp"
+#include "errormessage.hpp"
+#include "variant.hpp"
 
 using namespace Glinde;
 
@@ -99,8 +101,13 @@ void CmdProcMain::process(ConsoleInputHandler& coninput
 			{cmd.append(tok);}
 		}
 
-	if(equals(cmd[0],U"exit"))
-		{r_engine->stop();}
-	else
+	if(cmd.length()==0)
 		{coninput.status(Status::READY);}
+	else
+		{
+		if(equals(cmd[0],U"exit"))
+			{r_engine->stop();}
+		else
+			{throw ErrorMessage("Bad command",{});}
+		}
 	}

@@ -49,7 +49,6 @@ void ConsoleInputHandler::key(int scancode,GLFWmm::WindowBase::Action action
 						{
 						m_ready=0;
 						r_cmdproc->process(*this,m_input_buffer);
-						m_input_buffer.clear();
 						}
 					else
 						{m_input_buffer.append('\n');}

@@ -84,18 +84,26 @@ void Engine::run(Timer& timer)
 
 	do
 		{
-		m_session.eventsPoll();
 		Timeinfo now(t,dt,time(NULL));
-		if(msg_header.arrivalTime()<=t)
+		try
 			{
-			if(msg_header.valid())
-				{m_queue.process(msg_header,now);}
-			while(m_queue.get(msg_header))
+			m_session.eventsPoll();
+			if(msg_header.arrivalTime()<=t)
 				{
-				if(msg_header.arrivalTime() > t)
-					{break;}
-				m_queue.process(msg_header,now);
+				if(msg_header.valid())
+					{m_queue.process(msg_header,now);}
+				while(m_queue.get(msg_header))
+					{
+					if(msg_header.arrivalTime() > t)
+						{break;}
+					m_queue.process(msg_header,now);
+					}
 				}
+			}
+		catch(const ErrorMessage& err)
+			{
+			logWrite(Glinde::Log::MessageType::ERROR,"Error: #0;",{err.messageGet()});
+			m_queue.post(0,Message{m_con_input,Status::READY});
 			}
 		m_renderlist.render(m_mainwin,now);
 		m_mainwin.buffersSwap();
