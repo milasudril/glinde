@@ -33,7 +33,7 @@ namespace Angle
 			static constexpr auto vector_size=sizeof(value_type);
 			static constexpr auto components=1;
 
-			VertexBuffer(size_t n_elems):m_capacity(n_elems)
+			explicit VertexBuffer(size_t n_elems):m_capacity(n_elems)
 				{
 				glCreateBuffers(1,&m_handle);
 				glNamedBufferData(m_handle,sizeof(ElementType)*n_elems,NULL,native_type(usage_type));

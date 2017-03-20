@@ -57,6 +57,8 @@ static size_t malloc_count=0;
 void* Glinde::memoryAllocate(size_t N)
 	{
 	GLINDE_REGISTER_MALLOC_DTOR();
+	if(N==0)
+		{return NULL;}
 	void* ret=mallocx(N,MALLOCX_ALIGN(ALIGNMENT));
 	if(ret==nullptr)
 		{

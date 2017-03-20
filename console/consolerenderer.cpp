@@ -8,7 +8,7 @@
 using namespace Glinde;
 
 ConsoleRenderer::ConsoleRenderer(const Image& charmap,const Console& con):r_con(&con)
-,m_program(R"EOF(#version 450 core
+,m_program(R"EOF(#version 430 core
 layout(location=0) in vec4 vertex_pos;
 layout(location=1) in vec4 color_fg;
 layout(location=2) in vec4 color_bg;
@@ -28,7 +28,7 @@ void main()
 	frag_color_bg=color_bg;
 	uv=uv_pos*charcell_size/texture_size;
 	}
-)EOF"_vert,R"EOF(#version 450 core
+)EOF"_vert,R"EOF(#version 430 core
 layout(location=0) uniform sampler2D charmap;
 layout(location=7) uniform float bg_opacity;
 
