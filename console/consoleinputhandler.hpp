@@ -57,6 +57,9 @@ namespace Glinde
 					}
 				}
 
+			Console& console() noexcept
+				{return *r_con;}
+
 		private:
 			Console* r_con;
 			CommandProcessor* r_cmdproc;

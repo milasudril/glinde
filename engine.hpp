@@ -41,7 +41,6 @@ namespace Glinde
 			MessageQueue m_queue;
 			Handle<unsigned int,-1,decltype(&logQueueDetach)> m_queue_guard;
 			Console m_console;
-			CmdProcMain m_cmdproc;
 			ConsoleInputHandler m_con_input;
 			LogWriterConsole m_con_writer;			
 			Image m_charmap;
@@ -51,6 +50,7 @@ namespace Glinde
 			GLFWmm::Session m_session;
 			UICallback m_cb; 
 			Display m_mainwin;
+			CmdProcMain m_cmdproc;
 			ConsoleDisplay m_con_display;
 			RenderList m_renderlist;
 

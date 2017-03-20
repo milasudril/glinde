@@ -12,10 +12,13 @@
 
 namespace Glinde
 	{
+	class Display;
+
 	class CmdProcMain:public CommandProcessor
 		{
 		public:
-			explicit CmdProcMain(EngineBase& eng):r_engine(&eng)
+			explicit CmdProcMain(EngineBase& eng,Display& disp):
+				r_engine(&eng),r_display(&disp)
 				{}
 
 			void process(ConsoleInputHandler& coninput
@@ -23,6 +26,7 @@ namespace Glinde
 
 		private:
 			EngineBase* r_engine;
+			Display* r_display;
 		};
 	}
 

@@ -49,7 +49,6 @@ GLINDE_BLOB(consoletest,"consoletest.bin");
 Engine::Engine():
 	 m_queue_guard(logQueueAttach(m_queue),&logQueueDetach)
 	,m_console(25,80)
-	,m_cmdproc(*this)
 	,m_con_input(m_console,m_cmdproc)
 	,m_con_writer(m_console)
 	,m_charmap(MemoryReader(charmap_begin,charmap_end),0)
@@ -57,6 +56,7 @@ Engine::Engine():
 	,m_session(sessionCreate())
 	,m_cb(m_renderlist,m_con_input,*this)
 	,m_mainwin(m_cb,m_session)
+	,m_cmdproc(*this,m_mainwin)
 	,m_con_display(m_charmap,m_console)
 	{
 	glfwSwapInterval(0);
@@ -66,7 +66,6 @@ Engine::Engine():
 	m_renderlist.activate(con_id);
 	m_con_index=logWriterAttach(m_con_writer);
 	m_queue.post(0,Message{m_con_input,Status::READY});
-/*	*/
 	}
 
 Engine::~Engine()
@@ -76,7 +75,7 @@ void Engine::consoletest()
 	{
 	m_console.writeVGADump(Range<const VGACell>
 		{reinterpret_cast<const VGACell*>(consoletest_begin),80*25});
-	m_queue.post(0,Message{m_con_input,Status::READY_AFTER_KEY});
+	m_con_input.status(Status::READY_AFTER_KEY);
 	}
 
 void Engine::run(Timer& timer)

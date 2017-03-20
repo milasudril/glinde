@@ -6,17 +6,16 @@
 #define GLINDE_DISPLAY_HPP
 
 #include "imagerenderer.hpp" //Must go first since window includes GLFW, which includes GL.
-#include "log/logwriter.hpp"
-#include "variant.hpp"
 
 #define GLFWMM_NO_MEMBER_ADVERTISMENT
 
+#include "glfwmm/window.hpp"
 #include "errormessage.hpp"
 #include "variant.hpp"
-#include "glfwmm/window.hpp"
 #include "angle/contextguard.hpp"
 #include "angle/init.hpp"
 #include "angle/exceptionhandler.hpp"
+#include "log/logwriter.hpp"
 
 namespace Glinde
 	{
@@ -34,6 +33,11 @@ namespace Glinde
 			void draw(const Angle::Texture2D& texture)
 				{m_imgrenderer.render(texture);}
 
+			Angle::VersionResponse glinfo() const noexcept
+				{
+				return m_initializer.m_response;
+				}
+
 		private:
 			struct APIInitializer:public Angle::ExceptionHandler
 				{
@@ -46,13 +50,14 @@ namespace Glinde
 						,{GLEW_VERSION_MAJOR,GLEW_VERSION_MINOR});
 
 					auto response=Angle::init();
-					Glinde::logWrite(Glinde::Log::MessageType::INFORMATION
+					logWrite(Glinde::Log::MessageType::INFORMATION
 						,"Got an OpenGL context with the following characteristics:\n"
 						"    Vendor:          #0;\n"
 						"    Renderer:        #1;\n"
 						"    Version:         #2;\n"
 						"    Shader language: #3;\n"
 						,{response.vendor,response.renderer,response.version,response.glsl_version});
+					m_response=response;
 					}
 				~APIInitializer()
 					{Angle::exceptionHandlerSet(r_eh_old);}
@@ -61,6 +66,7 @@ namespace Glinde
 					{throw ErrorMessage("An error occured during a call to the graphics backend. #0;",{err.message()});}
 
 				Angle::ExceptionHandler* r_eh_old;
+				Angle::VersionResponse m_response;
 				};
 
 			Angle::ContextGuard<Display> m_context;

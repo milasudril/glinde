@@ -2,6 +2,7 @@
 //@	 "targets":[{"name":"cmdprocmain.o","type":"object"}]
 //@	}
 
+#include "display.hpp"
 #include "cmdprocmain.hpp"
 #include "errormessage.hpp"
 #include "variant.hpp"
@@ -110,6 +111,17 @@ void CmdProcMain::process(ConsoleInputHandler& coninput
 		else
 		if(equals(cmd[0],U"consoletest"))
 			{r_engine->consoletest();}
+		else
+		if(equals(cmd[0],U"glinfo"))
+			{
+			auto info=r_display->glinfo();
+			auto& con=coninput.console();
+			con.writeUTF8(info.renderer)
+				.writeUTF8(", ")
+				.writeUTF8(info.version)
+				.writeUTF8("\n");
+			coninput.status(Status::READY);
+			}
 		else
 			{throw ErrorMessage("Bad command",{});}
 		}
