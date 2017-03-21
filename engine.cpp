@@ -8,6 +8,7 @@
 #include "status.hpp"
 #include "time/timeinfo.hpp"
 #include "time/timer.hpp"
+#include "time/executiontimer.hpp"
 #include "io/memoryreader.hpp"
 #include "angle/init.hpp"
 #include "log/logwriter.hpp"
@@ -86,7 +87,8 @@ void Engine::run(Timer& timer)
 	auto t=m_t_0;
 	auto msg_header=m_msg_header;
 	m_stop=0;
-
+	size_t counter=0;
+	ExecutionTimer et;
 	do
 		{
 		Timeinfo now(t,dt);
@@ -110,9 +112,17 @@ void Engine::run(Timer& timer)
 			logWrite(Glinde::Log::MessageType::ERROR,"Error: #0;",{err.messageGet()});
 			m_queue.post(0,Message{m_con_input,Status::READY});
 			}
+		
+		if(counter%64==0)
+			{
+			fprintf(stderr,"%.15g\n",et.value()/(64.0*dt));
+			et.reset();
+			}
+
 		m_renderlist.render(m_mainwin,now);
 		m_mainwin.buffersSwap();
 		timer.wait();
+		++counter;
 		t+=dt;
 		}
 	while(!m_stop);
