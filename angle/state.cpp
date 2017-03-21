@@ -9,10 +9,12 @@ using namespace Angle;
 static const ValueType* s_element_index_type;
 static const size_t* s_element_index_count;
 
+#ifndef NDEBUG
 bool Angle::elementsRangeCheck(size_t index_last)
 	{
 	return index_last<=*s_element_index_count;
 	}
+#endif
 
 void Angle::bindElementIndexData(const ValueType& type,const size_t& count)
 	{

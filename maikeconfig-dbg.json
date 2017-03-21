@@ -5,6 +5,7 @@
             "..",
             ".",
             "__targets",
+			"__targets_rel",
 			".git"
         ],
         "recursive":1

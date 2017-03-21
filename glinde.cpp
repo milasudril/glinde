@@ -5,6 +5,7 @@
 #include "timer/timerdummy.hpp"
 #include "timer/timerreal.hpp"
 #include "log/logwriter.hpp"
+#include "time/wallclocktime.hpp"
 
 #ifdef PROFILE
 inline Glinde::TimerDummy timerCreate(double rate)

@@ -2,8 +2,8 @@
 
 #include "consolerenderer.hpp"
 #include "console.hpp"
-#include "../timeinfo.hpp"
 #include "../texture_upload.hpp"
+#include "../time/timeinfo.hpp"
 
 using namespace Glinde;
 
@@ -114,10 +114,10 @@ void ConsoleRenderer::render(Angle::Texture2D& texture,const Timeinfo& ti) const
 		glUniform4f(4,0.0f,r_con->lineOffset(k),0.0f,0.0f);
 		Angle::drawElements(Angle::DrawMode::TRIANGLES,((k + line_current)%n_rows) * n_cols,n_cols);
 		}
-	if(ti.t() - m_t_toggle >= 8.0/60.0 ) //Standard VGA blink rate
+	if(ti.simulationTime() - m_t_toggle >= 8.0/60.0 ) //Standard VGA blink rate
 		{
 		m_cursor_shown=!m_cursor_shown;
-		m_t_toggle=ti.t();
+		m_t_toggle=ti.simulationTime();
 		}
 
 	if(m_cursor_shown)

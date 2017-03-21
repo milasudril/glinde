@@ -5,7 +5,7 @@
 #include "renderlist.hpp"
 #include "display.hpp"
 #include "renderobject.hpp"
-#include "timeinfo.hpp"
+#include "time/timeinfo.hpp"
 #include <algorithm>
 
 using namespace Glinde;

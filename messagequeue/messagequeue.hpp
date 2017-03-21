@@ -6,13 +6,14 @@
 #include "../arraydynamicstl.hpp"
 #include "../mutex.hpp"
 #include "../idgenerator.hpp"
-#include "../timeinfo.hpp"
 #include "message.hpp"
 #include "messageheader.hpp"
 #include <queue>
 
 namespace Glinde
 	{
+	class Timeinfo;
+
 	class MessageQueue
 		{
 		public:

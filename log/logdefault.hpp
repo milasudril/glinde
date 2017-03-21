@@ -5,7 +5,6 @@
 #include "log.hpp"
 #include "../arrayfixed.hpp"
 #include "../string.hpp"
-#include "../timeinfo.hpp"
 
 #ifndef GLINDE_LOGDEFAULT_HPP
 #define GLINDE_LOGDEFAULT_HPP
@@ -13,6 +12,7 @@
 namespace Glinde
 	{
 	class MessageQueue;
+	class Timeinfo;
 	class LogDefault:public Log
 		{
 		private:

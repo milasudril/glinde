@@ -3,7 +3,8 @@
 #ifndef GLINDE_TIMEINFO_HPP
 #define GLINDE_TIMEINFO_HPP
 
-#include "vectortype.hpp"
+#include "wallclocktime.hpp"
+#include "../vectortype.hpp"
 #include <cstddef>
 
 namespace Glinde
@@ -11,23 +12,23 @@ namespace Glinde
 	class Timeinfo
 		{
 		public:
-			explicit Timeinfo(double t,double dt,int64_t wallclock) noexcept:
-				m_t{t,dt},m_wc{wallclock,0}
+			explicit Timeinfo(double t,double dt) noexcept:
+				m_t{t,dt}
 				{}
 
-			double t() const noexcept
+			double simulationTime() const noexcept
 				{return m_t[0];}
 
 			double dt() const noexcept
 				{return m_t[1];}
 
-			int64_t wallclock() const noexcept
-				{return m_wc[0];}
+			WallclockTime wallclockTime() const noexcept
+				{return m_wct;}
 		
 
 		private:
 			vec2_t<double> m_t;
-			vec2_t<int64_t> m_wc;
+			WallclockTime m_wct;
 		};
 	}
 

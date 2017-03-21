@@ -5,8 +5,8 @@
 #include "engine.hpp"
 #include "blob.hpp"
 #include "vgacell.hpp"
-#include "timeinfo.hpp"
 #include "status.hpp"
+#include "time/timeinfo.hpp"
 #include "timer/timer.hpp"
 #include "io/memoryreader.hpp"
 #include "angle/init.hpp"
@@ -89,7 +89,7 @@ void Engine::run(Timer& timer)
 
 	do
 		{
-		Timeinfo now(t,dt,time(NULL));
+		Timeinfo now(t,dt);
 		try
 			{
 			m_session.eventsPoll();

@@ -1,10 +1,15 @@
-//@	{
-//@	 "targets":
-//@		[{
-//@		 "dependencies":[{"ref":"rt","rel":"external"},{"ref":"pthread","rel":"external"}]
-//@		,"name":"timerreal.o","type":"object"
-//@		}]
-//@	}
+//@	[
+//@		[
+//@		"linux"
+//@			,{
+//@	 		"targets":
+//@				[{
+//@ 			 "dependencies":[{"ref":"rt","rel":"external"},{"ref":"pthread","rel":"external"}]
+//@				,"name":"timerreal.o","type":"object"
+//@				}]
+//@			 }
+//@		]
+//@	]
 
 #include "timerreal.hpp"
 #include "../errormessage.hpp"
