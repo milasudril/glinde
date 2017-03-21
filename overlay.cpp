@@ -1,8 +1,8 @@
 //@	{
-//@	"targets":[{"name":"hud.o","type":"object"}]
+//@	"targets":[{"name":"overlay.o","type":"object"}]
 //@	}
 
-#include "hud.hpp"
+#include "overlay.hpp"
 #include "display.hpp"
 
 using PageComposer::Surface;
@@ -18,7 +18,7 @@ namespace PageComposer
 
 using namespace Glinde;
 
-Hud::Hud():m_texture(1,Angle::TextureFormat::SRGB8_ALPHA8,1,1)
+Overlay::Overlay():m_texture(1,Angle::TextureFormat::SRGB8_ALPHA8,1,1)
 	,m_surface(1,1),m_texbuff(new PageComposer::Surface::Pixel[1])
 	,m_context(m_surface)
 	,m_text(m_context)
@@ -26,7 +26,7 @@ Hud::Hud():m_texture(1,Angle::TextureFormat::SRGB8_ALPHA8,1,1)
 	{
 	}
 
-void Hud::framebufferResize(int width,int height)
+void Overlay::framebufferResize(int width,int height)
 	{
 	m_texture.realloc(width,height);
 	m_surface=PageComposer::Surface(width,height);
@@ -36,7 +36,7 @@ void Hud::framebufferResize(int width,int height)
 	m_layers.forcedRender();
 	}
 
-void Hud::render(Display& disp,uint64_t tau) const noexcept
+void Overlay::render(Display& disp,const Timeinfo& ti) const noexcept
 	{
 	m_layers.render();
 	auto rect=m_surface.dirtyRectangle();

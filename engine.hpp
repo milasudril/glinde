@@ -11,6 +11,7 @@
 #include "image.hpp"
 #include "handle.hpp"
 #include "cmdprocmain.hpp"
+#include "overlay.hpp"
 
 #include "messagequeue/messagequeue.hpp"
 #include "console/logwriterconsole.hpp"
@@ -52,7 +53,9 @@ namespace Glinde
 			Display m_mainwin;
 			CmdProcMain m_cmdproc;
 			ConsoleDisplay m_con_display;
+			Overlay m_overlay;
 			RenderList m_renderlist;
+			
 
 			unsigned int m_con_index;
 			volatile bool m_stop;

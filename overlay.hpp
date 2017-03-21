@@ -1,10 +1,10 @@
 //@	{
-//@	"targets":[{"name":"hud.hpp","type":"include"}]
-//@	,"dependencies_extra":[{"ref":"hud.o","rel":"implementation"}]
+//@	"targets":[{"name":"overlay.hpp","type":"include"}]
+//@	,"dependencies_extra":[{"ref":"overlay.o","rel":"implementation"}]
 //@	}
 
-#ifndef GLINDE_HUD_HPP
-#define GLINDE_HUD_HPP
+#ifndef GLINDE_OVERLAY_HPP
+#define GLINDE_OVERLAY_HPP
 
 #include "stringkey.hpp"
 #include "renderobject.hpp"
@@ -19,14 +19,14 @@
 
 namespace Glinde
 	{
-	class Hud:public RenderObject
+	class Overlay:public RenderObject
 		{
 		public:
-			Hud();
+			Overlay();
 
 			void framebufferResize(int width,int height);
 
-			void render(Display& disp,uint64_t tau) const noexcept;
+			void render(Display& disp,const Timeinfo& ti) const noexcept;
 
 			PageComposer::Paragraph& paragraph(Stringkey key) noexcept
 				{
