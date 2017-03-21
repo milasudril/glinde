@@ -7,7 +7,7 @@
 #include "vgacell.hpp"
 #include "status.hpp"
 #include "time/timeinfo.hpp"
-#include "timer/timer.hpp"
+#include "time/timer.hpp"
 #include "io/memoryreader.hpp"
 #include "angle/init.hpp"
 #include "log/logwriter.hpp"
