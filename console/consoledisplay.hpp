@@ -4,7 +4,6 @@
 #define GLINDE_CONSOLEDISPLAY_HPP
 
 #include "../renderobject.hpp"
-#include "../imagerenderer.hpp"
 #include "consolerenderer.hpp"
 
 namespace Glinde
@@ -29,13 +28,12 @@ namespace Glinde
 					.bind(Angle::Framebuffer::Target::READDRAW);
 				auto s=disp.sizeFb();
 				glViewport(0,0,s.width,s.height);
-				m_img_renderer.render(m_con_texture);
+				disp.draw(m_con_texture);
 				}
 
 		private:
 			ConsoleRenderer m_con_renderer;
 			mutable Angle::Texture2D m_con_texture;
-			ImageRenderer m_img_renderer;
 		};
 	}
 
