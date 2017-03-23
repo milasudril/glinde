@@ -20,6 +20,8 @@ namespace Glinde
 	class ConsoleRenderer
 		{
 		public:
+			typedef ArrayFixed<Color,16> Colormap;
+
 			static constexpr auto CHARCELL_WIDTH=9.0f;
 			static constexpr auto CHARCELL_HEIGHT=16.0f;
 

@@ -41,39 +41,30 @@ static Color color(uint8_t color_mask) noexcept
 	}
 #endif
 
+static ConsoleRenderer::Colormap colors_generate() noexcept
+	{
+	ConsoleRenderer::Colormap ret;
+	for(decltype(ret.length()) k=0;k<ret.length();++k)
+		{ret[k]=color(k);}
+	return ret;
+	}
+
+static const ConsoleRenderer::Colormap s_vgacolors=colors_generate();
+
 ConsoleRenderer::ConsoleRenderer(const Image& charmap,const Console& con):r_con(&con)
 ,m_program(R"EOF(#version 430 core
 layout(location=0) in vec4 vertex_pos;
 layout(location=1) in uint colors;
 layout(location=2) in vec2 uv_pos;
-layout(location=3) uniform vec4 vertex_offset;
-layout(location=4) uniform vec2 texture_size;
-layout(location=5) uniform vec2 charcell_size;
+
+layout(location=2) uniform vec4 vertex_offset;
+layout(location=3) uniform vec2 texture_size;
+layout(location=4) uniform vec2 charcell_size;
+layout(location=5) uniform vec4 colortab[16];
 
 out vec4 frag_color_fg;
 out vec4 frag_color_bg;
 out vec2 uv;
-
-const vec4 colortab[16]=vec4[16]
-	(
-	 vec4(0.00,0.00,0.00,1.0)
-	,vec4(0.00,0.00,0.66,1.0)
-	,vec4(0.00,0.66,0.00,1.0)
-	,vec4(0.00,0.66,0.66,1.0)
-	,vec4(0.66,0.00,0.00,1.0)
-	,vec4(0.66,0.00,0.66,1.0)
-	,vec4(0.66,0.33,0.00,1.0)
-	,vec4(0.66,0.66,0.66,1.0)
-
-	,vec4(0.33,0.33,0.33,1.0)
-	,vec4(0.33,0.33,1.00,1.0)
-	,vec4(0.00,1.00,0.00,1.0)
-	,vec4(0.33,1.00,1.00,1.0)
-	,vec4(1.00,0.33,0.33,1.0)
-	,vec4(1.00,0.33,1.00,1.0)
-	,vec4(1.00,1.00,0.33,1.0)
-	,vec4(1.00,1.00,1.00,1.0)
-	);
 
 void main()
 	{
@@ -84,7 +75,7 @@ void main()
 	}
 )EOF"_vert,R"EOF(#version 430 core
 layout(location=0) uniform sampler2D charmap;
-layout(location=6) uniform float bg_opacity;
+layout(location=1) uniform float bg_opacity;
 
 in vec2 uv;
 in vec4 frag_color_fg;
@@ -119,10 +110,10 @@ void main()
 		.elementBuffer(m_faces);
 
 	m_program.bind();
-	glUniform2f(4,charmap.width(),charmap.height());
-	glUniform2f(5,CHARCELL_WIDTH,CHARCELL_HEIGHT);
-//	glUniform1f(6,1-1.0f/16.0f);
-	glUniform1f(6,1);
+	glUniform2f(3,charmap.width(),charmap.height());
+	glUniform2f(4,CHARCELL_WIDTH,CHARCELL_HEIGHT);
+	glUniform4fv(5,16,reinterpret_cast<const float*>(s_vgacolors.begin()));
+	glUniform1f(1,1);
 	m_program.unbind();
 	}
 
@@ -160,7 +151,7 @@ void ConsoleRenderer::render(Angle::Texture2D& texture,const Timeinfo& ti) const
 	glClear(GL_COLOR_BUFFER_BIT);
 	for(decltype(n_rows) k=0;k<n_rows;++k)
 		{
-		glUniform4f(3,0.0f,r_con->lineOffset(k),0.0f,0.0f);
+		glUniform4f(2,0.0f,r_con->lineOffset(k),0.0f,0.0f);
 		Angle::drawElements(Angle::DrawMode::TRIANGLES,((k + line_current)%n_rows) * n_cols,n_cols);
 		}
 	if(ti.simulationTime() - m_t_toggle >= 8.0/60.0 ) //Standard VGA blink rate
@@ -172,7 +163,7 @@ void ConsoleRenderer::render(Angle::Texture2D& texture,const Timeinfo& ti) const
 	if(m_cursor_shown)
 		{
 		auto pos=r_con->cursorPosition();
-		glUniform4f(3,pos[0],pos[1],0.0f,0.0f);
+		glUniform4f(2,pos[0],pos[1],0.0f,0.0f);
 		Angle::drawElements(Angle::DrawMode::TRIANGLES,n_cols*n_rows,6);
 		}
 	
