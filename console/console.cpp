@@ -108,45 +108,11 @@ namespace
 		ret+=dxdy;
 		return ret;
 		}
-
-	#ifdef __AVX2__
-	Color color(uint8_t color_mask) noexcept
-		{
-		vec4_t<float> color;
-		auto intensity=0.3333f*static_cast<float>( (color_mask & 8)/8 );
-		vec4_t<uint32_t> masks{4u,2u,1u,0};
-		masks&=color_mask;
-		masks>>=vec4_t<uint32_t>{2,1,0,1};
-		vec4_t<float> cvec=_mm_cvtepi32_ps(reinterpret_cast<__m128i>(masks));
-		color=cvec*0.6667f + vec4_t<float>{intensity,intensity,intensity,intensity};
-		// Adjust the green level
-		color=(color_mask==6)?color*vec4_t<float>{1.0f,0.5,1.0f,1.0f}:color;
-		// make it opaque 
-		color[3]=1.0f;
-		return Color::fromSRGB(color);
-		}
-	#else
-	Color color(uint8_t color_mask) noexcept
-		{
-		vec4_t<float> color;
-		auto intensity=0.3333f*static_cast<float>( (color_mask & 8)/8 );
-		vec4_t<uint32_t> masks{4u,2u,1u,0};
-		masks&=color_mask;
-		vec4_t<float> cvec=_mm_cvtepi32_ps(reinterpret_cast<__m128i>(masks));
-		color=cvec*0.6667f*vec4_t<float>{0.25,0.5,1,1} + vec4_t<float>{intensity,intensity,intensity,intensity};
-		// Adjust the green level
-		color=(color_mask==6)?color*vec4_t<float>{1.0f,0.5,1.0f,1.0f}:color;
-		// make it opaque 
-		color[3]=1.0f;
-		return Color::fromSRGB(color);
-		}
-	#endif
 	}
 
 Console::Console(uint32_t n_rows,uint32_t n_cols):
 	 m_vertices(new GeoSIMD::Point<float>[(n_rows*n_cols + 1)*4])
-	,m_colors_fg(new Color[(n_rows*n_cols + 1)*4])
-	,m_colors_bg(new Color[(n_rows*n_cols + 1)*4])
+	,m_colors(new uint32_t[(n_rows*n_cols + 1)*4])
 	,m_uvs(new vec2_t<float>[(n_rows*n_cols + 1)*4])
 	,m_faces(new FaceIndirect[2*(n_rows*n_cols + 1)])
 	,m_n_cols(n_cols),m_position(0),m_line_current(0)
@@ -192,13 +158,6 @@ Console::Console(uint32_t n_rows,uint32_t n_cols):
 	colorMask(0x07);
 	
 	character_render('\0',size());
-	}
-
-Console& Console::colorMask(uint8_t color_mask) noexcept
-	{
-	m_color_fg=color(color_mask&0x0f);
-	m_color_bg=color(static_cast<uint8_t>(color_mask>>4));
-	return *this;
 	}
 
 Console& Console::writeRaw(const char* string) noexcept
@@ -390,22 +349,15 @@ Console& Console::write(uint32_t codepoint) noexcept
 void Console::character_render(uint16_t ch,size_t position)
 	{
 	auto uvs=uvcoords(ch);
-	auto color_fg=m_color_fg;
-	auto color_bg=m_color_bg;
+
 	m_uvs[4*position + 0]=vec2_t<float>{uvs[0],uvs[1]};
 	m_uvs[4*position + 1]=vec2_t<float>{uvs[2],uvs[3]};
 	m_uvs[4*position + 2]=vec2_t<float>{uvs[4],uvs[5]};
 	m_uvs[4*position + 3]=vec2_t<float>{uvs[6],uvs[7]};
-
-	m_colors_fg[4*position + 0]=color_fg;
-	m_colors_fg[4*position + 1]=color_fg;
-	m_colors_fg[4*position + 2]=color_fg;
-	m_colors_fg[4*position + 3]=color_fg;
-
-	m_colors_bg[4*position + 0]=color_bg;
-	m_colors_bg[4*position + 1]=color_bg;
-	m_colors_bg[4*position + 2]=color_bg;
-	m_colors_bg[4*position + 3]=color_bg;
+	m_colors[4*position + 0]=m_color;
+	m_colors[4*position + 1]=m_color;
+	m_colors[4*position + 2]=m_color;
+	m_colors[4*position + 3]=m_color;
 	}
 
 void Console::scroll_down() noexcept

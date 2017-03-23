@@ -29,7 +29,7 @@
                         "-DMAIKE_TARGET_DIRECTORY={target_directory}",
                         "-DMAIKE_CURRENT_DIRECTORY={current_directory}",
 						"-march=native",
-						"-s",
+						"-g",
                         "-o",
                         "{target}",
                         "{source}",
@@ -56,7 +56,7 @@
                         "-DMAIKE_CURRENT_DIRECTORY={current_directory}",
 						"-march=native",
                         "-shared",
-                        "-s",
+                        "-g",
                         "-o",
                         "{target}",
                         "{source}",
@@ -87,6 +87,7 @@
                 "objcompile":{
                     "args":[
                         "-c",
+                        "-g",
                         "-O3",
                         "-fpic",
                         "{cxxversion}",

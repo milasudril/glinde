@@ -40,8 +40,7 @@ namespace Glinde
 			Angle::Texture2D m_charmap;
 
 			Angle::VertexBuffer<vec4_t<float>> m_charcells;
-			mutable Angle::VertexBuffer<vec4_t<float>,Angle::BufferUsage::DYNAMIC_DRAW> m_fg;
-			mutable Angle::VertexBuffer<vec4_t<float>,Angle::BufferUsage::DYNAMIC_DRAW> m_bg;
+			mutable Angle::VertexBuffer<uint32_t,Angle::BufferUsage::DYNAMIC_DRAW> m_colors;
 			mutable Angle::VertexBuffer<vec2_t<float>,Angle::BufferUsage::DYNAMIC_DRAW> m_uvs;
 			Angle::VertexBuffer<uint16_t> m_faces;
 
@@ -54,8 +53,7 @@ namespace Glinde
 				static constexpr Angle::VertexAttribute attributes[]=
 					{
 					 {decltype(m_charcells)::components,Angle::ConstantGet<float>::value}
-					,{decltype(m_fg)::components,Angle::ConstantGet<float>::value}
-					,{decltype(m_bg)::components,Angle::ConstantGet<float>::value}
+					,{decltype(m_colors)::components,Angle::ConstantGet<uint32_t>::value}
 					,{decltype(m_uvs)::components,Angle::ConstantGet<float>::value}
 					};
 				};

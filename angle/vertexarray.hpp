@@ -19,6 +19,9 @@ namespace Angle
 		GLuint offset;
 		};
 
+	template<ValueType t>
+	inline void attribFormat(GLuint vao,GLuint k,GLint size,bool normalized,GLuint offset);
+
 	template<class BatchLayout>
 	class VertexArray
 		{
@@ -137,12 +140,8 @@ namespace Angle
 				static void doIt(GLuint handle) noexcept
 					{
 					Init<k-1,dummy>::doIt(handle);                  
-					const auto& attribute=BatchLayout::attributes[k-1];
-					glVertexArrayAttribFormat(handle,k-1
-						,attribute.components
-						,native_type(attribute.type)
-						,attribute.normalized
-						,attribute.offset);
+					constexpr auto& attribute=BatchLayout::attributes[k-1];
+					attribFormat<attribute.type>(handle,k-1,attribute.components,attribute.normalized,attribute.offset);
                 	}
 				};
       
@@ -175,6 +174,18 @@ namespace Angle
 		//	Additional data to improve glDrawElements
 			ValueType m_index_type;
 			size_t m_index_count;
+		};
+
+	template<ValueType t>
+	inline void attribFormat(GLuint vao,GLuint k,GLint size,bool normalized,GLuint offset)
+		{
+		glVertexArrayAttribFormat(vao,k,size,native_type(t),normalized,offset);
+		};
+
+	template<>
+	inline void attribFormat<ConstantGet<GLuint>::value>(GLuint vao,GLuint k,GLint size,bool normalized,GLuint offset)
+		{
+		glVertexArrayAttribIFormat(vao,k,size,native_type(ConstantGet<GLuint>::value),offset);
 		};
 	}
 

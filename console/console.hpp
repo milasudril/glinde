@@ -22,7 +22,11 @@ namespace Glinde
 		public:
 			explicit Console(uint32_t n_rows,uint32_t n_cols);
 
-			Console& colorMask(uint8_t color_mask) noexcept;
+			Console& colorMask(uint8_t color_mask) noexcept
+				{
+				m_color=color_mask;
+				return *this;
+				}
 			Console& writeRaw(const char* string) noexcept;
 			Console& writeUTF8(const char* string) noexcept;
 			Console& write(char ch) noexcept;
@@ -48,25 +52,11 @@ namespace Glinde
 
 
 
-			auto colorsFg() const noexcept
-				{return Range<Color>{m_colors_fg.get(),size()*4};}
+			auto color() const noexcept
+				{return Range<uint32_t>{m_colors.get(),size()*4};}
 
-			auto colorsFgFull() const noexcept
-				{return Range<Color>{m_colors_fg.get(),sizeFull()*4};}
-
-			auto colorsFg(size_t k) const noexcept
-				{return row(m_colors_fg.get(),k,4);}
-
-
-
-			auto colorsBg() const noexcept
-				{return Range<Color>{m_colors_bg.get(),size()*4};}
-
-			auto colorsBgFull() const noexcept
-				{return Range<Color>{m_colors_bg.get(),sizeFull()*4};}
-
-			auto colorsBg(size_t k) const noexcept
-				{return row(m_colors_bg.get(),k,4);}
+			auto colorsFull() const noexcept
+				{return Range<uint32_t>{m_colors.get(),sizeFull()*4};}
 
 
 
@@ -171,16 +161,14 @@ namespace Glinde
 
 
 			std::unique_ptr<GeoSIMD::Point<float>[]> m_vertices;
-			std::unique_ptr<Color[]> m_colors_fg;
-			std::unique_ptr<Color[]> m_colors_bg;
+			std::unique_ptr<uint32_t[]> m_colors;
 			std::unique_ptr<vec2_t<float>[]> m_uvs;
 			std::unique_ptr<FaceIndirect[]> m_faces;
 
 			uint32_t m_n_cols;
 			uint32_t m_n_rows;
 
-			Color m_color_fg;
-			Color m_color_bg;
+			uint8_t m_color;
 			size_t m_position;
 			size_t m_line_current;
 			uint32_t m_utf8_state;
