@@ -10,6 +10,13 @@ namespace Angle
 	class Program
 		{
 		public:
+			template<class T>
+			using vec4 __attribute__ ((vector_size(4*sizeof(T))))=T;
+
+			template<class T>
+			using vec2 __attribute__ ((vector_size(2*sizeof(T))))=T;
+
+
 			template<class ... T>
 			explicit Program(const Shader& shader,const T&...shaders);
 
@@ -33,6 +40,113 @@ namespace Angle
 
 			void unbind() const noexcept
 				{glUseProgram(0);}
+
+
+			template<GLint loc>
+			Program& uniform(GLint v) noexcept
+				{
+				glProgramUniform1i(m_handle,loc,v);
+				return *this;
+				}
+
+			template<GLint loc>
+			Program& uniform(GLint v0,GLint v1) noexcept
+				{
+				glProgramUniform2i(m_handle,loc,v0,v1);
+				return *this;
+				}
+
+			template<GLint loc>
+			Program& uniform(GLint v0,GLint v1,GLint v2) noexcept
+				{
+				glProgramUniform3i(m_handle,loc,v0,v1,v2);
+				return *this;
+				}
+
+			template<GLint loc>
+			Program& uniform(GLint v0,GLint v1,GLint v2,GLint v3) noexcept
+				{
+				glProgramUniform4i(m_handle,loc,v0,v1,v2,v3);
+				return *this;
+				}
+
+
+			template<GLint loc>
+			Program& uniform(float v) noexcept
+				{
+				glProgramUniform1f(m_handle,loc,v);
+				return *this;
+				}
+
+			template<GLint loc>
+			Program& uniform(float v0,float v1) noexcept
+				{
+				glProgramUniform2f(m_handle,loc,v0,v1);
+				return *this;
+				}
+
+			template<GLint loc>
+			Program& uniform(float v0,float v1,float v2) noexcept
+				{
+				glProgramUniform3f(m_handle,loc,v0,v1,v2);
+				return *this;
+				}
+
+			template<GLint loc>
+			Program& uniform(float v0,float v1,float v2,float v3) noexcept
+				{
+				glProgramUniform4f(m_handle,loc,v0,v1,v2,v3);
+				return *this;
+				}
+
+
+		
+			template<GLint loc>
+			Program& uniform(const GLint* v,GLsizei count) noexcept
+				{
+				glProgramUniform1iv(m_handle,loc,count,v);
+				return *this;
+				}
+
+			template<GLint loc>
+			Program& uniform(const vec2<GLint>* v,GLsizei count) noexcept
+				{
+				glProgramUniform2iv(m_handle,loc,count,reinterpret_cast<const GLint*>(v));
+				return *this;
+				}
+
+			template<GLint loc>
+			Program& uniform(const vec4<GLint>* v,GLsizei count) noexcept
+				{
+				glProgramUniform4iv(m_handle,loc,count,reinterpret_cast<const GLint*>(v));
+				return *this;
+				}
+
+
+
+			template<GLint loc>
+			Program& uniform(const float* v,GLsizei count) noexcept
+				{
+				glProgramUniform1fv(m_handle,loc,count,v);
+				return *this;
+				}
+
+			template<GLint loc>
+			Program& uniform(const vec2<float>* v,GLsizei count) noexcept
+				{
+				glProgramUniform2fv(m_handle,loc,count,reinterpret_cast<const float*>(v));
+				return *this;
+				}
+
+			template<GLint loc>
+			Program& uniform(const vec4<float>* v,GLsizei count) noexcept
+				{
+				glProgramUniform4fv(m_handle,loc,count,reinterpret_cast<const float*>(v));
+				return *this;
+				}
+
+
+
 
 		private:
       		static constexpr void collect(GLuint* handles) noexcept

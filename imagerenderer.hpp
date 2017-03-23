@@ -34,11 +34,7 @@ namespace Glinde
 
 			ImageRenderer& mirror(bool x,bool y) noexcept
 				{
-				m_program.bind();
-				glUniform2f(1
-					,x?-1.0f:1.0f
-					,y?-1.0f:1.0f);
-				m_program.unbind();
+				m_program.uniform<1>(x?-1.0f:1.0f,y?-1.0f:1.0f);
 				return *this;
 				}
 			

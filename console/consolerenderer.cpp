@@ -109,12 +109,11 @@ void main()
 		.enableVertexAttrib<2>()
 		.elementBuffer(m_faces);
 
-	m_program.bind();
-	glUniform2f(3,charmap.width(),charmap.height());
-	glUniform2f(4,CHARCELL_WIDTH,CHARCELL_HEIGHT);
-	glUniform4fv(5,16,reinterpret_cast<const float*>(s_vgacolors.begin()));
-	glUniform1f(1,1);
-	m_program.unbind();
+	m_program.uniform<3>(static_cast<float>(charmap.width())
+		,static_cast<float>(charmap.height()))
+		.uniform<4>(static_cast<float>(CHARCELL_WIDTH),static_cast<float>(CHARCELL_HEIGHT))
+		.uniform<5>(native_type(s_vgacolors.begin()),s_vgacolors.length())
+		.uniform<1>(1.0f);
 	}
 
 constexpr Angle::VertexAttribute ConsoleRenderer::ShaderDescriptor::attributes[];

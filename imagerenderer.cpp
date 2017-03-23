@@ -32,7 +32,5 @@ void main()
 	{
 	m_vertices.bufferData(native_type(s_points),6);
 	m_vao.vertexBuffer<0>(m_vertices).enableVertexAttrib<0>();
-	m_program.bind();
-	glUniform2f(1,1.0f,1.0f);
-	m_program.unbind();
+	m_program.uniform<1>(1.0f,1.0f);
 	}
