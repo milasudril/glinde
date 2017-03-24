@@ -9,7 +9,6 @@
 #include "time/timeinfo.hpp"
 #include "time/timer.hpp"
 #include "time/executiontimer.hpp"
-#include "io/memoryreader.hpp"
 #include "angle/init.hpp"
 #include "log/logwriter.hpp"
 
@@ -44,7 +43,6 @@ namespace
 		}
 	}
 
-GLINDE_BLOB(charmap,"charmap.png");
 GLINDE_BLOB(consoletest,"consoletest.bin");
 
 Engine::Engine():
@@ -52,13 +50,12 @@ Engine::Engine():
 	,m_console(25,80)
 	,m_con_input(m_console,m_cmdproc)
 	,m_con_writer(m_console)
-	,m_charmap(MemoryReader(charmap_begin,charmap_end),0)
 	,m_t_0(0)
 	,m_session(sessionCreate())
 	,m_cb(m_renderlist,m_con_input,*this)
 	,m_mainwin(m_cb,m_session)
 	,m_cmdproc(*this,m_mainwin)
-	,m_con_display(m_charmap,m_console)
+	,m_con_display(m_console)
 	{
 	glfwSwapInterval(0);
 	auto size_fb=m_mainwin.sizeFb();

@@ -8,7 +8,6 @@
 
 #include "display.hpp"
 #include "uicallback.hpp"
-#include "image.hpp"
 #include "handle.hpp"
 #include "cmdprocmain.hpp"
 #include "overlay.hpp"
@@ -43,8 +42,7 @@ namespace Glinde
 			Handle<unsigned int,-1,decltype(&logQueueDetach)> m_queue_guard;
 			Console m_console;
 			ConsoleInputHandler m_con_input;
-			LogWriterConsole m_con_writer;			
-			Image m_charmap;
+			LogWriterConsole m_con_writer;
 
 			MessageHeader m_msg_header;
 			double m_t_0;

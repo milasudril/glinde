@@ -15,7 +15,8 @@ namespace Glinde
 	class ConsoleDisplay final:public RenderObject
 		{
 		public:
-			explicit ConsoleDisplay(const Image& charmap,Console& con);
+			explicit ConsoleDisplay(Console&& con)=delete;
+			explicit ConsoleDisplay(const Console& con);
 
 			void framebufferResize(int width,int height)
 				{}
@@ -31,7 +32,6 @@ namespace Glinde
 				}
 
 		private:
-			Angle::Texture2D m_charmap;
 			ConsoleRenderer m_con_renderer;
 			mutable Angle::Texture2D m_con_texture;
 		};

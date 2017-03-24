@@ -4,6 +4,10 @@
 #include "console.hpp"
 #include "../color.hpp"
 #include "../time/timeinfo.hpp"
+#include "../blob.hpp"
+#include "../io/memoryreader.hpp"
+#include "../image.hpp"
+#include "../texture_upload.hpp"
 
 using namespace Glinde;
 
@@ -48,8 +52,22 @@ static ConsoleRenderer::Colormap colors_generate() noexcept
 	return ret;
 	}
 
-static const ConsoleRenderer::Colormap s_vgacolors=colors_generate();
 static InstanceCounter<Angle::Program> s_program;
+static const ConsoleRenderer::Colormap s_vgacolors=colors_generate();
+GLINDE_BLOB(charmap,"charmap.png");
+static InstanceCounter<Angle::Texture2D> s_charmap;
+
+static Angle::Texture2D& charmap_init()
+	{
+	return s_charmap.get<Angle::Texture2D>( texture2d( Image( MemoryReader(charmap_begin,charmap_end),0) , 1) )
+		.filter(Angle::MagFilter::NEAREST)
+		.filter(Angle::MinFilter::NEAREST);
+	}
+
+ConsoleRenderer::ConsoleRenderer(const Console& con):
+	ConsoleRenderer(charmap_init(),con)
+	{}
+
 
 ConsoleRenderer::ConsoleRenderer(const Angle::Texture2D& charmap,const Console& con):r_con(&con)
 ,m_palette(16),m_bg_opacity(1.0f)
@@ -119,6 +137,8 @@ void main()
 ConsoleRenderer::~ConsoleRenderer()
 	{
 	s_program.release();
+	if(r_charmap==&s_charmap.get())
+		{s_charmap.release();}
 	}
 
 constexpr Angle::VertexAttribute ConsoleRenderer::ShaderDescriptor::attributes[];

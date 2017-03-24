@@ -44,7 +44,7 @@ namespace Glinde
 		{return GL_RGBA;}
 
 
-	Angle::Texture2D texture2d(const Image& img,size_t mipmaps=9)
+	inline Angle::Texture2D texture2d(const Image& img,size_t mipmaps=9)
 		{
 		if(img.channelCount()<1 || img.channelCount()>4)
 			{throw ErrorMessage("The image has an invalid channel count.",{});}
