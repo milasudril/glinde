@@ -11,6 +11,13 @@ namespace Glinde
 	class InstanceCounter
 		{
 		public:
+			InstanceCounter(const InstanceCounter&)=delete;
+			InstanceCounter(InstanceCounter&&)=delete;
+			InstanceCounter& operator=(const InstanceCounter&)=delete;
+			InstanceCounter& operator=(InstanceCounter&&)=delete;
+
+			InstanceCounter() noexcept:m_obj(nullptr),m_counter(0){}
+
 			template<class U,class... Args>
 			T& get(Args&&... args)
 				{
