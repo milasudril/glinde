@@ -46,7 +46,10 @@ namespace Angle
 				}
 
 			~VertexBuffer() noexcept
-				{glDeleteBuffers(1,&m_handle);}
+				{
+				glBindBuffer(GL_UNIFORM_BUFFER,0);
+				glDeleteBuffers(1,&m_handle);
+				}
 
 			VertexBuffer(const VertexBuffer&)=delete;
 
@@ -95,6 +98,10 @@ namespace Angle
 			size_t size() const noexcept
 				{return m_capacity;}
 
+			template<GLuint index>
+			void bind() const noexcept
+				{glBindBufferBase(GL_UNIFORM_BUFFER,index,m_handle);}
+
 		private:
 			GLuint m_handle;
 			size_t m_capacity;
@@ -110,6 +117,7 @@ namespace Angle
 			static constexpr auto components=4;
 			static constexpr auto vector_size=components*sizeof(float);
 			using typename base::value_type;
+			using base::bind;
 
 			VertexBuffer(size_t n_elems):base(components*n_elems)
 				{}
@@ -145,6 +153,7 @@ namespace Angle
 			static constexpr auto components=2;
 			static constexpr auto vector_size=components*sizeof(float);
 			using typename base::value_type;
+			using base::bind;
 
 			VertexBuffer(size_t n_elems):base(components*n_elems)
 				{}

@@ -42,6 +42,7 @@ namespace Glinde
 			Angle::Texture2D m_charmap;
 
 			Angle::VertexBuffer<vec4_t<float>> m_charcells;
+			Angle::VertexBuffer<vec4_t<float>> m_palette;
 			mutable Angle::VertexBuffer<uint32_t,Angle::BufferUsage::DYNAMIC_DRAW> m_colors;
 			mutable Angle::VertexBuffer<vec2_t<float>,Angle::BufferUsage::DYNAMIC_DRAW> m_uvs;
 			Angle::VertexBuffer<uint16_t> m_faces;

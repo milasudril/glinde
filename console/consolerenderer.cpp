@@ -60,7 +60,11 @@ layout(location=2) in vec2 uv_pos;
 layout(location=1) uniform vec4 vertex_offset;
 layout(location=2) uniform vec2 texture_size;
 layout(location=3) uniform vec2 charcell_size;
-layout(location=4) uniform vec4 colortab[16];
+
+layout(binding=0,std140) uniform Colormap
+	{
+	vec4 colors[16];
+	} palette;
 
 out vec4 frag_color_fg;
 out vec4 frag_color_bg;
@@ -69,8 +73,8 @@ out vec2 uv;
 void main()
 	{
 	gl_Position=vertex_pos + vertex_offset;
-	frag_color_fg=colortab[colors&0xf];
-	frag_color_bg=colortab[(colors&0xf0)>>4];
+	frag_color_fg=palette.colors[colors&0xf];
+	frag_color_bg=palette.colors[(colors&0xf0)>>4];
 	uv=uv_pos*charcell_size/texture_size;
 	}
 )EOF"_vert,R"EOF(#version 430 core
@@ -88,13 +92,14 @@ void main()
 	color=frag_color_fg*fg + frag_color_bg*(1.0 - fg)*bg_opacity;
 	}
 )EOF"_frag),m_charmap(texture2d(charmap,1))
-,m_charcells(4*con.sizeFull()),m_colors(4*con.sizeFull()),m_uvs(4*con.sizeFull())
+,m_charcells(4*con.sizeFull()),m_palette(16),m_colors(4*con.sizeFull()),m_uvs(4*con.sizeFull())
 ,m_faces(3*2*con.sizeFull()),m_t_toggle(0),m_cursor_shown(0)
 	{
 	m_charmap.filter(Angle::MagFilter::NEAREST)
 		.filter(Angle::MinFilter::NEAREST);
 	auto v=con.verticesFull();
 	m_charcells.bufferData(native_type(v.begin()),v.length());
+	m_palette.bufferData(native_type(s_vgacolors.begin()),s_vgacolors.length());
 	auto f=con.facesFull();
 	m_faces.bufferData(native_type(f.begin()),3*f.length());
 
@@ -112,7 +117,6 @@ void main()
 	m_program.uniform<2>(static_cast<float>(charmap.width())
 		,static_cast<float>(charmap.height()))
 		.uniform<3>(static_cast<float>(CHARCELL_WIDTH),static_cast<float>(CHARCELL_HEIGHT))
-		.uniform<4>(native_type(s_vgacolors.begin()),s_vgacolors.length())
 		.uniform<0>(1.0f);
 	}
 
@@ -133,6 +137,7 @@ void ConsoleRenderer::render(Angle::Texture2D& texture,const Timeinfo& ti) const
 		.filter(Angle::MinFilter::NEAREST);
 	m_vao.bind();
 	m_charmap.bind(0);
+	m_palette.bind<0>();
 	m_program.bind();
 	auto n_rows=r_con->rowsCount();
 	auto n_cols=r_con->colsCount();
