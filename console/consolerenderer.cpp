@@ -3,7 +3,6 @@
 #include "consolerenderer.hpp"
 #include "console.hpp"
 #include "../color.hpp"
-#include "../texture_upload.hpp"
 #include "../time/timeinfo.hpp"
 
 using namespace Glinde;
@@ -52,16 +51,12 @@ static ConsoleRenderer::Colormap colors_generate() noexcept
 static const ConsoleRenderer::Colormap s_vgacolors=colors_generate();
 static InstanceCounter<Angle::Program> s_program;
 
-
-
-ConsoleRenderer::ConsoleRenderer(const Image& charmap,const Console& con):r_con(&con)
+ConsoleRenderer::ConsoleRenderer(const Angle::Texture2D& charmap,const Console& con):r_con(&con)
 ,m_palette(16),m_bg_opacity(1.0f)
-,m_charmap(texture2d(charmap,1))
+,r_charmap(&charmap)
 ,m_charcells(4*con.sizeFull()),m_colors(4*con.sizeFull()),m_uvs(4*con.sizeFull())
 ,m_faces(3*2*con.sizeFull()),m_t_toggle(0),m_cursor_shown(0)
 	{
-	m_charmap.filter(Angle::MagFilter::NEAREST)
-		.filter(Angle::MinFilter::NEAREST);
 	auto v=con.verticesFull();
 	m_charcells.bufferData(native_type(v.begin()),v.length());
 	m_palette.bufferData(native_type(s_vgacolors.begin()),s_vgacolors.length());
@@ -145,11 +140,11 @@ void ConsoleRenderer::render(Angle::Texture2D& texture,const Timeinfo& ti) const
 
 	s_program.get()
 		.uniform<0>(m_bg_opacity)
-		.uniform<2>(static_cast<float>(m_charmap.width()),static_cast<float>(m_charmap.height()))
+		.uniform<2>(static_cast<float>(r_charmap->width()),static_cast<float>(r_charmap->height()))
 		.uniform<3>(static_cast<float>(CHARCELL_WIDTH),static_cast<float>(CHARCELL_HEIGHT))
 		.bind();
 
-	m_charmap.bind<0>();
+	r_charmap->bind<0>();
 	m_palette.bind<0>();
 		
 	auto n_rows=r_con->rowsCount();

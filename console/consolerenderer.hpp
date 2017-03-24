@@ -27,7 +27,8 @@ namespace Glinde
 			static constexpr auto CHARCELL_HEIGHT=16.0f;
 
 			ConsoleRenderer(const Image& charmap,Console&&)=delete;
-			explicit ConsoleRenderer(const Image& charmap,const Console& con);
+
+			explicit ConsoleRenderer(const Angle::Texture2D& charmap,const Console& con);
 			~ConsoleRenderer();
 
 			void render(Angle::Texture2D& tex,const Timeinfo& ti) const noexcept;
@@ -53,9 +54,7 @@ namespace Glinde
 			Angle::VertexBuffer<vec4_t<float>> m_palette;
 			float m_bg_opacity;
 
-
-
-			Angle::Texture2D m_charmap;
+			const Angle::Texture2D* r_charmap;
 			Angle::VertexBuffer<vec4_t<float>> m_charcells;
 			mutable Angle::VertexBuffer<uint32_t,Angle::BufferUsage::DYNAMIC_DRAW> m_colors;
 			mutable Angle::VertexBuffer<vec2_t<float>,Angle::BufferUsage::DYNAMIC_DRAW> m_uvs;

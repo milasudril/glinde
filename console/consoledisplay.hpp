@@ -1,9 +1,13 @@
-//@	{"targets":[{"name":"consoledisplay.hpp","type":"include"}]}
+//@	{
+//@	 "targets":[{"name":"consoledisplay.hpp","type":"include"}]
+//@	,"dependencies_extra":[{"ref":"consoledisplay.o","rel":"implementation"}]
+//@	}
 
 #ifndef GLINDE_CONSOLEDISPLAY_HPP
 #define GLINDE_CONSOLEDISPLAY_HPP
 
 #include "../renderobject.hpp"
+#include "../display.hpp"
 #include "consolerenderer.hpp"
 
 namespace Glinde
@@ -11,12 +15,7 @@ namespace Glinde
 	class ConsoleDisplay final:public RenderObject
 		{
 		public:
-			explicit ConsoleDisplay(const Image& charmap,Console& con):
-				 m_con_renderer(charmap,con)
-				,m_con_texture(10,Angle::TextureFormat::RGBA16F
-					,m_con_renderer.textureWidth()
-					,m_con_renderer.textureHeight())
-				{}
+			explicit ConsoleDisplay(const Image& charmap,Console& con);
 
 			void framebufferResize(int width,int height)
 				{}
@@ -32,6 +31,7 @@ namespace Glinde
 				}
 
 		private:
+			Angle::Texture2D m_charmap;
 			ConsoleRenderer m_con_renderer;
 			mutable Angle::Texture2D m_con_texture;
 		};
