@@ -97,9 +97,9 @@ layout(location=0) in vec4 vertex_pos;
 layout(location=1) in uint colors;
 layout(location=2) in vec2 uv_pos;
 
-layout(location=1) uniform vec4 vertex_offset;
-layout(location=2) uniform vec2 texture_size;
-layout(location=3) uniform vec2 charcell_size;
+layout(location=0) uniform vec4 vertex_offset;
+layout(location=1) uniform vec2 texture_size;
+layout(location=2) uniform vec2 charcell_size;
 
 layout(binding=0,std140) uniform Colormap
 	{
@@ -119,7 +119,7 @@ void main()
 	}
 )EOF"_vert,R"EOF(#version 430 core
 layout(binding=0) uniform sampler2D charmap;
-layout(location=0) uniform float bg_opacity;
+layout(location=3) uniform float bg_opacity;
 
 in vec2 uv;
 in vec4 frag_color_fg;
@@ -158,11 +158,11 @@ void ConsoleRenderer::render(Angle::Texture2D& texture,const Timeinfo& ti) const
 		.filter(Angle::MinFilter::NEAREST);
 	m_vao.bind();
 
-	s_program.get()
-		.uniform<0>(m_bg_opacity)
-		.uniform<2>(static_cast<float>(r_charmap->width()),static_cast<float>(r_charmap->height()))
-		.uniform<3>(static_cast<float>(CHARCELL_WIDTH),static_cast<float>(CHARCELL_HEIGHT))
-		.bind();
+	s_program.get().bind();
+
+	glUniform2f(1,r_charmap->width(),r_charmap->height());
+	glUniform2f(2,CHARCELL_WIDTH,CHARCELL_HEIGHT);
+	glUniform1f(3,m_bg_opacity);
 
 	r_charmap->bind<0>();
 	m_palette.bind<0>();
@@ -183,7 +183,7 @@ void ConsoleRenderer::render(Angle::Texture2D& texture,const Timeinfo& ti) const
 	glClear(GL_COLOR_BUFFER_BIT);
 	for(decltype(n_rows) k=0;k<n_rows;++k)
 		{
-		glUniform4f(1,0.0f,r_con->lineOffset(k),0.0f,0.0f);
+		glUniform4f(0,0.0f,r_con->lineOffset(k),0.0f,0.0f);
 		Angle::drawElements(Angle::DrawMode::TRIANGLES,((k + line_current)%n_rows) * n_cols,n_cols);
 		}
 	if(ti.simulationTime() - m_t_toggle >= 8.0/60.0 ) //Standard VGA blink rate
@@ -195,7 +195,7 @@ void ConsoleRenderer::render(Angle::Texture2D& texture,const Timeinfo& ti) const
 	if(m_cursor_shown)
 		{
 		auto pos=r_con->cursorPosition();
-		glUniform4f(1,pos[0],pos[1],0.0f,0.0f);
+		glUniform4f(0,pos[0],pos[1],0.0f,0.0f);
 		Angle::drawElements(Angle::DrawMode::TRIANGLES,n_cols*n_rows,6);
 		}
 	
