@@ -8,6 +8,8 @@
 #include "enginebase.hpp"
 #include "glfwmm/window.hpp"
 
+#include <cstdio>
+
 namespace Glinde
 	{
 	class UICallback

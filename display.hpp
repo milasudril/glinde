@@ -31,7 +31,7 @@ namespace Glinde
 				{}
 
 			void draw(const Angle::Texture2D& texture)
-				{m_imgrenderer.render(texture);}
+				{m_imgrenderer.render(texture,0,0);}
 
 			Angle::VersionResponse glinfo() const noexcept
 				{
