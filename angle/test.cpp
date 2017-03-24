@@ -171,7 +171,7 @@ void main()
 )EOF"_vert,R"EOF(#version 450 core
 out vec4 color;
 in vec2 tex_coords;
-layout(location=0) uniform sampler2D texture_data;
+layout(binding=0) uniform sampler2D texture_data;
 
 void main()
 	{
@@ -185,7 +185,7 @@ void main()
 
 		texture.dataSet(&g_texture[0][0],1920,1200);
 
-		texture.bind(1);
+		texture.bind<0>();
 		glEnable(GL_FRAMEBUFFER_SRGB);
 
 		while(!mainwin.shouldClose())

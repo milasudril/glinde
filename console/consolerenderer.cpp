@@ -136,7 +136,7 @@ void ConsoleRenderer::render(Angle::Texture2D& texture,const Timeinfo& ti) const
 	texture.filter(Angle::MagFilter::NEAREST)
 		.filter(Angle::MinFilter::NEAREST);
 	m_vao.bind();
-	m_charmap.bind(0);
+	m_charmap.bind<0>();
 	m_palette.bind<0>();
 	m_program.bind();
 	auto n_rows=r_con->rowsCount();

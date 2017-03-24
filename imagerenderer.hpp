@@ -27,7 +27,7 @@ namespace Glinde
 			void render(const Angle::Texture2D& texture) const noexcept
 				{
 				m_vao.bind();
-				texture.bind(0);
+				texture.bind<0>();
 				m_program.bind();
 				glDrawArrays(GL_TRIANGLES,0,6);
 				}
