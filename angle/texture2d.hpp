@@ -132,7 +132,13 @@ namespace Angle
 
 			Texture2D(const Texture2D&)=delete;
 
-			Texture2D(Texture2D&& obj) noexcept:m_handle(obj.m_handle),m_unit(obj.m_unit)
+			Texture2D(Texture2D&& obj) noexcept:
+				 m_handle(obj.m_handle)
+				,m_unit(obj.m_unit)
+				,m_width(obj.m_width)
+				,m_height(obj.m_height)
+				,m_format(obj.m_format)
+				,m_levels(obj.m_levels)
 				{
 				obj.m_handle=0;
 				obj.m_unit=static_cast<GLuint>(-1);
@@ -140,10 +146,14 @@ namespace Angle
 
 			Texture2D& operator=(const Texture2D&)=delete;
 
-			Texture2D& operator=(Texture2D&& obj)
+			Texture2D& operator=(Texture2D&& obj) noexcept
 				{
 				std::swap(obj.m_handle,m_handle);
 				std::swap(obj.m_handle,obj.m_unit);
+				m_width=obj.m_width;
+				m_height=obj.m_height;
+				m_format=obj.m_format;
+				m_levels=obj.m_levels;
 				return *this;
 				}
 

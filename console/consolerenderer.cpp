@@ -55,7 +55,7 @@ static InstanceCounter<Angle::Program> s_program;
 
 
 ConsoleRenderer::ConsoleRenderer(const Image& charmap,const Console& con):r_con(&con)
-,m_palette(16)
+,m_palette(16),m_bg_opacity(1.0f)
 ,m_charmap(texture2d(charmap,1))
 ,m_charcells(4*con.sizeFull()),m_colors(4*con.sizeFull()),m_uvs(4*con.sizeFull())
 ,m_faces(3*2*con.sizeFull()),m_t_toggle(0),m_cursor_shown(0)
@@ -118,9 +118,7 @@ void main()
 	float fg=float(texture(charmap,uv));
 	color=frag_color_fg*fg + frag_color_bg*(1.0 - fg)*bg_opacity;
 	}
-)EOF"_frag).uniform<2>(static_cast<float>(charmap.width()),static_cast<float>(charmap.height()))
-		.uniform<3>(static_cast<float>(CHARCELL_WIDTH),static_cast<float>(CHARCELL_HEIGHT))
-		.uniform<0>(1.0f);
+)EOF"_frag);
 	}
 
 ConsoleRenderer::~ConsoleRenderer()
@@ -144,9 +142,16 @@ void ConsoleRenderer::render(Angle::Texture2D& texture,const Timeinfo& ti) const
 	texture.filter(Angle::MagFilter::NEAREST)
 		.filter(Angle::MinFilter::NEAREST);
 	m_vao.bind();
+
+	s_program.get()
+		.uniform<0>(m_bg_opacity)
+		.uniform<2>(static_cast<float>(m_charmap.width()),static_cast<float>(m_charmap.height()))
+		.uniform<3>(static_cast<float>(CHARCELL_WIDTH),static_cast<float>(CHARCELL_HEIGHT))
+		.bind();
+
 	m_charmap.bind<0>();
 	m_palette.bind<0>();
-	s_program.get().bind();
+		
 	auto n_rows=r_con->rowsCount();
 	auto n_cols=r_con->colsCount();
 

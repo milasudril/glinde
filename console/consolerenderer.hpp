@@ -38,10 +38,22 @@ namespace Glinde
 			int textureHeight() const noexcept
 				{return r_con->rowsCount()*CHARCELL_HEIGHT;}
 
+			float bgOpacity() const noexcept
+				{return m_bg_opacity;}
+
+			ConsoleRenderer& bgOpacity(float v) noexcept
+				{
+				m_bg_opacity=v;
+				return *this;
+				}
+
 		private:
 			const Console* r_con;
 
 			Angle::VertexBuffer<vec4_t<float>> m_palette;
+			float m_bg_opacity;
+
+
 
 			Angle::Texture2D m_charmap;
 			Angle::VertexBuffer<vec4_t<float>> m_charcells;
