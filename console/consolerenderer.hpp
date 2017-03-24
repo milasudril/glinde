@@ -7,6 +7,7 @@
 #define GLINDE_CONSOLERENDERER_HPP
 
 #include "console.hpp"
+#include "../instancecounter.hpp"
 #include "../angle/texture2d.hpp"
 #include "../angle/program.hpp"
 #include "../angle/vertexbuffer.hpp"
@@ -27,6 +28,7 @@ namespace Glinde
 
 			ConsoleRenderer(const Image& charmap,Console&&)=delete;
 			explicit ConsoleRenderer(const Image& charmap,const Console& con);
+			~ConsoleRenderer();
 
 			void render(Angle::Texture2D& tex,const Timeinfo& ti) const noexcept;
 
@@ -38,11 +40,11 @@ namespace Glinde
 
 		private:
 			const Console* r_con;
-			Angle::Program m_program;
-			Angle::Texture2D m_charmap;
 
-			Angle::VertexBuffer<vec4_t<float>> m_charcells;
 			Angle::VertexBuffer<vec4_t<float>> m_palette;
+
+			Angle::Texture2D m_charmap;
+			Angle::VertexBuffer<vec4_t<float>> m_charcells;
 			mutable Angle::VertexBuffer<uint32_t,Angle::BufferUsage::DYNAMIC_DRAW> m_colors;
 			mutable Angle::VertexBuffer<vec2_t<float>,Angle::BufferUsage::DYNAMIC_DRAW> m_uvs;
 			Angle::VertexBuffer<uint16_t> m_faces;

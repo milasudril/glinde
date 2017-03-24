@@ -50,9 +50,36 @@ static ConsoleRenderer::Colormap colors_generate() noexcept
 	}
 
 static const ConsoleRenderer::Colormap s_vgacolors=colors_generate();
+static InstanceCounter<Angle::Program> s_program;
+
+
 
 ConsoleRenderer::ConsoleRenderer(const Image& charmap,const Console& con):r_con(&con)
-,m_program(R"EOF(#version 430 core
+,m_palette(16)
+,m_charmap(texture2d(charmap,1))
+,m_charcells(4*con.sizeFull()),m_colors(4*con.sizeFull()),m_uvs(4*con.sizeFull())
+,m_faces(3*2*con.sizeFull()),m_t_toggle(0),m_cursor_shown(0)
+	{
+	m_charmap.filter(Angle::MagFilter::NEAREST)
+		.filter(Angle::MinFilter::NEAREST);
+	auto v=con.verticesFull();
+	m_charcells.bufferData(native_type(v.begin()),v.length());
+	m_palette.bufferData(native_type(s_vgacolors.begin()),s_vgacolors.length());
+	auto f=con.facesFull();
+	m_faces.bufferData(native_type(f.begin()),3*f.length());
+
+	auto uvs=con.uvsFull();
+	m_uvs.bufferData(uvs.begin(),uvs.length());
+
+	m_vao.vertexBuffer<0>(m_charcells)
+		.vertexBuffer<1>(m_colors)
+		.vertexBuffer<2>(m_uvs)
+		.enableVertexAttrib<0>()
+		.enableVertexAttrib<1>()
+		.enableVertexAttrib<2>()
+		.elementBuffer(m_faces);
+
+	s_program.get<Angle::Shader,Angle::Shader>(R"EOF(#version 430 core
 layout(location=0) in vec4 vertex_pos;
 layout(location=1) in uint colors;
 layout(location=2) in vec2 uv_pos;
@@ -91,33 +118,14 @@ void main()
 	float fg=float(texture(charmap,uv));
 	color=frag_color_fg*fg + frag_color_bg*(1.0 - fg)*bg_opacity;
 	}
-)EOF"_frag),m_charmap(texture2d(charmap,1))
-,m_charcells(4*con.sizeFull()),m_palette(16),m_colors(4*con.sizeFull()),m_uvs(4*con.sizeFull())
-,m_faces(3*2*con.sizeFull()),m_t_toggle(0),m_cursor_shown(0)
-	{
-	m_charmap.filter(Angle::MagFilter::NEAREST)
-		.filter(Angle::MinFilter::NEAREST);
-	auto v=con.verticesFull();
-	m_charcells.bufferData(native_type(v.begin()),v.length());
-	m_palette.bufferData(native_type(s_vgacolors.begin()),s_vgacolors.length());
-	auto f=con.facesFull();
-	m_faces.bufferData(native_type(f.begin()),3*f.length());
-
-	auto uvs=con.uvsFull();
-	m_uvs.bufferData(uvs.begin(),uvs.length());
-
-	m_vao.vertexBuffer<0>(m_charcells)
-		.vertexBuffer<1>(m_colors)
-		.vertexBuffer<2>(m_uvs)
-		.enableVertexAttrib<0>()
-		.enableVertexAttrib<1>()
-		.enableVertexAttrib<2>()
-		.elementBuffer(m_faces);
-
-	m_program.uniform<2>(static_cast<float>(charmap.width())
-		,static_cast<float>(charmap.height()))
+)EOF"_frag).uniform<2>(static_cast<float>(charmap.width()),static_cast<float>(charmap.height()))
 		.uniform<3>(static_cast<float>(CHARCELL_WIDTH),static_cast<float>(CHARCELL_HEIGHT))
 		.uniform<0>(1.0f);
+	}
+
+ConsoleRenderer::~ConsoleRenderer()
+	{
+	s_program.release();
 	}
 
 constexpr Angle::VertexAttribute ConsoleRenderer::ShaderDescriptor::attributes[];
@@ -138,7 +146,7 @@ void ConsoleRenderer::render(Angle::Texture2D& texture,const Timeinfo& ti) const
 	m_vao.bind();
 	m_charmap.bind<0>();
 	m_palette.bind<0>();
-	m_program.bind();
+	s_program.get().bind();
 	auto n_rows=r_con->rowsCount();
 	auto n_cols=r_con->colsCount();
 
