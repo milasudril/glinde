@@ -11,7 +11,7 @@ constexpr GeoSIMD::Point<float> ImageRenderer::s_points[];
 ImageRenderer::ImageRenderer():m_vertices(6)
 	,m_program(R"EOF(#version 430 core
 layout(location=0) in vec4 position;
-layout(location=1) uniform vec2 mirror;
+layout(location=0) uniform vec2 mirror;
 out vec2 tex_coords;
 void main()
 	{
@@ -22,7 +22,7 @@ void main()
 )EOF"_vert,R"EOF(#version 430 core
 out vec4 color;
 in vec2 tex_coords;
-layout(location=0) uniform sampler2D texture_data;
+layout(binding=0) uniform sampler2D texture_data;
 
 void main()
 	{
@@ -32,5 +32,5 @@ void main()
 	{
 	m_vertices.bufferData(native_type(s_points),6);
 	m_vao.vertexBuffer<0>(m_vertices).enableVertexAttrib<0>();
-	m_program.uniform<1>(1.0f,1.0f);
+	m_program.uniform<0>(1.0f,1.0f);
 	}
