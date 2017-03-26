@@ -164,7 +164,7 @@ namespace Angle
 				{return m_width;}
 
 			GLsizei height() const noexcept
-				{return m_width;}
+				{return m_height;}
 
 			template<class T>
 			void dataSet(const T* data,GLsizei width_in,GLsizei height_in)
