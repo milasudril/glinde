@@ -303,7 +303,7 @@ static constexpr uint16_t charmap(uint32_t codepoint) noexcept
 		{return static_cast<uint16_t>(codepoint - 0x384) + 224;}
 
 	if(codepoint>=0x2018 && codepoint<0x2020) // Quotation marks
-		{return static_cast<uint16_t>(codepoint-0x2018) + 395;}
+		{return static_cast<uint16_t>(codepoint-0x2018) + 459;}
 
 	//Misc dingbats, box drawing, and blocks
 	return charmap_misc(codepoint); 
