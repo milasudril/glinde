@@ -98,8 +98,6 @@ layout(location=1) in uint colors;
 layout(location=2) in vec2 uv_pos;
 
 layout(location=0) uniform vec4 vertex_offset;
-layout(location=1) uniform vec2 texture_size;
-layout(location=2) uniform vec2 charcell_size;
 
 layout(binding=0,std140) uniform Colormap
 	{
@@ -115,11 +113,11 @@ void main()
 	gl_Position=vertex_pos + vertex_offset;
 	frag_color_fg=palette.colors[colors&0xf];
 	frag_color_bg=palette.colors[(colors&0xf0)>>4];
-	uv=uv_pos*charcell_size/texture_size;
+	uv=uv_pos*vec2(1.0f/32.0f,1.0f/16.0f);
 	}
 )EOF"_vert,R"EOF(#version 430 core
 layout(binding=0) uniform sampler2D charmap;
-layout(location=3) uniform float bg_opacity;
+layout(location=1) uniform float bg_opacity;
 
 in vec2 uv;
 in vec4 frag_color_fg;
@@ -160,9 +158,7 @@ void ConsoleRenderer::render(Angle::Texture2D& texture,const Timeinfo& ti) const
 
 	s_program.get().bind();
 
-	glUniform2f(1,r_charmap->width(),r_charmap->height());
-	glUniform2f(2,CHARCELL_WIDTH,CHARCELL_HEIGHT);
-	glUniform1f(3,m_bg_opacity);
+	glUniform1f(1,m_bg_opacity);
 
 	r_charmap->bind<0>();
 	m_palette.bind<0>();
