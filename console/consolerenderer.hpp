@@ -23,9 +23,6 @@ namespace Glinde
 		public:
 			typedef ArrayFixed<Color,16> Colormap;
 
-			static constexpr auto CHARCELL_WIDTH=9.0f;
-			static constexpr auto CHARCELL_HEIGHT=16.0f;
-
 			ConsoleRenderer(Console&&)=delete;
 
 			explicit ConsoleRenderer(const Console& con);
@@ -40,10 +37,10 @@ namespace Glinde
 			void render(Angle::Texture2D& tex,const Timeinfo& ti) const noexcept;
 
 			int textureWidth() const noexcept
-				{return r_con->colsCount()*CHARCELL_WIDTH;}
+				{return r_con->colsCount()*r_charmap->width()/32;}
 
 			int textureHeight() const noexcept
-				{return r_con->rowsCount()*CHARCELL_HEIGHT;}
+				{return r_con->rowsCount()*r_charmap->height()/16;}
 
 			float bgOpacity() const noexcept
 				{return m_bg_opacity;}
