@@ -6,7 +6,52 @@ for each object, set object uniforms ( various matrices, uniform parameters, ...
 
 
 Fragment shader input (see https://learnopengl.com/#!PBR/Theory):
-	* Diffuse texture (RGBA)
+	* Albedo texture (RGBA)
 	* Emmision texture (RGB)
 	* Normal+Hight map (RGBA)
 	* Metallic+Roughness+AO (RGB)
+
+
+Vertex shader
+
+#version 430 core
+layout(location=0) in vec4 vertex_pos;
+layout(location=1) in vec4 vertex_normal;
+layout(location=2) in vec2 uv_coords;
+
+layout(location=0) uniform vec4 camera_pos;
+layout(location=0) uniform mat4 MVP;
+
+
+out vec2 uvs;
+out vec4 cam_pos;
+out vec4 vert_pos_model;
+
+void main()
+	{
+	gl_Position=MVP*vertex_pos;
+	vert_pos_model=M*vert_pos_model;
+	uvs=uv_coords;
+	}
+
+
+Fragment shader
+
+#version 430 core
+layout(binding=0) uniform sampler2D albedo;
+layout(binding=1) uniform sampler2D emission;
+layout(binding=2) uniform sampler2D normal_height;
+layout(binding=3) uniform sampler2D surface;
+
+layout(location=1) uniform float bg_opacity;
+
+in vec2 uvs;
+in vec4 cam_pos;
+in vec4 vert_pos_model;
+
+layout(location=0) out vec4 color;
+
+void main()
+	{
+	
+	}
