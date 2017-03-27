@@ -7,5 +7,6 @@ for each object, set object uniforms ( various matrices, uniform parameters, ...
 
 Fragment shader input (see https://learnopengl.com/#!PBR/Theory):
 	* Diffuse texture (RGBA)
+	* Emmision texture (RGB)
 	* Normal+Hight map (RGBA)
 	* Metallic+Roughness+AO (RGB)
