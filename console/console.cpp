@@ -71,8 +71,26 @@ namespace //Code from Björn Höhrmann
 
 namespace
 	{
+#ifdef __AVX__
 	using floatpack __attribute__ ((vector_size(8*sizeof(float))))=vector_type(float);
+#else
+	struct floatpack
+		{
+		constexpr float operator[](int k) const noexcept
+			{
+			return k<4?a[0][k]:a[1][k-4];
+			}
 
+		floatpack& operator+=(const floatpack& b) noexcept
+			{
+			a[0]+=b.a[0];
+			a[1]+=b.a[1];
+			return *this;
+			}
+			
+		vec4_t<float> a[2];
+		};
+#endif
 	inline ArrayFixed<GeoSIMD::Vector<float>,4>
 	coords(uint32_t l,uint32_t n_rows,uint32_t n_cols) noexcept
 		{
