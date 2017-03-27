@@ -1,5 +1,7 @@
+
+
 Console
-=======
+-------
 
 Example (VGA console):
 
@@ -18,7 +20,7 @@ Example (VGA console):
 	,0.67,0.00,0.67,1.00
 	,0.67,0.33,0.00,1.00
 	,0.67,0.67,0.67,1.00
-#	Bright colors
+#Bright colors
 	,0.33,0.33,0.33,1.00
 	,0.33,0.33,1.00,1.00
 	,0.33,1.00,0.33,1.00
@@ -29,5 +31,6 @@ Example (VGA console):
 	,1.00,1.00,1.00,1.00
 	]
 ,colormode,s:"srgb" #see image.cpp
-,inputhandler,s:""
+,command_processor,s:"CmdProc"  #Created, and defined by action program
 }
+
