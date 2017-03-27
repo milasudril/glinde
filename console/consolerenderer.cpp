@@ -111,8 +111,8 @@ out vec2 uv;
 void main()
 	{
 	gl_Position=vertex_pos + vertex_offset;
-	frag_color_fg=palette.colors[colors&0xf];
-	frag_color_bg=palette.colors[(colors&0xf0)>>4];
+	frag_color_fg=palette.colors[colors&uint(0xf)];
+	frag_color_bg=palette.colors[(colors&uint(0xf0))>>4];
 	uv=uv_pos*vec2(1.0f/32.0f,1.0f/16.0f);
 	}
 )EOF"_vert,R"EOF(#version 430 core
