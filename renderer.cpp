@@ -43,7 +43,7 @@ layout(location=0) uniform vec4 view_position;
 layout(location=1) uniform vec4 light_position;
 layout(location=2) uniform vec3 light_color;
 layout(location=3) uniform vec3 ambient;
-layout(locaiion=4) uniform vec3 albedo;
+layout(location=4) uniform vec3 albedo;
 
 void main()
 	{
