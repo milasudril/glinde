@@ -4,6 +4,8 @@
 #define GLINDE_INSTANCECOUNTER_HPP
 
 #include <cassert>
+#include <cstddef>
+#include <utility>
 
 namespace Glinde
 	{

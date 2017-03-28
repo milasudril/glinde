@@ -20,18 +20,21 @@ layout(location=1) in vec4 vertex_normal;
 layout(location=2) in vec2 uv_coords;
 
 layout(location=0) uniform vec4 camera_pos;
-layout(location=0) uniform mat4 MVP;
+layout(location=1) uniform mat4 MVP;
+layout(location=2) uniform mat4 M;
 
 
-out vec2 uvs;
+out vec2 uv;
 out vec4 cam_pos;
 out vec4 vert_pos_model;
+out vec4 normal;
 
 void main()
 	{
 	gl_Position=MVP*vertex_pos;
 	vert_pos_model=M*vert_pos_model;
-	uvs=uv_coords;
+	uv=uv_coords;
+	normal=vertex_normal;
 	}
 
 
@@ -43,15 +46,90 @@ layout(binding=1) uniform sampler2D emission;
 layout(binding=2) uniform sampler2D normal_height;
 layout(binding=3) uniform sampler2D surface;
 
-layout(location=1) uniform float bg_opacity;
+layout(location=3) uniform vec4 lamp_pos;
+layout(location=4) uniform vec3 lamp_color;
+layout(location=5) uniform vec3 ambient;
 
-in vec2 uvs;
+in vec2 uv;
+in vec4 normal;
 in vec4 cam_pos;
 in vec4 vert_pos_model;
 
 layout(location=0) out vec4 color;
 
+
+const float PI = 3.14159265359;
+
+vec3 fresnelSchlick(float cosTheta, vec3 F0)
+	{return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);}
+
+float gcx_distrib(vec4 normal,vec4 h,float r)
+	{
+    float a=r*r; //Square hack
+    float a2=a*a;
+
+    float proj_nh  = max(dot(N, H), 0.0);
+    float proj_nh2 = proj_nh*proj_nh;
+	
+	float nom=a2;
+	float denom=(proj_nh2*(a2 - 1.0) + 1.0);
+	denom = PI*denom*denom;
+	return nom/denom;
+	}
+
+float gcx_geom(float proj_nv,float r)
+	{
+	float a =(r + 1.0);
+	float k = (r*r) / 8.0;
+
+	float nom=proj_nv;
+	float denom= proj_nv* (1.0 - k) + k;
+	
+	return nom/denom;
+	}
+
+float smith_geom(vec4 normal,vec4 vl_norm,vec4 cv_norm,float r)
+	{
+	float proj_ncv=max(dot(normal,cv_norm),0.0);
+	float proj_nvl=max(dot(normal,vl_norm),0.0);
+	float ggc2=gcx_geom(proj_nvc,r);
+	float ggc1=gcx_geom(proj_nvl,r);
+	return ggc2*ggc1;
+	}
+
 void main()
 	{
-	
+	vec4 VC=cam_pos - vert_pos_model;
+	float d2_frag=dot(VC,VC);
+	vec4 vc=VC/sqrt(d2_frag);
+	float alb=texture(albedo,uv).rgb;
+	float metallic=texture(surface,uv).t;
+	float r=texture(surface,uv).g;
+
+
+	vec4 lo=vec4(0.0);
+
+	vec4 VL=lamp_pos - vert_pos_model;
+	float d2_lamp=dot(vl,vl);
+	float a_1=1.0/d2_lamp;
+
+	vec4 vl=VL/sqrt(d2_lamp);
+	vec4 h=normalize(cv + vl);
+	vec3 I0=lamp_color*a_1;
+
+	vec3 F0=mix( vec3(0.04),alb,metallic );
+	float ndf=gcx_distrib(normal,h,r);
+	float g=smith_geom(normal,vl,cv,r);
+	vec3 F=fresnelSchlick(max(dot(h,vl),0.0f),F0);
+	vec3 kD=vec3(1.0) - F;
+	kD*=1.0 - metallic;
+	vec4 nom=ndf*g*F;
+	float demom=4*max(dot(normal,vc),0.0) + 1e-3;
+	vec4 brdf=nom/denom;
+
+	float proj_nvl=max(dot(normal,vl),0.0);
+	lo+=(kD*alb/PI + brdf)*I0*proj_nvl;
+
+	color=(ambient + Lo + texture(emission,uv).rgb )/d2_frag;
+
 	}

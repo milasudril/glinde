@@ -53,13 +53,13 @@ namespace Angle
 				return *this;
 				}
 
-			Framebuffer& attachDepthBuffer(Texture2D& texture,GLint level) noexcept
+			Framebuffer& attachDepthBuffer(Texture2D& texture,GLint level=0) noexcept
 				{
 				glNamedFramebufferTexture(m_handle,GL_DEPTH_ATTACHMENT,texture.handle(),level);
 				return *this;
 				}
 
-			Framebuffer& attachStencilBuffer(Texture2D& texture,GLint level) noexcept
+			Framebuffer& attachStencilBuffer(Texture2D& texture,GLint level=0) noexcept
 				{
 				glNamedFramebufferTexture(m_handle,GL_STENCIL_ATTACHMENT,texture.handle(),level);
 				return *this;
