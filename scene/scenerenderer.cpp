@@ -1,17 +1,19 @@
 //@	{
-//@	 "targets":[{"name":"renderer.o","type":"object"}]
+//@	 "targets":[{"name":"scenerenderer.o","type":"object"}]
 //@	}
 
-#include "renderer.hpp"
+#include "scenerenderer.hpp"
 #include "viewpoint.hpp"
-#include "instancecounter.hpp"
-#include "angle/program.hpp"
+#include "../instancecounter.hpp"
+#include "../angle/program.hpp"
 
 using namespace Glinde;
 
 static InstanceCounter<Angle::Program> s_program;
 
-Renderer::Renderer()
+SceneRenderer::SceneRenderer(int width,int height):
+	 m_texture_out(9,Angle::TextureFormat::RGB16F,width,height)
+	,m_depthbuffer(1,Angle::TextureFormat::R32F,width,height)
 	{
 	s_program.get<Angle::Shader,Angle::Shader>(R"EOF(#version 430 core
 layout(location=0) in vec4 vertex_pos;
@@ -56,12 +58,21 @@ void main()
 	color=vec4( (ambient + diffuse)*albedo/cl_size2 ,1.0f);
 	}
 )EOF"_frag);
+
+	m_fb.attachColorBuffer<0>(m_texture_out)
+		.attachDepthBuffer(m_depthbuffer)
+		.colorBuffersOutputActivate(0u);
 	}
 
-Renderer::~Renderer() noexcept
+SceneRenderer::~SceneRenderer() noexcept
 	{s_program.release();}
 
-void Renderer::render(const Site& s
-	,const Viewpoint& v
-	,Angle::Texture2D& texture_out) noexcept
-	{}
+void SceneRenderer::render(const Site& s,const Viewpoint& v) noexcept
+	{
+	m_fb.bind(Angle::Framebuffer::Target::DRAW);
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
+	glViewport(0,0,m_texture_out.width(),m_texture_out.height());
+
+//	DODO: render stuff from s using v
+	}
