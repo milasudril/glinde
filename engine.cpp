@@ -60,6 +60,7 @@ Engine::Engine():
 	glfwSwapInterval(0);
 	auto size_fb=m_mainwin.sizeFb();
 	m_cb.framebufferSizeChanged(m_mainwin,size_fb.width,size_fb.height);
+	m_renderlist.insertOnTop(m_scene);
 	auto con_id=m_renderlist.insertOnTop(m_con_display);
 	m_renderlist.activate(con_id);
 	m_con_index=logWriterAttach(m_con_writer);

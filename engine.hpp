@@ -17,6 +17,7 @@
 #include "console/console.hpp"
 #include "console/consoledisplay.hpp"
 #include "console/consoleinputhandler.hpp"
+#include "scene/scene.hpp"
 
 namespace Glinde
 	{
@@ -52,6 +53,7 @@ namespace Glinde
 			CmdProcMain m_cmdproc;
 			ConsoleDisplay m_con_display;
 			Overlay m_overlay;
+			Scene m_scene;
 			RenderList m_renderlist;
 			
 

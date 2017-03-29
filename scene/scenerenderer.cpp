@@ -11,9 +11,9 @@ using namespace Glinde;
 
 static InstanceCounter<Angle::Program> s_program;
 
-SceneRenderer::SceneRenderer(int width,int height):
-	 m_texture_out(9,Angle::TextureFormat::RGB16F,width,height)
-	,m_depthbuffer(1,Angle::TextureFormat::R32F,width,height)
+SceneRenderer::SceneRenderer():
+	 m_texture_out(9,Angle::TextureFormat::RGB16F,1,1)
+	,m_depthbuffer(1,Angle::TextureFormat::R32F,1,1)
 	{
 	s_program.get<Angle::Shader,Angle::Shader>(R"EOF(#version 430 core
 layout(location=0) in vec4 vertex_pos;
@@ -67,6 +67,14 @@ void main()
 SceneRenderer::~SceneRenderer() noexcept
 	{s_program.release();}
 
+void SceneRenderer::framebufferResize(int width,int height)
+	{
+	m_texture_out.realloc(width,height);
+	m_depthbuffer.realloc(width,height);
+	
+	}
+
+
 void SceneRenderer::render(const Site& s,const Viewpoint& v) noexcept
 	{
 	m_fb.bind(Angle::Framebuffer::Target::DRAW);
@@ -74,5 +82,8 @@ void SceneRenderer::render(const Site& s,const Viewpoint& v) noexcept
 	glDisable(GL_BLEND);
 	glViewport(0,0,m_texture_out.width(),m_texture_out.height());
 
-//	DODO: render stuff from s using v
+//	TODO: render stuff from s using v
 	}
+
+constexpr Angle::VertexAttribute SceneRenderer::ShaderDescriptor::attributes[];
+

@@ -18,10 +18,15 @@ namespace Glinde
 	class SceneRenderer
 		{
 		public:
-			SceneRenderer(int width,int height);
+			SceneRenderer();
 			~SceneRenderer() noexcept;
 
+			void framebufferResize(int width,int height);
+
 			void render(const Site& site,const Viewpoint& v) noexcept;
+
+			const Angle::Texture2D& texture() const noexcept
+				{return m_texture_out;}
 
 		private:
 			struct ShaderDescriptor
