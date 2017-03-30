@@ -79,7 +79,7 @@ void SceneRenderer::render(const Site& s,const Viewpoint& v) noexcept
 	{
 	m_fb.bind(Angle::Framebuffer::Target::DRAW);
 	glEnable(GL_DEPTH_TEST);
-	glDisable(GL_BLEND);
+	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	glViewport(0,0,m_texture_out.width(),m_texture_out.height());
 
 //	TODO: render stuff from s using v

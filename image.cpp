@@ -50,8 +50,8 @@ namespace
 			inline ColorType colorType() const noexcept
 				{return m_color_type;}
 
-			inline float gamma() const noexcept
-				{return static_cast<float>( m_gamma );}
+			inline double gamma() const noexcept
+				{return m_gamma;}
 
 			uint32_t sampleSize() const noexcept
 				{return m_sample_size;}
@@ -252,22 +252,31 @@ void PNGReader::pixelsRead(Image::SampleType* pixels_out)
 			throw ErrorMessage("#0;: Unsupported sample size.",{source->nameGet()});
 			}
 		}
-
 	}
-
-
-
-namespace
-	{
-	typedef void (*ColorConverter)(Image& image);
-	}
-
-static void fromGamma(Image& image)
-	{}
 
 static float fromSRGB(float x)
 	{
 	return x<=0.04045f? x/12.92f : std::pow( (x + 0.055f)/(1.0f + 0.055f),2.4f);
+	}
+
+static float fromGamma(float x,float gamma)
+	{
+	return std::pow(x,gamma);
+	}
+
+static void fromGamma(Image& image,float gamma)
+	{
+	logWrite(Log::MessageType::INFORMATION,"Converting image with γ=#0;",{gamma});
+	auto ptr=image.pixels();
+	auto n_ch=image.channelCount();
+	auto N=image.width() * image.height() * n_ch;
+
+	while(N!=0)
+		{
+		*ptr=fromGamma(*ptr,gamma);
+		++ptr;
+		--N;
+		}
 	}
 
 static void fromSRGB(Image& image)
@@ -284,30 +293,30 @@ static void fromSRGB(Image& image)
 		}
 	}
 
-static ColorConverter converterGet(PNGReader::ColorType color_type)
+static void convert(Image& img,const PNGReader& reader)
 	{
-	switch(color_type)
+	switch(reader.colorType())
 		{
 		case PNGReader::ColorType::UNKNOWN:
 			logWrite(Log::MessageType::WARNING
 				,"Color type for loaded image is unknown. Assuming LINEAR color values.",{});
-			return nullptr;
+			return;
 
 		case PNGReader::ColorType::INFORMATION_MISSING:
 			logWrite(Log::MessageType::WARNING
-				,"Color type information for loaded image is missing. Assuming sRGB.",{});
-			return fromSRGB;
+				,"Color type information for loaded image is missing. Assuming sRGB color values.",{});
+			return fromSRGB(img);
 
 		case PNGReader::ColorType::GAMMACORRECTED:
-			return fromGamma;
+			return fromGamma(img,static_cast<float>(1.0/reader.gamma()));
 
 		case PNGReader::ColorType::SRGB:
-			return fromSRGB;
+			return fromSRGB(img);
 
 		default:
 			logWrite(Log::MessageType::WARNING
 				,"Color type for loaded image is unknown. Assuming LINEAR color values.",{});
-			return nullptr;
+			return;
 		}
 	}
 
@@ -342,14 +351,7 @@ Image::Image(DataSource& source,uint32_t id)
 		*reader.channelCount());
 
 	reader.pixelsRead(m_pixels.begin());
-
-
-
-	auto converter=converterGet(reader.colorType());
-	if(converter!=nullptr)
-		{
-		converter(*this);
-		}
+	convert(*this,reader);
 
 	GLINDE_DEBUG_PRINT("Loaded an image of size #0; x #1;",width(),height());
 	}

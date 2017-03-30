@@ -1,4 +1,10 @@
-//@	{"targets":[{"name":"consolerenderer.o","type":"object"}]}
+//@	{
+//@	"targets":
+//@		[{
+//@		 "name":"consolerenderer.o","type":"object"
+//@		,"dependencies":[{"ref":"charmap_srgb.png","rel":"generated"}]
+//@		}]
+//@	}
 
 #include "consolerenderer.hpp"
 #include "console.hpp"
@@ -8,6 +14,8 @@
 #include "../io/memoryreader.hpp"
 #include "../image.hpp"
 #include "../texture_upload.hpp"
+
+#include <maike/targetinclude.hpp>
 
 using namespace Glinde;
 
@@ -54,7 +62,7 @@ static ConsoleRenderer::Colormap colors_generate() noexcept
 
 static InstanceCounter<Angle::Program> s_program;
 static const ConsoleRenderer::Colormap s_vgacolors=colors_generate();
-GLINDE_BLOB(charmap,"charmap.png");
+GLINDE_BLOB(charmap,MAIKE_TARGET(charmap_srgb.png));
 static InstanceCounter<Angle::Texture2D> s_charmap;
 
 static Angle::Texture2D& charmap_init()
