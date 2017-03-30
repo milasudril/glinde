@@ -157,7 +157,7 @@ int main()
 		Angle::VertexBuffer<uint16_t> facebuff(6);
 		facebuff.bufferData(faces,6);
 
-		Angle::Texture2D texture(1,Angle::TextureFormat::SRGB8_ALPHA8 ,1920,1200);
+		Angle::Texture2D texture(Angle::TextureFormat::SRGB8_ALPHA8 ,1920,1200);
 
 		Angle::Program prgm(
 R"EOF(#version 450 core

@@ -10,6 +10,8 @@
 #include <GL/glew.h>
 #include <cassert>
 #include <utility>
+#include <cmath>
+#include <algorithm>
 
 namespace Angle
 	{
@@ -106,22 +108,7 @@ namespace Angle
 	class Texture2D
 		{
 		public:
-			explicit Texture2D(GLsizei levels,TextureFormat format,GLsizei width,GLsizei height)
-				{
-				glCreateTextures(GL_TEXTURE_2D,1,&m_handle);
-				glTextureStorage2D(m_handle,levels,native_type(format),width,height);
-				auto error=glGetError();
-				if(error!=GL_NO_ERROR)
-					{
-					glDeleteTextures(1,&m_handle);
-					exceptionRaise(Error("Failed to allocate texture storage."));
-					}
-				m_width=width;
-				m_height=height;
-				m_format=format;
-				m_levels=levels;
-				m_unit=static_cast<GLuint>(-1);
-				}
+			explicit Texture2D(TextureFormat format,GLsizei width,GLsizei height);
 
 			~Texture2D() noexcept
 				{
@@ -138,7 +125,6 @@ namespace Angle
 				,m_width(obj.m_width)
 				,m_height(obj.m_height)
 				,m_format(obj.m_format)
-				,m_levels(obj.m_levels)
 				{
 				obj.m_handle=0;
 				obj.m_unit=static_cast<GLuint>(-1);
@@ -153,7 +139,6 @@ namespace Angle
 				m_width=obj.m_width;
 				m_height=obj.m_height;
 				m_format=obj.m_format;
-				m_levels=obj.m_levels;
 				return *this;
 				}
 
@@ -173,7 +158,7 @@ namespace Angle
 					{realloc(width_in,height_in);}
 				glTextureSubImage2D(m_handle,0,0,0,width_in,height_in,gl_format(T{}),gl_type(*data)
 					,data);
-				if(m_levels>1)
+				if(levels()>1)
 					{glGenerateTextureMipmap(m_handle);}
 				}
 
@@ -184,7 +169,7 @@ namespace Angle
 					{realloc(width_in,height_in);}
 				glTextureSubImage2D(m_handle,0,x,y,width_in,height_in,gl_format(T{}),gl_type(T{})
 					,data);
-				if(m_levels>1)
+				if(levels()>1)
 					{glGenerateTextureMipmap(m_handle);}
 				}
 
@@ -214,18 +199,34 @@ namespace Angle
 
 			Texture2D& mipmapsGenerate() noexcept
 				{
-				if(m_levels>1)
+				if(levels()>1)
 					{glGenerateTextureMipmap(m_handle);}
 				return *this;
 				}
 
 		private:
+			int levels() const noexcept
+				{return levels(m_width,m_height);}
+
+			static int levels(int width,int height) noexcept
+				{
+				auto n=width;
+				auto m=height;
+				auto k=1;
+				while(n!=1 && m!=1)
+					{
+					n>>=1;
+					m>>=1;
+					++k;
+					}
+				return k;
+				}
+
 			GLuint m_handle;
 			mutable GLuint m_unit;
 			GLsizei m_width;
 			GLsizei m_height;
 			TextureFormat m_format;
-			GLsizei m_levels;
 		};
 	};
 

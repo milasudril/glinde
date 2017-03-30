@@ -12,8 +12,8 @@ using namespace Glinde;
 static InstanceCounter<Angle::Program> s_program;
 
 SceneRenderer::SceneRenderer():
-	 m_texture_out(9,Angle::TextureFormat::RGB16F,1,1)
-	,m_depthbuffer(1,Angle::TextureFormat::R32F,1,1)
+	 m_texture_out(Angle::TextureFormat::RGB16F,1,1)
+	,m_depthbuffer(Angle::TextureFormat::R32F,1,1)
 	{
 	s_program.get<Angle::Shader,Angle::Shader>(R"EOF(#version 430 core
 layout(location=0) in vec4 vertex_pos;
@@ -36,7 +36,7 @@ void main()
 	}
 )EOF"_vert,R"EOF(#version 430 core
 
-out(location=0) out vec4 color;
+layout(location=0) out vec4 color;
 in vec4 vertex_pos_out;
 in vec4 vertex_normal_out;
 in vec2 vertex_uvs_out;
@@ -51,11 +51,11 @@ void main()
 	{
 	vec4 VL=vertex_pos_out - light_position;
 	vec4 CL=view_position - light_position;
-	float vl_size2=dot(VL,VL);
-	float cl_size2=dot(CL,CL);
-	vec4 vl=VL/sqrt(vl_size2);
-	vec3 diffuse=max(dot(vertex_normal_out,vl),0.0)*light_color/frag_d2;
-	color=vec4( (ambient + diffuse)*albedo/cl_size2 ,1.0f);
+//	float vl_size2=dot(VL,VL);
+//	float cl_size2=dot(CL,CL);
+//	vec4 vl=VL/sqrt(vl_size2);
+//	vec3 diffuse=max(dot(vertex_normal_out,vl),0.0)*light_color/frag_d2;
+//	color=vec4( (ambient + diffuse)*albedo/cl_size2 ,1.0f);
 	}
 )EOF"_frag);
 

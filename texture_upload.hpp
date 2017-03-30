@@ -49,7 +49,7 @@ namespace Glinde
 		if(img.channelCount()<1 || img.channelCount()>4)
 			{throw ErrorMessage("The image has an invalid channel count.",{});}
 
-		Angle::Texture2D ret(mipmaps,s_texture_formats[img.channelCount()-1]
+		Angle::Texture2D ret(s_texture_formats[img.channelCount()-1]
 			,img.width(),img.height());
 
 		switch(img.channelCount())

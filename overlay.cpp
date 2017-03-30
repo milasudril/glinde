@@ -18,7 +18,7 @@ namespace PageComposer
 
 using namespace Glinde;
 
-Overlay::Overlay():m_texture(1,Angle::TextureFormat::SRGB8_ALPHA8,1,1)
+Overlay::Overlay():m_texture(Angle::TextureFormat::SRGB8_ALPHA8,1,1)
 	,m_surface(1,1),m_texbuff(new PageComposer::Surface::Pixel[1])
 	,m_context(m_surface)
 	,m_text(m_context)

@@ -4,11 +4,27 @@
 
 using namespace Angle;
 
+Texture2D::Texture2D(TextureFormat format,GLsizei width,GLsizei height)
+	{
+	glCreateTextures(GL_TEXTURE_2D,1,&m_handle);
+	glTextureStorage2D(m_handle,levels(width,height),native_type(format),width,height);
+	auto error=glGetError();
+	if(error!=GL_NO_ERROR)
+		{
+		glDeleteTextures(1,&m_handle);
+		exceptionRaise(Error("Failed to allocate texture storage."));
+		}
+	m_format=format;
+	m_width=width;
+	m_height=height;
+	m_unit=static_cast<GLuint>(-1);
+	}
+
 void Texture2D::realloc(GLsizei width_in,GLsizei height_in)
 	{
 	GLuint handle;
 	glCreateTextures(GL_TEXTURE_2D,1,&handle);
-	glTextureStorage2D(handle,m_levels,native_type(m_format),width_in,height_in);
+	glTextureStorage2D(handle,levels(width_in,height_in),native_type(m_format),width_in,height_in);
 	auto error=glGetError();
 	if(error!=GL_NO_ERROR)
 		{
