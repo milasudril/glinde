@@ -49,13 +49,13 @@ layout(location=4) uniform vec3 albedo;
 
 void main()
 	{
-	vec4 VL=vertex_pos_out - light_position;
-	vec4 CL=view_position - light_position;
-//	float vl_size2=dot(VL,VL);
-//	float cl_size2=dot(CL,CL);
-//	vec4 vl=VL/sqrt(vl_size2);
-//	vec3 diffuse=max(dot(vertex_normal_out,vl),0.0)*light_color/frag_d2;
-//	color=vec4( (ambient + diffuse)*albedo/cl_size2 ,1.0f);
+	vec4 LV=vertex_pos_out - light_position;
+	vec4 LC=view_position - light_position;
+	float lv_size2=dot(LV,LV);
+	float lc_size2=dot(LC,LC);
+	vec4 lv=lv/sqrt(lv_size2);
+	vec3 diffuse=max(dot(vertex_normal_out,lv),0.0)*light_color/lv_size2;
+	color=vec4( (ambient + diffuse)*albedo/lc_size2 ,1.0f);
 	}
 )EOF"_frag);
 
