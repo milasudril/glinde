@@ -18,10 +18,12 @@
 #include "console/consoledisplay.hpp"
 #include "console/consoleinputhandler.hpp"
 #include "scene/scene.hpp"
+#include "game.hpp"
 
 namespace Glinde
 	{
 	class Timer;
+
 	class Engine:public EngineBase
 		{
 		public:
@@ -37,6 +39,8 @@ namespace Glinde
 				{m_stop=1;}
 
 			void consoletest();
+
+			void gameLoad(const char* archive);
 			
 		private:
 			MessageQueue m_queue;
@@ -55,6 +59,7 @@ namespace Glinde
 			Overlay m_overlay;
 			Scene m_scene;
 			RenderList m_renderlist;
+			std::unique_ptr<Game> m_game;
 			
 
 			unsigned int m_con_index;

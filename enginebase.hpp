@@ -13,6 +13,7 @@ namespace Glinde
 			virtual void stop()=0;
 			virtual void run(Timer& timer)=0;
 			virtual void consoletest()=0;
+			virtual void gameLoad(const char* archive)=0;
 		};
 	}
 

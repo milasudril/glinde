@@ -1,8 +1,8 @@
 //@	{
-//@	 "targets":[{"name":"world.o","type":"object"}]
+//@	 "targets":[{"name":"game.o","type":"object"}]
 //@	}
 
-#include "world.hpp"
+#include "game.hpp"
 #include "errormessage.hpp"
 #include "variant.hpp"
 #include "harvester/harvester.hpp"
@@ -32,9 +32,9 @@ namespace
 		};
 	}
 
-World::World(MessageQueue& msgqueue,const char* filename):r_msgqueue(&msgqueue)
+Game::Game(MessageQueue& msgqueue,const char* filename):r_msgqueue(&msgqueue)
 	,m_dirtemp(Harvester::extract(filename,"/tmp",HarvesterExecutionControl{filename}))
 	{}
 
-World::~World()
+Game::~Game()
 	{}

@@ -127,3 +127,11 @@ void Engine::run(Timer& timer)
 	m_msg_header=msg_header;
 	m_t_0=t;
 	}
+
+void Engine::gameLoad(const char* archive)
+	{
+//	TODO: Load game in worker thread;
+	m_game=std::make_unique<Game>(m_queue,archive);
+//	Must be posted from worker thread
+	m_queue.post(0,Message{m_con_input,Status::READY});
+	}

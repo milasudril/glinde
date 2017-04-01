@@ -123,6 +123,16 @@ void CmdProcMain::process(ConsoleInputHandler& coninput
 			coninput.status(Status::READY);
 			}
 		else
+		if(equals(cmd[0],U"load"))
+			{
+			if(cmd.length()==1)
+				{throw ErrorMessage("What game do you want to load?",{});}
+			if(cmd.length()>2)
+				{throw ErrorMessage("load: Too many arguments. If the argument contains any whitespace, use \\ before any whitespace.",{});}
+		//	We must convert to UTF8 first...
+		//	r_engine->gameLoad(cmd[1]);
+			}
+		else
 			{throw ErrorMessage("Bad command",{});}
 		}
 	}
