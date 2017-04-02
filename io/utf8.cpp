@@ -30,10 +30,6 @@ namespace //Code from Björn Höhrmann
 //
 //	See http://bjoern.hoehrmann.de/utf-8/decoder/dfa/ for details.
 
-
-	static constexpr uint32_t UTF8_ACCEPT=0;
-	static constexpr uint32_t UTF8_REJECT=1;
-
 	static constexpr uint8_t UTF8_STATES[]=
 		{
 		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, // 00..1f
