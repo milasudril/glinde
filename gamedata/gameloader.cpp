@@ -19,10 +19,8 @@ void GameLoader::operator()()
 		r_msgqueue->post(0
 			,Message{*r_eng,std::make_unique<Game>(*r_msgqueue,m_src.begin())});
 		}
-
 	catch(const ErrorMessage& msg)
 		{
-		fprintf(stderr,"%s\n",msg.messageGet());
 		m_error=msg;
 		r_msgqueue->post(0,Message{*r_eng,this});
 		}
