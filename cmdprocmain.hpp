@@ -21,8 +21,7 @@ namespace Glinde
 				r_engine(&eng),r_display(&disp)
 				{}
 
-			void process(ConsoleInputHandler& coninput
-				,Range<const uint32_t> cmdbuff);
+			void process(ConsoleInputHandler& coninput,const char* cmd);
 
 		private:
 			EngineBase* r_engine;

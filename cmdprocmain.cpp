@@ -6,16 +6,15 @@
 #include "cmdprocmain.hpp"
 #include "errormessage.hpp"
 #include "variant.hpp"
+#include "string.hpp"
 
 using namespace Glinde;
 
-static Range<const uint32_t> tokenGet(Range<const uint32_t> r,ArrayDynamic<uint32_t>& buffer)
+static const char* tokenGet(const char* ptr,String& buffer)
 	{
-	auto ptr=r.begin();
-	auto ptr_end=r.end();
 	buffer.clear();
 	auto state=0;
-	while(ptr!=ptr_end)
+	while(1)
 		{
 		auto ch_in=*ptr;
 		switch(state)
@@ -23,6 +22,8 @@ static Range<const uint32_t> tokenGet(Range<const uint32_t> r,ArrayDynamic<uint3
 			case 0:
 				switch(ch_in)
 					{
+					case '\0':
+						return nullptr;
 					case '\\':
 						state=2;
 						break;
@@ -38,19 +39,27 @@ static Range<const uint32_t> tokenGet(Range<const uint32_t> r,ArrayDynamic<uint3
 			case 1:
 				switch(ch_in)
 					{
+					case '\0':
+						return nullptr;
 					case '\\':
 						state=2;
 						break;
 					case ' ':
-						return Range<const uint32_t>(ptr,ptr_end);
+						return ptr;
 					default:
 						buffer.append(ch_in);
 					}
 				break;
 
 			case 2:
-				buffer.append(ch_in);
-				state=1;
+				switch(ch_in)
+					{
+					case '\0':
+						return nullptr;
+					default:
+						buffer.append(ch_in);
+						state=1;
+					}
 				break;
 
 			default:
@@ -58,8 +67,9 @@ static Range<const uint32_t> tokenGet(Range<const uint32_t> r,ArrayDynamic<uint3
 			}
 		++ptr;
 		}
-	return Range<const uint32_t>(ptr,ptr_end);
+	return ptr;
 	}
+
 #if 0
 static void print(Range<const uint32_t> r)
 	{
@@ -76,43 +86,29 @@ static void print(Range<const uint32_t> r)
 	}
 #endif
 
-static bool equals(Range<const uint32_t> a,const char32_t* str)
+void CmdProcMain::process(ConsoleInputHandler& coninput,const char* cmdbuff)
 	{
-	auto a_begin=a.begin();
-	auto a_end=a.end();
-	while(*str!='\0' && a_begin!=a_end)
-		{
-		if(*str!=*a_begin)
-			{return 0;}
-		++a_begin;
-		++str;
-		}
-	return *str=='\0' && a_begin==a_end;
-	}
-
-void CmdProcMain::process(ConsoleInputHandler& coninput
-	,Range<const uint32_t> cmdbuff)
-	{
-	ArrayDynamic<uint32_t> tok;
+	String tok;
 	ArrayDynamic<decltype(tok)> cmd;
-	while(cmdbuff.begin()!=cmdbuff.end())
+	do
 		{
 		cmdbuff=tokenGet(cmdbuff,tok);
 		if(tok.length()!=0)
 			{cmd.append(tok);}
 		}
+	while(cmdbuff!=nullptr);
 
 	if(cmd.length()==0)
 		{coninput.status(Status::READY);}
 	else
 		{
-		if(equals(cmd[0],U"exit"))
+		if(cmd[0]=="exit")
 			{r_engine->stop();}
 		else
-		if(equals(cmd[0],U"consoletest"))
+		if(cmd[0]=="consoletest")
 			{r_engine->consoletest();}
 		else
-		if(equals(cmd[0],U"glinfo"))
+		if(cmd[0]=="glinfo")
 			{
 			auto info=r_display->glinfo();
 			auto& con=coninput.console();
@@ -123,14 +119,13 @@ void CmdProcMain::process(ConsoleInputHandler& coninput
 			coninput.status(Status::READY);
 			}
 		else
-		if(equals(cmd[0],U"load"))
+		if(cmd[0]=="load")
 			{
 			if(cmd.length()==1)
 				{throw ErrorMessage("What game do you want to load?",{});}
 			if(cmd.length()>2)
 				{throw ErrorMessage("load: Too many arguments. If the argument contains any whitespace, use \\ before any whitespace.",{});}
-		//	We must convert to UTF8 first...
-		//	r_engine->gameLoad(cmd[1]);
+			r_engine->gameLoad(cmd[1].begin());
 			}
 		else
 			{throw ErrorMessage("Bad command",{});}

@@ -4,6 +4,7 @@
 
 #include "consoleinputhandler.hpp"
 #include "../commandprocessor.hpp"
+#include "../io/utf8.hpp"
 
 using namespace Glinde;
 
@@ -49,7 +50,7 @@ void ConsoleInputHandler::key(int scancode,GLFWmm::WindowBase::Action action
 						if(modifiers==0)
 							{
 							m_status=Status::WAITING;
-							r_cmdproc->process(*this,m_input_buffer);
+							r_cmdproc->process(*this,utf8_encode(m_input_buffer).begin());
 							}
 						else
 							{m_input_buffer.append('\n');}

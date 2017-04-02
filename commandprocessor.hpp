@@ -3,9 +3,6 @@
 #ifndef GLINDE_COMMANDPROCESSOR_HPP
 #define GLINDE_COMMANDPROCESSOR_HPP
 
-#include "range.hpp"
-#include <cstdint>
-
 namespace Glinde
 	{
 	class ConsoleInputHandler;
@@ -14,8 +11,7 @@ namespace Glinde
 		{
 		public:
 			virtual ~CommandProcessor()=default;
-			virtual void process(ConsoleInputHandler& coninput
-				,Range<const uint32_t> cmdbuff)=0;
+			virtual void process(ConsoleInputHandler& coninput,const char* cmdbuff)=0;
 		};
 	}
 
