@@ -334,7 +334,7 @@ Console& Console::write(uint32_t codepoint) noexcept
 
 	if(ch>=CONTROLCODE)
 		{
-		if(ch>=CONTROLCODE+256)
+		if(ch>=CONTROLCODE + 256)
 			{colorMask(ch - (CONTROLCODE+256));}
 		
 		if(ch==CONTROLCODE + 10)
