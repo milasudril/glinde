@@ -14,7 +14,9 @@ namespace Glinde
 	class MessageQueue;
 
 	void logWrite(Log::MessageType type,const char* format
-		,const std::initializer_list<Variant>& args) noexcept;
+		,const std::initializer_list<Variant>& args);
+
+	void logProgress(double x,const char* message);
 
 	unsigned int logWriterAttach(Log::Writer& writer) noexcept;
 

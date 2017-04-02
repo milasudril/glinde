@@ -32,7 +32,12 @@ void Glinde::deathtrapHandlerActivate() noexcept
 	{s_log.deathtrapHandlerActivate();}
 
 void Glinde::logWrite(Log::MessageType type
-	,const char* format,const std::initializer_list<Variant>& args) noexcept
+	,const char* format,const std::initializer_list<Variant>& args)
 	{
 	s_log.write(type,format,args);
+	}
+
+void Glinde::logProgress(double x,const char* message)
+	{
+	s_log.progress(x,message);
 	}

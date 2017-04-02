@@ -14,12 +14,11 @@ namespace Glinde
 	class Message
 		{
 		private:
-			static constexpr size_t DATA_SIZE=24;
-			static constexpr size_t DATA_ALIGNMENT=alignof(vec4_t<float>);
-			typedef ArrayFixed<uint64_t,DATA_SIZE/3> Data;
+			typedef vec4_t<int> DataVec;
+			typedef int64_t DataWord;
 
-			typedef void (*DataDestructor)(Data&);
-			typedef void (*Processor)(void*,const Timeinfo&,Data&&);
+			typedef void (*DataDestructor)(DataVec&);
+			typedef void (*Processor)(void*,const Timeinfo&,DataVec&&);
 
 		public:
 			Message()
@@ -31,15 +30,15 @@ namespace Glinde
 			template<class Callback,class T>
 			explicit Message(Callback& msgproc,T&& data) noexcept
 				{
-				static_assert(sizeof(T)<=DATA_SIZE,"Objects of type T does not fit in the message");
-				static_assert(alignof(T)<=DATA_ALIGNMENT,"Objects of type T requires to large alignment");
-				new(m_data.begin())T(std::move(data));
-				DataDestructor dtor=[](Data& d)
-					{reinterpret_cast<T*>(d.begin())->~T();};
-				Processor proc=[](void* callback,const Timeinfo& ti,Data&& d)
+				static_assert(sizeof(T)<=sizeof(DataVec),"Objects of type T does not fit in the message");
+				static_assert(alignof(T)<=alignof(DataVec),"Objects of type T requires to large alignment");
+				new(&m_data)T(std::move(data));
+				DataDestructor dtor=[](DataVec& d)
+					{reinterpret_cast<T*>(&d)->~T();};
+				Processor proc=[](void* callback,const Timeinfo& ti,DataVec&& d)
 					{
 					auto& cb=*reinterpret_cast<Callback*>(callback);
-					auto& data=*reinterpret_cast<T*>(d.begin());
+					auto& data=*reinterpret_cast<T*>(&d);
 					cb(ti,std::move(data));
 					};
 				m_callback_data=&msgproc;
@@ -78,7 +77,8 @@ namespace Glinde
 				}
 
 		private:
-			alignas(DATA_ALIGNMENT) Data m_data;
+			DataVec m_data;
+			int64_t m_data_a;
 			void* m_callback_data;
 			union
 				{
@@ -90,6 +90,17 @@ namespace Glinde
 					} pointers;
 				} m_callbacks;
 		};
-	};
+#ifdef SIZE_CHECK
+	template<size_t k>
+	class X
+		{
+		public:
+			X()
+				{}
+		};
+	
+	static constexpr X<sizeof(Message)> z;
+#endif
+	}
 
 #endif

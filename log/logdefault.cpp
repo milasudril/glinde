@@ -72,8 +72,54 @@ void LogDefault::write(MessageType type,const char* message)
 		}
 	}
 
+class LogDefault::MessageData
+	{
+	public:
+		MessageData():m_message(nullptr){}
+		explicit MessageData(MessageType type,const char* text);
+		~MessageData() noexcept;
+		MessageData(const MessageData&)=delete;
+		MessageData& operator=(const MessageData&)=delete;
+		MessageData(MessageData&& msgdata) noexcept:
+			m_message(msgdata.m_message),m_type(msgdata.m_type)
+			{msgdata.m_message=nullptr;}
+		MessageData& operator=(MessageData&& msgdata) noexcept
+			{
+			std::swap(msgdata.m_message,m_message);
+			m_type=msgdata.m_type;
+			return *this;
+			}
+
+		const char* text() const noexcept
+			{return m_message;}
+
+		MessageType type() const noexcept
+			{return m_type;}
+
+	private:
+		char* m_message;
+		MessageType m_type;
+	};
+
+
+LogDefault::MessageData::MessageData(MessageType type,const char* text):m_type(type)
+	{
+	auto l=strlen(text)+1;
+	m_message=reinterpret_cast<char*>(memoryAllocate(l*sizeof(char)));
+	memcpy(m_message,text,l);
+	}
+
+LogDefault::MessageData::~MessageData() noexcept
+	{
+	if(m_message!=nullptr)
+		{memoryFree(m_message);}
+	}
+
+void LogDefault::operator()(const Timeinfo& ti,const MessageData& logmessage) noexcept
+	{write(logmessage.type(),logmessage.text());}
+
 void LogDefault::write(Log::MessageType type,const char* format_string
-	,const std::initializer_list<Variant>& args) noexcept
+	,const std::initializer_list<Variant>& args)
 	{
 	char msgbuff[4096];
 	format(Range<char>(msgbuff,sizeof(msgbuff)/sizeof(msgbuff[0])),format_string
@@ -83,6 +129,10 @@ void LogDefault::write(Log::MessageType type,const char* format_string
 	else
 		{r_queue->post(0,Message{*this,MessageData(type,msgbuff)});}
 	}
+
+void LogDefault::progress(double x,const char* message)
+	{}
+
 
 unsigned int LogDefault::writerAttach(Log::Writer& writer) noexcept
 	{
@@ -104,20 +154,6 @@ void LogDefault::writerDetach(unsigned int index) noexcept
 	if(index!=static_cast<unsigned int>(-1))
 		{m_writers[index]=nullptr;}
 	}
-
-LogDefault::MessageData::MessageData(MessageType type,const char* text):m_type(type)
-	{
-	auto l=strlen(text)+1;
-	m_message=reinterpret_cast<char*>(memoryAllocate(l*sizeof(char)));
-	memcpy(m_message,text,l);
-	}
-
-LogDefault::MessageData::~MessageData() noexcept
-	{
-	if(m_message!=nullptr)
-		{memoryFree(m_message);}
-	}
-
 
 
 ///Deathtrap handlers

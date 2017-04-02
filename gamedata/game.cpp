@@ -30,6 +30,7 @@ namespace
 					logWrite(Log::MessageType::INFORMATION,"Extracting game data from #0;",{filename});
 					first=0;
 					}
+				logProgress(x,name);
 				}
 
 		private:

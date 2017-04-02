@@ -50,7 +50,9 @@ namespace Glinde
 			*
 			*/
 			virtual void write(MessageType type,const char* format
-				,const std::initializer_list<Variant>& args) noexcept=0;
+				,const std::initializer_list<Variant>& args)=0;
+
+			virtual void progress(double x,const char* message)=0;
 		};
 	}
 
