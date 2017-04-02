@@ -18,7 +18,7 @@
 #include "console/consoledisplay.hpp"
 #include "console/consoleinputhandler.hpp"
 #include "scene/scene.hpp"
-#include "gamedata/game.hpp"
+#include "thread/thread.hpp"
 
 namespace Glinde
 	{
@@ -41,6 +41,10 @@ namespace Glinde
 			void consoletest();
 
 			void gameLoad(const char* archive);
+
+			void operator()(const Timeinfo& ti,GameLoader* loader);
+
+			void operator()(const Timeinfo& ti,std::unique_ptr<Game>&& game);
 			
 		private:
 			MessageQueue m_queue;
@@ -60,7 +64,7 @@ namespace Glinde
 			Scene m_scene;
 			RenderList m_renderlist;
 			std::unique_ptr<Game> m_game;
-			
+			std::unique_ptr<Thread<GameLoader>> m_game_loader;
 
 			unsigned int m_con_index;
 			volatile bool m_stop;

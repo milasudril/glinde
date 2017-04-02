@@ -14,6 +14,9 @@ namespace Glinde
 	class ThreadBase
 		{
 		public:
+			ThreadBase(const ThreadBase&)=delete;
+			ThreadBase& operator=(const ThreadBase&)=delete;
+
 			virtual void run()=0;
 
 		protected:
@@ -31,7 +34,7 @@ namespace Glinde
 	class Thread:private ThreadBase
 		{
 		public:
-			Thread(Function&& entry):m_entry(std::move(entry))
+			explicit Thread(Function&& entry):m_entry(std::move(entry))
 				{start();}
 
 			void run()

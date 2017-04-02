@@ -11,6 +11,7 @@
 #include "time/executiontimer.hpp"
 #include "angle/init.hpp"
 #include "log/logwriter.hpp"
+#include "gamedata/gameloader.hpp"
 
 #include <maike/targetinclude.hpp>
 #include <utility>
@@ -130,8 +131,19 @@ void Engine::run(Timer& timer)
 
 void Engine::gameLoad(const char* archive)
 	{
-//	TODO: Load game in worker thread;
-	m_game=std::make_unique<Game>(m_queue,archive);
-//	Must be posted from worker thread
-	m_queue.post(0,Message{m_con_input,Status::READY});
+	m_game_loader=std::make_unique<Thread<GameLoader>>(GameLoader{archive,*this,m_queue});
+	}
+
+void Engine::operator()(const Timeinfo& ti,GameLoader* loader)
+	{
+	auto x=loader->error();
+	m_game_loader.reset();
+	throw x;
+	}
+
+void Engine::operator()(const Timeinfo& ti,std::unique_ptr<Game>&& game)
+	{
+	m_game=std::move(game);
+	m_game_loader.reset();
+	m_con_input.status(Status::READY);
 	}

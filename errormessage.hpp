@@ -27,6 +27,9 @@ namespace Glinde
 	class ErrorMessage
 		{
 		public:
+			ErrorMessage() noexcept
+				{}
+
 			/**\brief Initializes an ErrorMessage.
 			 *
 			 * This constructor initializes the ErrorMessage. The format string

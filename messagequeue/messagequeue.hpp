@@ -37,7 +37,7 @@ namespace Glinde
 				return 1;
 				}
 
-			void process(MessageHeader& header,const Timeinfo& ti) noexcept
+			void process(MessageHeader& header,const Timeinfo& ti)
 				{
 				auto msg_id=header.id();
 				assert(msg_id<m_messages.length());
