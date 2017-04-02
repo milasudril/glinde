@@ -63,11 +63,15 @@ namespace Glinde
 
 			void operator()(const Timeinfo& ti,const String& str,Log::MessageType type) noexcept;
 
+			void operator()(const Timeinfo& ti,const String& str,double x) noexcept;
+
 		private:
 			ArrayFixed<Writer*,4> m_writers;
 			MessageQueue* r_queue;
 
-			void write(MessageType type,const char* message);
+			void write(MessageType type,const char* message) noexcept;
+
+			void progress(const char* message,double x) noexcept;
 		};
 	}
 

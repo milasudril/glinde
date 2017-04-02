@@ -40,6 +40,7 @@ namespace Glinde
 				{
 				public:
 					virtual void write(MessageType type,const char* message) noexcept=0;
+					virtual void progress(const char* message,double x) noexcept=0;
 				};
 
 			/**\brief Writes a message to the console (or the standard error stream).

@@ -30,6 +30,7 @@ namespace Glinde
 
 			bool get(MessageHeader& header) noexcept
 				{
+				Mutex::LockGuard guard(m_mutex);
 				if(m_queue.size()==0)
 					{return 0;}
 				header=m_queue.top();
@@ -39,6 +40,7 @@ namespace Glinde
 
 			void process(MessageHeader& header,const Timeinfo& ti)
 				{
+				Mutex::LockGuard guard(m_mutex);
 				auto msg_id=header.id();
 				assert(msg_id<m_messages.length());
 				m_msg_id.release(msg_id);

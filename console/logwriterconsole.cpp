@@ -44,3 +44,11 @@ void LogWriterConsole::write(Log::MessageType type,const char* message) noexcept
 	r_con.writeUTF8(message);
 	r_con.write('\n');
 	}
+
+void LogWriterConsole::progress(const char* message,double x) noexcept
+	{
+	int val=r_con.colsCount()*x;
+	if(val!=prog_state)
+		{r_con.writeUTF8("█");}
+	prog_state=val;
+	}

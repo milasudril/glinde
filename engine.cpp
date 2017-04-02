@@ -97,12 +97,17 @@ void Engine::run(Timer& timer)
 			if(msg_header.arrivalTime()<=t)
 				{
 				if(msg_header.valid())
-					{m_queue.process(msg_header,now);}
+					{
+					m_queue.process(msg_header,now);
+					assert(!msg_header.valid());
+					}
 				while(m_queue.get(msg_header))
 					{
 					if(msg_header.arrivalTime() > t)
 						{break;}
+					assert(msg_header.valid());
 					m_queue.process(msg_header,now);
+					assert(!msg_header.valid());
 					}
 				}
 			}

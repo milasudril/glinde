@@ -21,6 +21,11 @@ namespace
 		{
 		public:
 			void write(Log::MessageType type, const char* message) noexcept;
+			void progress(const char* message,double x) noexcept
+				{
+				auto val=static_cast<int>(100*x);
+				fprintf(stderr,"[%d%%] Extracting %s\n",val,message);
+				}
 		};
 	}
 
@@ -61,7 +66,7 @@ LogDefault::LogDefault() noexcept:r_queue(nullptr)
 	writerAttach(s_writer_stderr);
 	}
 
-void LogDefault::write(MessageType type,const char* message)
+void LogDefault::write(MessageType type,const char* message) noexcept
 	{
 	auto k=static_cast<unsigned int>( m_writers.length() );
 	while(k!=0)
@@ -89,7 +94,26 @@ void LogDefault::write(Log::MessageType type,const char* format_string
 	}
 
 void LogDefault::progress(double x,const char* message)
-	{}
+	{
+	if(r_queue==nullptr)
+		{progress(message,x);}
+	else
+		{r_queue->post(0,Message{*this,String(message),std::move(x)});}
+	}
+
+void LogDefault::progress(const char* message,double x) noexcept
+	{
+	auto k=static_cast<unsigned int>( m_writers.length() );
+	while(k!=0)
+		{
+		--k;
+		if(m_writers[k]!=nullptr)
+			{m_writers[k]->progress(message,x);}
+		}
+	}
+
+void LogDefault::operator()(const Timeinfo& ti,const String& str,double x) noexcept
+	{progress(str.begin(),x);}
 
 
 unsigned int LogDefault::writerAttach(Log::Writer& writer) noexcept
