@@ -19,7 +19,7 @@ namespace
 
 			void raise(const char* message)
 				{
-				throw ErrorMessage("It was not possible to extract game data from #0;. #1;.",{filename,message});
+				throw ErrorMessage("It was not possible to extract any game data from #0;. #1;.",{filename,message});
 				}
 
 			void progress(double x,const char* name)

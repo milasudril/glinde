@@ -107,7 +107,7 @@ void Engine::run(Timer& timer)
 			}
 		catch(const ErrorMessage& err)
 			{
-			logWrite(Glinde::Log::MessageType::ERROR,"Error: #0;",{err.messageGet()});
+			logWrite(Glinde::Log::MessageType::ERROR,"#0;",{err.messageGet()});
 			m_queue.post(0,Message{m_con_input,Status::READY});
 			}
 		
