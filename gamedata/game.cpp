@@ -3,9 +3,9 @@
 //@	}
 
 #include "game.hpp"
-#include "errormessage.hpp"
-#include "variant.hpp"
-#include "harvester/harvester.hpp"
+#include "../errormessage.hpp"
+#include "../variant.hpp"
+#include "../harvester/harvester.hpp"
 
 using namespace Glinde;
 

@@ -18,7 +18,7 @@
 #include "console/consoledisplay.hpp"
 #include "console/consoleinputhandler.hpp"
 #include "scene/scene.hpp"
-#include "game.hpp"
+#include "gamedata/game.hpp"
 
 namespace Glinde
 	{

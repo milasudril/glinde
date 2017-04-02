@@ -6,7 +6,7 @@
 #ifndef GLINDE_GAME_HPP
 #define GLINDE_GAME_HPP
 
-#include "harvester/directory.hpp"
+#include "../harvester/directory.hpp"
 
 namespace Glinde
 	{
