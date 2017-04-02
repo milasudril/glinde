@@ -10,6 +10,9 @@
 #include "messageheader.hpp"
 #include <queue>
 
+
+#include <cstdio>
+
 namespace Glinde
 	{
 	class Timeinfo;
@@ -34,6 +37,7 @@ namespace Glinde
 				if(m_queue.size()==0)
 					{return 0;}
 				header=m_queue.top();
+				printf("%lu\n",header.id());
 				m_queue.pop();
 				return 1;
 				}

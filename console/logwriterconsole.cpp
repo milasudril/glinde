@@ -48,7 +48,9 @@ void LogWriterConsole::write(Log::MessageType type,const char* message) noexcept
 void LogWriterConsole::progress(const char* message,double x) noexcept
 	{
 	int val=r_con.colsCount()*x;
-	if(val!=prog_state)
-		{r_con.writeUTF8("█");}
-	prog_state=val;
+	while(val!=prog_state)
+		{
+		r_con.writeUTF8("█");
+		++prog_state;
+		}
 	}
