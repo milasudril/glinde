@@ -17,11 +17,11 @@ void GameLoader::operator()()
 	try
 		{
 		r_msgqueue->post(0
-			,Message{*r_eng,std::make_unique<Game>(*r_msgqueue,m_src.begin())});
+			,Message{*r_eng,std::make_unique<Game>(*r_msgqueue,m_src.begin()),0});
 		}
 	catch(const ErrorMessage& msg)
 		{
 		m_error=msg;
-		r_msgqueue->post(0,Message{*r_eng,this});
+		r_msgqueue->post(0,Message{*r_eng,this,0});
 		}
 	}

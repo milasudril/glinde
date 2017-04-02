@@ -38,7 +38,7 @@ namespace Glinde
 			void key(int scancode,GLFWmm::WindowBase::Action action
 				,unsigned int modifiers);
 
-			void operator()(const Timeinfo& ti,Status s) noexcept
+			void operator()(const Timeinfo& ti,Status s,int) noexcept
 				{
 				status(s);
 				}

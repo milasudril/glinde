@@ -19,8 +19,8 @@ namespace Glinde
 			virtual void run(Timer& timer)=0;
 			virtual void consoletest()=0;
 			virtual void gameLoad(const char* archive)=0;
-			virtual void operator()(const Timeinfo& ti,GameLoader* loader)=0;
-			virtual void operator()(const Timeinfo& ti,std::unique_ptr<Game>&& game)=0;
+			virtual void operator()(const Timeinfo& ti,GameLoader* loader,int x)=0;
+			virtual void operator()(const Timeinfo& ti,std::unique_ptr<Game>&& game,int x)=0;
 		};
 	}
 

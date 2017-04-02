@@ -42,9 +42,9 @@ namespace Glinde
 
 			void gameLoad(const char* archive);
 
-			void operator()(const Timeinfo& ti,GameLoader* loader);
+			void operator()(const Timeinfo& ti,GameLoader* loader,int x);
 
-			void operator()(const Timeinfo& ti,std::unique_ptr<Game>&& game);
+			void operator()(const Timeinfo& ti,std::unique_ptr<Game>&& game,int x);
 			
 		private:
 			MessageQueue m_queue;

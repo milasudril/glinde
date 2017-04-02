@@ -65,7 +65,7 @@ Engine::Engine():
 	auto con_id=m_renderlist.insertOnTop(m_con_display);
 	m_renderlist.activate(con_id);
 	m_con_index=logWriterAttach(m_con_writer);
-	m_queue.post(0,Message{m_con_input,Status::READY});
+	m_queue.post(0,Message{m_con_input,Status::READY,0});
 	}
 
 Engine::~Engine()
@@ -109,7 +109,7 @@ void Engine::run(Timer& timer)
 		catch(const ErrorMessage& err)
 			{
 			logWrite(Glinde::Log::MessageType::ERROR,"#0;",{err.messageGet()});
-			m_queue.post(0,Message{m_con_input,Status::READY});
+			m_queue.post(0,Message{m_con_input,Status::READY,0});
 			}
 		
 		if(counter%64==0)
@@ -134,14 +134,14 @@ void Engine::gameLoad(const char* archive)
 	m_game_loader=std::make_unique<Thread<GameLoader>>(GameLoader{archive,*this,m_queue});
 	}
 
-void Engine::operator()(const Timeinfo& ti,GameLoader* loader)
+void Engine::operator()(const Timeinfo& ti,GameLoader* loader,int)
 	{
 	auto x=loader->error();
 	m_game_loader.reset();
 	throw x;
 	}
 
-void Engine::operator()(const Timeinfo& ti,std::unique_ptr<Game>&& game)
+void Engine::operator()(const Timeinfo& ti,std::unique_ptr<Game>&& game,int)
 	{
 	m_game=std::move(game);
 	m_game_loader.reset();

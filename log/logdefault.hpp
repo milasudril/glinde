@@ -15,8 +15,6 @@ namespace Glinde
 	class Timeinfo;
 	class LogDefault:public Log
 		{
-		private:
-			class MessageData;
 		public:
 			LogDefault() noexcept;
 
@@ -63,7 +61,7 @@ namespace Glinde
 			void queueDetach(unsigned int index) noexcept
 				{r_queue=nullptr;}
 
-			void operator()(const Timeinfo& ti,const MessageData& logmessage) noexcept;
+			void operator()(const Timeinfo& ti,const String& str,Log::MessageType type) noexcept;
 
 		private:
 			ArrayFixed<Writer*,4> m_writers;
