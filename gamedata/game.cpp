@@ -23,7 +23,7 @@ namespace
 				throw ErrorMessage("It was not possible to extract any game data from #0;. #1;.",{filename,message});
 				}
 
-			void progress(double x,const char* name)
+			Harvester::ProgressStatus progress(double x,const char* name)
 				{
 				if(first)
 					{
@@ -34,6 +34,7 @@ namespace
 				assert(x>=x_0);
 				x_0=x;
 				logProgress(x,name);
+				return Harvester::ProgressStatus::EXTRACT;
 				}
 
 		private:
