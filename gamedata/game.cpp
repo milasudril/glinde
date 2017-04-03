@@ -28,6 +28,7 @@ namespace
 				if(first)
 					{
 					logWrite(Log::MessageType::INFORMATION,"Extracting game data from #0;",{filename});
+					logProgressInit();
 					first=0;
 					}
 				assert(x>=x_0);
@@ -45,6 +46,7 @@ namespace
 Game::Game(MessageQueue& msgqueue,const char* filename):r_msgqueue(&msgqueue)
 	,m_dirtemp(Harvester::extract(filename,"/tmp",HarvesterExecutionControl{filename}))
 	{
+	logProgressEnd();
 	logWrite(Log::MessageType::INFORMATION,"Game data extracted from #0;",{filename});
 	}
 

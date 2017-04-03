@@ -15,11 +15,18 @@ namespace Glinde
 	class Timeinfo;
 	class LogDefault:public Log
 		{
+		private:
+			struct ProgressInit{};
+			struct ProgressEnd{};
 		public:
 			LogDefault() noexcept;
 
 			void write(MessageType type,const char* format_string
 				,const std::initializer_list<Variant>& args);
+
+			void progressInit();
+
+			void progressEnd();
 
 			void progress(double x,const char* message);
 
@@ -65,6 +72,10 @@ namespace Glinde
 
 			void operator()(const Timeinfo& ti,const String& str,double x) noexcept;
 
+			void operator()(const Timeinfo& ti,ProgressInit i,int) noexcept;
+
+			void operator()(const Timeinfo& ti,ProgressEnd i,int) noexcept;
+
 		private:
 			ArrayFixed<Writer*,4> m_writers;
 			MessageQueue* r_queue;
@@ -72,6 +83,10 @@ namespace Glinde
 			void write(MessageType type,const char* message) noexcept;
 
 			void progress(const char* message,double x) noexcept;
+
+			void progress(ProgressInit) noexcept;
+
+			void progress(ProgressEnd) noexcept;
 		};
 	}
 

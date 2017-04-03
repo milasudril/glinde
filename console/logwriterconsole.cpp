@@ -38,19 +38,38 @@ void LogWriterConsole::write(Log::MessageType type,const char* message) noexcept
 			color_mask=0x07;
 			break;
 		}
-	r_con.colorMask(color_mask);
-	r_con.writeUTF8(infostring);
-	r_con.colorMask(0x07);
-	r_con.writeUTF8(message);
-	r_con.write('\n');
+	r_con->colorMask(color_mask);
+	r_con->writeUTF8(infostring);
+	r_con->colorMask(0x07);
+	r_con->writeUTF8(message);
+	r_con->write('\n');
 	}
 
 void LogWriterConsole::progress(const char* message,double x) noexcept
 	{
-	int val=r_con.colsCount()*x;
+	int val=(r_con->colsCount() - 1)*x;
 	while(val!=prog_state)
 		{
-		r_con.writeUTF8("█");
+		r_con->write(U'█');
 		++prog_state;
 		}
+	}
+
+
+void LogWriterConsole::progressInit() noexcept
+	{
+	r_con->write('\n').write(' ');
+	auto n=r_con->colsCount() - 2;
+	while(n)
+		{
+		r_con->write(U'▒');
+		--n;
+		}
+	r_con->write('\r').write(' ');
+	prog_state=0;
+	}
+
+void LogWriterConsole::progressEnd() noexcept
+	{
+	r_con->write('\n').write('\n');
 	}

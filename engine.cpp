@@ -91,8 +91,11 @@ void Engine::run(Timer& timer)
 	do
 		{
 		Timeinfo now(t,dt);
-		try
+		try 
 			{
+		//TODO: Check exception policy for message processors. Should
+		//	we really stop processing the remaining messages if one
+		//	failed?
 			m_session.eventsPoll();
 			if(msg_header.arrivalTime()<=t)
 				{

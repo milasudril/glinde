@@ -26,6 +26,12 @@ namespace
 				auto val=static_cast<int>(100*x);
 				fprintf(stderr,"[%d%%] Extracting %s\n",val,message);
 				}
+
+			void progressInit() noexcept
+				{}
+
+			void progressEnd() noexcept
+				{}
 		};
 	}
 
@@ -93,6 +99,46 @@ void LogDefault::write(Log::MessageType type,const char* format_string
 		{r_queue->post(0,Message{*this,String(msgbuff),std::move(type)});}
 	}
 
+
+void LogDefault::progressInit()
+	{
+	if(r_queue==nullptr)
+		{progress(ProgressInit{});}
+	else
+		{r_queue->post(0,Message{*this,ProgressInit{},0});}
+	}
+
+void LogDefault::progressEnd()
+	{
+	if(r_queue==nullptr)
+		{progress(ProgressEnd{});}
+	else
+		{r_queue->post(0,Message{*this,ProgressEnd{},0});}
+	}
+
+
+void LogDefault::progress(ProgressInit) noexcept
+	{
+	auto k=static_cast<unsigned int>( m_writers.length() );
+	while(k!=0)
+		{
+		--k;
+		if(m_writers[k]!=nullptr)
+			{m_writers[k]->progressInit();}
+		}
+	}
+
+void LogDefault::progress(ProgressEnd) noexcept
+	{
+	auto k=static_cast<unsigned int>( m_writers.length() );
+	while(k!=0)
+		{
+		--k;
+		if(m_writers[k]!=nullptr)
+			{m_writers[k]->progressEnd();}
+		}
+	}
+
 void LogDefault::progress(double x,const char* message)
 	{
 	if(r_queue==nullptr)
@@ -111,6 +157,12 @@ void LogDefault::progress(const char* message,double x) noexcept
 			{m_writers[k]->progress(message,x);}
 		}
 	}
+
+void LogDefault::operator()(const Timeinfo& ti,ProgressInit i,int) noexcept
+	{progress(i);}
+
+void LogDefault::operator()(const Timeinfo& ti,ProgressEnd i,int) noexcept
+	{progress(i);}
 
 void LogDefault::operator()(const Timeinfo& ti,const String& str,double x) noexcept
 	{progress(str.begin(),x);}

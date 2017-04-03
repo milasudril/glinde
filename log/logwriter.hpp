@@ -17,6 +17,8 @@ namespace Glinde
 		,const std::initializer_list<Variant>& args);
 
 	void logProgress(double x,const char* message);
+	void logProgressInit();
+	void logProgressEnd();
 
 	unsigned int logWriterAttach(Log::Writer& writer) noexcept;
 

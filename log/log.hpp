@@ -41,6 +41,8 @@ namespace Glinde
 				public:
 					virtual void write(MessageType type,const char* message) noexcept=0;
 					virtual void progress(const char* message,double x) noexcept=0;
+					virtual void progressInit() noexcept=0;
+					virtual void progressEnd() noexcept=0;
 				};
 
 			/**\brief Writes a message to the console (or the standard error stream).
@@ -52,6 +54,10 @@ namespace Glinde
 			*/
 			virtual void write(MessageType type,const char* format
 				,const std::initializer_list<Variant>& args)=0;
+
+			virtual void progressInit()=0;
+
+			virtual void progressEnd()=0;
 
 			virtual void progress(double x,const char* message)=0;
 		};
