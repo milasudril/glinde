@@ -32,7 +32,6 @@ static size_t malloc_count=0;
 			if( malloc_count!=0 ) \
 				{ \
 				GLINDE_DEBUG_PRINT("Leak detected: #0; objects are left on the heap.",{malloc_count}); \
-				 \
 				} \
 			}); \
 		} \
