@@ -116,6 +116,7 @@ void Engine::run(Timer& timer)
 			logWrite(Glinde::Log::MessageType::ERROR,"#0;",{err.messageGet()});
 			m_queue.post(0,Message{m_con_input,Status::READY,0});
 			}
+		m_queue.swapBuffers();
 		
 		if(counter%64==0)
 			{

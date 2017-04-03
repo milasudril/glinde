@@ -10,9 +10,6 @@
 #include "messageheader.hpp"
 #include <queue>
 
-
-#include <cstdio>
-
 namespace Glinde
 	{
 	class Timeinfo;
@@ -20,48 +17,63 @@ namespace Glinde
 	class MessageQueue
 		{
 		public:
+			MessageQueue() noexcept:read_buffer(mb + 0),write_buffer(mb + 1)
+				{}
+		
 			void post(double time_arrival,Message&& message)
 				{
-				Mutex::LockGuard guard(m_mutex);
-				auto id=m_msg_id.get();
-				m_queue.push(MessageHeader(time_arrival,id));
-				if(id>=m_messages.length())
-					{m_messages.append(std::move(message));}
+				Mutex::LockGuard guard(m_write_mutex);
+				auto buffer=write_buffer;
+				auto id=buffer->m_msg_id.get();
+				buffer->m_queue.push(MessageHeader(time_arrival,id));
+				if(id>=buffer->m_messages.length())
+					{buffer->m_messages.append(std::move(message));}
 				else
-					{m_messages[id]=std::move(message);}
+					{buffer->m_messages[id]=std::move(message);}
 				}
 
 			bool get(MessageHeader& header) noexcept
 				{
-				Mutex::LockGuard guard(m_mutex);
-				if(m_queue.size()==0)
+				auto buffer=read_buffer;
+				if(buffer->m_queue.size()==0)
 					{return 0;}
-				header=m_queue.top();
-				printf("%lu\n",header.id());
-				m_queue.pop();
+				header=buffer->m_queue.top();
+				buffer->m_queue.pop();
 				return 1;
 				}
 
 			void process(MessageHeader& header,const Timeinfo& ti)
 				{
-				Mutex::LockGuard guard(m_mutex);
+				auto buffer=read_buffer;
 				auto msg_id=header.id();
-				assert(msg_id<m_messages.length());
-				m_msg_id.release(msg_id);
+				assert(msg_id<buffer->m_messages.length());
+				buffer->m_msg_id.release(msg_id);
 				header.invalidate();
-				auto msg=std::move( m_messages[msg_id] );
+				auto msg=std::move( buffer->m_messages[msg_id] );
 				msg.process(ti);
 				}
 
+			void swapBuffers()
+				{
+				Mutex::LockGuard guard(m_write_mutex);
+				std::swap(read_buffer,write_buffer);
+				}
+
 		private:
-			Mutex m_mutex;
-			std::priority_queue< Message,ArrayDynamicSTL<MessageHeader>
-				,std::greater<MessageHeader> > m_queue;
-		
-			IdGenerator<uint32_t
-				,std::priority_queue<uint32_t,ArrayDynamicSTL<uint32_t>,std::greater<uint32_t>  >
-				> m_msg_id;
-			ArrayDynamic<Message> m_messages;
+			struct MessageBuffer
+				{
+				std::priority_queue< Message,ArrayDynamicSTL<MessageHeader>
+					,std::greater<MessageHeader> > m_queue;		
+				IdGenerator<uint32_t
+					,std::priority_queue<uint32_t,ArrayDynamicSTL<uint32_t>,std::greater<uint32_t>  >
+					> m_msg_id;
+				ArrayDynamic<Message> m_messages;
+				};
+
+			MessageBuffer mb[2];
+			Mutex m_write_mutex;
+			MessageBuffer* read_buffer;
+			MessageBuffer* write_buffer;
 		};
 	};
 
