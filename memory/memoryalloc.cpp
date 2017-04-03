@@ -38,15 +38,15 @@ static size_t malloc_count=0;
 		} \
 	}
 
-#define GLINDE_MALLOC_INCREMENT [](){++malloc_count;}
+#define GLINDE_MALLOC_INCREMENT [](){__atomic_add_fetch(&malloc_count,1,__ATOMIC_SEQ_CST);}
 #define GLINDE_MALLOC_DECREMENT []()\
 	{\
-	if(malloc_count==0) \
+	auto x=__atomic_fetch_add(&malloc_count,-1,__ATOMIC_SEQ_CST);\
+	if(x==0) \
 		{ \
 		GLINDE_DEBUG_PRINT("Double free detected");\
 		abort(); \
 		} \
-	--malloc_count; \
 	}
 #else
 #define GLINDE_REGISTER_MALLOC_DTOR [](){}
