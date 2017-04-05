@@ -10,19 +10,19 @@
 
 namespace Glinde
 	{
-	class Console;
+	class ConsoleBuffer;
 
 	class LogWriterConsole:public Log::Writer
 		{
 		public:
-			explicit LogWriterConsole(Console& con):r_con(&con),prog_state(0){}
+			explicit LogWriterConsole(ConsoleBuffer& con):r_con(&con),prog_state(0){}
 			void write(Log::MessageType type,const char* message) noexcept;
 			void progress(const char* message,double x) noexcept;
 			void progressInit() noexcept;
 			void progressEnd() noexcept;
 
 		private:
-			Console* r_con;
+			ConsoleBuffer* r_con;
 			int prog_state;
 		};
 	}

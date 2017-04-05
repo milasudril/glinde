@@ -88,27 +88,27 @@ String Glinde::utf8_encode(Range<const uint32_t> src)
 		{
 		auto code_point=*ptr_in;
 		if (code_point < 0x80)
-			{dest.append(code_point);}
+			{dest.append(static_cast<char>(code_point));}
 		else
 		if(code_point <= 0x7FF)
 			{
-			dest.append((code_point >> 6) + 0xC0);
-			dest.append((code_point & 0x3F) + 0x80);
+			dest.append(static_cast<char>((code_point >> 6) + 0xC0))
+				.append(static_cast<char>((code_point & 0x3F) + 0x80));
 			}
 		else
 		if(code_point <= 0xFFFF)
 			{
-			dest.append((code_point >> 12) + 0xE0);
-			dest.append(((code_point >> 6) & 0x3F) + 0x80);
-			dest.append((code_point & 0x3F) + 0x80);
+			dest.append(static_cast<char>((code_point >> 12) + 0xE0))
+				.append(static_cast<char>(((code_point >> 6) & 0x3F) + 0x80))
+				.append(static_cast<char>((code_point & 0x3F) + 0x80));
 			}
 		else
 		if(code_point <= 0x10FFFF)
 			{
-			dest.append((code_point >> 18) + 0xF0);
-			dest.append(((code_point >> 12) & 0x3F) + 0x80);
-			dest.append(((code_point >> 6) & 0x3F) + 0x80);
-			dest.append((code_point & 0x3F) + 0x80);
+			dest.append(static_cast<char>((code_point >> 18) + 0xF0))
+				.append(static_cast<char>(((code_point >> 12) & 0x3F) + 0x80))
+				.append(static_cast<char>(((code_point >> 6) & 0x3F) + 0x80))
+				.append(static_cast<char>((code_point & 0x3F) + 0x80));
 			}
 		else
 			{throw ErrorMessage("Codepoint #0; is invalid",{code_point});}

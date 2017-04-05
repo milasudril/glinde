@@ -45,6 +45,7 @@ namespace Glinde
 				{
 				std::swap(h.m_handle,m_handle);
 				std::swap(h.m_d,m_d);
+				return *this;
 				}
 
 			Handle& operator=(const Handle&)=delete;

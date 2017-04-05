@@ -17,7 +17,7 @@ namespace Glinde
 			typedef vec4_t<int> DataVec;
 			typedef int64_t DataWord;
 
-			typedef void (*DataDestructor)(DataVec,DataWord);
+			typedef void (*DataDestructor)(DataVec&,DataWord&);
 			typedef void (*Processor)(void*,const Timeinfo&,DataVec&,DataWord&);
 
 		public:
@@ -38,7 +38,7 @@ namespace Glinde
 				new(&m_data_vec)T(std::move(data_vec));
 				new(&m_data_word)U(std::move(data_word));
 
-				DataDestructor dtor=[](DataVec d1,DataWord d2)
+				DataDestructor dtor=[](DataVec& d1,DataWord& d2)
 					{
 					reinterpret_cast<T*>(&d1)->~T();
 					reinterpret_cast<U*>(&d2)->~U();
@@ -47,7 +47,7 @@ namespace Glinde
 					{
 					auto& cb=*reinterpret_cast<Callback*>(callback);
 					auto& data_vec=*reinterpret_cast<T*>(&d1);
-					auto& data_word=*reinterpret_cast<U*>(&d2); 
+					auto& data_word=*reinterpret_cast<U*>(&d2);
 					cb(ti,std::move(data_vec),std::move(data_word));
 					};
 				m_callback_data=&msgproc;
@@ -74,7 +74,7 @@ namespace Glinde
 				m_callbacks.vec=msg.m_callbacks.vec;
 				msg.m_callbacks.vec=vec2_t<size_t>{0,0};
 				}
-			
+
 			void process(const Timeinfo& ti)
 				{
 				assert(m_callbacks.pointers.r_proc!=nullptr);
@@ -109,7 +109,7 @@ namespace Glinde
 			X()
 				{}
 		};
-	
+
 	static constexpr X<sizeof(Message)> z;
 #endif
 	}

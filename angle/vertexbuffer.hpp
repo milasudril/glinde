@@ -66,13 +66,13 @@ namespace Angle
 
 			VertexBuffer& bufferData(const ElementType* data,size_t n_elems) noexcept
 				{
-				assert(m_capacity==n_elems); 
+				assert(m_capacity==n_elems);
 				return bufferData(data,0,n_elems);
 				}
 
 			VertexBuffer& bufferData(const ElementType* data,size_t offset,size_t n_elems) noexcept
 				{
-				assert(m_capacity>=n_elems + offset); 
+				assert(m_capacity>=n_elems + offset);
 				glNamedBufferSubData(m_handle,offset,sizeof(ElementType)*n_elems,data);
 				return *this;
 				}
@@ -119,7 +119,7 @@ namespace Angle
 			using typename base::value_type;
 			using base::bind;
 
-			VertexBuffer(size_t n_elems):base(components*n_elems)
+			explicit VertexBuffer(size_t n_elems):base(components*n_elems)
 				{}
 
 			VertexBuffer& bufferData(const vector_type* data,size_t n_elems) noexcept
@@ -155,7 +155,7 @@ namespace Angle
 			using typename base::value_type;
 			using base::bind;
 
-			VertexBuffer(size_t n_elems):base(components*n_elems)
+			explicit VertexBuffer(size_t n_elems):base(components*n_elems)
 				{}
 
 			VertexBuffer& bufferData(const vector_type* data,size_t n_elems) noexcept

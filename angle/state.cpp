@@ -24,7 +24,7 @@ void Angle::bindElementIndexData(const ValueType& type,const size_t& count)
 
 size_t Angle::drawElementsUnchecked(DrawMode mode,size_t index_first,size_t count)
 	{
-	glDrawElements(native_type(mode),count,native_type(*s_element_index_type)
+	glDrawElements(native_type(mode),static_cast<GLsizei>(count),native_type(*s_element_index_type)
 		,reinterpret_cast<void*>(index_first*size(*s_element_index_type)));
 	return count;
 	}

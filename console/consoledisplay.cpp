@@ -7,7 +7,7 @@
 
 using namespace Glinde;
 
-ConsoleDisplay::ConsoleDisplay(const Console& con):
+ConsoleDisplay::ConsoleDisplay(const ConsoleBuffer& con):
 	 m_con_renderer(con)
 	,m_con_texture(Angle::TextureFormat::RGBA16F
 		,m_con_renderer.textureWidth()

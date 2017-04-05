@@ -23,7 +23,7 @@ namespace Glinde
 				timespec now;
 				clock_gettime(CLOCK_PROCESS_CPUTIME_ID,&now);
 				auto ret=static_cast<double>(now.tv_sec - m_start.tv_sec);
-				return ret + (now.tv_nsec - m_start.tv_nsec)/1e9;
+				return ret + static_cast<double>(now.tv_nsec - m_start.tv_nsec)/1e9;
 				}
 
 			void reset() noexcept

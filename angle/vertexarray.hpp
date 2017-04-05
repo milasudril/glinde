@@ -32,7 +32,9 @@ namespace Angle
 		public:
 			VertexArray(const VertexArray&)=delete;
 
-			VertexArray(VertexArray&& obj) noexcept:m_handle(obj.m_handle)
+			VertexArray(VertexArray&& obj) noexcept:
+				 m_handle(obj.m_handle),m_index_type(obj.m_index_type)
+				,m_index_count(obj.m_index_count)
 				{obj.m_handle=0;}
 
 			VertexArray& operator=(const VertexArray&)=delete;
@@ -40,6 +42,8 @@ namespace Angle
 			VertexArray& operator=(VertexArray&& obj)
 				{
 				std::swap(obj.m_handle,m_handle);
+				m_index_count=obj.m_index_count;
+				m_index_type=obj.m_index_type;
 				return *this;
 				}
 
@@ -49,7 +53,7 @@ namespace Angle
 				glCreateVertexArrays(1,&m_handle);
               	Init<size(BatchLayout::attributes),true>::doIt(m_handle);
 				}
-				
+
 			~VertexArray()
 				{
 				glBindVertexArray(0);
@@ -139,12 +143,12 @@ namespace Angle
 				{
 				static void doIt(GLuint handle) noexcept
 					{
-					Init<k-1,dummy>::doIt(handle);                  
+					Init<k-1,dummy>::doIt(handle);
 					constexpr auto& attribute=BatchLayout::attributes[k-1];
 					attribFormat<attribute.type>(handle,k-1,attribute.components,attribute.normalized,attribute.offset);
                 	}
 				};
-      
+
 			template<bool dummy>
 			struct Init<0,dummy>
 				{
@@ -156,7 +160,7 @@ namespace Angle
 			class AttribContextPrev:public AttribContextPrev<k-1,dummy>
 				{
 				public:
-					AttribContextPrev(VertexArray& vao) noexcept:
+					explicit AttribContextPrev(VertexArray& vao) noexcept:
 						AttribContextPrev<k-1,dummy>(vao),m_context(vao)
 						{}
 
@@ -167,7 +171,7 @@ namespace Angle
 			class AttribContextPrev<0,dummy>
 				{
 				public:
-					AttribContextPrev(VertexArray& vao) noexcept{}
+					explicit AttribContextPrev(VertexArray& vao) noexcept{}
 				};
 
 			GLuint m_handle;

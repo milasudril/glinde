@@ -77,10 +77,10 @@ static int data_copy(archive* ar,archive* aw) noexcept
 
 		if(status!=ARCHIVE_OK)
 			{return status;}
-		
-		status=archive_write_data_block(aw,buff,size,offset);
-		if(status!=ARCHIVE_OK)
-			{return status;}
+
+	//TODO: Check example
+		if(archive_write_data_block(aw,buff,size,offset)==-1)
+			{return ARCHIVE_EOF;}
 		}
 	}
 
@@ -141,7 +141,7 @@ Directory Harvester::extract_impl(const char* src_file,const char* dest_dir
 		if(absolute(path))
 			{eh("The given archive contains an absolute path",exec_policy);}
 
-		auto pos=static_cast<uint64_t>( archive_filter_bytes(handle,-1) );
+		auto pos=static_cast<double>( archive_filter_bytes(handle,-1) );
 		switch( cb(pos/input_size,path,exec_policy) )
 			{
 			case ProgressStatus::SKIP:

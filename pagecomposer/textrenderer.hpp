@@ -21,12 +21,13 @@ namespace PageComposer
 			~TextRenderer();
 
 			TextRenderer(TextRenderer&& tr) noexcept:
-				 m_handle(tr.m_handle)
+				 r_rc(tr.r_rc),m_handle(tr.m_handle)
 				{tr.m_handle.reset();}
 
 			TextRenderer& operator=(TextRenderer&& tr) noexcept
 				{
 				std::swap(tr.m_handle,m_handle);
+				r_rc=tr.r_rc;
 				return *this;
 				}
 
@@ -41,7 +42,7 @@ namespace PageComposer
 
 			RenderContext& renderContext() noexcept
 				{return *r_rc;}
-	
+
 		private:
 			RenderContext* r_rc;
 			Handle<tr_t> m_handle;

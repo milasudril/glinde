@@ -244,7 +244,7 @@ inline static const void* faultAddressGet(ucontext_t* context) noexcept
 	format(Range<char>(buffer,sizeof(buffer)/sizeof(buffer[0]))
 		,"(x) The evil boss has setup a deathtrap because of #0; "
 		"at #1;. The program will now terminate.\n",{reason,ptr});
-	write(STDERR_FILENO,buffer,strlen(buffer));
+	if(write(STDERR_FILENO,buffer,strlen(buffer)));
 	_exit(signal);
 	}
 

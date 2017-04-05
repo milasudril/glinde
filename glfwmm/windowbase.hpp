@@ -113,8 +113,10 @@ namespace GLFWmm
 			WindowBase(float width,float height,const char* title,Session&)
 				{
 				auto video_mode=glfwGetVideoMode(glfwGetPrimaryMonitor());
-				m_handle=glfwCreateWindow(width*video_mode->width
-					,height*video_mode->height,title,NULL,NULL);
+				m_handle=glfwCreateWindow(
+					 static_cast<int>(width*static_cast<float>(video_mode->width))
+					,static_cast<int>(height*static_cast<float>(video_mode->height))
+					,title,NULL,NULL);
 				glfwSetWindowUserPointer(m_handle,this);
 				}
 

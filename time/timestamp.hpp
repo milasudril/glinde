@@ -33,7 +33,7 @@ namespace Glinde
 			bool operator>=(const Timestamp& t_prime) const noexcept
 				{return !(*this < t_prime);}
 
-			uint8_t sec() const noexcept
+			auto sec() const noexcept
 				{return m_bits&MASK_SEC;}
 
 			Timestamp& sec(uint32_t sec) noexcept
@@ -44,7 +44,7 @@ namespace Glinde
 				return *this;
 				}
 
-			uint8_t min() const noexcept
+			auto min() const noexcept
 				{return (m_bits&MASK_MIN)>>6;}
 
 			Timestamp& min(uint32_t min) noexcept
@@ -55,7 +55,7 @@ namespace Glinde
 				return *this;
 				}
 
-			uint8_t hour() const noexcept
+			auto hour() const noexcept
 				{return (m_bits&MASK_HOUR)>>12;}
 
 			Timestamp& hour(uint32_t hour) noexcept
@@ -66,7 +66,7 @@ namespace Glinde
 				return *this;
 				}
 
-			uint8_t day() const noexcept
+			auto day() const noexcept
 				{return (m_bits&MASK_DAY)>>17;}
 
 			Timestamp& day(uint32_t day)
@@ -77,7 +77,7 @@ namespace Glinde
 				return *this;
 				}
 
-			uint8_t month() const
+			auto month() const
 				{return (m_bits&MASK_MONTH)>>22;}
 
 			Timestamp& month(uint32_t month) noexcept

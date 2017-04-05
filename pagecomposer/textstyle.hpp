@@ -41,7 +41,7 @@ namespace PageComposer
 			TextStyle& operator=(TextStyle&& obj) noexcept
 				{
 				std::swap(obj.m_family,m_family);
-				std::swap(obj.m_family_size,obj.m_family_size);
+				std::swap(obj.m_family_size,m_family_size);
 				m_style=obj.m_style;
 				m_size=obj.m_size;
 				m_size_mode=obj.m_size_mode;

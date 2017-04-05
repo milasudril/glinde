@@ -26,7 +26,7 @@ namespace Glinde
 
 			uint32_t insert(RenderObject& obj,unsigned int z_index)
 				{
-				auto id=r_objects.length(); //Assume we never removes objects
+				auto id=r_objects.length(); //Assume no objects are removed
 				auto obj_index=r_objects.length(); //The new object will be stored last in the array
 				m_id_to_obj_index.append(obj_index); //Append object index to id->object lookup table
 				r_objects.append(RenderTask{0,z_index,id,&obj}); //Append the object using the new id

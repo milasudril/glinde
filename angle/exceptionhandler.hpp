@@ -1,6 +1,6 @@
 //@	{
 //@	 "targets":[{"name":"exceptionhandler.hpp","type":"include"}]
-//@	,"dependencies_extra":[{"ref":"exceptionhandler.o","rel":"implementation"}]	
+//@	,"dependencies_extra":[{"ref":"exceptionhandler.o","rel":"implementation"}]
 //@}
 
 #ifndef ANGLE_EXCEPTIONHANDLER_HPP
@@ -12,10 +12,9 @@ namespace Angle
 	{
 	class ExceptionHandler
 		{
-		virtual void raise(const Error& err)
-			{throw err;}
-
-		friend void exceptionRaise(const Error& err);
+		public:
+			virtual void raise(const Error& err)
+				{throw err;}
 		};
 
 	ExceptionHandler& exceptionHandlerSet(ExceptionHandler* eh) noexcept;
@@ -27,7 +26,7 @@ namespace Angle
 			explicit ExceptionContext(ExceptionHandler* eh) noexcept:
 				r_handler_old(exceptionHandlerSet(eh))
 				{}
-		
+
 			~ExceptionContext() noexcept
 				{exceptionHandlerSet(&r_handler_old);}
 

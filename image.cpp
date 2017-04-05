@@ -3,7 +3,7 @@
 //@		[{
 //@		 "dependencies":[{"ref":"Half","rel":"external"}]
 //@		,"name":"image.o","type":"object"
-//@		,"pkgconfig_libs":["libpng"]		
+//@		,"pkgconfig_libs":["libpng"]
 //@		}]
 //@	}
 
@@ -27,7 +27,7 @@ namespace
 	class PNGReader
 		{
 		public:
-			inline PNGReader(DataSource& source);
+			explicit inline PNGReader(DataSource& source);
 			inline ~PNGReader();
 
 			uint32_t width() const noexcept

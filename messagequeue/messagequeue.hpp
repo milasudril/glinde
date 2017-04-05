@@ -45,7 +45,7 @@ namespace Glinde
 			void process(MessageHeader& header,const Timeinfo& ti)
 				{
 				auto buffer=read_buffer;
-				auto msg_id=header.id();
+				auto msg_id=static_cast<uint32_t>(header.id());
 				assert(msg_id<buffer->m_messages.length());
 				buffer->m_msg_id.release(msg_id);
 				header.invalidate();

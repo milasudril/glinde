@@ -7,7 +7,6 @@
 //@	}
 
 #include "consolerenderer.hpp"
-#include "console.hpp"
 #include "../color.hpp"
 #include "../time/timeinfo.hpp"
 #include "../blob.hpp"
@@ -56,7 +55,7 @@ static ConsoleRenderer::Colormap colors_generate() noexcept
 	{
 	ConsoleRenderer::Colormap ret;
 	for(decltype(ret.length()) k=0;k<ret.length();++k)
-		{ret[k]=color(k);}
+		{ret[k]=color(static_cast<uint8_t>(k));}
 	return ret;
 	}
 
@@ -72,12 +71,12 @@ static Angle::Texture2D& charmap_init()
 		.filter(Angle::MinFilter::NEAREST);
 	}
 
-ConsoleRenderer::ConsoleRenderer(const Console& con):
+ConsoleRenderer::ConsoleRenderer(const ConsoleBuffer& con):
 	ConsoleRenderer(charmap_init(),con)
 	{}
 
 
-ConsoleRenderer::ConsoleRenderer(const Angle::Texture2D& charmap,const Console& con):r_con(&con)
+ConsoleRenderer::ConsoleRenderer(const Angle::Texture2D& charmap,const ConsoleBuffer& con):r_con(&con)
 ,m_palette(16),m_bg_opacity(1.0f)
 ,r_charmap(&charmap)
 ,m_charcells(4*con.sizeFull()),m_colors(4*con.sizeFull()),m_uvs(4*con.sizeFull())

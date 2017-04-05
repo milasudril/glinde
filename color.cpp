@@ -8,7 +8,7 @@ static constexpr ArrayFixed<float,256> srgb_lut_generate() noexcept
 	{
 	ArrayFixed<float,256> ret;
 	for(int k=0;k<256;++k)
-		{ret[k]=Color::fromSRGB(k/255.0f);}
+		{ret[k]=Color::fromSRGB(static_cast<float>(k)/255.0f);}
 	return ret;
 	}
 

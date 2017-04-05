@@ -14,7 +14,7 @@
 
 #include "messagequeue/messagequeue.hpp"
 #include "console/logwriterconsole.hpp"
-#include "console/console.hpp"
+#include "console/consolebuffer.hpp"
 #include "console/consoledisplay.hpp"
 #include "console/consoleinputhandler.hpp"
 #include "scene/scene.hpp"
@@ -49,24 +49,31 @@ namespace Glinde
 		private:
 			MessageQueue m_queue;
 			Handle<unsigned int,-1,decltype(&logQueueDetach)> m_queue_guard;
-			Console m_console;
+			ConsoleBuffer m_console;
 			ConsoleInputHandler m_con_input;
 			LogWriterConsole m_con_writer;
+			unsigned int m_con_writer_index;
+
 
 			MessageHeader m_msg_header;
 			double m_t_0;
 			GLFWmm::Session m_session;
 			UICallback m_cb; 
 			Display m_mainwin;
+
 			CmdProcMain m_cmdproc;
+
 			ConsoleDisplay m_con_display;
 			Overlay m_overlay;
 			Scene m_scene;
 			RenderList m_renderlist;
+
+			unsigned int m_condisp_id;
+			unsigned int m_overlay_id;
+			unsigned int m_scene_id;
+
 			std::unique_ptr<Game> m_game;
 			std::unique_ptr<Thread<GameLoader>> m_game_loader;
-
-			unsigned int m_con_index;
 			volatile bool m_stop;
 		};
 	}

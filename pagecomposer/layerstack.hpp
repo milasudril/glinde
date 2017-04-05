@@ -17,7 +17,7 @@ namespace PageComposer
 	class LayerStack
 		{
 		public:
-			explicit LayerStack(RenderContext& rc) noexcept:r_rc(rc)
+			explicit LayerStack(RenderContext& rc) noexcept:r_rc(rc),m_forced(1)
 				{}
 
 			void render() const noexcept
@@ -48,7 +48,7 @@ namespace PageComposer
 			const Layer& operator[](size_t k) const noexcept
 				{return m_layers[k];}
 
-			void forcedRender() noexcept	
+			void forcedRender() noexcept
 				{m_forced=1;}
 
 		private:

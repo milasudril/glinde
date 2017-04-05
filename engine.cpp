@@ -12,8 +12,8 @@
 #include "angle/init.hpp"
 #include "log/logwriter.hpp"
 #include "gamedata/gameloader.hpp"
-
 #include <maike/targetinclude.hpp>
+#include MAIKE_TARGET(projectinfo.hpp)
 #include <utility>
 #include <cstdio>
 
@@ -46,30 +46,90 @@ namespace
 
 GLINDE_BLOB(consoletest,"consoletest.bin");
 
+static void bannerDraw(ConsoleBuffer& con)
+	{
+	auto nc=con.colsCount();
+	con.colorMask(0xf7)
+		.fill(nc,U' ');
+	String text;
+	text.append(ProjectInfo::name())
+		.append(' ').append(ProjectInfo::version());
+
+	auto n=text.length();
+	auto n_left=static_cast<int>( 0.5*(nc-8 - n) );
+	con.colorMask(0xfd)
+		.write(' ')
+		.fill(n_left,U'〜')
+		.write(' ')
+		.colorMask(0xf9)
+		.write(U'✦')
+		.colorMask(0xfd)
+		.write(' ')
+		.colorMask(0xf5)
+		.writeUTF8(text.begin())
+		.colorMask(0xfd)
+		.write(' ')
+		.colorMask(0xf9)
+		.write(U'✦')
+		.colorMask(0xfd)
+		.write(' ')
+		.fill(nc-8-n-n_left,U'〜')
+		.write(' ').colorMask(0xf0)
+		.fill(nc,U'▄');
+	}
+
 Engine::Engine():
+//	Attach the message queue to the global log so any log message is passed
+//	to the queue.
 	 m_queue_guard(logQueueAttach(m_queue),&logQueueDetach)
+
+//	Console stuff
 	,m_console(25,80)
 	,m_con_input(m_console,m_cmdproc)
 	,m_con_writer(m_console)
-	,m_t_0(0)
+
+//	Initialize GLFW
 	,m_session(sessionCreate())
+
+//	Create UI callback and the main window
 	,m_cb(m_renderlist,m_con_input,*this)
 	,m_mainwin(m_cb,m_session)
+
+//	Connect *this and m_mainwin to the main CommandProcessor
 	,m_cmdproc(*this,m_mainwin)
 	,m_con_display(m_console)
 	{
+	bannerDraw(m_console);
+
+//	Connect console to logWriter
+	m_con_writer_index=logWriterAttach(m_con_writer);
+
+//	Reset the world clock
+	m_t_0=0;
+//	And stop check variable
+	m_stop=0;
+//	Currently, the render speed is controlled by an external timer
 	glfwSwapInterval(0);
+
 	auto size_fb=m_mainwin.sizeFb();
+
+//	Broadcast framebuffer resize to affected parts
 	m_cb.framebufferSizeChanged(m_mainwin,size_fb.width,size_fb.height);
-	m_renderlist.insertOnTop(m_scene);
-	auto con_id=m_renderlist.insertOnTop(m_con_display);
-	m_renderlist.activate(con_id);
-	m_con_index=logWriterAttach(m_con_writer);
+
+//	Add all RenderObjects
+	m_condisp_id=m_renderlist.insert(m_con_display,2);
+	m_overlay_id=m_renderlist.insert(m_overlay,1);
+	m_scene_id=m_renderlist.insert(m_scene,0);
+
+//	Make the console visible
+	m_renderlist.activate(m_condisp_id);
+
+//	Notify the ConsoleInputHandler that it can process input.
 	m_queue.post(0,Message{m_con_input,Status::READY,0});
 	}
 
 Engine::~Engine()
-	{logWriterDetach(m_con_index);}
+	{logWriterDetach(m_con_writer_index);}
 
 void Engine::consoletest()
 	{
@@ -91,11 +151,12 @@ void Engine::run(Timer& timer)
 	do
 		{
 		Timeinfo now(t,dt);
-		try 
+		try
 			{
 		//TODO: Check exception policy for message processors. Should
 		//	we really stop processing the remaining messages if one
 		//	failed?
+
 			m_session.eventsPoll();
 			if(msg_header.arrivalTime()<=t)
 				{
@@ -120,7 +181,7 @@ void Engine::run(Timer& timer)
 			m_queue.post(0,Message{m_con_input,Status::READY,0});
 			}
 		m_queue.swapBuffers();
-		
+
 		if(counter%64==0)
 			{
 			fprintf(stderr,"%.15g\n",et.value()/(64.0*dt));

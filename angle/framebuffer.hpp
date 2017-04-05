@@ -31,7 +31,7 @@ namespace Angle
 
 			Framebuffer(const Framebuffer&)=delete;
 			Framebuffer& operator=(const Framebuffer&)=delete;
-			
+
 			Framebuffer(Framebuffer&& obj) noexcept:m_handle(obj.m_handle)
 				{obj.m_handle=0;}
 
@@ -82,7 +82,7 @@ namespace Angle
 				{glBindFramebuffer(native_type(t),m_handle);}
 
 		private:
-			Framebuffer(GLuint id):m_handle(id){}
+			explicit Framebuffer(GLuint id):m_handle(id){}
 
 			static constexpr GLenum native_type(Target t) noexcept
 				{return static_cast<GLenum>(t);}

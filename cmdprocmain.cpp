@@ -111,7 +111,7 @@ void CmdProcMain::process(ConsoleInputHandler& coninput,const char* cmdbuff)
 		if(cmd[0]=="glinfo")
 			{
 			auto info=r_display->glinfo();
-			auto& con=coninput.console();
+			auto& con=coninput.consoleBuffer();
 			con.writeUTF8(info.renderer)
 				.writeUTF8(", ")
 				.writeUTF8(info.version)

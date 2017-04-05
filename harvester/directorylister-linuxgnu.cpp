@@ -35,7 +35,7 @@ using namespace Harvester;
 class DirectoryLister::Impl
 	{
 	public:
-		Impl(const char* dirname)
+		explicit Impl(const char* dirname)
 			{
 			fd=open(dirname,O_DIRECTORY|O_RDONLY);
 			if(fd==-1)

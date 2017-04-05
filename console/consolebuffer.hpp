@@ -1,9 +1,9 @@
 //@	{
-//@	 "dependencies_extra":[{"ref":"console.o","rel":"implementation"}]
-//@	,"targets":[{"name":"console.hpp","type":"include"}]
+//@	 "targets":[{"name":"consolebuffer.hpp","type":"include"}]
+//@	,"dependencies_extra":[{"ref":"consolebuffer.o","rel":"implementation"}]
 //@	}
-#ifndef GLINDE_CONSOLE_HPP
-#define GLINDE_CONSOLE_HPP
+#ifndef GLINDE_CONSOLEBUFFER_HPP
+#define GLINDE_CONSOLEBUFFER_HPP
 
 #include "../faceindirect.hpp"
 #include "../vectortype.hpp"
@@ -17,21 +17,23 @@ namespace Glinde
 	{
 	struct VGACell;
 
-	class Console
+	class ConsoleBuffer
 		{
 		public:
-			explicit Console(uint32_t n_rows,uint32_t n_cols);
+			explicit ConsoleBuffer(uint32_t n_rows,uint32_t n_cols);
 
-			Console& colorMask(uint8_t color_mask) noexcept
+			ConsoleBuffer& colorMask(uint8_t color_mask) noexcept
 				{
 				m_color=color_mask;
+				character_render('\0',size());
 				return *this;
 				}
-			Console& writeRaw(const char* string) noexcept;
-			Console& writeUTF8(const char* string) noexcept;
-			Console& write(char ch) noexcept;
-			Console& write(uint32_t codepoint) noexcept;
-			Console& writeVGADump(Range<const VGACell> dump) noexcept;
+
+			ConsoleBuffer& writeRaw(const char* string) noexcept;
+			ConsoleBuffer& writeUTF8(const char* string) noexcept;
+			ConsoleBuffer& write(char ch) noexcept;
+			ConsoleBuffer& write(uint32_t codepoint) noexcept;
+			ConsoleBuffer& writeVGADump(Range<const VGACell> dump) noexcept;
 
 			uint32_t colsCount() const noexcept
 				{return m_n_cols;}
@@ -117,13 +119,16 @@ namespace Glinde
 				auto col=m_position%m_n_cols;
 				return vec2_t<float>
 					{
-					 static_cast<float>(2*col)/m_n_cols
-					,m_full?-2.0f*(m_n_rows - 1.0f)/m_n_rows:-static_cast<float>(2*row)/m_n_rows
+					 static_cast<float>(2*col)/static_cast<float>(m_n_cols)
+					,m_full?-2.0f*static_cast<float>(m_n_rows - 1)/static_cast<float>(m_n_rows)
+						:-static_cast<float>(2*row)/static_cast<float>(m_n_rows)
 					};
 				}
 
 			size_t sizeFull() const noexcept
 				{return size() + 1;}
+
+			ConsoleBuffer& fill(int n,uint32_t ch) noexcept;
 
 		private:
 			void go_back() noexcept

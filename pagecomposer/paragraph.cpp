@@ -105,9 +105,9 @@ static PangoStyle pango_style(TextStyle::FontStyle style) noexcept
 	}
 
 
-static float size_box(const ParaStyle& para,const TextStyle& font,int w,int h);
+static float size_box(const ParaStyle& para,const TextStyle& font,float w,float h);
 
-static float size_font(const ParaStyle& para,const TextStyle& font,int w,int h)
+static float size_font(const ParaStyle& para,const TextStyle& font,float w,float h)
 	{
 	auto size=font.size();
 	switch(font.textSizeMode())
@@ -126,7 +126,7 @@ static float size_font(const ParaStyle& para,const TextStyle& font,int w,int h)
 	return size;
 	}
 
-static float size_box(const ParaStyle& para,const TextStyle& font,int w,int h)
+static float size_box(const ParaStyle& para,const TextStyle& font,float w,float h)
 	{
 	auto size=para.size();
 	switch(para.textSizeMode())
@@ -148,8 +148,8 @@ static float size_box(const ParaStyle& para,const TextStyle& font,int w,int h)
 
 void Paragraph::style_apply() const noexcept
 	{
-	auto width=render_context().surface().width();
-	auto height=render_context().surface().height();
+	auto width=static_cast<float>(render_context().surface().width());
+	auto height=static_cast<float>(render_context().surface().height());
 
 	auto f=const_cast<PangoFontDescription*>(font(m_font));
 	pango_font_description_set_family(f, m_t_style.family() );
@@ -157,15 +157,23 @@ void Paragraph::style_apply() const noexcept
 	pango_font_description_set_style(f, pango_style(m_t_style.style() ) );
 	pango_font_description_set_variant(f
 		,m_t_style.smallcaps()?PANGO_VARIANT_SMALL_CAPS:PANGO_VARIANT_NORMAL);
-	pango_font_description_set_size(f,size_font(m_p_style,m_t_style,width,height)*PANGO_SCALE);
+	pango_font_description_set_size(f
+		,static_cast<int>(size_font(m_p_style,m_t_style,width,height)
+			*static_cast<float>(PANGO_SCALE)));
 
 	auto para_size_dim=m_p_style.sizeDimension();
 	auto l=const_cast<PangoLayout*>(layout(m_layout));
 	pango_layout_set_font_description(l,f);
 	if(para_size_dim==ParaStyle::SizeDimension::HEIGHT)
-		{pango_layout_set_height(l,size_box(m_p_style,m_t_style,width,height)*PANGO_SCALE);}
+		{
+		pango_layout_set_height(l,static_cast<int>( size_box(m_p_style,m_t_style,width,height)
+			*static_cast<float>(PANGO_SCALE)));
+		}
 	else
-		{pango_layout_set_width(l,size_box(m_p_style,m_t_style,width,height)*PANGO_SCALE);}
+		{
+		pango_layout_set_width(l,static_cast<int>(size_box(m_p_style,m_t_style,width,height)
+			*static_cast<float>(PANGO_SCALE)));
+		}
 	pango_layout_set_alignment(l,pango_alignment(m_p_style.alignment()));
 
 	m_flags&=~STYLE_DIRTY;

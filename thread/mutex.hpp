@@ -16,7 +16,9 @@ namespace Glinde
 			class LockGuard
 				{
 				public:
-					LockGuard(Mutex& m):r_m(m)
+					LockGuard(const LockGuard&)=delete;
+					LockGuard& operator=(const LockGuard&)=delete;
+					explicit LockGuard(Mutex& m):r_m(m)
 						{m.lock();}
 
 					~LockGuard()

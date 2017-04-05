@@ -7,7 +7,7 @@
 #define GLINDE_CONSOLEINPUTHANDLER_HPP
 
 #include "../inputhandler.hpp"
-#include "console.hpp"
+#include "consolebuffer.hpp"
 #include "../arraydynamic.hpp"
 #include "../status.hpp"
 
@@ -18,7 +18,7 @@ namespace Glinde
 	class ConsoleInputHandler:public InputHandler
 		{
 		public:
-			explicit ConsoleInputHandler(Console& con,CommandProcessor& cmdproc):
+			explicit ConsoleInputHandler(ConsoleBuffer& con,CommandProcessor& cmdproc):
 				r_con(&con),r_cmdproc(&cmdproc),m_status(Status::WAITING)
 				{}
 
@@ -57,11 +57,11 @@ namespace Glinde
 					}
 				}
 
-			Console& console() noexcept
+			ConsoleBuffer& consoleBuffer() noexcept
 				{return *r_con;}
 
 		private:
-			Console* r_con;
+			ConsoleBuffer* r_con;
 			CommandProcessor* r_cmdproc;
 			ArrayDynamic<uint32_t> m_input_buffer;
 			Status m_status;

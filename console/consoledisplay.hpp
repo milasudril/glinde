@@ -15,8 +15,8 @@ namespace Glinde
 	class ConsoleDisplay final:public RenderObject
 		{
 		public:
-			explicit ConsoleDisplay(Console&& con)=delete;
-			explicit ConsoleDisplay(const Console& con);
+			explicit ConsoleDisplay(ConsoleBuffer&& con)=delete;
+			explicit ConsoleDisplay(const ConsoleBuffer& con);
 
 			void framebufferResize(int width,int height)
 				{}

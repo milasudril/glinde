@@ -22,7 +22,7 @@ using namespace Glinde;
 
 struct TimerReal::Impl
 	{
-	Impl(double frequency)
+	explicit Impl(double frequency)
 		{
 		if(sem_init(&m_trig,0,1)!=0)
 			{throw ErrorMessage("It was not possible to initialize a semaphore for the timerreal",{});}
@@ -60,9 +60,9 @@ struct TimerReal::Impl
 		t.it_value={0,1};
 		if(timer_settime(m_id,0,&t,NULL)!=0)
 			{
-			throw ErrorMessage("It was not possible to set the timerreal interval.",{});
 			timer_delete(m_id);
 			sem_destroy(&m_trig);
+			throw ErrorMessage("It was not possible to set the timerreal interval.",{});
 			}
 		}
 

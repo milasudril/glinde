@@ -31,7 +31,7 @@ namespace Glinde
 		};
 
 	template<class Function>
-	class Thread:private ThreadBase
+	class Thread final:private ThreadBase
 		{
 		public:
 			explicit Thread(Function&& entry):m_entry(std::move(entry))

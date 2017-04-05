@@ -17,12 +17,12 @@ int main()
 	PageComposer::TextRenderer tr(rc);
 
 	PageComposer::ParaStyle style_para;
-	style_para.color(PageComposer::Color{1,0.75,0.85,1})
+	style_para.color(PageComposer::Color{1.0f,0.75f,0.85f,1.0f})
 		.alignment(PageComposer::ParaStyle::Alignment::CENTER);
 
 	PageComposer::TextStyle style_text;
 	style_text.size(16).family("Latin Modern Roman")
-		.color(PageComposer::Color{0,0.5,0.2,1});
+		.color(PageComposer::Color{0.0f,0.5f,0.2f,1.0f});
 	
 	PageComposer::Paragraph foo(tr);
 	foo.style(style_para)
@@ -45,7 +45,7 @@ int main()
 			{
 			assert(k!=1);
 			auto si=rect.sizeInt();
-			PageComposer::Surface surf2(si.x(),si.y());
+			PageComposer::Surface surf2(int(si.x()),int(si.y()));
 			surf2.contentModify([&surf,si](PageComposer::Surface::Pixel* pixels,int width,int height)
 				{
 				surf.rectangleGet(surf.dirtyRectangle(),pixels);

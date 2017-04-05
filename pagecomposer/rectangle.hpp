@@ -38,7 +38,7 @@ namespace PageComposer
 				return s.x()*s.y();
 				}
 
-			size_t areaInt() const noexcept
+			auto areaInt() const noexcept
 				{
 				auto s=sizeInt();
 				return s.x()*s.y();

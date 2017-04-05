@@ -6,7 +6,7 @@
 #ifndef GLINDE_CONSOLERENDERER_HPP
 #define GLINDE_CONSOLERENDERER_HPP
 
-#include "console.hpp"
+#include "consolebuffer.hpp"
 #include "../instancecounter.hpp"
 #include "../angle/texture2d.hpp"
 #include "../angle/program.hpp"
@@ -23,14 +23,14 @@ namespace Glinde
 		public:
 			typedef ArrayFixed<Color,16> Colormap;
 
-			ConsoleRenderer(Console&&)=delete;
+			ConsoleRenderer(ConsoleBuffer&&)=delete;
 
-			explicit ConsoleRenderer(const Console& con);
+			explicit ConsoleRenderer(const ConsoleBuffer& con);
 
 			template<class T>
 			ConsoleRenderer(Angle::Texture2D&& charmap,T)=delete;
 
-			explicit ConsoleRenderer(const Angle::Texture2D& charmap,const Console& con);
+			explicit ConsoleRenderer(const Angle::Texture2D& charmap,const ConsoleBuffer& con);
 
 			~ConsoleRenderer();
 
@@ -52,7 +52,7 @@ namespace Glinde
 				}
 
 		private:
-			const Console* r_con;
+			const ConsoleBuffer* r_con;
 
 			Angle::VertexBuffer<vec4_t<float>> m_palette;
 			float m_bg_opacity;

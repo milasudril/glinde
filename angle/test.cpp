@@ -19,7 +19,7 @@
 
 struct GLFWContext
 	{
-	GLFWContext(const Angle::VersionRequest& version)
+	explicit GLFWContext(const Angle::VersionRequest& version)
 		{
 		glfwInit();
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, version.major);
@@ -122,8 +122,8 @@ static void textureFill()
 		{
 		for(size_t l=0;l<1920;++l)
 			{
-			g_texture[k][l].R=uint8_t(255*k/1200.0f);
-			g_texture[k][l].G=uint8_t(255*l/1920.0f);
+			g_texture[k][l].R=uint8_t(255.0f*float(k)/1200.0f);
+			g_texture[k][l].G=uint8_t(255.0f*float(l)/1920.0f);
 			g_texture[k][l].B=0;
 			g_texture[k][l].A=255;
 			}

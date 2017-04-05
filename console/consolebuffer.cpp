@@ -1,5 +1,5 @@
-//@	{"targets":[{"name":"console.o","type":"object"}]}
-#include "console.hpp"
+//@	{"targets":[{"name":"consolebuffer.o","type":"object"}]}
+#include "consolebuffer.hpp"
 #include "../io/utf8.hpp"
 #include "../arrayfixed.hpp"
 #include "../vgacell.hpp"
@@ -48,7 +48,7 @@ namespace
 			,2.0f*(GeoSIMD::Point<float>(x+dx,y-dy,0.0f)-GeoSIMD::Point<float>(0.5f,0.5f,0.0f))
 			,2.0f*(GeoSIMD::Point<float>(x,y-dy,0.0f)-GeoSIMD::Point<float>(0.5f,0.5f,0.0f))
 			);
-			return coords;
+		return coords;
 		}
 
 	inline floatpack uvcoords(uint16_t ch) noexcept
@@ -68,7 +68,7 @@ namespace
 		}
 	}
 
-Console::Console(uint32_t n_rows,uint32_t n_cols):
+ConsoleBuffer::ConsoleBuffer(uint32_t n_rows,uint32_t n_cols):
 	 m_vertices(new GeoSIMD::Point<float>[(n_rows*n_cols + 1)*4])
 	,m_colors(new uint32_t[(n_rows*n_cols + 1)*4])
 	,m_uvs(new vec2_t<float>[(n_rows*n_cols + 1)*4])
@@ -88,12 +88,12 @@ Console::Console(uint32_t n_rows,uint32_t n_cols):
 			m_vertices[4*cell + 2]=O + verts[2];
 			m_vertices[4*cell + 3]=O + verts[3];
 
-			m_faces[2*cell + 0][2]=4*cell + 0;
-			m_faces[2*cell + 0][1]=4*cell + 1;
-			m_faces[2*cell + 0][0]=4*cell + 2;
-			m_faces[2*cell + 1][2]=4*cell + 2;
-			m_faces[2*cell + 1][1]=4*cell + 3;
-			m_faces[2*cell + 1][0]=4*cell + 0;
+			m_faces[2*cell + 0][2]=static_cast<uint16_t>( 4*cell + 0 );
+			m_faces[2*cell + 0][1]=static_cast<uint16_t>( 4*cell + 1 );
+			m_faces[2*cell + 0][0]=static_cast<uint16_t>( 4*cell + 2 );
+			m_faces[2*cell + 1][2]=static_cast<uint16_t>( 4*cell + 2 );
+			m_faces[2*cell + 1][1]=static_cast<uint16_t>( 4*cell + 3 );
+			m_faces[2*cell + 1][0]=static_cast<uint16_t>( 4*cell + 0 );
 			}
 		}
 		{
@@ -103,22 +103,20 @@ Console::Console(uint32_t n_rows,uint32_t n_cols):
 		m_vertices[4*cell + 1]=O + verts[1];
 		m_vertices[4*cell + 2]=O + verts[2];
 		m_vertices[4*cell + 3]=O + verts[3];
-		m_faces[2*cell + 0][2]=4*cell + 0;
-		m_faces[2*cell + 0][1]=4*cell + 1;
-		m_faces[2*cell + 0][0]=4*cell + 2;
-		m_faces[2*cell + 1][2]=4*cell + 2;
-		m_faces[2*cell + 1][1]=4*cell + 3;
-		m_faces[2*cell + 1][0]=4*cell + 0;
+		m_faces[2*cell + 0][2]=static_cast<uint16_t>( 4*cell + 0 );
+		m_faces[2*cell + 0][1]=static_cast<uint16_t>( 4*cell + 1 );
+		m_faces[2*cell + 0][0]=static_cast<uint16_t>( 4*cell + 2 );
+		m_faces[2*cell + 1][2]=static_cast<uint16_t>( 4*cell + 2 );
+		m_faces[2*cell + 1][1]=static_cast<uint16_t>( 4*cell + 3 );
+		m_faces[2*cell + 1][0]=static_cast<uint16_t>( 4*cell + 0 );
 		}
 
 	m_n_rows=n_rows;
 	m_n_cols=n_cols;
-	colorMask(0x07);
-	
-	character_render('\0',size());
+	colorMask(0xc);
 	}
 
-Console& Console::writeRaw(const char* string) noexcept
+ConsoleBuffer& ConsoleBuffer::writeRaw(const char* string) noexcept
 	{
 	while(*string!='\0')
 		{
@@ -128,7 +126,7 @@ Console& Console::writeRaw(const char* string) noexcept
 	return *this;
 	}
 
-Console& Console::writeUTF8(const char* string) noexcept
+ConsoleBuffer& ConsoleBuffer::writeUTF8(const char* string) noexcept
 	{
 	if(string==nullptr)
 		{
@@ -189,52 +187,59 @@ static constexpr uint16_t charmap_misc(uint32_t codepoint)
 		case u'▲': return 30;
 		case u'▼': return 31;
 		case u'⌂': return 127;
-		case u'░': return 467;
-		case u'▒': return 468;
-		case u'▓': return 469;
-		case u'│': return 470;
-		case u'┤': return 471;
-		case u'╡': return 472;
-		case u'╢': return 473;
-		case u'╖': return 474;
-		case u'╕': return 475;
-		case u'╣': return 476;
-		case u'║': return 477;
-		case u'╗': return 478;
-		case u'╝': return 479;
-		case u'╜': return 480;
-		case u'╛': return 481;
-		case u'┐': return 482;
-		case u'└': return 483;
-		case u'┴': return 484;
-		case u'┬': return 485;
-		case u'├': return 486;
-		case u'─': return 487;
-		case u'┼': return 488;
-		case u'╞': return 489;
-		case u'╟': return 490;
-		case u'╚': return 491;
-		case u'╔': return 492;
-		case u'╩': return 493;
-		case u'╦': return 494;
-		case u'╠': return 495;
-		case u'═': return 496;
-		case u'╬': return 497;
-		case u'╧': return 498;
-		case u'╨': return 499;
-		case u'╤': return 500;
-		case u'╥': return 501;
-		case u'╙': return 502;
-		case u'╘': return 503;
-		case u'╒': return 504;
-		case u'╓': return 505;
-		case u'╫': return 506;
-		case u'╪': return 507;
-		case u'┘': return 508;
-		case u'┌': return 509;
-		case u'█': return 510;
+		case u'〜': return 452;
+		case u'✦': return 453;
+		case u'✧': return 454;
+		case u'░': return 463;
+		case u'▒': return 464;
+		case u'▓': return 465;
+		case u'│': return 466;
+		case u'┤': return 467;
+		case u'╡': return 468;
+		case u'╢': return 469;
+		case u'╖': return 470;
+		case u'╕': return 471;
+		case u'╣': return 472;
+		case u'║': return 473;
+		case u'╗': return 474;
+		case u'╝': return 475;
+		case u'╜': return 476;
+		case u'╛': return 477;
+		case u'┐': return 478;
+		case u'└': return 479;
+		case u'┴': return 480;
+		case u'┬': return 481;
+		case u'├': return 482;
+		case u'─': return 483;
+		case u'┼': return 484;
+		case u'╞': return 485;
+		case u'╟': return 486;
+		case u'╚': return 487;
+		case u'╔': return 488;
+		case u'╩': return 489;
+		case u'╦': return 490;
+		case u'╠': return 491;
+		case u'═': return 492;
+		case u'╬': return 493;
+		case u'╧': return 494;
+		case u'╨': return 495;
+		case u'╤': return 496;
+		case u'╥': return 497;
+		case u'╙': return 498;
+		case u'╘': return 499;
+		case u'╒': return 500;
+		case u'╓': return 501;
+		case u'╫': return 502;
+		case u'╪': return 503;
+		case u'┘': return 504;
+		case u'┌': return 505;
+		case u'█': return 506;
+		case u'▄': return 507;
+		case u'▌': return 508;
+		case u'▐': return 509;
+		case u'▀': return 510;
 		}
-	return 447;
+	return 511;
 	}
 
 static constexpr uint16_t charmap(uint32_t codepoint) noexcept
@@ -246,28 +251,28 @@ static constexpr uint16_t charmap(uint32_t codepoint) noexcept
 		{return 21;}
 
 	if(codepoint<32) //Control codes
-		{return static_cast<uint16_t>(codepoint) + CONTROLCODE;}
+		{return static_cast<uint16_t>(codepoint + CONTROLCODE);}
 
 	if(codepoint>=32 && codepoint<128) //ASCII characters
 		{return static_cast<uint16_t>(codepoint);}
 
 	if(codepoint>=0xe000 && codepoint<0xe100) //First 256 elements of private area (used for attribute change)
-		{return static_cast<uint16_t>(codepoint-0xe000) + CONTROLCODE + 256;}
+		{return static_cast<uint16_t>((codepoint-0xe000) + CONTROLCODE + 256);}
 	
 	if(codepoint>=160 && codepoint<256) //Latin-1 characters
 		{return static_cast<uint16_t>(codepoint - 32);}
 
 	if(codepoint>=0x384 && codepoint<0x3ce) //Greek characters
-		{return static_cast<uint16_t>(codepoint - 0x384) + 224;}
+		{return static_cast<uint16_t>((codepoint - 0x384) + 224);}
 
 	if(codepoint>=0x2018 && codepoint<0x2020) // Quotation marks
-		{return static_cast<uint16_t>(codepoint-0x2018) + 459;}
+		{return static_cast<uint16_t>((codepoint-0x2018) + 459);}
 
 	//Misc dingbats, box drawing, and blocks
 	return charmap_misc(codepoint); 
 	}
 
-Console& Console::write(uint32_t codepoint) noexcept
+ConsoleBuffer& ConsoleBuffer::write(uint32_t codepoint) noexcept
 	{
 	auto ch=charmap(codepoint);
 	auto N=m_n_cols*m_n_rows;
@@ -275,7 +280,7 @@ Console& Console::write(uint32_t codepoint) noexcept
 	if(ch>=CONTROLCODE)
 		{
 		if(ch>=CONTROLCODE + 256)
-			{colorMask(ch - (CONTROLCODE+256));}
+			{colorMask(static_cast<uint8_t>(ch - (CONTROLCODE+256)));}
 		
 		if(ch==CONTROLCODE + 10)
 			{
@@ -293,7 +298,7 @@ Console& Console::write(uint32_t codepoint) noexcept
 		return *this;
 		}
 
-	if(ch==447)
+	if(ch==511)
 		{fprintf(stderr,"Codepoint %x missing\n",codepoint);}
 
 	if(m_scroll_pending)
@@ -304,7 +309,7 @@ Console& Console::write(uint32_t codepoint) noexcept
 	return *this;
 	}
 
-void Console::character_render(uint16_t ch,size_t position)
+void ConsoleBuffer::character_render(uint16_t ch,size_t position)
 	{
 	auto uvs=uvcoords(ch);
 
@@ -318,7 +323,7 @@ void Console::character_render(uint16_t ch,size_t position)
 	m_colors[4*position + 3]=m_color;
 	}
 
-void Console::scroll_down() noexcept
+void ConsoleBuffer::scroll_down() noexcept
 	{
 	auto pos=m_position;
 	auto n_cols=m_n_cols;
@@ -329,12 +334,12 @@ void Console::scroll_down() noexcept
 	m_scroll_pending=0;
 	}
 
-Console& Console::write(char ch) noexcept
+ConsoleBuffer& ConsoleBuffer::write(char ch) noexcept
 	{
 	return write(static_cast<uint32_t>( static_cast<uint8_t>(ch) ));
 	}
 
-Console& Console::writeVGADump(Range<const VGACell> dump) noexcept
+ConsoleBuffer& ConsoleBuffer::writeVGADump(Range<const VGACell> dump) noexcept
 	{
 	auto ptr=dump.begin();
 	uint8_t mask_prev=0;
@@ -366,3 +371,14 @@ Console& Console::writeVGADump(Range<const VGACell> dump) noexcept
 	m_line_current=0;
 	return *this;
 	}
+
+ConsoleBuffer& ConsoleBuffer::fill(int n,uint32_t ch) noexcept
+	{
+	while(n)
+		{
+		write(ch);
+		--n;
+		}
+	return *this;
+	}
+
