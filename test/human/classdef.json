@@ -1,6 +1,0 @@
-{
-	 "name":"human"
-	,"model":"../common/player_placeholder/model.json"
-	,"mass_density":23.0
-	,"mass_dimension":2.0
-}

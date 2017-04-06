@@ -4,9 +4,11 @@
         "paths_reject":[
             "..",
             ".",
-            "__targets"
+            "__targets_rel",
+			"__targets",
+			".git"
         ],
-        "recursive":0
+        "recursive":1
     },
     "source_files":[
         "."
@@ -36,7 +38,7 @@
                 "cflags_extra":["march=native","-fast-math"],
                 "cflags_format":"-^",
                 "cxxversion_max":-1,
-                "cxxversion_min":201103,
+                "cxxversion_min":201402,
                 "dllcompile":{
                     "args":[
                         "-g",
