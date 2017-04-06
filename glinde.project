@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<CodeLite_Project Name="glinde" InternalType="Console">
+<CodeLite_Project Name="glinde" InternalType="Console" Version="10.0.0">
   <Plugins>
     <Plugin Name="qmake">
       <![CDATA[00020001N0005Debug0000000000000001N0007Release000000000000]]>
@@ -33,8 +33,6 @@
     <File Name="projectinfo.py"/>
     <File Name="errormessage.cpp"/>
     <File Name="commandprocessor.hpp"/>
-    <File Name="blob.hpp"/>
-    <File Name="arrayinit.hpp"/>
     <File Name="inputhandler.hpp"/>
     <File Name="instancecounter.hpp"/>
     <File Name="string.cpp"/>
@@ -43,7 +41,6 @@
     <File Name="enginebase.hpp"/>
     <File Name="debug.cpp"/>
     <File Name="color.hpp"/>
-    <File Name="vectortype.hpp"/>
     <File Name="image.cpp"/>
     <File Name="renderlist.hpp"/>
     <File Name="imagerenderer.hpp"/>
@@ -59,24 +56,19 @@
     <File Name="display.hpp"/>
     <File Name="overlay.hpp"/>
     <File Name="uicallback.hpp"/>
-    <File Name="arraysimple.hpp"/>
     <File Name="maikeconfig-rel.json"/>
     <File Name="narrow_cast.hpp"/>
     <File Name="imagerenderer.cpp"/>
     <File Name="projectinfo.json"/>
     <File Name="cmdprocmain.hpp"/>
     <File Name="variant.hpp"/>
-    <File Name="arraydynamic.hpp"/>
     <File Name="cmdprocmain.cpp"/>
     <File Name="debug.hpp"/>
-    <File Name="arraydynamicstl.hpp"/>
     <File Name="image.hpp"/>
     <File Name="faceindirect.hpp"/>
     <File Name="overlay.cpp"/>
     <File Name="stringformat.cpp"/>
-    <File Name="range.hpp"/>
     <File Name="handle.hpp"/>
-    <File Name="arrayfixed.hpp"/>
     <File Name="stringkey.hpp"/>
     <File Name="color.cpp"/>
     <File Name="maikeconfig-dbg.json"/>
@@ -123,6 +115,7 @@
       <File Name="gamedata/gameloader.hpp"/>
       <File Name="gamedata/gameloader.cpp"/>
       <File Name="gamedata/game.hpp"/>
+      <File Name="gamedata/site.hpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="glfwmm">
       <File Name="glfwmm/session.cpp"/>
@@ -230,6 +223,16 @@
       <File Name="time/timer.hpp"/>
       <File Name="time/timerreal-linux.cpp"/>
       <File Name="time/timerreal.hpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="storage">
+      <File Name="storage/arraydynamic.hpp"/>
+      <File Name="storage/arraydynamicstl.hpp"/>
+      <File Name="storage/arrayfixed.hpp"/>
+      <File Name="storage/arrayinit.hpp"/>
+      <File Name="storage/arraysimple.hpp"/>
+      <File Name="storage/blob.hpp"/>
+      <File Name="range.hpp"/>
+      <File Name="vectortype.hpp"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Settings Type="Executable">

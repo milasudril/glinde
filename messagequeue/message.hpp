@@ -4,8 +4,8 @@
 #ifndef GLINDE_MESSAGE_HPP
 #define GLINDE_MESSAGE_HPP
 
-#include "../vectortype.hpp"
-#include "../arrayfixed.hpp"
+#include "../storage/vectortype.hpp"
+#include "../storage/arrayfixed.hpp"
 
 namespace Glinde
 	{

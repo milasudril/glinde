@@ -6,7 +6,7 @@
 #ifndef GLINDE_RENDERLIST_HPP
 #define GLINDE_RENDERLIST_HPP
 
-#include "arraydynamic.hpp"
+#include "storage/arraydynamic.hpp"
 
 namespace Glinde
 	{

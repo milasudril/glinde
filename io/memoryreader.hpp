@@ -7,7 +7,7 @@
 #define GLINDE_MEMORYREADER_HPP
 
 #include "datasource.hpp"
-#include "../vectortype.hpp"
+#include "../storage/vectortype.hpp"
 
 #include <cstdint>
 

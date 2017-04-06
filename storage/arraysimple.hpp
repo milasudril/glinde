@@ -7,10 +7,10 @@
 #define GLINDE_ARRAYSIMPLE_HPP
 
 #include "vectortype.hpp"
-#include "debug.hpp"
 #include "arrayinit.hpp"
 #include "range.hpp"
-#include "memory/memoryalloc.hpp"
+#include "../debug.hpp"
+#include "../memory/memoryalloc.hpp"
 
 #include <utility>
 #include <cstdint>

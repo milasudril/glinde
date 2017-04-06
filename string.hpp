@@ -5,7 +5,7 @@
 #ifndef GLINDE_STRING_HPP
 #define GLINDE_STRING_HPP
 
-#include "arraydynamic.hpp"
+#include "storage/arraydynamic.hpp"
 
 namespace Glinde
 	{

@@ -8,7 +8,7 @@
 /**\file errormessage.hpp \brief Defines an error message.
  */
 
-#include "arrayfixed.hpp"
+#include "storage/arrayfixed.hpp"
 #include <initializer_list>
 
 namespace Glinde

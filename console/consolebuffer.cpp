@@ -1,7 +1,7 @@
 //@	{"targets":[{"name":"consolebuffer.o","type":"object"}]}
 #include "consolebuffer.hpp"
 #include "../io/utf8.hpp"
-#include "../arrayfixed.hpp"
+#include "../storage/arrayfixed.hpp"
 #include "../vgacell.hpp"
 #include <cstdint>
 #include <xmmintrin.h>

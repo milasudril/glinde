@@ -4,7 +4,7 @@
 #ifndef GLINDE_MESSAGEHEADER_HPP
 #define GLINDE_MESSAGEHEADER_HPP
 
-#include "../vectortype.hpp"
+#include "../storage/vectortype.hpp"
 #include <limits>
 
 namespace Glinde

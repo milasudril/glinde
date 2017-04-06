@@ -4,7 +4,7 @@
 //@	}
 
 #include "../string.hpp"
-#include "../arraydynamic.hpp"
+#include "../storage/arraydynamic.hpp"
 #include <cstdint>
 
 namespace Glinde

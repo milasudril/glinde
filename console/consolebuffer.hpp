@@ -6,7 +6,7 @@
 #define GLINDE_CONSOLEBUFFER_HPP
 
 #include "../faceindirect.hpp"
-#include "../vectortype.hpp"
+#include "../storage/vectortype.hpp"
 #include "../color.hpp"
 #include "../memory/new.hpp"
 #include <geosimd/point.hpp>

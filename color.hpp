@@ -6,8 +6,8 @@
 #ifndef GLINDE_COLOR_HPP
 #define GLINDE_COLOR_HPP
 
-#include "vectortype.hpp"
-#include "arrayfixed.hpp"
+#include "storage/vectortype.hpp"
+#include "storage/arrayfixed.hpp"
 #include <cmath>
 #include <cstdint>
 

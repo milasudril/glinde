@@ -3,7 +3,7 @@
 //@	,"targets":[{"name":"logdefault.hpp","type":"include"}]
 //@	}
 #include "log.hpp"
-#include "../arrayfixed.hpp"
+#include "../storage/arrayfixed.hpp"
 #include "../string.hpp"
 
 #ifndef GLINDE_LOGDEFAULT_HPP

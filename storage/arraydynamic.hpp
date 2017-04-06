@@ -8,11 +8,11 @@
 
 #include "vectortype.hpp"
 #include "arrayinit.hpp"
-#include "debug.hpp"
-#include "errormessage.hpp"
 #include "range.hpp"
-#include "variant.hpp"
-#include "memory/memoryalloc.hpp"
+#include "../variant.hpp"
+#include "../debug.hpp"
+#include "../errormessage.hpp"
+#include "../memory/memoryalloc.hpp"
 
 #include <limits>
 #include <cstdint>

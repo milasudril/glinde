@@ -8,7 +8,7 @@
 
 #include "../inputhandler.hpp"
 #include "consolebuffer.hpp"
-#include "../arraydynamic.hpp"
+#include "../storage/arraydynamic.hpp"
 #include "../status.hpp"
 
 namespace Glinde

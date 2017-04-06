@@ -9,7 +9,7 @@
 #include "consolerenderer.hpp"
 #include "../color.hpp"
 #include "../time/timeinfo.hpp"
-#include "../blob.hpp"
+#include "../storage/blob.hpp"
 #include "../io/memoryreader.hpp"
 #include "../image.hpp"
 #include "../texture_upload.hpp"

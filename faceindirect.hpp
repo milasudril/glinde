@@ -3,7 +3,7 @@
 #ifndef GLINDE_FACEINDIRECT_HPP
 #define GLINDE_FACEINDIRECT_HPP
 
-#include "arrayfixed.hpp"
+#include "storage/arrayfixed.hpp"
 #include <cstdint>
 
 namespace Glinde

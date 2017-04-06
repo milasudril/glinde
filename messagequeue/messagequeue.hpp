@@ -3,7 +3,7 @@
 #ifndef GLINDE_MESSAGEQUEUE_HPP
 #define GLINDE_MESSAGEQUEUE_HPP
 
-#include "../arraydynamicstl.hpp"
+#include "../storage/arraydynamicstl.hpp"
 #include "../thread/mutex.hpp"
 #include "../idgenerator.hpp"
 #include "message.hpp"

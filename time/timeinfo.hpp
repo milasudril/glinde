@@ -4,7 +4,7 @@
 #define GLINDE_TIMEINFO_HPP
 
 #include "wallclocktime.hpp"
-#include "../vectortype.hpp"
+#include "../storage/vectortype.hpp"
 #include <cstddef>
 
 namespace Glinde
