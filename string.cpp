@@ -1,16 +1,8 @@
-//@	{
-//@	    "dependencies_extra":[],
-//@	    "targets":[
-//@	        {
-//@	            "dependencies":[],
-//@	            "name":"string.o",
-//@	            "type":"object"
-//@	        }
-//@	    ]
-//@	}
-#include "string.h"
-#include "debug.h"
-#include "errormessage.h"
+//@	{"targets":[{"name":"string.o","type":"object"}]}
+
+#include "string.hpp"
+#include "debug.hpp"
+#include "errormessage.hpp"
 #include <cstring>
 #include <cstdlib>
 #include <limits>

@@ -1,52 +1,43 @@
-//@	{
-//@	    "dependencies_extra":[],
-//@	    "targets":[
-//@	        {
-//@	            "dependencies":[],
-//@	            "name":"glinde",
-//@	            "type":"application"
-//@	        }
-//@	    ]
-//@	}
-#include "errormessage.h"
-#include "logwriter.h"
-#include "enginedefault.h"
-#include "variant.h"
-#include "handle.h"
-#include "windowgamedefault.h"
-#include "usereventhandler.h"
-#include "timerreal.h"
+//@	{"targets":[{"name":"glinde","type":"application"}]}
 
-#include "messagequeue.h"
+#include "engine.hpp"
+#include "errormessage.hpp"
+#include "time/timerdummy.hpp"
+#include "time/timerreal.hpp"
+#include "log/logwriter.hpp"
 
-using namespace Glinde;
+#ifdef PROFILE
+inline Glinde::TimerDummy timerCreate(double rate)
+	{return std::move(Glinde::TimerDummy(rate));}
+#else
+inline Glinde::TimerReal timerCreate(double rate)
+	{return std::move(Glinde::TimerReal(rate));}
+#endif
 
 
 int main()
 	{
-	deathtrapHandlerActivate();
-	logWrite(Log::MessageType::INFORMATION,"Glinde is starting up",{});
 	try
 		{
-		MessageQueue queue;
-		Handle<unsigned int,-1,decltype(&logQueueDetach)>
-			queue_guard(logQueueAttach(queue),&logQueueDetach);
+		Glinde::Engine engine;
+		engine.run(timerCreate(30));
 
-		EngineDefault e(queue);
-		logWrite(Log::MessageType::INFORMATION,"Engine initialized",{});
-		UserEventHandler test(e);
-		WindowGameDefault mainwin("Glinde",800,600,test);
-		TimerReal world_clock(30);
-		logWrite(Log::MessageType::INFORMATION
-			,"World clock ticks every #0; second",{world_clock.delayGet()});
-		e.windowSet(&mainwin).timerSet(&world_clock);
-		e.worldLoadAsync("test.zip");
-		e.run();
+	//TODO:
+	//	check argv
+	//		If a world is going to be loaded
+	//			Load that world and move input control to its menu
+	//		Else
+	//			Move input to console.
+	//	Console can always be accessed through key X
+	//	Esc returns to previous input mode
+
+
 		}
-	catch(const ErrorMessage& message)
+	catch(const Glinde::ErrorMessage& msg)
 		{
-		logWrite(Log::MessageType::ERROR,"#0;",{message.messageGet()});
+		fprintf(stderr,"%s\n",msg.messageGet());
 		return -1;
 		}
+
 	return 0;
-	};
+	}

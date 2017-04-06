@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeLite_Project Name="glinde" InternalType="Console">
+  <Plugins>
+    <Plugin Name="qmake">
+      <![CDATA[00020001N0005Debug0000000000000001N0007Release000000000000]]>
+    </Plugin>
+    <Plugin Name="CMakePlugin">
+      <![CDATA[[{
+  "name": "Debug",
+  "enabled": false,
+  "buildDirectory": "build",
+  "sourceDirectory": "$(ProjectPath)",
+  "generator": "",
+  "buildType": "",
+  "arguments": [],
+  "parentProject": ""
+ }, {
+  "name": "Release",
+  "enabled": false,
+  "buildDirectory": "build",
+  "sourceDirectory": "$(ProjectPath)",
+  "generator": "",
+  "buildType": "",
+  "arguments": [],
+  "parentProject": ""
+ }]]]>
+    </Plugin>
+  </Plugins>
+  <Description/>
+  <Dependencies/>
+  <VirtualDirectory Name="glinde-new">
+    <File Name="idgenerator.hpp"/>
+    <File Name="projectinfo.py"/>
+    <File Name="errormessage.cpp"/>
+    <File Name="commandprocessor.hpp"/>
+    <File Name="blob.hpp"/>
+    <File Name="arrayinit.hpp"/>
+    <File Name="inputhandler.hpp"/>
+    <File Name="instancecounter.hpp"/>
+    <File Name="string.cpp"/>
+    <File Name="texture_upload.hpp"/>
+    <File Name="renderobject.hpp"/>
+    <File Name="enginebase.hpp"/>
+    <File Name="debug.cpp"/>
+    <File Name="color.hpp"/>
+    <File Name="vectortype.hpp"/>
+    <File Name="image.cpp"/>
+    <File Name="renderlist.hpp"/>
+    <File Name="imagerenderer.hpp"/>
+    <File Name="cpuinfo.hpp"/>
+    <File Name="string.hpp"/>
+    <File Name="status.hpp"/>
+    <File Name="vgacell.cpp"/>
+    <File Name="vgacell.hpp"/>
+    <File Name="engine.hpp"/>
+    <File Name="engine.cpp"/>
+    <File Name="renderlist.cpp"/>
+    <File Name="glinde.cpp"/>
+    <File Name="display.hpp"/>
+    <File Name="overlay.hpp"/>
+    <File Name="uicallback.hpp"/>
+    <File Name="arraysimple.hpp"/>
+    <File Name="maikeconfig-rel.json"/>
+    <File Name="narrow_cast.hpp"/>
+    <File Name="imagerenderer.cpp"/>
+    <File Name="projectinfo.json"/>
+    <File Name="cmdprocmain.hpp"/>
+    <File Name="variant.hpp"/>
+    <File Name="arraydynamic.hpp"/>
+    <File Name="cmdprocmain.cpp"/>
+    <File Name="debug.hpp"/>
+    <File Name="arraydynamicstl.hpp"/>
+    <File Name="image.hpp"/>
+    <File Name="faceindirect.hpp"/>
+    <File Name="overlay.cpp"/>
+    <File Name="stringformat.cpp"/>
+    <File Name="range.hpp"/>
+    <File Name="handle.hpp"/>
+    <File Name="arrayfixed.hpp"/>
+    <File Name="stringkey.hpp"/>
+    <File Name="color.cpp"/>
+    <File Name="maikeconfig-dbg.json"/>
+    <File Name="maikeconfig.json"/>
+    <File Name="errormessage.hpp"/>
+    <File Name="stringformat.hpp"/>
+    <VirtualDirectory Name="angle">
+      <File Name="angle/init.hpp"/>
+      <File Name="angle/init.cpp"/>
+      <File Name="angle/contextguard.hpp"/>
+      <File Name="angle/shader.cpp"/>
+      <File Name="angle/texture2d.cpp"/>
+      <File Name="angle/arraysize.hpp"/>
+      <File Name="angle/program.hpp"/>
+      <File Name="angle/test.cpp"/>
+      <File Name="angle/texture2d.hpp"/>
+      <File Name="angle/vertexarray.hpp"/>
+      <File Name="angle/framebuffer.hpp"/>
+      <File Name="angle/valuetype.hpp"/>
+      <File Name="angle/exceptionhandler.cpp"/>
+      <File Name="angle/state.cpp"/>
+      <File Name="angle/vertexbuffer.hpp"/>
+      <File Name="angle/state.hpp"/>
+      <File Name="angle/exceptionhandler.hpp"/>
+      <File Name="angle/error.hpp"/>
+      <File Name="angle/shader.hpp"/>
+      <File Name="angle/maikeconfig.json"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="console">
+      <File Name="console/logwriterconsole.cpp"/>
+      <File Name="console/consoledisplay.hpp"/>
+      <File Name="console/consoledisplay.cpp"/>
+      <File Name="console/consolebuffer.hpp"/>
+      <File Name="console/consolebuffer.cpp"/>
+      <File Name="console/consolerenderer.cpp"/>
+      <File Name="console/logwriterconsole.hpp"/>
+      <File Name="console/consoleinputhandler.hpp"/>
+      <File Name="console/consolerenderer.hpp"/>
+      <File Name="console/consoleinputhandler.cpp"/>
+      <File Name="console/charmap.py"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="gamedata">
+      <File Name="gamedata/game.cpp"/>
+      <File Name="gamedata/gameloader.hpp"/>
+      <File Name="gamedata/gameloader.cpp"/>
+      <File Name="gamedata/game.hpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="glfwmm">
+      <File Name="glfwmm/session.cpp"/>
+      <File Name="glfwmm/size.hpp"/>
+      <File Name="glfwmm/window.hpp"/>
+      <File Name="glfwmm/session.hpp"/>
+      <File Name="glfwmm/test.cpp"/>
+      <File Name="glfwmm/windowbase.hpp"/>
+      <File Name="glfwmm/membercheck.hpp"/>
+      <File Name="glfwmm/maikeconfig.json"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="harvester">
+      <File Name="harvester/directorylister-linuxgnu.cpp"/>
+      <File Name="harvester/rmdir.hpp"/>
+      <File Name="harvester/rmdir.cpp"/>
+      <File Name="harvester/harvester.hpp"/>
+      <File Name="harvester/fileinfo.hpp"/>
+      <File Name="harvester/harvester_impl.hpp"/>
+      <File Name="harvester/fileinfo-linuxgnu.cpp"/>
+      <File Name="harvester/main.cpp"/>
+      <File Name="harvester/harvester.cpp"/>
+      <File Name="harvester/directory.hpp"/>
+      <File Name="harvester/strcpy.cpp"/>
+      <File Name="harvester/strcpy.hpp"/>
+      <File Name="harvester/cherrypick_test.cpp"/>
+      <File Name="harvester/directorylister.hpp"/>
+      <File Name="harvester/maikeconfig.json"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="io">
+      <File Name="io/datasource.hpp"/>
+      <File Name="io/memoryreader.hpp"/>
+      <File Name="io/utf8.cpp"/>
+      <File Name="io/utf8.hpp"/>
+      <File Name="io/memoryreader.cpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="log">
+      <File Name="log/logwriter.hpp"/>
+      <File Name="log/logwriter.cpp"/>
+      <File Name="log/logdefault.hpp"/>
+      <File Name="log/log.hpp"/>
+      <File Name="log/logdefault.cpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="memory">
+      <File Name="memory/new.cpp"/>
+      <File Name="memory/memoryalloc.hpp"/>
+      <File Name="memory/memoryalloc.cpp"/>
+      <File Name="memory/new.hpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="messagequeue">
+      <File Name="messagequeue/message.hpp"/>
+      <File Name="messagequeue/messageheader.hpp"/>
+      <File Name="messagequeue/messagequeue.hpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="pagecomposer">
+      <File Name="pagecomposer/layerstack.hpp"/>
+      <File Name="pagecomposer/rendercontext.cpp"/>
+      <File Name="pagecomposer/surface.hpp"/>
+      <File Name="pagecomposer/pageobject.hpp"/>
+      <File Name="pagecomposer/textrenderer.cpp"/>
+      <File Name="pagecomposer/paragraph.cpp"/>
+      <File Name="pagecomposer/cairohandles.hpp"/>
+      <File Name="pagecomposer/layerstack.cpp"/>
+      <File Name="pagecomposer/parastyle.hpp"/>
+      <File Name="pagecomposer/color.hpp"/>
+      <File Name="pagecomposer/textsizemode.hpp"/>
+      <File Name="pagecomposer/rendercontext.hpp"/>
+      <File Name="pagecomposer/paragraph.hpp"/>
+      <File Name="pagecomposer/test.cpp"/>
+      <File Name="pagecomposer/textstyle.hpp"/>
+      <File Name="pagecomposer/pageobjectbase.hpp"/>
+      <File Name="pagecomposer/textrenderer.hpp"/>
+      <File Name="pagecomposer/surface.cpp"/>
+      <File Name="pagecomposer/rectangle.hpp"/>
+      <File Name="pagecomposer/pattern.hpp"/>
+      <File Name="pagecomposer/exceptionhandler.cpp"/>
+      <File Name="pagecomposer/pangohandles.hpp"/>
+      <File Name="pagecomposer/handle.hpp"/>
+      <File Name="pagecomposer/vec2.hpp"/>
+      <File Name="pagecomposer/exceptionhandler.hpp"/>
+      <File Name="pagecomposer/pattern.cpp"/>
+      <File Name="pagecomposer/error.hpp"/>
+      <File Name="pagecomposer/layer.hpp"/>
+      <File Name="pagecomposer/maikeconfig.json"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="scene">
+      <File Name="scene/scenerenderer.hpp"/>
+      <File Name="scene/viewpoint.hpp"/>
+      <File Name="scene/scene.hpp"/>
+      <File Name="scene/scenerenderer.cpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="thread">
+      <File Name="thread/thread.cpp"/>
+      <File Name="thread/mutex.cpp"/>
+      <File Name="thread/test.cpp"/>
+      <File Name="thread/thread.hpp"/>
+      <File Name="thread/mutex.hpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="time">
+      <File Name="time/executiontimer.hpp"/>
+      <File Name="time/timeinfo.hpp"/>
+      <File Name="time/wallclocktime-linux.cpp"/>
+      <File Name="time/wallclocktime.hpp"/>
+      <File Name="time/timerdummy.hpp"/>
+      <File Name="time/timestamp.hpp"/>
+      <File Name="time/timer.hpp"/>
+      <File Name="time/timerreal-linux.cpp"/>
+      <File Name="time/timerreal.hpp"/>
+    </VirtualDirectory>
+  </VirtualDirectory>
+  <Settings Type="Executable">
+    <GlobalSettings>
+      <Compiler Options="" C_Options="" Assembler="">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Options="">
+        <LibraryPath Value="."/>
+      </Linker>
+      <ResourceCompiler Options=""/>
+    </GlobalSettings>
+    <Configuration Name="Debug" CompilerType="GCC" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
+      <Compiler Options="-g;-O0;-Wall" C_Options="-g;-O0;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Options="" Required="yes"/>
+      <ResourceCompiler Options="" Required="no"/>
+      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./__targets" Command="./__targets/$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="." PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
+      <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
+        <![CDATA[]]>
+      </Environment>
+      <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="" IsExtended="yes">
+        <DebuggerSearchPaths/>
+        <PostConnectCommands/>
+        <StartupCommands/>
+      </Debugger>
+      <PreBuild/>
+      <PostBuild/>
+      <CustomBuild Enabled="yes">
+        <RebuildCommand>maike --clean &amp;&amp; maike</RebuildCommand>
+        <CleanCommand>maike --clean</CleanCommand>
+        <BuildCommand>maike</BuildCommand>
+        <PreprocessFileCommand/>
+        <SingleFileCommand/>
+        <MakefileGenerationCommand/>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory>.</WorkingDirectory>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild/>
+        <CustomPreBuild/>
+      </AdditionalRules>
+      <Completion EnableCpp11="yes" EnableCpp14="yes">
+        <ClangCmpFlagsC/>
+        <ClangCmpFlags/>
+        <ClangPP/>
+        <SearchPaths/>
+      </Completion>
+    </Configuration>
+    <Configuration Name="Release" CompilerType="GCC" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
+      <Compiler Options="-O2;-Wall" C_Options="-O2;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
+        <IncludePath Value="."/>
+        <Preprocessor Value="NDEBUG"/>
+      </Compiler>
+      <Linker Options="" Required="yes"/>
+      <ResourceCompiler Options="" Required="no"/>
+      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./__targets_rel" Command="./__targets_rel/$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="." PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
+      <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
+        <![CDATA[]]>
+      </Environment>
+      <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="" IsExtended="no">
+        <DebuggerSearchPaths/>
+        <PostConnectCommands/>
+        <StartupCommands/>
+      </Debugger>
+      <PreBuild/>
+      <PostBuild/>
+      <CustomBuild Enabled="yes">
+        <RebuildCommand>maike --configfiles=maikeconfig-rel.json --clean &amp;&amp; maike --configfiles=maikeconfig-rel.json</RebuildCommand>
+        <CleanCommand>maike --configfiles=maikeconfig-rel.json --clean</CleanCommand>
+        <BuildCommand>maike --configfiles=maikeconfig-rel.json</BuildCommand>
+        <PreprocessFileCommand/>
+        <SingleFileCommand/>
+        <MakefileGenerationCommand/>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory/>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild/>
+        <CustomPreBuild/>
+      </AdditionalRules>
+      <Completion EnableCpp11="yes" EnableCpp14="yes">
+        <ClangCmpFlagsC/>
+        <ClangCmpFlags/>
+        <ClangPP/>
+        <SearchPaths/>
+      </Completion>
+    </Configuration>
+  </Settings>
+</CodeLite_Project>

@@ -1,8 +1,11 @@
 //@	{"targets":[{"name":"debug.o","type":"object"}]}
 
-#include "debug.h"
-#include "stringformat.h"
-#include "variant.h"
+#ifndef NDEBUG
+
+#include "debug.hpp"
+#include "stringformat.hpp"
+#include "variant.hpp"
+
 #include <cstdio>
 
 void Glinde::logWriteDebug(const char* file,uint64_t line
@@ -18,3 +21,5 @@ void Glinde::logWriteDebug(const char* file,uint64_t line
 		,"(DEBUG) #0;:#1;: #2;\n",{file,line,buffer_a});
 	fputs(buffer_b,stderr);
 	}
+
+#endif

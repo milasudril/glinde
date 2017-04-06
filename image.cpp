@@ -1,30 +1,20 @@
 //@	{
-//@	    "dependencies_extra":[],
-//@	    "targets":[
-//@	        {
-//@	            "dependencies":[
-//@	                {
-//@	                    "ref":"png",
-//@	                    "rel":"external"
-//@	                },
-//@	                {
-//@	                    "ref":"Half",
-//@	                    "rel":"external"
-//@	                }
-//@	            ],
-//@	            "name":"image.o",
-//@	            "type":"object"
-//@	        }
-//@	    ]
+//@	"targets":
+//@		[{
+//@		 "dependencies":[{"ref":"Half","rel":"external"}]
+//@		,"name":"image.o","type":"object"
+//@		,"pkgconfig_libs":["libpng"]
+//@		}]
 //@	}
-#include "image.h"
-#include "datasource.h"
-#include "errormessage.h"
-#include "logwriter.h"
-#include "cpuinfo.h"
-#include "debug.h"
-#include "narrow_cast.h"
-#include "variant.h"
+
+#include "image.hpp"
+#include "errormessage.hpp"
+#include "cpuinfo.hpp"
+#include "debug.hpp"
+#include "narrow_cast.hpp"
+#include "variant.hpp"
+#include "log/logwriter.hpp"
+#include "io/datasource.hpp"
 #include <png.h>
 #include <cmath>
 #include <memory>
@@ -36,16 +26,16 @@ namespace
 	class PNGReader
 		{
 		public:
-			inline PNGReader(DataSource& source);
+			explicit inline PNGReader(DataSource& source);
 			inline ~PNGReader();
 
-			uint32_t widthGet() const noexcept
+			uint32_t width() const noexcept
 				{return m_width;}
 
-			uint32_t heightGet() const noexcept
+			uint32_t height() const noexcept
 				{return m_height;}
 
-			uint32_t channelCountGet() const noexcept
+			uint32_t channelCount() const noexcept
 				{return m_n_channels;}
 
 			enum class ColorType:unsigned int
@@ -56,13 +46,13 @@ namespace
 				,GAMMACORRECTED
 				};
 
-			inline ColorType colorTypeGet() const noexcept
+			inline ColorType colorType() const noexcept
 				{return m_color_type;}
 
-			inline float gammaGet() const noexcept
-				{return static_cast<float>( m_gamma );}
+			inline double gamma() const noexcept
+				{return m_gamma;}
 
-			uint32_t sampleSizeGet() const noexcept
+			uint32_t sampleSize() const noexcept
 				{return m_sample_size;}
 
 			inline void headerRead();
@@ -261,29 +251,38 @@ void PNGReader::pixelsRead(Image::SampleType* pixels_out)
 			throw ErrorMessage("#0;: Unsupported sample size.",{source->nameGet()});
 			}
 		}
-
 	}
-
-
-
-namespace
-	{
-	typedef void (*ColorConverter)(Image& image);
-	}
-
-static void fromGamma(Image& image)
-	{}
 
 static float fromSRGB(float x)
 	{
 	return x<=0.04045f? x/12.92f : std::pow( (x + 0.055f)/(1.0f + 0.055f),2.4f);
 	}
 
+static float fromGamma(float x,float gamma)
+	{
+	return std::pow(x,gamma);
+	}
+
+static void fromGamma(Image& image,float gamma)
+	{
+	logWrite(Log::MessageType::INFORMATION,"Converting image with γ=#0;",{gamma});
+	auto ptr=image.pixels();
+	auto n_ch=image.channelCount();
+	auto N=image.width() * image.height() * n_ch;
+
+	while(N!=0)
+		{
+		*ptr=fromGamma(*ptr,gamma);
+		++ptr;
+		--N;
+		}
+	}
+
 static void fromSRGB(Image& image)
 	{
-	auto ptr=image.pixelsGet();
-	auto n_ch=image.channelCountGet();
-	auto N=image.widthGet() * image.heightGet() * n_ch;
+	auto ptr=image.pixels();
+	auto n_ch=image.channelCount();
+	auto N=image.width() * image.height() * n_ch;
 
 	while(N!=0)
 		{
@@ -293,30 +292,30 @@ static void fromSRGB(Image& image)
 		}
 	}
 
-static ColorConverter converterGet(PNGReader::ColorType color_type)
+static void convert(Image& img,const PNGReader& reader)
 	{
-	switch(color_type)
+	switch(reader.colorType())
 		{
 		case PNGReader::ColorType::UNKNOWN:
 			logWrite(Log::MessageType::WARNING
 				,"Color type for loaded image is unknown. Assuming LINEAR color values.",{});
-			return nullptr;
+			return;
 
 		case PNGReader::ColorType::INFORMATION_MISSING:
 			logWrite(Log::MessageType::WARNING
-				,"Color type information for loaded image is missing. Assuming sRGB.",{});
-			return fromSRGB;
+				,"Color type information for loaded image is missing. Assuming sRGB color values.",{});
+			return fromSRGB(img);
 
 		case PNGReader::ColorType::GAMMACORRECTED:
-			return fromGamma;
+			return fromGamma(img,static_cast<float>(1.0/reader.gamma()));
 
 		case PNGReader::ColorType::SRGB:
-			return fromSRGB;
+			return fromSRGB(img);
 
 		default:
 			logWrite(Log::MessageType::WARNING
 				,"Color type for loaded image is unknown. Assuming LINEAR color values.",{});
-			return nullptr;
+			return;
 		}
 	}
 
@@ -324,7 +323,7 @@ static ColorConverter converterGet(PNGReader::ColorType color_type)
 
 Image::Image(DataSource& source,uint32_t id)
 	{
-	logWrite(Log::MessageType::INFORMATION,"Reading image #0;"
+	logWrite(Log::MessageType::INFORMATION,"Loading image from #0;"
 		,{source.nameGet()});
 		{
 		uint8_t magic[8]="xxxxxxx";
@@ -345,22 +344,15 @@ Image::Image(DataSource& source,uint32_t id)
 	reader.headerRead();
 
 	m_properties.x=vec4_t<uint32_t>
-		{reader.widthGet(),reader.heightGet(),reader.channelCountGet(),id};
+		{reader.width(),reader.height(),reader.channelCount(),id};
 
-	m_pixels=ArraySimple<SampleType>(reader.widthGet()*reader.heightGet()
-		*reader.channelCountGet());
+	m_pixels=ArraySimple<SampleType>(reader.width()*reader.height()
+		*reader.channelCount());
 
 	reader.pixelsRead(m_pixels.begin());
+	convert(*this,reader);
 
-
-
-	auto converter=converterGet(reader.colorTypeGet());
-	if(converter!=nullptr)
-		{
-		converter(*this);
-		}
-
-	GLINDE_DEBUG_PRINT("Loaded an image of size #0; x #1;",widthGet(),heightGet());
+	GLINDE_DEBUG_PRINT("Loaded an image of size #0; x #1;",width(),height());
 	}
 
 Image::Image(uint32_t width,uint32_t height,uint32_t n_channels,uint32_t id):

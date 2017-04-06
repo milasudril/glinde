@@ -1,15 +1,7 @@
-//@	{
-//@	    "dependencies_extra":[],
-//@	    "targets":[
-//@	        {
-//@	            "dependencies":[],
-//@	            "name":"errormessage.o",
-//@	            "type":"object"
-//@	        }
-//@	    ]
-//@	}
-#include "errormessage.h"
-#include "stringformat.h"
+//@	{"targets":[{"name":"errormessage.o","type":"object"}]}
+
+#include "errormessage.hpp"
+#include "stringformat.hpp"
 
 using namespace Glinde;
 

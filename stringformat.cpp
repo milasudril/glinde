@@ -1,16 +1,8 @@
-//@	{
-//@	    "dependencies_extra":[],
-//@	    "targets":[
-//@	        {
-//@	            "dependencies":[],
-//@	            "name":"stringformat.o",
-//@	            "type":"object"
-//@	        }
-//@	    ]
-//@	}
-#include "stringformat.h"
-#include "variant.h"
-#include "range.h"
+//@	{"targets":[{"name":"stringformat.o","type":"object"}]}
+
+#include "stringformat.hpp"
+#include "variant.hpp"
+#include "range.hpp"
 #include <algorithm>
 #include <cstring>
 
