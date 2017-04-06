@@ -26,6 +26,15 @@
  }]]]>
     </Plugin>
   </Plugins>
+  <Reconciliation>
+    <Regexes/>
+    <Excludepaths/>
+    <Ignorefiles/>
+    <Extensions>
+      <![CDATA[cpp;c;h;hpp;xrc;wxcp;fbp]]>
+    </Extensions>
+    <Topleveldir>../glinde</Topleveldir>
+  </Reconciliation>
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="glinde-new">
@@ -65,7 +74,6 @@
     <File Name="cmdprocmain.cpp"/>
     <File Name="debug.hpp"/>
     <File Name="image.hpp"/>
-    <File Name="faceindirect.hpp"/>
     <File Name="overlay.cpp"/>
     <File Name="stringformat.cpp"/>
     <File Name="handle.hpp"/>
@@ -233,6 +241,11 @@
       <File Name="storage/blob.hpp"/>
       <File Name="range.hpp"/>
       <File Name="vectortype.hpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="geometry">
+      <File Name="geometry/faceindirect.hpp"/>
+      <File Name="geometry/mesh.hpp"/>
+      <File Name="geometry/meshsize.hpp"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Settings Type="Executable">

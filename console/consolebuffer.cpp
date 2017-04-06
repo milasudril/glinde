@@ -72,7 +72,7 @@ ConsoleBuffer::ConsoleBuffer(uint32_t n_rows,uint32_t n_cols):
 	 m_vertices(new GeoSIMD::Point<float>[(n_rows*n_cols + 1)*4])
 	,m_colors(new uint32_t[(n_rows*n_cols + 1)*4])
 	,m_uvs(new vec2_t<float>[(n_rows*n_cols + 1)*4])
-	,m_faces(new FaceIndirect[2*(n_rows*n_cols + 1)])
+	,m_faces(new FaceIndirect<>[2*(n_rows*n_cols + 1)])
 	,m_n_cols(n_cols),m_position(0),m_line_current(0)
 	,m_utf8_state(0),m_codepoint(0),m_full(0),m_scroll_pending(0)
 	{

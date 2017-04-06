@@ -5,7 +5,7 @@
 #ifndef GLINDE_CONSOLEBUFFER_HPP
 #define GLINDE_CONSOLEBUFFER_HPP
 
-#include "../faceindirect.hpp"
+#include "../geometry/faceindirect.hpp"
 #include "../storage/vectortype.hpp"
 #include "../color.hpp"
 #include "../memory/new.hpp"
@@ -74,12 +74,12 @@ namespace Glinde
 
 
 			auto faces() const noexcept
-				{return Range<const FaceIndirect>{m_faces.get(),size()*2};}
+				{return Range<const FaceIndirect<>>{m_faces.get(),size()*2};}
 
 			auto facesFull() const noexcept
-				{return Range<const FaceIndirect>{m_faces.get(),sizeFull()*2};}
+				{return Range<const FaceIndirect<>>{m_faces.get(),sizeFull()*2};}
 
-			Range<const FaceIndirect> faces(size_t k) const noexcept
+			Range<const FaceIndirect<>> faces(size_t k) const noexcept
 				{return row(m_faces.get(),k,2);}
 
 
@@ -168,7 +168,7 @@ namespace Glinde
 			std::unique_ptr<GeoSIMD::Point<float>[]> m_vertices;
 			std::unique_ptr<uint32_t[]> m_colors;
 			std::unique_ptr<vec2_t<float>[]> m_uvs;
-			std::unique_ptr<FaceIndirect[]> m_faces;
+			std::unique_ptr<FaceIndirect<>[]> m_faces;
 
 			uint32_t m_n_cols;
 			uint32_t m_n_rows;
