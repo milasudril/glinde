@@ -167,7 +167,7 @@ static constexpr uint16_t charmap_misc(uint32_t codepoint)
 		case u'◙': return 10;
 		case u'♂': return 11;
 		case u'♀': return 12;
-		case U'𝅘𝅥𝅯': return 13;
+		case U'\x1d161': return 13;
 		case u'♬': return 14;
 		case u'☼': return 15;
 		case u'►': return 16;

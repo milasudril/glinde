@@ -1,5 +1,7 @@
 //@	{"targets":[{"name":"test","type":"application","pkgconfig_libs":["glew"]}]}
 
+#define GLFWMM_NO_MEMBER_ADVERTISMENT
+
 #include "window.hpp"
 #include "session.hpp"
 #include <cstdio>
