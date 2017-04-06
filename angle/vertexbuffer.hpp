@@ -4,6 +4,7 @@
 #define ANGLE_VERTEXBUFFER_HPP
 
 #include "exceptionhandler.hpp"
+#include <GL/glew.h>
 #include <cassert>
 #include <utility>
 

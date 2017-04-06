@@ -213,6 +213,7 @@
       <File Name="scene/viewpoint.hpp"/>
       <File Name="scene/scene.hpp"/>
       <File Name="scene/scenerenderer.cpp"/>
+      <File Name="scene/meshhosted.hpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="thread">
       <File Name="thread/thread.cpp"/>
@@ -239,8 +240,8 @@
       <File Name="storage/arrayinit.hpp"/>
       <File Name="storage/arraysimple.hpp"/>
       <File Name="storage/blob.hpp"/>
-      <File Name="range.hpp"/>
       <File Name="vectortype.hpp"/>
+      <File Name="storage/range.hpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="geometry">
       <File Name="geometry/faceindirect.hpp"/>

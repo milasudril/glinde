@@ -2,6 +2,7 @@
 //@	 "targets":[{"name":"scenerenderer.o","type":"object"}]
 //@	}
 
+#include "meshhosted.hpp"
 #include "scenerenderer.hpp"
 #include "viewpoint.hpp"
 #include "../instancecounter.hpp"
