@@ -26,7 +26,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "../geometry/faceindirect.hpp"
 #include "../storage/vectortype.hpp"
 #include "../color.hpp"
-#include "../memory/new.hpp"
+#include "../storage/new.hpp"
 #include <geosimd/point.hpp>
 #include <memory>
 #include <algorithm>

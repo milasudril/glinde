@@ -166,12 +166,6 @@
       <File Name="log/log.hpp"/>
       <File Name="log/logdefault.cpp"/>
     </VirtualDirectory>
-    <VirtualDirectory Name="memory">
-      <File Name="memory/new.cpp"/>
-      <File Name="memory/memoryalloc.hpp"/>
-      <File Name="memory/memoryalloc.cpp"/>
-      <File Name="memory/new.hpp"/>
-    </VirtualDirectory>
     <VirtualDirectory Name="messagequeue">
       <File Name="messagequeue/message.hpp"/>
       <File Name="messagequeue/messageheader.hpp"/>
@@ -242,6 +236,11 @@
       <File Name="storage/blob.hpp"/>
       <File Name="vectortype.hpp"/>
       <File Name="storage/range.hpp"/>
+      <File Name="storage/lookuptable.hpp"/>
+      <File Name="storage/new.cpp"/>
+      <File Name="storage/memoryalloc.cpp"/>
+      <File Name="storage/new.hpp"/>
+      <File Name="storage/memoryalloc.hpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="geometry">
       <File Name="geometry/faceindirect.hpp"/>
@@ -252,6 +251,8 @@
       <File Name="testdata/cube.temple"/>
       <File Name="testdata/materials.temple"/>
     </VirtualDirectory>
+    <File Name="resourcemanager.hpp"/>
+    <File Name="resourcemanager.cpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>

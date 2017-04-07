@@ -27,8 +27,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "vectortype.hpp"
 #include "arrayinit.hpp"
 #include "range.hpp"
+#include "memoryalloc.hpp"
 #include "../debug.hpp"
-#include "../memory/memoryalloc.hpp"
 
 #include <utility>
 #include <cstdint>
