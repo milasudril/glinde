@@ -26,6 +26,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 #include "storage/lookuptable.hpp"
 #include "angle/texture2d.hpp"
+#include "image.hpp"
 #include "stringkey.hpp"
 
 namespace Glinde
@@ -36,8 +37,14 @@ namespace Glinde
 			ResourceManager();
 			~ResourceManager();
 
+			Image& image(const char* name)
+				{
+				auto key=Stringkey(name);
+				return m_images.find(key,name);
+				}
+
 		private:
-			LookupTable<Stringkey,Angle::Texture2D> m_textures;
+			LookupTable<Stringkey,Image> m_images;
 		};
 	}
 

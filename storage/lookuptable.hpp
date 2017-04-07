@@ -22,48 +22,45 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #ifndef GLINDE_LOOKUPTABLE_HPP
 #define GLINDE_LOOKUPTABLE_HPP
 
-#include "arraydynamic.hpp"
-#include <utility>
-#include <algorithm>
+#include "new.hpp"
+#include <map>
 #include <memory>
 
 namespace Glinde
 	{
-	/** \brief Look-up table optimized for frequent lookup
+	/** \brief Look-up table with simple interface
 	*/
-	template<class Key,class Value
-		,class Compare=std::less<Key> >
+	template<class Key,class Value>
 	class LookupTable
 		{
 		public:
-			LookupTable():m_cmp(Compare{}),m_dirty(0){}
-
-			LookupTable& insert(Key&& key,Value&& val) noexcept
+			Value* insert(Key&& key,Value&& val)
 				{
-				m_data.append({std::move(key),make_unique(val)});
-				m_dirty=1;
-				return *this;
+				auto ip=m_data.insert(std::make_pair(key,std::make_unique(val)));
+				if(ip.second)
+					{return ip.first->second.get();}
+				return nullptr;
 				}
 
-			auto find(const Key& k) noexcept
+			Value* find(const Key& key) noexcept
 				{
-				auto first=m_data.begin();
-				auto last=m_data.end();
-				if(m_dirty)
-					{
-					std::sort(first,last,m_cmp);
-					m_dirty=0;
-					}
-				auto i=std::lower_bound(first,last,m_cmp);
-				if(i!=last && !m_cmp(k,i->first))
-					{return i;}
-				return last;
+				auto i=m_data.find(key);
+				if(i!=m_data.end())
+					{return i->second.get();}
+				return nullptr;
+				}
+
+			template<class ... T>
+			Value& find(const Key& key,T&& ... args)
+				{
+				auto i=find(key);
+				return i==nullptr?
+					*insert(key,Value(args...))
+					:*i;
 				}
 
 		private:
-			ArrayDynamic< std::pair<Key,std::unique_ptr<Value*> > > m_data;
-			Compare m_cmp;
-			mutable bool m_dirty;
+			std::map<Key,std::unique_ptr<Value>> m_data;
 		};
 	}
 
