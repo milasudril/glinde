@@ -30,9 +30,7 @@ using namespace Glinde;
 
 static InstanceCounter<Angle::Program> s_program;
 
-SceneRenderer::SceneRenderer():
-	 m_texture_out(Angle::TextureFormat::RGB16F,1,1)
-	,m_depthbuffer(Angle::TextureFormat::R32F,1,1)
+SceneRenderer::SceneRenderer()
 	{
 	s_program.get<Angle::Shader,Angle::Shader>(R"EOF(#version 430 core
 layout(location=0) in vec4 vertex_pos;
@@ -77,31 +75,29 @@ void main()
 	color=vec4( (ambient + diffuse)*albedo/lc_size2 ,1.0f);
 	}
 )EOF"_frag);
-
-	m_fb.attachColorBuffer<0>(m_texture_out)
-		.attachDepthBuffer(m_depthbuffer)
-		.colorBuffersOutputActivate(0u);
 	}
 
 SceneRenderer::~SceneRenderer() noexcept
 	{s_program.release();}
 
-void SceneRenderer::framebufferResize(int width,int height)
+void SceneRenderer::render(const Site& s,const Viewpoint& v
+	,OutputBuffer& render_result) noexcept
 	{
-	m_texture_out.realloc(width,height);
-	m_depthbuffer.realloc(width,height);
-	
-	}
-
-
-void SceneRenderer::render(const Site& s,const Viewpoint& v) noexcept
-	{
+	render_result.get<0>().filter(Angle::MagFilter::NEAREST)
+		.filter(Angle::MinFilter::NEAREST);
+	render_result.get<1>().filter(Angle::MagFilter::NEAREST)
+		.filter(Angle::MinFilter::NEAREST);
 	m_fb.bind(Angle::Framebuffer::Target::DRAW);
 	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-	glViewport(0,0,m_texture_out.width(),m_texture_out.height());
+	glViewport(0,0,render_result.get<0>().width()
+		,render_result.get<0>().height());
 
 //	TODO: render stuff from s using v
+
+	render_result.get<0>().mipmapsGenerate()
+		.filter(Angle::MagFilter::LINEAR)
+		.filter(Angle::MinFilter::LINEAR_MIPMAP_LINEAR);
 	}
 
 constexpr Angle::VertexAttribute SceneRenderer::ShaderDescriptor::attributes[];

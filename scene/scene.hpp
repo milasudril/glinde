@@ -30,14 +30,14 @@ namespace Glinde
 		{
 		public:
 			void framebufferResize(int width,int height)
-				{m_renderer.framebufferResize(width,height);}
+				{m_buffer_out.framebufferResize(width,height);}
 
 			void render(Display& disp,const Timeinfo& ti) const noexcept
 				{}
 
 		private:
 			SceneRenderer m_renderer;
-
+			mutable SceneRenderer::OutputBuffer m_buffer_out;
 		};
 	}
 

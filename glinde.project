@@ -257,6 +257,7 @@
     <File Name="resourcemanager.cpp"/>
     <File Name="strerror.hpp"/>
     <File Name="strerror-linux.cpp"/>
+    <File Name="framebuffercontent.hpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>

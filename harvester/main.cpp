@@ -11,7 +11,7 @@ struct ExecutionPolicy
 	
 		strncpy(msg.data(),message,511);
 		msg[511]='\0';
-		throw msg;
+		throw std::move(msg);
 		}
 
 	Harvester::ProgressStatus progress(double x,const char* file) noexcept

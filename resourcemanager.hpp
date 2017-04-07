@@ -28,6 +28,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "angle/texture2d.hpp"
 #include "image.hpp"
 #include "stringkey.hpp"
+#include "texture_upload.hpp"
 
 namespace Glinde
 	{
@@ -38,9 +39,11 @@ namespace Glinde
 			~ResourceManager();
 
 			Image& image(const char* name);
+			Angle::Texture2D& texture(const char* name);
 
 		private:
 			LookupTable<Stringkey,Image> m_images;
+			LookupTable<Stringkey,Angle::Texture2D> m_textures;
 		};
 	}
 

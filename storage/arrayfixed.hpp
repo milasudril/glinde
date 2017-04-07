@@ -26,6 +26,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "range.hpp"
 #include <cstddef>
 #include <initializer_list>
+#include <utility>
 
 namespace Glinde
 	{
@@ -53,8 +54,18 @@ namespace Glinde
 			 *
 			 */
 			template<typename... U>
-			constexpr explicit ArrayFixed(U... values):data{values...}
+			constexpr explicit ArrayFixed(const T& x,const U&... values):data{x,values...}
 				{}
+
+			/**\brief Element initialize constructor
+			 *
+			 * This constructor copies the initializer list to the array.
+			 *
+			 */
+			template<typename... U>
+			constexpr explicit ArrayFixed(T&& x,U&&... values):data{std::move(x),std::move(values)...}
+				{}
+
 
 			constexpr ArrayFixed(const ArrayFixed&)=default;
 
@@ -68,7 +79,10 @@ namespace Glinde
 			 *
 			 */
 			constexpr const T& operator[](size_t k) const noexcept
-				{return data[k];}
+				{
+				assert(k<N);
+				return data[k];
+				}
 
 			/**\brief Element access
 			 *
@@ -79,7 +93,10 @@ namespace Glinde
 			 *
 			 */
 			constexpr T& operator[](size_t k) noexcept
-				{return data[k];}
+				{
+				assert(k<N);
+				return data[k];
+				}
 
 			/**\brief Returns a pointer to the beginning of the array
 			 *
@@ -132,6 +149,20 @@ namespace Glinde
 			 */
 			operator Range<T>() noexcept
 				{return Range<T>{data,N};}
+
+			template<size_t k>
+			constexpr T& get() noexcept
+				{
+				static_assert(k<N,"");
+				return data[k];
+				}
+
+			template<size_t k>
+			constexpr const T& get() const noexcept
+				{
+				static_assert(k<N,"");
+				return data[k];
+				}
 
 		private:
 			T data[N];

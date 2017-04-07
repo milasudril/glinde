@@ -220,8 +220,6 @@ void ConsoleRenderer::render(Angle::Texture2D& texture,const Timeinfo& ti) const
 		Angle::drawElements(Angle::DrawMode::TRIANGLES,n_cols*n_rows,6);
 		}
 	
-	glEnable(GL_BLEND);
-	
 	texture.mipmapsGenerate()
 		.filter(Angle::MagFilter::LINEAR)
 		.filter(Angle::MinFilter::LINEAR_MIPMAP_LINEAR);

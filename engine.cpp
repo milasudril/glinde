@@ -224,9 +224,12 @@ void Engine::gameLoad(const char* archive)
 
 void Engine::operator()(const Timeinfo& ti,GameLoader* loader,int)
 	{
+//	We must catch the message before calling m_game_loader.reset(),
+//	since otherwise, it will be deleted.
 	auto x=loader->error();
+	assert(loader==&m_game_loader->entry());
 	m_game_loader.reset();
-	throw x;
+	throw std::move(x);
 	}
 
 void Engine::operator()(const Timeinfo& ti,std::unique_ptr<Game>&& game,int)

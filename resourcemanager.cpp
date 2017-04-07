@@ -36,3 +36,9 @@ Image& ResourceManager::image(const char* name)
 	return m_images.find(Stringkey(name),[name]()
 		{return Image(FileIn(name),0);});
 	}
+
+Angle::Texture2D& ResourceManager::texture(const char* name) 
+	{
+	return m_textures.find(Stringkey(name),[name,this]()
+		{return texture2d(this->image(name));});
+	}

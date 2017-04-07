@@ -61,6 +61,10 @@ namespace Glinde
 			~Thread() noexcept
 				{synchronize();}
 
+#ifndef NDEBUG
+			Function& entry() noexcept
+				{return m_entry;}
+#endif
 		private:
 			Function m_entry;
 		};
