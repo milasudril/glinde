@@ -20,7 +20,8 @@ namespace Glinde
 			~FramebufferContent()
 				{}
 
-			FramebufferContent(FramebufferContent&& fbcontent)=default;
+			FramebufferContent(FramebufferContent&& fbcontent):m_textures(std::move(fbcontent.m_textures))
+				{}
 
 			void framebufferResize(int width,int height)
 				{

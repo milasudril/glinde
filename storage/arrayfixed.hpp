@@ -51,7 +51,7 @@ namespace Glinde
 
 			/**\brief Element initialize constructor
 			 *
-			 * This constructor copies the initializer list to the array.
+			 * This constructor copies x followed by values to the array.
 			 *
 			 */
 			template<typename... U>
@@ -67,11 +67,13 @@ namespace Glinde
 			constexpr explicit ArrayFixed(T&& x,U&&... values):data{std::move(x),std::move(values)...}
 				{}
 
-			constexpr ArrayFixed(ArrayFixed&& a) noexcept
-				{std::move(a.begin(),a.end(),&data[0]);}
-
+			constexpr ArrayFixed(ArrayFixed&& a)=default;
 
 			constexpr ArrayFixed(const ArrayFixed& a)=default;
+
+			constexpr ArrayFixed& operator=(const ArrayFixed&)=default;
+
+			constexpr ArrayFixed& operator=(ArrayFixed&&)=default;
 
 			/**\brief Element access
 			 *
