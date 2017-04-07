@@ -36,7 +36,7 @@ namespace Glinde
 		public:
 			Value* insert(Key&& key,Value&& val)
 				{
-				auto ip=m_data.insert(std::make_pair(key,std::make_unique(val)));
+				auto ip=m_data.insert(std::make_pair(key,std::make_unique<Value>(val)));
 				if(ip.second)
 					{return ip.first->second.get();}
 				return nullptr;
@@ -50,12 +50,12 @@ namespace Glinde
 				return nullptr;
 				}
 
-			template<class ... T>
-			Value& find(const Key& key,T&& ... args)
+			template<class ObjectCreator>
+			Value& find(Key&& key,ObjectCreator&& create)
 				{
 				auto i=find(key);
 				return i==nullptr?
-					*insert(key,Value(args...))
+					*insert(std::move(key),create())
 					:*i;
 				}
 

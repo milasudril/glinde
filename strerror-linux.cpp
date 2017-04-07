@@ -16,32 +16,28 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
-//@	{
-//@  "targets":[{"name":"resourcemanager.hpp","type":"include"}]
-//@	,"dependencies_extra":[{"ref":"resourcemanager.o","rel":"implementation"}]
-//@	}
+//@	{"targets":[{"name":"strerror.o","type":"object"}]}
+#include "strerror.hpp"
 
-#ifndef GLINDE_RESOURCEMANAGER_HPP
-#define GLINDE_RESOURCEMANAGER_HPP
+#ifdef _GNU_SOURCE
 
-#include "storage/lookuptable.hpp"
-#include "angle/texture2d.hpp"
-#include "image.hpp"
-#include "stringkey.hpp"
+extern "C"
+    {
+    extern int __xpg_strerror_r(int errcode,char* buffer,size_t length);
+    #define strerror_r __xpg_strerror_r
+    }
 
-namespace Glinde
+#else
+
+#include <cstring>
+
+#endif
+
+using namespace Glinde;
+
+int Glinde::strerror(int errcode,char* buffer,size_t length)
 	{
-	class ResourceManager
-		{
-		public:
-			ResourceManager();
-			~ResourceManager();
-
-			Image& image(const char* name);
-
-		private:
-			LookupTable<Stringkey,Image> m_images;
-		};
+	auto ret=strerror_r(errcode,buffer,length);
+	buffer[length-1]=0;
+	return ret;
 	}
-
-#endif // GLINDE_RESOURCEMANAGER_HPP

@@ -17,31 +17,32 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 //@	{
-//@  "targets":[{"name":"resourcemanager.hpp","type":"include"}]
-//@	,"dependencies_extra":[{"ref":"resourcemanager.o","rel":"implementation"}]
+//@	 "targets":[{"name":"filein.hpp","type":"include"}]
+//@	,"dependencies_extra":[{"ref":"filein.o","rel":"implementation"}]
 //@	}
+#ifndef GLINDE_FILEIN_HPP
+#define GLINDE_FILEIN_HPP
 
-#ifndef GLINDE_RESOURCEMANAGER_HPP
-#define GLINDE_RESOURCEMANAGER_HPP
-
-#include "storage/lookuptable.hpp"
-#include "angle/texture2d.hpp"
-#include "image.hpp"
-#include "stringkey.hpp"
+#include "datasource.hpp"
+#include "../string.hpp"
 
 namespace Glinde
 	{
-	class ResourceManager
+	class FileIn:public DataSource
 		{
 		public:
-			ResourceManager();
-			~ResourceManager();
+			explicit FileIn(const char* filename);
+			~FileIn();
 
-			Image& image(const char* name);
+			size_t read(void* buffer,size_t count);
+
+			const char* nameGet() const noexcept
+				{return m_name.begin();}
 
 		private:
-			LookupTable<Stringkey,Image> m_images;
+			String m_name;
+			intptr_t m_handle;
 		};
 	}
 
-#endif // GLINDE_RESOURCEMANAGER_HPP
+#endif

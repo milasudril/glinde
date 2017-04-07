@@ -158,6 +158,8 @@
       <File Name="io/utf8.cpp"/>
       <File Name="io/utf8.hpp"/>
       <File Name="io/memoryreader.cpp"/>
+      <File Name="io/filein-linux.cpp"/>
+      <File Name="io/filein.hpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="log">
       <File Name="log/logwriter.hpp"/>
@@ -234,13 +236,13 @@
       <File Name="storage/arrayinit.hpp"/>
       <File Name="storage/arraysimple.hpp"/>
       <File Name="storage/blob.hpp"/>
-      <File Name="vectortype.hpp"/>
       <File Name="storage/range.hpp"/>
       <File Name="storage/lookuptable.hpp"/>
       <File Name="storage/new.cpp"/>
       <File Name="storage/memoryalloc.cpp"/>
       <File Name="storage/new.hpp"/>
       <File Name="storage/memoryalloc.hpp"/>
+      <File Name="storage/vectortype.hpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="geometry">
       <File Name="geometry/faceindirect.hpp"/>
@@ -253,6 +255,8 @@
     </VirtualDirectory>
     <File Name="resourcemanager.hpp"/>
     <File Name="resourcemanager.cpp"/>
+    <File Name="strerror.hpp"/>
+    <File Name="strerror-linux.cpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
