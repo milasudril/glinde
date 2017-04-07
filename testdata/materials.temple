@@ -1,0 +1,5 @@
+[
+	 {"red",s:[image(red.png),null(),null(),null()]}
+	,{"green",s:[image(green.png),null(),null(),null()]}
+	,{"blue",s:[image(blue.png),null(),null(),null()]}
+]

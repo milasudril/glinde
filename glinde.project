@@ -248,6 +248,10 @@
       <File Name="geometry/mesh.hpp"/>
       <File Name="geometry/meshsize.hpp"/>
     </VirtualDirectory>
+    <VirtualDirectory Name="testdata">
+      <File Name="testdata/cube.temple"/>
+      <File Name="testdata/materials.temple"/>
+    </VirtualDirectory>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>

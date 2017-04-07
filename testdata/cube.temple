@@ -78,4 +78,19 @@
 	,20,21,22
 	,22,23,20
 	]
+,materials,s:
+	[
+		 red
+		,red
+		,green
+		,green
+		,blue
+		,blue
+		,red
+		,red
+		,green
+		,green
+		,blue
+		,blue
+	]
 }
