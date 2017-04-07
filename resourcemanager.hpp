@@ -41,6 +41,9 @@ namespace Glinde
 			Image& image(const char* name);
 			Angle::Texture2D& texture(const char* name);
 			CameraBuffer& camera(const char* name);
+			Image& image(const char* name,uint32_t width,uint32_t height);
+			Angle::Texture2D& texture(const char* name,uint32_t width,uint32_t height);
+
 
 		private:
 			LookupTable<Stringkey,Image> m_images;

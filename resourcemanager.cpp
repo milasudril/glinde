@@ -40,7 +40,7 @@ Image& ResourceManager::image(const char* name)
 Angle::Texture2D& ResourceManager::texture(const char* name) 
 	{
 	return m_textures.find(Stringkey(name),[name,this]()
-		{return texture2d(this->image(name));});
+		{return texture2d(image(name));});
 	}
 
 CameraBuffer& ResourceManager::camera(const char* name)
@@ -50,4 +50,16 @@ CameraBuffer& ResourceManager::camera(const char* name)
 		CameraBuffer ret;
 		return std::move(ret);
 		});
+	}
+
+Image& ResourceManager::image(const char* name,uint32_t width,uint32_t height)
+	{
+	return m_images.find(Stringkey(name),[width,height]()
+		{return Image(width,height,4,0);});
+	}
+
+Angle::Texture2D& ResourceManager::texture(const char* name,uint32_t width,uint32_t height)
+	{
+	return m_textures.find(Stringkey(name),[name,width,height,this]()
+		{return texture2d(image(name,width,height));});
 	}
