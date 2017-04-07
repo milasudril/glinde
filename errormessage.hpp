@@ -70,6 +70,7 @@ namespace Glinde
 			const char* messageGet() const noexcept
 				{return m_buffer.begin();}
 
+
 		private:
 			ArrayFixed<char,1024> m_buffer;
 		};

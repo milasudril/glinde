@@ -81,12 +81,14 @@ SceneRenderer::~SceneRenderer() noexcept
 	{s_program.release();}
 
 void SceneRenderer::render(const Site& s,const Viewpoint& v
-	,OutputBuffer& render_result) noexcept
+	,CameraBuffer& render_result) noexcept
 	{
 	render_result.get<0>().filter(Angle::MagFilter::NEAREST)
 		.filter(Angle::MinFilter::NEAREST);
 	render_result.get<1>().filter(Angle::MagFilter::NEAREST)
 		.filter(Angle::MinFilter::NEAREST);
+	m_fb.attachColorBuffer<0>(render_result.get<0>())
+		.attachDepthBuffer(render_result.get<1>());
 	m_fb.bind(Angle::Framebuffer::Target::DRAW);
 	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);

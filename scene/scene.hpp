@@ -37,7 +37,7 @@ namespace Glinde
 
 		private:
 			SceneRenderer m_renderer;
-			mutable SceneRenderer::OutputBuffer m_buffer_out;
+			mutable CameraBuffer m_buffer_out;
 		};
 	}
 

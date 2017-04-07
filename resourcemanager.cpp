@@ -42,3 +42,12 @@ Angle::Texture2D& ResourceManager::texture(const char* name)
 	return m_textures.find(Stringkey(name),[name,this]()
 		{return texture2d(this->image(name));});
 	}
+
+CameraBuffer& ResourceManager::camera(const char* name)
+	{
+	return m_cambuffers.find(Stringkey(name),[]()
+		{
+		CameraBuffer ret;
+		return std::move(ret);
+		});
+	}

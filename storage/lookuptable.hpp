@@ -36,7 +36,8 @@ namespace Glinde
 		public:
 			Value* insert(Key&& key,Value&& val)
 				{
-				auto ip=m_data.insert(std::make_pair(key,std::make_unique<Value>(std::move(val))));
+				auto ip=m_data.insert(
+					std::make_pair(key,std::make_unique<Value>(std::move(val))));
 				if(ip.second)
 					{return ip.first->second.get();}
 				return nullptr;

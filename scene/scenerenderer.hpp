@@ -24,8 +24,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #ifndef GLINDE_SCENERENDERER_HPP
 #define GLINDE_SCENERENDERER_HPP
 
-#include "../framebuffercontent.hpp"
-
+#include "camerabuffer.hpp"
 #include "../angle/vertexarray.hpp"
 #include "../angle/framebuffer.hpp"
 #include "../angle/texture2d.hpp"
@@ -38,15 +37,13 @@ namespace Glinde
 	class SceneRenderer
 		{
 		public:
-			typedef FramebufferContent<Angle::TextureFormat::RGB16F
-				,Angle::TextureFormat::R32F> OutputBuffer;
 			SceneRenderer();
 			~SceneRenderer() noexcept;
 
 			void framebufferResize(int width,int height);
 
 			void render(const Site& site,const Viewpoint& v
-				,OutputBuffer& render_result) noexcept;
+				,CameraBuffer& render_result) noexcept;
 		private:
 			struct ShaderDescriptor
 				{

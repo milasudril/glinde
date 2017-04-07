@@ -27,6 +27,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include <cstddef>
 #include <initializer_list>
 #include <utility>
+#include <algorithm>
 
 namespace Glinde
 	{
@@ -66,9 +67,11 @@ namespace Glinde
 			constexpr explicit ArrayFixed(T&& x,U&&... values):data{std::move(x),std::move(values)...}
 				{}
 
+			constexpr ArrayFixed(ArrayFixed&& a) noexcept
+				{std::move(a.begin(),a.end(),&data[0]);}
 
-			constexpr ArrayFixed(const ArrayFixed&)=default;
 
+			constexpr ArrayFixed(const ArrayFixed& a)=default;
 
 			/**\brief Element access
 			 *

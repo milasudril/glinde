@@ -20,6 +20,8 @@ namespace Glinde
 			~FramebufferContent()
 				{}
 
+			FramebufferContent(FramebufferContent&& fbcontent)=default;
+
 			void framebufferResize(int width,int height)
 				{
 				for(decltype(size()) k=0;k<N;++k)
