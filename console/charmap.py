@@ -3,7 +3,7 @@
 #@      [
 #@          {
 #@			 "name":"charmap_srgb.png"
-#@			,"dependencies":[{"ref":"charmap.png","rel":"file"}]
+#@			,"dependencies":[{"ref":"charmap.png","rel":"misc"}]
 #@			}
 #@      ]
 #@  }

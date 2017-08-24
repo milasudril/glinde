@@ -29,6 +29,7 @@
                         "{includedir}",
                         "-DMAIKE_TARGET_DIRECTORY={target_directory}",
                         "-DMAIKE_CURRENT_DIRECTORY={current_directory}",
+                        "{includes_extra}",
 						"-march=native",
                         "-o",
                         "{target}",
@@ -55,6 +56,7 @@
                         "{includedir}",
                         "-DMAIKE_TARGET_DIRECTORY={target_directory}",
                         "-DMAIKE_CURRENT_DIRECTORY={current_directory}",
+                        "{includes_extra}",
 						"-march=native",
                         "-shared",
                         "-o",
@@ -98,6 +100,7 @@
                         "{includedir}",
                         "-DMAIKE_TARGET_DIRECTORY={target_directory}",
                         "-DMAIKE_CURRENT_DIRECTORY={current_directory}",
+                        "{includes_extra}",
 						"-march=native",
                         "-o",
                         "{target}",
@@ -105,6 +108,7 @@
                     ],
                     "name":"g++"
                 },
+				"include_format":"-include^",
                 "pkgconfig":{
                     "args":[
                         "{action}",

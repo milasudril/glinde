@@ -20,7 +20,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 //@	"targets":
 //@		[{
 //@		 "name":"consolerenderer.o","type":"object"
-//@		,"dependencies":[{"ref":"charmap_srgb.png","rel":"generated"}]
+//@		,"dependencies":[{"ref":"charmap_srgb.png","rel":"misc"}]
 //@		}]
 //@	}
 

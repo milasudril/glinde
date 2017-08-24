@@ -251,7 +251,6 @@
     </VirtualDirectory>
     <VirtualDirectory Name="testdata">
       <File Name="testdata/cube.temple"/>
-      <File Name="testdata/materials.temple"/>
     </VirtualDirectory>
     <File Name="resourcemanager.hpp"/>
     <File Name="resourcemanager.cpp"/>

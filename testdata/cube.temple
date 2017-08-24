@@ -78,7 +78,7 @@
 	,20,21,22
 	,22,23,20
 	]
-,materials,s:
+,face_materials,s:
 	[
 		 red
 		,red
@@ -92,5 +92,15 @@
 		,green
 		,blue
 		,blue
+	]
+,materials:
+	[
+		 {red,s:[image(red.png),null(),null(),null()]}
+		,{green,s:[image(green.png),null(),null(),null()]}
+		,{blue,s:[image(blue.png),null(),null(),null()]}
+		,{
+		 cctv_display,s:
+			[null(),null(),null(),camera(foobar)]
+		 }
 	]
 }

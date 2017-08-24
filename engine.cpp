@@ -17,7 +17,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 //@	{
-//@	 "targets":[{"name":"engine.o","type":"object"}]
+//@	 "targets":[{"name":"engine.o","type":"object","include_targets":["projectinfo.hpp"]}]
 //@	}
 
 #include "engine.hpp"
@@ -31,7 +31,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "log/logwriter.hpp"
 #include "gamedata/gameloader.hpp"
 #include <maike/targetinclude.hpp>
-#include MAIKE_TARGET(projectinfo.hpp)
 #include <utility>
 #include <cstdio>
 
