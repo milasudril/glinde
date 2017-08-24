@@ -21,6 +21,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 //@		[{
 //@		 "name":"consolerenderer.o","type":"object"
 //@		,"dependencies":[{"ref":"charmap_srgb.png","rel":"misc"}]
+//@		,"cxxoptions_local":{"cflags_extra":["fno-lto"]}
 //@		}]
 //@	}
 

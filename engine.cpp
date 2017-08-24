@@ -17,7 +17,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 //@	{
-//@	 "targets":[{"name":"engine.o","type":"object","include_targets":["projectinfo.hpp"]}]
+//@	 "targets":[{"name":"engine.o","type":"object","include_targets":["projectinfo.hpp"],"cxxoptions_local":{"cflags_extra":["fno-lto"]}}]
 //@	}
 
 #include "engine.hpp"
