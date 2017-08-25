@@ -4,132 +4,83 @@ for each model
 for each texture change, set object textures
 for each object, set object uniforms ( various matrices, uniform parameters, ... )
 
+## Fragment shader input
 
-Fragment shader input (see https://learnopengl.com/#!PBR/Theory):
-	* Albedo texture (RGBA)
-	* Emmision texture (RGB)
-	* Normal+Hight map (RGBA)
-	* Metallic+Roughness+AO (RGB)
-
-
-Vertex shader
-
-#version 430 core
-layout(location=0) in vec4 vertex_pos;
-layout(location=1) in vec4 vertex_normal;
-layout(location=2) in vec2 uv_coords;
-
-layout(location=0) uniform vec4 camera_pos;
-layout(location=1) uniform mat4 MVP;
-layout(location=2) uniform mat4 M;
+ * base_color (RGBA: alpha boolean for simplicity)
+ * material_properties (RGB: roughness, metal, coating)
+ * normals (RGB, x ,y, z)
 
 
-out vec2 uv;
-out vec4 cam_pos;
-out vec4 vert_pos_model;
-out vec4 normal;
+## Final clamping routine, runs before converting to sRGB, but after any lighting
+
+vec3 hcy_clamp(vec3 color)
+	{
+	float M=max( max(color.r,color.g), color.b );
+	float m=min( min(color.r,color.g), color.b );
+	vec3 weights=vec3(0.3333,0.3333,0.3334);
+
+	float C=M-m;
+	float huevals[3]=
+		{
+		 mod((color.g - color.b)/C,6)
+		,(color.b - color.r)/C + 2
+		,(color.r - color.g)/C + 4
+		};
+	float H=huevals[largest(color)];
+	
+	float Y=tanh(  dot(weights,color) );
+	C=tanh( C );
+	float X=C*(1.0 - abs(mod(H,2.0)-1.0));
+	vec3 rgblut[7]=
+		{
+		 vec3(C,X,0)
+		,vec3(X,C,0)
+		,vec3(0,C,X)
+		,vec3(0,X,C)
+		,vec3(X,0,C)
+		,vec3(C,0,X)
+		,vec3(C,X,0)
+		};
+	float m_out=Y - dot(rgblut[int(H)],weights);
+	return abs(m - M)<1e-5?vec3(Y,Y,Y):rgblut[int(H)] + vec3(m_out,m_out,m_out);
+	}
+
+## Convert to sRGB (we will activate sRGB framebuffer, thus not needed)
+
+float sRGB(float x)
+	{
+	if (x <= 0.00031308)
+		{return 12.92 * x;}
+	else
+		{return 1.055*pow(x,(1.0 / 2.4) ) - 0.055;}
+	}
+
+vec3 to_srgb(vec3 color)
+	{return vec3(sRGB(color.r),sRGB(color.g),sRGB(color.b));}
+
+## Simple Blinn-Phong lighting
+
+Works great for non-metallic materials. But metallic materials will look better with proper ambient color. vec3(1,1,1) is the light color, and should be merged with light_intensity.
 
 void main()
 	{
-	gl_Position=MVP*vertex_pos;
-	vert_pos_model=M*vert_pos_model;
-	uv=uv_coords;
-	normal=vertex_normal;
-	}
+	vec3 lf=light_position - fragment_pos;
+	vec3 vf=camera_position - fragment_pos;
 
+	float dl_2=dot(lf,lf);
+	float dl=sqrt(dl_2);
+	float n_proj_l=max(dot( fragment_normal,lf/dl ),0.0f);
 
-Fragment shader
+	vec3 halfdir=normalize(vf + lf);
+	float n_proj_halfdir=pow(max(dot(fragment_normal,halfdir),0),1.0f/roughness);
+	float z_proj_n=0.5*( 1 + tanh(2*fragment_normal.z));
 
-#version 430 core
-layout(binding=0) uniform sampler2D albedo;
-layout(binding=1) uniform sampler2D emission;
-layout(binding=2) uniform sampler2D normal_height;
-layout(binding=3) uniform sampler2D surface;
+	vec3 diffuse=color_in*(n_proj_l/dl_2);
+	vec3 glossy=mix(vec3(1.0f,1.0f,1.0f)*1.0/dl_2,color_in/dl_2,metal) * n_proj_halfdir;
 
-layout(location=3) uniform vec4 lamp_pos;
-layout(location=4) uniform vec3 lamp_color;
-layout(location=5) uniform vec3 ambient;
+	vec3 total=mix(mix(0.25f*diffuse,mix(diffuse,glossy,0.8f),coating), glossy ,metal) 
+		+ 0.01*ambient*color_in*z_proj_n 
+		+ mix(vec3(0.0f,0.0f,0.0f),0.001f*ambient*vec3(1.0f,1.0f,1.0f)*z_proj_n ,coating );
 
-in vec2 uv;
-in vec4 normal;
-in vec4 cam_pos;
-in vec4 vert_pos_model;
-
-layout(location=0) out vec4 color;
-
-
-const float PI = 3.14159265359;
-
-vec3 fresnelSchlick(float cosTheta, vec3 F0)
-	{return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);}
-
-float gcx_distrib(vec4 normal,vec4 h,float r)
-	{
-    float a=r*r; //Square hack
-    float a2=a*a;
-
-    float proj_nh  = max(dot(N, H), 0.0);
-    float proj_nh2 = proj_nh*proj_nh;
-	
-	float nom=a2;
-	float denom=(proj_nh2*(a2 - 1.0) + 1.0);
-	denom = PI*denom*denom;
-	return nom/denom;
-	}
-
-float gcx_geom(float proj_nv,float r)
-	{
-	float a =(r + 1.0);
-	float k = (r*r) / 8.0;
-
-	float nom=proj_nv;
-	float denom= proj_nv* (1.0 - k) + k;
-	
-	return nom/denom;
-	}
-
-float smith_geom(vec4 normal,vec4 vl_norm,vec4 cv_norm,float r)
-	{
-	float proj_ncv=max(dot(normal,cv_norm),0.0);
-	float proj_nvl=max(dot(normal,vl_norm),0.0);
-	float ggc2=gcx_geom(proj_nvc,r);
-	float ggc1=gcx_geom(proj_nvl,r);
-	return ggc2*ggc1;
-	}
-
-void main()
-	{
-	vec4 VC=cam_pos - vert_pos_model;
-	float d2_frag=dot(VC,VC);
-	vec4 vc=VC/sqrt(d2_frag);
-	float alb=texture(albedo,uv).rgb;
-	float metallic=texture(surface,uv).t;
-	float r=texture(surface,uv).g;
-
-
-	vec4 lo=vec4(0.0);
-
-	vec4 VL=lamp_pos - vert_pos_model;
-	float d2_lamp=dot(vl,vl);
-	float a_1=1.0/d2_lamp;
-
-	vec4 vl=VL/sqrt(d2_lamp);
-	vec4 h=normalize(cv + vl);
-	vec3 I0=lamp_color*a_1;
-
-	vec3 F0=mix( vec3(0.04),alb,metallic );
-	float ndf=gcx_distrib(normal,h,r);
-	float g=smith_geom(normal,vl,cv,r);
-	vec3 F=fresnelSchlick(max(dot(h,vl),0.0f),F0);
-	vec3 kD=vec3(1.0) - F;
-	kD*=1.0 - metallic;
-	vec4 nom=ndf*g*F;
-	float demom=4*max(dot(normal,vc),0.0) + 1e-3;
-	vec4 brdf=nom/denom;
-
-	float proj_nvl=max(dot(normal,vl),0.0);
-	lo+=(kD*alb/PI + brdf)*I0*proj_nvl;
-
-	color=(ambient + Lo + texture(emission,uv).rgb )/d2_frag;
-
+	color=to_srgb( hcy_clamp( 4.0f*light_intensity * total) );
 	}
